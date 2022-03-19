@@ -2,6 +2,7 @@
 #include <cpu/cpu.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <memory/paddr.h>
 #include "sdb.h"
 
 static int is_batch_mode = false;
@@ -38,6 +39,9 @@ static int cmd_q(char *args) {
 }
 
 static int cmd_help(char *args);
+static int cmd_x(char *args);
+static int cmd_si(char *args);
+ static int cmd_info(char *args);
 
 static struct {
   const char *name;
@@ -49,7 +53,9 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
 
   /* TODO: Add more commands */
-
+  {"si", "Execute the program in n steps\n -n nsteps\n", cmd_si},
+  {"info", "print status\n -r print register status", cmd_info},
+  {"x", "scan the rom", cmd_x},
 };
 
 #define NR_CMD ARRLEN(cmd_table)
@@ -76,6 +82,75 @@ static int cmd_help(char *args) {
   }
   return 0;
 }
+
+static int cmd_x(char *args) {
+  if (args == NULL) {
+    printf("No parameters\n");
+    return 0;
+  }
+  int count = atoi(strtok(NULL, " "));
+  if (count==0) {
+    printf("Wrong parameter1\n");
+    return 0;
+  }
+  char* EXPR_BUFFER = strtok(NULL, " ");
+  if (EXPR_BUFFER==NULL) {
+    printf("Wrong parameter2\n");
+    return 0;
+  }
+  int EXPR = strtol(EXPR_BUFFER,NULL,16);
+  if (EXPR==0) {
+    printf("Wrong parameter2\n");
+    return 0;
+  }
+  if(strtok(NULL, " ")!=NULL) {
+    printf("Too many parameters\n");
+    return 0;
+  }
+
+  for(int i = 0; i < count; i++) {
+    printf("0x%x:    0x%lx\n", EXPR+i*5, paddr_read(EXPR+i*4, 4));
+  }
+  return 0;
+}
+
+static int cmd_si(char *args) {
+  if (args == NULL) {
+    cpu_exec(1);
+    return 0;
+  }
+  int step = atoi(strtok(NULL, " "));
+  if(strtok(NULL, " ")!=NULL) {
+    printf("Too many parameters\n");
+    return 0;
+  }
+  if (step<=0 || step >=999) {
+    printf("Wrong parameter\n");
+    return 0;
+  }
+  cpu_exec(step);
+  return 0;
+}
+
+static int cmd_info(char *args) {
+  if (args == NULL) {
+    printf("Please input the info r\n");
+    return 0;
+  }
+  char *arg = strtok(NULL, " ");
+  if(strtok(NULL, " ")!=NULL) {
+    printf("Too many parameters\n");
+    return 0;
+  }
+  if (strcmp(arg, "r") == 0) {
+    isa_reg_display();
+  }
+  else {
+    printf("Info is imperfect\n");
+  }
+  return 0;
+}
+
 
 void sdb_set_batch_mode() {
   is_batch_mode = true;

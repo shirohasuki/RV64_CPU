@@ -9,6 +9,10 @@ const char *regs[] = {
 };
 
 void isa_reg_display() {
+  //for (int i = R_EAX; i <= R_EDI ; i++) {
+	//printf("$%s\t0x%08x\n", cpu.gpr[i], gpr(i));
+  //}
+  //printf("$eip\t0x%08x\n", cpu.eip);
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {

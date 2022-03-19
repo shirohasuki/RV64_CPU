@@ -195,10 +195,12 @@ void sdb_mainloop() {
         break;
       }
     }
-    if (strcmp(cmd, "zxy") == 0) {
+    if (i == NR_CMD) { 
+      if (strcmp(cmd, "zxy") == 0) {
     	cmd_confession(args);
-    }//loveu
-    if (i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
+      }//loveu
+      else { printf("Unknown command '%s'\n", cmd);} 
+    }
   }
 }
 

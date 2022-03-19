@@ -42,6 +42,7 @@ static int cmd_help(char *args);
 static int cmd_x(char *args);
 static int cmd_si(char *args);
  static int cmd_info(char *args);
+ static int cmd_confession(char *args);
 
 static struct {
   const char *name;
@@ -53,9 +54,9 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
 
   /* TODO: Add more commands */
-  {"si", "Execute the program in n steps\n \t-n nsteps", cmd_si},
-  {"info", "print status\n \t-r print register status", cmd_info},
-  {"x", "scan the rom", cmd_x},
+  {"si", "Execute the program in n steps\n \t-n nsteps", cmd_si },
+  {"info", "print status\n \t-r print register status", cmd_info },
+  {"x", "scan the rom", cmd_x },
 };
 
 #define NR_CMD ARRLEN(cmd_table)
@@ -151,6 +152,11 @@ static int cmd_info(char *args) {
   return 0;
 }
 
+static int cmd_confession(char *args) {
+    printf("\tThe fountains mingle with the river\n\tAnd the rivers with the ocean,\n\tThe winds of heaven mix for ever\n\tWith a sweet emotion;\n\tNothing in the world is single,\n\tAll things by a law divine\n\tIn one another’s being mingle—\n\tWhy not I with thine?\n\tSee the mountains kiss high heaven\n\tAnd the waves clasp one another;\n\tNo sister-flower would be forgive\n\tIf it disdain’d its brother;\n\tAnd the sunlight clasps the earth,\n\tAnd the moonbeams kiss the sea\n\tWhat are all these kissings worth,\n\tIf thou kiss not me?\n");
+    printf("\033[44;31m Dull words can't express my love. I write it into the chip and devote my whole life to you.\033[0m\n");//the confession for u
+    return 0;
+}
 
 void sdb_set_batch_mode() {
   is_batch_mode = true;
@@ -189,7 +195,9 @@ void sdb_mainloop() {
         break;
       }
     }
-
+    if (strcmp(cmd, "zxy") == 0) {
+    	cmd_confession(args);
+    }//loveu
     if (i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
   }
 }

@@ -53,7 +53,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
 
   /* TODO: Add more commands */
-  {"si", "Execute the program in n steps\n \t-n nsteps\n", cmd_si},
+  {"si", "Execute the program in n steps\n \t-n nsteps", cmd_si},
   {"info", "print status\n \t-r print register status", cmd_info},
   {"x", "scan the rom", cmd_x},
 };

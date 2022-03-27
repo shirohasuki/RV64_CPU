@@ -6,7 +6,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_DEC, 
+  TK_NOTYPE = 256, TK_EQ, TK_DEC, TK_NEG 
 
   /* TODO: Add more token types */
 
@@ -108,6 +108,99 @@ static bool make_token(char *e) {
     return true;
 }
 
+int check_parentheses(Token* start, Token* end) {
+    int sign = 0;
+    int count = 0;
+    if (start->type!='(' || end->type!=')' ) {
+        return false;
+    }
+    for (Token* sym = start; sym<end; sym++) {
+        if(sym->type == '(') {
+        count++;
+        } else if(sym->type ==')') {
+            count--;
+        }
+        if (count==0) {
+            sign=1;
+        }
+    }
+    if(count==1&&sign==0) {
+        return true;
+    }
+    if(count==1&&sign==1) {
+        return false;
+    }
+    panic("Error expression");
+}
+// 用于检测前后是否有括号，如果有，将括号去掉。
+// (1+(2+3))清掉括号，但是(1+2)+(3+4)则不清理
+// 思路是如果开头写过括号，则会到最后闭合，提前闭合就是错误的，根据这一点可以写出代码。
+
+Token * calc(Token* start, Token* end) {
+  int sign = 0;
+  int count = 0;
+  Token* op = NULL;
+  for (Token* sym = start; sym<=end; sym++) {
+    if (sym->type=='(') {
+      count++;
+      continue;
+    }
+    if (sym->type==')') {
+      count--;
+      continue;
+    }
+    if(count!=0) {
+      continue;
+    }
+    if(sym->type==TK_DEC) {
+      continue;
+    }
+    if(sign<=1&&(sym->type=='+'||sym->type=='-')) {
+      op = sym;
+      sign = 1;
+    }
+    else if(sign==0&&(sym->type=='*'||sym->type=='/')) {
+      op=sym;
+    }
+  }
+  return op;
+}
+
+
+int eval(Token* start, Token* end) {
+  if (start == end) {
+    return atoi(start->str);
+  }
+  else if(check_parentheses(start, end) == true) {
+    return eval(start + 1, end - 1);
+  }
+  else{
+    int val1,val2=0;
+    Token *op = calc(start, end);
+    val1 = eval(start, op - 1);
+    val2 = eval(op + 1, end);
+    switch (op->type) {
+      case '+': return val1 + val2;
+      case '-': return val1 - val2;
+      case '*': return val1 * val2;
+      case '/': return val1 / val2;
+      default: panic("Error expression");
+    }
+  }
+}
+
+
+
+void check_Negative(Token* start, Token* end) {
+    Token* op = start;
+    for (; start <= end; start++) {
+        if(start->type == '-' && (start - 1)->type != TK_DEC && (start - 1)->type != ')') {
+        start->type = TK_NEG;
+        }
+    }
+    start=op;
+    return;
+}
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -116,7 +209,22 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
-
-  return 0;
+  int num = eval(tokens,tokens+nr_token-1);
+  return num;
 }
+/*
+static int cmd_p(char *args) {
+    if (args == NULL) {
+        printf("No parameters\n");
+        return 0;
+    }
+    bool success = true;
+    int num = expr(args,&success);
+    if (success==false) {
+        printf("Wrong expression\n");
+        return 0;
+    } else {
+        printf("0x%x or %dD\n",num,num);
+        return 0;
+    }
+}*/

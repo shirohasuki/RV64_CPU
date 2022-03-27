@@ -6,7 +6,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
+  TK_NOTYPE = 256, TK_EQ, TK_DEC
 
   /* TODO: Add more token types */
 
@@ -20,10 +20,15 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
-
-  {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
-  {"==", TK_EQ},        // equal
+    {"[0-9]+", TK_DEC},     // dec
+    {" +", TK_NOTYPE},    // spaces
+    {"\\+", '+'},         // plus
+    {"\\*", '*'},           // mul
+    {"/", '/'},             // div
+    {"\\(", '('},           // bra1
+    {"\\)", ')'},           // bra2
+    {"-", '-'},             // sub
+    {"==", TK_EQ},        // equal
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -48,52 +53,52 @@ void init_regex() {
 }
 
 typedef struct token {
-  int type;
-  char str[32];
+    int type;
+    char str[32];
 } Token;
 
 static Token tokens[32] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
 static bool make_token(char *e) {
-  int position = 0;
-  int i;
-  regmatch_t pmatch;
+    int position = 0;
+    int i;
+    regmatch_t pmatch;
 
-  nr_token = 0;
+    nr_token = 0;
 
-  while (e[position] != '\0') {
-    /* Try all rules one by one. */
-    for (i = 0; i < NR_REGEX; i ++) {
-      if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
-        char *substr_start = e + position;
-        int substr_len = pmatch.rm_eo;
+    while (e[position] != '\0') {
+        /* Try all rules one by one. */
+        for (i = 0; i < NR_REGEX; i++) {
+            if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
+                char *substr_start = e + position;
+                int substr_len = pmatch.rm_eo;
 
-        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-            i, rules[i].regex, position, substr_len, substr_len, substr_start);
+                Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+                    i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
-        position += substr_len;
+                position += substr_len;
 
         /* TODO: Now a new token is recognized with rules[i]. Add codes
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
 
-        switch (rules[i].token_type) {
-          default: TODO();
+                switch (rules[i].token_type) {
+                    default: TODO();
+                }
+
+                break;
+            }
         }
 
-        break;
-      }
+        if (i == NR_REGEX) {
+        printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
+        return false;
+        }
     }
 
-    if (i == NR_REGEX) {
-      printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
-      return false;
-    }
-  }
-
-  return true;
+    return true;
 }
 
 

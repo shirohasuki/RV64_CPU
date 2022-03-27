@@ -120,14 +120,14 @@ int check_parentheses(Token* start, Token* end) {
         } else if(sym->type ==')') {
             count--;
         }
-        if (count==0) {
+        if (count == 0) {
             sign=1;
         }
     }
-    if(count==1&&sign==0) {
+    if (count == 1 && sign == 0) {
         return true;
     }
-    if(count==1&&sign==1) {
+    if (count == 1 && sign == 1) {
         return false;
     }
     panic("Error expression");
@@ -137,35 +137,37 @@ int check_parentheses(Token* start, Token* end) {
 // 思路是如果开头写过括号，则会到最后闭合，提前闭合就是错误的，根据这一点可以写出代码。
 
 Token * calc(Token* start, Token* end) {
-  int sign = 0;
-  int count = 0;
-  Token* op = NULL;
-  for (Token* sym = start; sym<=end; sym++) {
-    if (sym->type=='(') {
-      count++;
-      continue;
+    int sign = 0;
+    int count = 0;
+    Token* op = NULL;
+    for (Token* sym = start; sym<=end; sym++) {
+        if (sym->type == '(') {
+      	    count++;
+      	    continue;
     }
-    if (sym->type==')') {
-      count--;
-      continue;
+        if (sym->type == ')') {
+            count--;
+            continue;
+        }
+        if (count != 0) {
+            continue;
+        }
+        if (sym->type == TK_DEC) {
+            continue;
+        }
+        if (sign <= 2 && (sym->type == '+' || sym->type == '-')) {
+            op = sym;
+  	        sign = 2;
+	    }
+        else if(sign <= 1 && (sym->type == '*' || sym->type == '/')) {
+            op = sym;
+            sign = 1;
+        } else if (sign == 0 && (sym->type == TK_NEG)) {
+            op = sym;
+        }
     }
-    if(count!=0) {
-      continue;
-    }
-    if(sym->type==TK_DEC) {
-      continue;
-    }
-    if(sign<=1&&(sym->type=='+'||sym->type=='-')) {
-      op = sym;
-      sign = 1;
-    }
-    else if(sign==0&&(sym->type=='*'||sym->type=='/')) {
-      op=sym;
-    }
-  }
   return op;
 }
-
 
 int eval(Token* start, Token* end) {
   if (start == end) {
@@ -175,21 +177,22 @@ int eval(Token* start, Token* end) {
     return eval(start + 1, end - 1);
   }
   else{
-    int val1,val2=0;
+    int val1, val2 = 0;
     Token *op = calc(start, end);
-    val1 = eval(start, op - 1);
-    val2 = eval(op + 1, end);
+    //if (op->type != TK_NEG) {
+        val1 = eval(start, op - 1);  
+    //} 
+        val2 = eval(op + 1, end);
     switch (op->type) {
       case '+': return val1 + val2;
       case '-': return val1 - val2;
       case '*': return val1 * val2;
       case '/': return val1 / val2;
+      //case TK_NEG : return val2 * -1;//单目负号
       default: panic("Error expression");
     }
   }
 }
-
-
 
 void check_Negative(Token* start, Token* end) {
     Token* op = start;
@@ -198,7 +201,7 @@ void check_Negative(Token* start, Token* end) {
         start->type = TK_NEG;
         }
     }
-    start=op;
+    start = op;
     return;
 }
 

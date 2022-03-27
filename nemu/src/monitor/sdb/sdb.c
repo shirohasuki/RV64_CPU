@@ -152,6 +152,35 @@ static int cmd_info(char *args) {
   return 0;
 }
 
+
+//caculate the result of expression
+/* 
+uint32_t expr(char *e, bool *success) {
+  if (!make_token(e)) {
+    *success = false;
+    return 0;
+  }
+  int num = eval(tokens,tokens+nr_token-1);
+  return num;
+}
+
+static int cmd_p(char *args) {
+  if (args == NULL) {
+    printf("No parameters\n");
+    return 0;
+  }
+  bool success = true;
+  int num = expr(args,&success);
+  if(success==false) {
+    printf("Wrong expression\n");
+    return 0;
+  }else {
+    printf("0x%x or %dD\n",num,num);
+    return 0;
+  }
+}
+*/
+
 static int cmd_confession(char *args) {
     printf("\tThe fountains mingle with the river\n\tAnd the rivers with the ocean,\n\tThe winds of heaven mix for ever\n\tWith a sweet emotion;\n\tNothing in the world is single,\n\tAll things by a law divine\n\tIn one another’s being mingle—\n\tWhy not I with thine?\n\tSee the mountains kiss high heaven\n\tAnd the waves clasp one another;\n\tNo sister-flower would be forgive\n\tIf it disdain’d its brother;\n\tAnd the sunlight clasps the earth,\n\tAnd the moonbeams kiss the sea\n\tWhat are all these kissings worth,\n\tIf thou kiss not me?\n");
     printf("\033[44;31m Dull words can't express my love. I write it into the chip and devote my whole life to you.\033[0m\n");//the confession for u

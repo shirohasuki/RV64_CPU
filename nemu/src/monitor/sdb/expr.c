@@ -157,8 +157,8 @@ Token * calc(Token* start, Token* end) {
         }
         if (sign <= 2 && (sym->type == '+' || sym->type == '-')) {
             op = sym;
-  	        sign = 2;
-	    }
+  	    sign = 2;
+	}
         else if(sign <= 1 && (sym->type == '*' || sym->type == '/')) {
             op = sym;
             sign = 1;
@@ -188,7 +188,7 @@ int eval(Token* start, Token* end) {
       case '-': return val1 - val2;
       case '*': return val1 * val2;
       case '/': return val1 / val2;
-      //case TK_NEG : return val2 * -1;//单目负号
+      //case TK_NEG : return val2 * -1;//单目负号，是bug，还没解决
       default: panic("Error expression");
     }
   }

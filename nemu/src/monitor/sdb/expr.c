@@ -85,9 +85,16 @@ static bool make_token(char *e) {
          */
 
                 switch (rules[i].token_type) {
-                    default: TODO();
-                }
-
+                    case '+': case '-':  case '*': case '/': 
+                    case '(': case ')':  case TK_DEC:
+                        tokens[nr_token].type = rules[i].token_type;
+                        strncpy(tokens[nr_token++].str, substr_start, substr_len);
+                        tokens[nr_token].str[substr_len] = '\0';
+                        // 匹配token，把它们存入数组tokens
+                        break;
+                    case TK_NOTYPE:
+                        break;
+                    }
                 break;
             }
         }

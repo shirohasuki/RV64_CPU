@@ -43,7 +43,10 @@ static int cmd_x(char *args);
 static int cmd_si(char *args);
 static int cmd_info(char *args);
 static int cmd_confession(char *args);
-static int cmd_p(char *args);//definded in expr.c
+static int cmd_p(char *args);//expr
+
+//static int cmd_w(char *args);
+//static int cmd_d(char *args);//definded in watchpoint.c
 
 static struct {
   const char *name;
@@ -56,7 +59,7 @@ static struct {
 
   /* TODO: Add more commands */
   {"si", "Execute the program in n steps\n \t-n nsteps", cmd_si },
-  {"info", "print status\n \t-r print register status", cmd_info },
+  {"info", "print status\n \t-r print register status\n \t -w print watchpoints", cmd_info },
   {"x", "scan the rom", cmd_x },
   {"p", "eval the expr", cmd_p },
 };
@@ -167,7 +170,7 @@ static int cmd_p(char *args) {
     }
     bool success = true;
     int num = expr(args,&success);
-    if (success==false) {
+    if (success == false) {
         printf("Wrong expression\n");
         return 0;
     } else {

@@ -7,7 +7,6 @@
 
 #include <stdbool.h>
 #include <stdio.h>
-#include <common.h>
 
 enum {
   TK_NOTYPE = 256, TK_EQ, TK_DEC, TK_NEG 
@@ -140,7 +139,7 @@ int check_parentheses(Token* start, Token* end) {
 // (1+(2+3))清掉括号，但是(1+2)+(3+4)则不清理
 // 思路是如果开头写过括号，则会到最后闭合，提前闭合就是错误的，根据这一点可以写出代码。
 
-Token * calc(Token* start, Token* end) {
+Token *calc(Token* start, Token* end) {
     int sign = 0;
     int count = 0;
     Token* op = NULL;
@@ -188,12 +187,12 @@ int eval(Token* start, Token* end) {
     //} 
         val2 = eval(op + 1, end);
     switch (op->type) {
-      case '+': return val1 + val2;
-      case '-': return val1 - val2;
-      case '*': return val1 * val2;
-      case '/': return val1 / val2;
-      //case TK_NEG : return val2 * -1;//单目负号，是bug，还没解决
-      default: panic("Error expression");
+        case '+': return val1 + val2;
+        case '-': return val1 - val2;
+        case '*': return val1 * val2;
+        case '/': return val1 / val2;
+        //case TK_NEG : return val2 * -1;//单目负号，是bug，还没解决
+        default: panic("Error expression");
     }
   }
 }
@@ -210,14 +209,14 @@ void check_Negative(Token* start, Token* end) {
 }
 
 word_t expr(char *e, bool *success) {
-  if (!make_token(e)) {
-    *success = false;
-    return 0;
-  }
+    if (!make_token(e)) {
+        *success = false;
+        return 0;
+    }
 
   /* TODO: Insert codes to evaluate the expression. */
-  int num = eval(tokens,tokens+nr_token-1);
-  return num;
+    int num = eval(tokens,tokens+nr_token-1);
+    return num;
 }
 /*
 static int cmd_p(char *args) {

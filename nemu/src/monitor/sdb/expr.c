@@ -4,7 +4,10 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
+
 #include <stdbool.h>
+#include <stdio.h>
+#include <common.h>
 
 enum {
   TK_NOTYPE = 256, TK_EQ, TK_DEC, TK_NEG 

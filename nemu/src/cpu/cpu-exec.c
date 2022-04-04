@@ -35,7 +35,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
   int ilen = s->snpc - s->pc;
   int i;
-  uint8_t *inst = (uint8_t *)&s->isa.instr.val;
+  uint8_t *inst = (uint8_t *)&s->isa.inst.val;
   for (i = 0; i < ilen; i ++) {
     p += snprintf(p, 4, " %02x", inst[i]);
   }
@@ -48,7 +48,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
-      MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.instr.val, ilen);
+      MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
 #endif
 }
 

@@ -5,9 +5,9 @@
 typedef struct watchpoint {
     int NO; //第NO个监视点的序号
     struct watchpoint *next;
-
+    
   /* TODO: Add more members if necessary */
-
+    int arg; //变量
 } WP;
 
 static WP wp_pool[NR_WP] = {}; //线程池

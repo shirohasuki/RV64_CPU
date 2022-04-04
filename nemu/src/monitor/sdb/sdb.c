@@ -45,7 +45,7 @@ static int cmd_info(char *args);
 static int cmd_confession(char *args);
 static int cmd_p(char *args);//expr
 
-//static int cmd_w(char *args);
+static int cmd_w(char *args);
 //static int cmd_d(char *args);//definded in watchpoint.c
 
 static struct {
@@ -62,6 +62,7 @@ static struct {
   {"info", "print status\n \t-r print register status\n \t -w print watchpoints", cmd_info },
   {"x", "scan the rom", cmd_x },
   {"p", "eval the expr", cmd_p },
+  {"w", "define a new watchpoint", cmd_w },
 };
 
 #define NR_CMD ARRLEN(cmd_table)
@@ -177,6 +178,12 @@ static int cmd_p(char *args) {
         printf("0x%x or %dD\n",num,num);
         return 0;
     }
+}
+
+static int cmd_w(char *args) {
+    //WP *wp = new_wp();
+    //free(wp);
+    return 0;
 }
 
 void sdb_set_batch_mode() {

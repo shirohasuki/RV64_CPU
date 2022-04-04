@@ -3,25 +3,42 @@
 #define NR_WP 32
 
 typedef struct watchpoint {
-  int NO;
-  struct watchpoint *next;
+    int NO; //第NO个监视点
+    struct watchpoint *next;
 
   /* TODO: Add more members if necessary */
 
 } WP;
 
-static WP wp_pool[NR_WP] = {};
+static WP wp_pool[NR_WP] = {}; //线程池
 static WP *head = NULL, *free_ = NULL;
+//head:激活的监视点的链表的头节点;free:空闲的监视点的链表的头节点
 
 void init_wp_pool() {
     for (int i = 0; i < NR_WP; i ++) {
-      wp_pool[i].NO = i;
-      wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
+        wp_pool[i].NO = i;
+        wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
     }
 
-    head = NULL;
-    free_ = wp_pool;
+    head = NULL; // null
+    free_ = wp_pool; // 0 -> 1 -> 2 -> 3 -> ... -> 31 -> null
 }
 
 /* TODO: Implement the functionality of watchpoint */
 
+WP *new_wp() {
+    if (!free_) {
+        panic("Error: wp_pool is empty!\n");
+    }
+    WP *tmp = free_;
+    free_ = free_->next;
+    tmp->next = head; //头插法
+    head = tmp;
+    return tmp;
+} // free -> head
+
+
+void free_wp(WP *wp) {
+    if (!wp) { return ;}
+    
+}

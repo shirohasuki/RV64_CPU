@@ -2,13 +2,15 @@
 
 #define NR_WP 32
 
+/*
 typedef struct watchpoint {
     int NO; //第NO个监视点的序号
     struct watchpoint *next;
     
-  /* TODO: Add more members if necessary */
+  
     int arg; //变量
-} WP;
+} WP;*/ 
+
 
 static WP wp_pool[NR_WP] = {}; //线程池
 static WP *head = NULL, *free_ = NULL; //链表（头节点）

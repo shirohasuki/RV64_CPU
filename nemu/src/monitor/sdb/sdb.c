@@ -182,8 +182,9 @@ static int cmd_p(char *args) {
 
 static int cmd_w(char *args) {
     WP *wp = new_wp();
-    
-    free(wp);
+    bool success = true;
+    wp->arg = expr(args, &success);
+    printf("%d", wp->arg);
     return 0;
 }
 

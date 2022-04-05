@@ -170,18 +170,21 @@ static int cmd_p(char *args) {
         return 0;
     }
     bool success = true;
-    int num = expr(args,&success);
+    int num = expr(args, &success);
     if (success == false) {
         printf("Wrong expression\n");
         return 0;
     } else {
-        printf("0x%x or %dD\n",num,num);
+        printf("0x%x or %dD\n", num, num);
         return 0;
     }
 }
 
 static int cmd_w(char *args) {
     //WP *wp = new_wp();
+    bool success = true;
+    int num = expr(args, &success);
+    printf("%d", num);
     //free(wp);
     return 0;
 }

@@ -10,6 +10,7 @@ typedef struct watchpoint {
     struct watchpoint *next;
     int arg; 
 } WP;
+
 WP *new_wp(); 
 void free_wp(WP *wp); //watchpoint
 

@@ -181,11 +181,9 @@ static int cmd_p(char *args) {
 }
 
 static int cmd_w(char *args) {
-    //WP *wp = new_wp();
-    bool success = true;
-    int num = expr(args, &success);
-    printf("%d", num);
-    //free(wp);
+    WP *wp = new_wp();
+    
+    free(wp);
     return 0;
 }
 

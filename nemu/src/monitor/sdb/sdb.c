@@ -184,7 +184,7 @@ static int cmd_w(char *args) {
     WP *wp = new_wp();
     bool success = true;
     wp->arg = expr(args, &success);
-    printf("%d", wp->arg);
+    printf("watchpoint: %d\t%s\t%d", wp->NO, args, wp->arg);
     return 0;
 }
 

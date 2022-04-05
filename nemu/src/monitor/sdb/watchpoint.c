@@ -2,14 +2,13 @@
 
 #define NR_WP 32
 
-/*
 typedef struct watchpoint {
     int NO; //第NO个监视点的序号
-    struct watchpoint *next;
-*/    
+    struct watchpoint *next;   
+
   /* TODO: Add more members if necessary */
-/*    int arg; //变量
-} WP;*/
+    int arg; //变量
+} WP;
 
 
 static WP wp_pool[NR_WP] = {}; //线程池
@@ -49,3 +48,11 @@ void free_wp(WP *wp) { //传入节点
     wp->next = free_; 
     free_ = wp;// wp->next一定指向free头，之前操作只是作用于head链表内部逻辑 
 } //将head链表中指定的wp拿出插入free_
+
+int make_a_new_w(char *args) {
+    WP *wp = new_wp();
+    bool success = true;
+    wp->arg = expr(args, &success);
+    printf("watchpoint: %d\t%s\t%d\n", wp->NO, args, wp->arg);
+    return 0;
+}

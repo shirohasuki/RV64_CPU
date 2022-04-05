@@ -45,7 +45,7 @@ static int cmd_info(char *args);
 static int cmd_confession(char *args);
 static int cmd_p(char *args);//expr
 
-static int cmd_w(char *args);
+static int cmd_w(char *args);//watchpoint
 //static int cmd_d(char *args);//definded in watchpoint.c
 
 static struct {
@@ -152,6 +152,15 @@ static int cmd_info(char *args) {
     if(strcmp(arg, "r") == 0) {
         isa_reg_display();
     }
+    /*if(strcmp(arg, "w") == 0) {
+        WP *wp = ;
+        bool success = true;
+        while (!wp) {
+            wp->arg = expr(args, &success);
+            printf("watchpoint: %d\t%s\t%d\n", wp->NO, args, wp->arg);
+            wp = wp->next;
+        }
+    }*/
     else {
         printf("Info is imperfect\n");
     }
@@ -181,10 +190,7 @@ static int cmd_p(char *args) {
 }
 
 static int cmd_w(char *args) {
-    WP *wp = new_wp();
-    bool success = true;
-    wp->arg = expr(args, &success);
-    printf("watchpoint: %d\t%s\t%d", wp->NO, args, wp->arg);
+    make_a_new_w(args); 
     return 0;
 }
 

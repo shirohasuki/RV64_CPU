@@ -4,14 +4,6 @@
 #include <common.h>
 
 word_t expr(char *e, bool *success); //expr
-
-typedef struct watchpoint {
-    int NO;
-    struct watchpoint *next;
-    int arg; 
-} WP;
-
-WP *new_wp(); 
-void free_wp(WP *wp); //watchpoint
+int make_a_new_w(char *args) ;
 
 #endif

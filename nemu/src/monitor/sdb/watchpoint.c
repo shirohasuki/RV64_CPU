@@ -36,7 +36,7 @@ WP *new_wp() {
     free_ = free_->next;
     tmp->next = head; //头插法
     head = tmp;
-    printf("%d\n", tmp->NO);
+    //printf("%d\n", tmp->NO);
     return tmp;
 } // free -> head
 
@@ -68,7 +68,7 @@ int print_w_list() {
         printf("there is no watchpoint in the list");
         return 0;
     }
-    printf("watchpoint: %d\t%s\t%d\n", wp->NO, wp->args, wp->ret);
+    printf("watchpoint: %d\t%s\t%d\t%d\n", wp->NO, wp->args, wp->ret, wp->next->NO);
     while (!wp->next) {
         printf("watchpoint: %d\t%s\t%d\n", wp->NO, wp->args, wp->ret);
         wp = wp->next;

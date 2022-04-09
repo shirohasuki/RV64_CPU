@@ -69,9 +69,13 @@ int print_w_list() {
         return 0;
     }
     //printf("watchpoint: %d\t%s\t%d\t%d\n", wp->NO, wp->args, wp->ret, wp->next->ret);
-    while (!(wp->next)) {
+    while (wp->next != NULL) {
         printf("watchpoint: %d\t%s\t%d\n", wp->NO, wp->args, wp->ret);
         wp = wp->next;
+        if (wp->next == NULL) {
+            printf("watchpoint: %d\t%s\t%d\n", wp->NO, wp->args, wp->ret);
+            break;
+        }
     }
     return 0;
 }

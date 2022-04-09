@@ -36,6 +36,7 @@ WP *new_wp() {
     free_ = free_->next;
     tmp->next = head; //头插法
     head = tmp;
+    printf("%d\n", tmp->NO);
     return tmp;
 } // free -> head
 
@@ -58,7 +59,6 @@ int make_a_new_w(char *args) {
     bool success = true;
     wp->ret = expr(args, &success); // 存结果
     printf("watchpoint: %d\t%s\t%d\n", wp->NO, wp->args, wp->ret);
-    printf("watchpoint: %d\n", wp->next->NO);
     return 0;
 }
 

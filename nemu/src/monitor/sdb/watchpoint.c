@@ -52,12 +52,13 @@ void free_wp(WP *wp) { // 传入节点
 
 int make_a_new_w(char *args) {
     WP *wp = new_wp();
-    wp->next = head->next;
-    head->next = wp; 
+    //wp->next = head->next;
+    //head->next = wp; 
     wp->args = args; // 存表达式
     bool success = true;
     wp->ret = expr(args, &success); // 存结果
     printf("watchpoint: %d\t%s\t%d\n", wp->NO, wp->args, wp->ret);
+    printf("watchpoint: %d\n", wp->next->NO);
     return 0;
 }
 

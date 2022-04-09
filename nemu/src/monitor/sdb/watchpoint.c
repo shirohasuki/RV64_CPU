@@ -36,7 +36,7 @@ WP *new_wp() {
     free_ = free_->next;
     tmp->next = head; //头插法
     head = tmp;
-    return tmp;
+    return head;
 } // free -> head
 
 void free_wp(WP *wp) { // 传入节点

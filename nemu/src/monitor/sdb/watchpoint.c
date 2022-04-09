@@ -57,18 +57,16 @@ int make_a_new_w(char *args) {
     printf("watchpoint: %d\t%s\t%d\n", wp->NO, wp->args, wp->ret);
     return 0;
 }
-/*
-int traverse_w_list() {
+
+int print_w_list() {
     WP *wp = head;
     if (wp->next == NULL) {
         printf("there is no watchpoint in the list");
         return 0;
     }
-    bool success = true;
     while (!wp->next) {
-        wp->arg = expr(args, &success);
-        printf("watchpoint: %d\t%s\t%d\n", wp->NO, args, wp->arg);
+        printf("watchpoint: %d\t%s\t%d\n", wp->NO, wp->args, wp->ret);
         wp = wp->next;
     }
     return 0;
-}*/
+}

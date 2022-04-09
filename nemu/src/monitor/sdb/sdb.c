@@ -153,7 +153,7 @@ static int cmd_info(char *args) {
         isa_reg_display();
     }
     if(strcmp(arg, "w") == 0) {
-        //print_w_list(head);
+        print_w_list();
     }
     else {
         printf("Info is imperfect\n");

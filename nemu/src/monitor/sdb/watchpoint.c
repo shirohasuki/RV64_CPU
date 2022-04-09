@@ -52,9 +52,7 @@ void free_wp(WP *wp) { // 传入节点
 } // 将head链表中指定的wp拿出插入free_
 
 int make_a_new_w(char *args) {
-    WP *wp = new_wp();
-    //wp->next = head->next;
-    //head->next = wp; 
+    WP *wp = new_wp(); 
     wp->args = args; // 存表达式
     bool success = true;
     wp->ret = expr(args, &success); // 存结果
@@ -68,12 +66,11 @@ int print_w_list() {
         printf("there is no watchpoint in the list");
         return 0;
     }
-    //printf("watchpoint: %d\t%s\t%d\t%d\n", wp->NO, wp->args, wp->ret, wp->next->ret);
     while (wp->next != NULL) {
-        printf("watchpoint: %d\t%s\t%d\n", wp->NO, wp->args, wp->ret);
+        printf("watchpoint: %d\t%d\n", wp->NO, wp->ret);
         wp = wp->next;
         if (wp->next == NULL) {
-            printf("watchpoint: %d\t%s\t%d\n", wp->NO, wp->args, wp->ret);
+            printf("watchpoint: %d\t%d\n", wp->NO, wp->ret);
             break;
         }
     }

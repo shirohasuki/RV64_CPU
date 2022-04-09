@@ -5,9 +5,10 @@
 typedef struct watchpoint {
     int NO; //第NO个监视点的序号
     struct watchpoint *next;   
-    char *args;
+    
   /* TODO: Add more members if necessary */
-    int ret; //变量
+    char *args; // 表达式
+    int ret; // 结果
 } WP;
 
 
@@ -51,9 +52,9 @@ void free_wp(WP *wp) { //传入节点
 
 int make_a_new_w(char *args) {
     WP *wp = new_wp();
-    wp->args = args;
+    wp->args = args; // 存表达式
     bool success = true;
-    wp->ret = expr(args, &success);
+    wp->ret = expr(args, &success); // 存结果
     printf("watchpoint: %d\t%s\t%d\n", wp->NO, wp->args, wp->ret);
     return 0;
 }
@@ -64,6 +65,7 @@ int print_w_list() {
         printf("there is no watchpoint in the list");
         return 0;
     }
+    printf("watchpoint: %d\t%s\t%d\n", wp->NO, wp->args, wp->ret);
     while (!wp->next) {
         printf("watchpoint: %d\t%s\t%d\n", wp->NO, wp->args, wp->ret);
         wp = wp->next;

@@ -65,7 +65,7 @@ int print_w_list() {
         printf("there is no watchpoint in the list");
         return 0;
     }
-    //printf("watchpoint: %d\t%s\t%d\n", wp->NO, wp->args, wp->ret);
+    printf("watchpoint: %d\t%s\t%d\n", wp->NO, wp->args, wp->ret);
     while (!wp->next) {
         printf("watchpoint: %d\t%s\t%d\n", wp->NO, wp->args, wp->ret);
         wp = wp->next;

@@ -152,15 +152,9 @@ static int cmd_info(char *args) {
     if(strcmp(arg, "r") == 0) {
         isa_reg_display();
     }
-    /*if(strcmp(arg, "w") == 0) {
-        WP *wp = ;
-        bool success = true;
-        while (!wp) {
-            wp->arg = expr(args, &success);
-            printf("watchpoint: %d\t%s\t%d\n", wp->NO, args, wp->arg);
-            wp = wp->next;
-        }
-    }*/
+    if(strcmp(arg, "w") == 0) {
+        print_w_list(args);
+    }
     else {
         printf("Info is imperfect\n");
     }

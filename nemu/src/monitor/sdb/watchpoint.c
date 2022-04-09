@@ -15,7 +15,7 @@ static WP wp_pool[NR_WP] = {}; //线程池
 static WP *head = NULL, *free_ = NULL; //链表（头节点）
 //head:激活的监视点的链表的头节点;free:空闲的监视点的链表的头节点
 
-void init_wp_pool() {
+void init_wp_pool() {   
     for (int i = 0; i < NR_WP; i ++) {
         wp_pool[i].NO = i;
         wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
@@ -46,7 +46,7 @@ void free_wp(WP *wp) { //传入节点
     tmp->next = tmp->next->next; //剔除wp
 
     wp->next = free_; 
-    free_ = wp;// wp->next一定指向free头，之前操作只是作用于head链表内部逻辑 
+    free_ = wp; // wp->next一定指向free头，之前操作只是作用于head链表内部逻辑 
 } //将head链表中指定的wp拿出插入free_
 
 int make_a_new_w(char *args) {

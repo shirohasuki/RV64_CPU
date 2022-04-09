@@ -4,6 +4,7 @@
 #include <common.h>
 
 word_t expr(char *e, bool *success); //expr
-int make_a_new_w(char *args) ;
+int make_a_new_w(char *args);
+void init_wp_pool();
 
 #endif

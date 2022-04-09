@@ -59,6 +59,7 @@ int make_a_new_w(char *args) {
 
 int print_w_list(char *args) {
     WP *wp = head;
+    printf("0");
     if (wp->next == NULL) {
         printf("there is no watchpoint in the list");
         return 0;

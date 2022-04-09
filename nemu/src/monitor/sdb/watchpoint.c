@@ -36,7 +36,7 @@ WP *new_wp() {
     free_ = free_->next;
     tmp->next = head; //头插法
     head = tmp;
-    return head;
+    return tmp;
 } // free -> head
 
 void free_wp(WP *wp) { // 传入节点
@@ -52,6 +52,8 @@ void free_wp(WP *wp) { // 传入节点
 
 int make_a_new_w(char *args) {
     WP *wp = new_wp();
+    wp->next = head->next;
+    head->next = wp; 
     wp->args = args; // 存表达式
     bool success = true;
     wp->ret = expr(args, &success); // 存结果

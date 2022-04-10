@@ -66,11 +66,10 @@ int print_w_list() {
         return 0;
     }
     while (wp != NULL) {
-        printf("watchpoint: %d\t%d\n", wp->NO, wp->ret);
-        if (wp->next == NULL) {
-            //printf("watchpoint: %d\t%d\n", wp->NO, wp->ret);
-            break;
-        }
+        //printf("watchpoint: %d\t%d\n", wp->NO, wp->ret);
+        bool success = true;
+        printf("watchpoint: %d\t%ld\n", wp->NO, expr(wp->args, &success));
+        if (wp->next == NULL) { break;}
         wp = wp->next;
     }
     return 0;
@@ -89,7 +88,7 @@ int delete_a_w(int NO) {
             break;
         }
         if (wp->next == NULL) {
-            printf("NO.%d watchpoint is not find\n", wp->NO);
+            printf("NO.%d watchpoint is not find\n", NO);
             break;
         }
         wp = wp->next;

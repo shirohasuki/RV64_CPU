@@ -46,7 +46,7 @@ static int cmd_confession(char *args);
 static int cmd_p(char *args);//expr
 
 static int cmd_w(char *args);//watchpoint
-//static int cmd_d(char *args);//definded in watchpoint.c
+static int cmd_d(char *args);//watchpoint
 
 static struct {
   const char *name;
@@ -63,6 +63,7 @@ static struct {
   {"x", "scan the rom", cmd_x },
   {"p", "eval the expr", cmd_p },
   {"w", "define a new watchpoint", cmd_w },
+  {"d", "delete NO.x watchpoint", cmd_d},
 };
 
 #define NR_CMD ARRLEN(cmd_table)
@@ -185,6 +186,11 @@ static int cmd_p(char *args) {
 
 static int cmd_w(char *args) {
     make_a_new_w(args); 
+    return 0;
+}
+
+static int cmd_d(char *args) {
+    delete_a_w(atoi(args));
     return 0;
 }
 

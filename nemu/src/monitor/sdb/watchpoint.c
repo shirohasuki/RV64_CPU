@@ -94,6 +94,5 @@ int delete_a_w(int NO) {
             break;
         }
     }
-
     return 0;
 }

@@ -95,4 +95,4 @@ int delete_a_w(int NO) {
         wp = wp->next;
     }
     return 0;
-} // 删除watchpoint的函数还是有bug的对于第一个和最后一个监视点删除会出段错误
+} // 删除watchpoint的函数还是有bug,最后一个监视点删除会出段错误

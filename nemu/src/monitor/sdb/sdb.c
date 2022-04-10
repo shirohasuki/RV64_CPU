@@ -132,7 +132,7 @@ static int cmd_si(char *args) {
         printf("Too many parameters\n");
         return 0;
     }
-    if(step<=0 || step >=999) {
+    if(step <= 0 || step >= 999) {
         printf("Wrong parameter\n");
     return 0;
     }
@@ -142,7 +142,7 @@ static int cmd_si(char *args) {
 
 static int cmd_info(char *args) {
     if(args == NULL) {
-        printf("Please input the info r\n");
+        printf("Please input the info r/w\n");
         return 0;
     }
     char *arg = strtok(NULL, " ");

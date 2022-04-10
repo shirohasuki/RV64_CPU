@@ -190,7 +190,6 @@ static int cmd_w(char *args) {
 }
 
 static int cmd_d(char *args) {
-    printf("%d", atoi(args));
     delete_a_w(atoi(args));
     return 0;
 }

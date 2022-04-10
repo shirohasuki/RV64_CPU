@@ -86,7 +86,7 @@ int delete_a_w(int NO) {
     while (wp->next != NULL) {
         if (wp->NO == NO) {
             free_wp(wp);
-            printf("delete NO.%d watchpoint", wp->NO);
+            printf("delete NO.%d watchpoint successfully", wp->NO);
             break;
         }
         wp = wp->next;

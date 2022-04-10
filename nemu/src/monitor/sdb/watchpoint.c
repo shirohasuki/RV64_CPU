@@ -68,7 +68,7 @@ int print_w_list() {
     while (wp != NULL) {
         printf("watchpoint: %d\t%d\n", wp->NO, wp->ret);
         if (wp->next == NULL) {
-            printf("watchpoint: %d\t%d\n", wp->NO, wp->ret);
+            //printf("watchpoint: %d\t%d\n", wp->NO, wp->ret);
             break;
         }
         wp = wp->next;

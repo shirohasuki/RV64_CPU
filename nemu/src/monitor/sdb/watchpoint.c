@@ -61,38 +61,38 @@ int make_a_new_w(char *args) {
 
 int print_w_list() {
     WP *wp = head;
-    if (wp->next == NULL) {
-        printf("there is no watchpoint in the list");
+    if (wp == NULL) {
+        printf("there is no watchpoint in the list\n");
         return 0;
     }
-    while (wp->next != NULL) {
+    while (wp != NULL) {
         printf("watchpoint: %d\t%d\n", wp->NO, wp->ret);
-        wp = wp->next;
         if (wp->next == NULL) {
             printf("watchpoint: %d\t%d\n", wp->NO, wp->ret);
             break;
         }
+        wp = wp->next;
     }
     return 0;
 }
 
 int delete_a_w(int NO) {
     WP *wp = head;
-    if (wp->next == NULL) {
+    if (wp == NULL) {
         printf("there is no watchpoint in the list\n");
         return 0;
     }
-    while (wp->next != NULL) {
+    while (wp != NULL) {
         if (wp->NO == NO) {
             free_wp(wp);
             printf("delete NO.%d watchpoint successfully\n", wp->NO);
             break;
         }
-        wp = wp->next;
         if (wp->next == NULL) {
             printf("NO.%d watchpoint is not find\n", wp->NO);
             break;
         }
+        wp = wp->next;
     }
     return 0;
 } // 删除watchpoint的函数还是有bug的对于第一个和最后一个监视点删除会出段错误

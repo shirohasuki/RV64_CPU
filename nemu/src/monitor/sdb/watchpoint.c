@@ -36,7 +36,6 @@ WP *new_wp() {
     free_ = free_->next;
     tmp->next = head; //头插法
     head = tmp;
-    //printf("%d\n", tmp->NO);
     return tmp;
 } // free -> head
 
@@ -96,4 +95,4 @@ int delete_a_w(int NO) {
         }
     }
     return 0;
-}
+} // 删除watchpoint的函数还是有bug的对于第一个和最后一个监视点删除会出段错误

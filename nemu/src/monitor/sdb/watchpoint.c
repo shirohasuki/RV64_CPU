@@ -76,3 +76,24 @@ int print_w_list() {
     }
     return 0;
 }
+
+int delete_a_w(int NO) {
+    WP *wp = head;
+    if (wp->next == NULL) {
+        printf("there is no watchpoint in the list");
+        return 0;
+    }
+    while (wp->next != NULL) {
+        if (wp->NO == NO) {
+            free_wp(wp);
+            printf("delete NO.%d watchpoint", wp->NO);
+        }
+        wp = wp->next;
+        if (wp->next == NULL) {
+            printf("NO.%d watchpoint is not find", wp->NO);
+            break;
+        }
+    }
+
+    return 0;
+}

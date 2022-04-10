@@ -214,7 +214,7 @@ word_t expr(char *e, bool *success) {
     }
 
   /* TODO: Insert codes to evaluate the expression. */
-    int num = eval(tokens,tokens+nr_token-1);
+    int num = eval(tokens, tokens + nr_token-1);
     return num;
 }
 /*

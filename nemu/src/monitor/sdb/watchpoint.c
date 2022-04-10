@@ -11,7 +11,6 @@ typedef struct watchpoint {
     int ret; // 结果
 } WP;
 
-
 static WP wp_pool[NR_WP] = {}; //线程池
 static WP *head = NULL, *free_ = NULL; //链表（头节点）
 //head:激活的监视点的链表的头节点;free:空闲的监视点的链表的头节点
@@ -66,9 +65,7 @@ int print_w_list() {
         return 0;
     }
     while (wp != NULL) {
-        //printf("watchpoint: %d\t%d\n", wp->NO, wp->ret);
-        bool success = true;
-        printf("watchpoint: %d\t%ld\n", wp->NO, expr(wp->args, &success));
+        printf("watchpoint: %d\t%s\t%d\n", wp->NO, wp->args, wp->ret);
         if (wp->next == NULL) { break;}
         wp = wp->next;
     }
@@ -94,4 +91,4 @@ int delete_a_w(int NO) {
         wp = wp->next;
     }
     return 0;
-} // 删除watchpoint的函数还是有bug,最后一个监视点删除会出段错误
+} // 删除watchpoint的函数还是有bug, 最后一个监视点删除会出段错误

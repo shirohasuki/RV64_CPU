@@ -48,13 +48,13 @@ static int cmd_p(char *args); // expr
 static int cmd_w(char *args); // watchpoint
 static int cmd_d(char *args); // watchpoint
 
-#include <unistd.h>
+/*#include <unistd.h>
 static int cmd_dummy() {
     //execlp("/home/shiroha/Code/ysyx/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-riscv64-nemu.bin", (char *)0);
-    int i = system("/home/shiroha/Code/ysyx/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-riscv64-nemu.bin");
-    printf("%d",i);
+    //int i = system("/home/shiroha/Code/ysyx/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-riscv64-nemu.bin");
+    //printf("%d",i);
     return 0;
-} // dummy
+} // dummy*/
 
 static struct {
   const char *name;
@@ -72,7 +72,7 @@ static struct {
   {"p", "eval the expr", cmd_p },
   {"w", "define a new watchpoint", cmd_w },
   {"d", "delete NO.x watchpoint", cmd_d},
-  {"dummy", "exec the dummy", cmd_dummy},
+  // {"dummy", "exec the dummy", cmd_dummy},
 };
 
 #define NR_CMD ARRLEN(cmd_table)

@@ -40,7 +40,7 @@ static void decode_operand(Decode *s, word_t *dest, word_t *src1, word_t *src2, 
         case TYPE_S: destI(immS(i)); src1R(rs1); src2R(rs2); break;
         // I/U/S-型指令
     }
-}
+} //见src/isa/risv64
 
 static int decode_exec(Decode *s) {
     word_t dest = 0, src1 = 0, src2 = 0;

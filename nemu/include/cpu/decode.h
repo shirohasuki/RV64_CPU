@@ -54,7 +54,7 @@ finish:
 __attribute__((always_inline))
 static inline void pattern_decode_hex(const char *str, int len,
     uint32_t *key, uint32_t *mask, uint32_t *shift) {
-  uint32_t __key = 0, __mask = 0, __shift = 0;
+    uint32_t __key = 0, __mask = 0, __shift = 0;
 #define macro(i) \
   if ((i) >= len) goto finish; \
   else { \

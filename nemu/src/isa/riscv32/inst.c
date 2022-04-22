@@ -24,22 +24,28 @@ static word_t immU(uint32_t i) { return BITS(i, 31, 12) << 12; }
 static word_t immS(uint32_t i) { return (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); }
 
 static void decode_operand(Decode *s, word_t *dest, word_t *src1, word_t *src2, int type) {
-    uint32_t i = s->isa.inst.val;
+    /*
+        decode_operand():对dest ,src1, src2进行具体操作(查询)
+        immI等辅助函数, 用于从指令中抽取出立即数
+        src1R(), src1I()等辅助宏, 用于将译码结果记录到相应的操作数变量中
+    */
+    uint32_t i = s->isa.inst.val; 
     int rd  = BITS(i, 11, 7);
-    int rs1 = BITS(i, 19, 15);
-    int rs2 = BITS(i, 24, 20);
-    destR(rd);
+    int rs1 = BITS(i, 19, 15); 
+    int rs2 = BITS(i, 24, 20); // BITS:位抽取
+    destR(rd); // destR(rd):对目标操作数进行寄存器操作数的译码
     switch (type) {
         case TYPE_I: src1R(rs1);     src2I(immI(i)); break;
         case TYPE_U: src1I(immU(i)); break;
         case TYPE_S: destI(immS(i)); src1R(rs1); src2R(rs2); break;
+        // I/U/S-型指令
     }
 }
 
 static int decode_exec(Decode *s) {
     word_t dest = 0, src1 = 0, src2 = 0;
     s->dnpc = s->snpc;
-//}
+// dest和src分别表示目的操作数和两个源操作数
 
 #define INSTPAT_INST(s) ((s)->isa.inst.val)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */ ) { \

@@ -5,17 +5,24 @@
 
 typedef struct Decode {
   vaddr_t pc;
-  vaddr_t snpc; // static next pc
-  vaddr_t dnpc; // dynamic next pc
+  vaddr_t snpc; // static next pc 静态指令
+  vaddr_t dnpc; // dynamic next pc 动态指令
   ISADecodeInfo isa;
   IFDEF(CONFIG_ITRACE, char logbuf[128]);
 } Decode;
+
+// snpc是指代码中的下一条指令, 而dnpc是指程序运行过程中的下一条指令。
+// 对于顺序执行的指令, 它们的snpc和dnpc是一样的; 
+// 但对于跳转指令, snpc和dnpc就会有所不同, dnpc应该指向跳转目标的指令
 
 // --- pattern matching mechanism ---
 __attribute__((always_inline))
 static inline void pattern_decode(const char *str, int len,
     uint32_t *key, uint32_t *mask, uint32_t *shift) {
-  uint32_t __key = 0, __mask = 0, __shift = 0;
+    uint32_t __key = 0, __mask = 0, __shift = 0;
+// key:pattern_decode()函数将模式字符串中的0和1抽取到整型变量key中
+// mask:key的掩码
+// shift:opcode距离最低位的比特数量, 用于帮助编译器进行优化
 #define macro(i) \
   if ((i) >= len) goto finish; \
   else { \

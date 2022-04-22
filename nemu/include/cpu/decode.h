@@ -73,13 +73,19 @@ finish:
 
 // --- pattern matching wrappers for decode ---
 #define INSTPAT(pattern, ...) do { \
-  uint32_t key, mask, shift; \
-  pattern_decode(pattern, STRLEN(pattern), &key, &mask, &shift); \
-  if (((INSTPAT_INST(s) >> shift) & mask) == key) { \
-    INSTPAT_MATCH(s, ##__VA_ARGS__); \
-    goto *(__instpat_end); \
-  } \
-} while (0)
+    uint32_t key, mask, shift; \
+    pattern_decode(pattern, STRLEN(pattern), &key, &mask, &shift); \
+    if (((INSTPAT_INST(s) >> shift) & mask) == key) { \
+        INSTPAT_MATCH(s, ##__VA_ARGS__); \
+        goto *(__instpat_end); \
+    } \
+} while (0) 
+// INSTPAT(模式字符串, 指令名称, 指令类型, 指令执行操作);
+
+// 宏函数复习:
+// #:将字符转义为变量
+// ##:将变量与普通字符连接,将##后的字符转义为变量并于前面的字符相连
+// ##__VA_ARGS__:当可变参数为零时去掉前面括号,防止错误
 
 #define INSTPAT_START(name) { const void ** __instpat_end = &&concat(__instpat_end_, name);
 #define INSTPAT_END(name)   concat(__instpat_end_, name): ; }

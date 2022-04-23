@@ -21,9 +21,10 @@ enum {
 
 static word_t immI(uint32_t i) { return SEXT(BITS(i, 31, 20), 12); }
 static word_t immS(uint32_t i) { return (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); }
-//static word_t immB(uint32_t i) { return (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); }
+static word_t immB(uint32_t i) { return (SEXT(BITS(i, 31, 30), 1) << 12) | BITS(i, 30, 25) << 5 | BITS(i, 11, 8) << 1 | BITS(i, 7, 6) << 11;} // add
 static word_t immU(uint32_t i) { return SEXT(BITS(i, 31, 12), 20) << 12; }
-//static word_t immJ(uint32_t i) { return (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); }
+static word_t immJ(uint32_t i) { return (SEXT(BITS(i, 31, 30), 1) << 20) | BITS(i, 30, 21) << 1 | BITS(i, 21, 20) << 11 | BITS(i, 19, 12) << 12;} // add
+// SEXT:sign extern, riscv中所有立即数都需要进行符号拓展为64位
 
 static void decode_operand(Decode *s, word_t *dest, word_t *src1, word_t *src2, int type) {
     uint32_t i = s->isa.inst.val;
@@ -32,12 +33,12 @@ static void decode_operand(Decode *s, word_t *dest, word_t *src1, word_t *src2, 
     int rs2 = BITS(i, 24, 20);
     destR(rd);
     switch (type) {
-        //case TYPE_R: destI(immS(i)); src1R(rs1); src2R(rs2); break;
-        case TYPE_I: src1R(rs1);     src2I(immI(i)); break;
-        case TYPE_S: destI(immS(i)); src1R(rs1); src2R(rs2); break;
-        //case TYPE_B: destI(immS(i)); src1R(rs1); src2R(rs2); break;
-        case TYPE_U: src1I(immU(i)); break;
-        //case TYPE_J: destI(immS(i)); src1R(rs1); src2R(rs2); break;
+        case TYPE_R: src1R(rs1);     src2R(rs2);    break; //add
+        case TYPE_I: src1R(rs1);     src2I(immI(i));    break;
+        case TYPE_S: destI(immS(i)); src1R(rs1);    src2R(rs2);     break;
+        case TYPE_B: src1R(rs1);     src2R(rs2);    src1I(immB(i));   break; // add
+        case TYPE_U: src1I(immU(i));    break;
+        case TYPE_J: src1I(immJ(i));    break; // add
         
     }
 }
@@ -53,13 +54,13 @@ static int decode_exec(Decode *s) {
 }
 
     INSTPAT_START();
-    INSTPAT("??????? ????? ????? ??? ????? 00101 11", auipc  , U, R(dest) = src1 + s->pc);
+    INSTPAT("??????? ????? ????? ??? ????? 00101 11", auipc  , U, R(dest) = src1 + s->pc); // auipc:Add Upper Immediate to PC
     INSTPAT("??????? ????? ????? 011 ????? 00000 11", ld     , I, R(dest) = Mr(src1 + src2, 8));
     INSTPAT("??????? ????? ????? 011 ????? 01000 11", sd     , S, Mw(src1 + dest, 8, src2));
 
     INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
     
-  
+    /* TODO: */
     //INSTPAT("??????? ????? ????? ??? ????? ????? ??", li     , N, INV(s->pc));
     INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, INV(s->pc)); 
     // addi:把符号位扩展的立即数加到寄存器 x[rs1]上, 结果写入 x[rd],忽略算术溢出

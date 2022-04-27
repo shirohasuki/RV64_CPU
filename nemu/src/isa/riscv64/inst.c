@@ -8,7 +8,12 @@
 #define Mw vaddr_write // 写指令
 
 enum {
-    TYPE_R, TYPE_I, TYPE_S, TYPE_B, TYPE_U, TYPE_J,
+    TYPE_R, 
+    TYPE_I, // 加载类指令使用的是 I-typed 指令格式
+    TYPE_S, // 存储类指令使用的是 S-typed 指令格式
+    TYPE_B, 
+    TYPE_U, 
+    TYPE_J,
     TYPE_N, // none
 };
 
@@ -70,8 +75,18 @@ static int decode_exec(Decode *s) {
     // jal:跳转并链接，把 pc 设置成当前值+偏移值，然后将 pc+4 当做下一条指令的地址存入 rd 中
     INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, s->dnpc = (R(dest) + src1) & (~1), R(dest) = s->pc + 4);
     // jalr:跳转并链接，把 pc 设置成 rs1+偏移值，然后将 pc+4 写入 rd 中
-    INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw     , I, INV(s->pc));
-    // lw: 
+    
+
+    //lb 是字节加载，读取一个字节写入 rd 中
+    //lh 是半字加载，读取两个字节写入 rd 中
+    INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw     , I, R(dest) = src1 + src2);
+    //lw 是字加载，读取四个字节写入 rd 中
+    //lbu 是无符号字节加载，读取一个字节写入 rd 中
+    //lhu 是无符号半字加载，读取两个字节写入 rd 中
+    //sb 是存字节，把 rs2 的低位一字节存入地址 rs1+立即数中
+    //sh 是存半字，把 rs2的低位两字节存入地址 rs1+立即数中    
+    //sw 是存字，把 rs2 的低位四字节存入地址 rs1+立即数中
+
     INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
 
     INSTPAT_END();

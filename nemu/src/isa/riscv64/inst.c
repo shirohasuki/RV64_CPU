@@ -24,7 +24,7 @@ static word_t immS(uint32_t i) { return (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i
 static word_t immB(uint32_t i) { return (SEXT(BITS(i, 31, 30), 1) << 12) | BITS(i, 30, 25) << 5 | BITS(i, 11, 8) << 1 | BITS(i, 7, 6) << 11;} // add
 static word_t immU(uint32_t i) { return SEXT(BITS(i, 31, 12), 20) << 12; }
 static word_t immJ(uint32_t i) { return (SEXT(BITS(i, 31, 30), 1) << 20) | BITS(i, 30, 21) << 1 | BITS(i, 21, 20) << 11 | BITS(i, 19, 12) << 12;} // add
-// SEXT:sign extern, riscv中所有立即数都需要进行符号拓展为64位
+// SEXT:sign extern, riscv中所有立即数都需要进行符号拓展为，并且指令的最高位是符号位
 
 static void decode_operand(Decode *s, word_t *dest, word_t *src1, word_t *src2, int type) {
     uint32_t i = s->isa.inst.val;
@@ -63,8 +63,8 @@ static int decode_exec(Decode *s) {
     
     /* TODO: */
     INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(dest) = src1 + src2); 
-    // addi:把符号位扩展的立即数加到寄存器 x[rs1]上, 结果写入 x[rd],忽略算术溢出
-    INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, s->dnpc = (s->pc) + src1);
+    // addi:把符号位扩展的立即数加到寄存器 x[rs1]上, 结果写入x[rd],忽略算术溢出
+    INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, R(dest) = s->pc + 4, s->dnpc += src1);
     // jal:无条件跳转指令,使用PC相对寻址
     INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, R(dest) = R(dest) + src1 + 4);
     // jalr:

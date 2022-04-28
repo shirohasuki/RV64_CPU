@@ -76,6 +76,9 @@ static int decode_exec(Decode *s) {
     INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, s->dnpc = (R(dest) + src1) & (~1), R(dest) = s->pc + 4);
     // jalr:跳转并链接，把 pc 设置成 rs1+偏移值，然后将 pc+4 写入 rd 中
     
+    
+    INSTPAT("??????? ????? ????? 000 ????? 01110 11", addw   , I, R(dest) = src1 + src2);
+    //addw:把寄存器 x[rs2]加到寄存器 x[rs1]上, 将结果截断为 32 位, 把符号位扩展的结果写入 x[rd]
 
     //lb 是字节加载，读取一个字节写入 rd 中
     //lh 是半字加载，读取两个字节写入 rd 中

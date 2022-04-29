@@ -26,9 +26,9 @@ enum {
 
 static word_t immI(uint32_t i) { return SEXT(BITS(i, 31, 20), 12); }
 static word_t immS(uint32_t i) { return (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); }
-static word_t immB(uint32_t i) { return (SEXT(BITS(i, 31, 30), 1) << 12) | BITS(i, 7, 6)| BITS(i, 30, 25) | BITS(i, 11, 8);} // add
+static word_t immB(uint32_t i) { return (SEXT(BITS(i, 31, 30), 1) << 12) | BITS(i, 7, 6) << 11 | BITS(i, 30, 25) << 5 | BITS(i, 11, 8) << 1;} // add
 static word_t immU(uint32_t i) { return SEXT(BITS(i, 31, 12), 20) << 12; }
-static word_t immJ(uint32_t i) { return (SEXT(BITS(i, 31, 30), 1) << 20) | BITS(i, 19, 12)|  BITS(i, 21, 20)  | BITS(i, 30, 21);} // add
+static word_t immJ(uint32_t i) { return (SEXT(BITS(i, 31, 30), 1) << 20) | BITS(i, 19, 12) << 12 |  BITS(i, 21, 20) << 11 |BITS(i, 30, 21) << 1; } // add
 // SEXT:sign extern, riscv中所有立即数都需要进行符号拓展为，并且指令的最高位是符号位
 
 static void decode_operand(Decode *s, word_t *dest, word_t *src1, word_t *src2, int type) {
@@ -70,7 +70,7 @@ static int decode_exec(Decode *s) {
 
     INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, R(dest) = src1 - src2);
     // sub是 rs1 减去 rs2 并写入 rd 中；
-    INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(dest) = src1 + immI(INSTPAT_INST(s))); // 不应该是加立即数吗
+    INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(dest) = src1 + immI(INSTPAT_INST(s))); 
     // addi:把符号位扩展的立即数加到寄存器 x[rs1]上, 结果写入x[rd],忽略算术溢出
 
     INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq    , B, if (src1 == src2) s->pc += immB(INSTPAT_INST(s)));

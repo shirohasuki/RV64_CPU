@@ -44,7 +44,6 @@ static void decode_operand(Decode *s, word_t *dest, word_t *src1, word_t *src2, 
         case TYPE_B: destI(immB(i)); src1R(rs1);    src2R(rs2);    src1I(immB(i));   break; // add
         case TYPE_U: src1I(immU(i));    break;
         case TYPE_J: src1I(immJ(i));    break; // add
-        
     }
 }
 
@@ -76,7 +75,7 @@ static int decode_exec(Decode *s) {
 
     INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq    , B, if (src1 == src2) s->pc += src1);
     //beq 是相等条件分支，rs1 和 rs2 的值相等时，把 pc 的值设置成当前值+偏移值；
-    INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne    , B, if (src1 != src2) s->pc += src1);
+    INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne    , B, if (src1 != src2) s->pc += immB(INSTPAT_INST(s)));
     //bne 是不等条件分支，rs1 和 rs2 的值不等时，把 pc 的值设置成当前值+偏移值；
     //blt 是小于条件分支，rs1 小于 rs2 的值时，把 pc 的值设置成当前值+偏移值；
     //bge是大于等于条件分支，rs1 大于等于 rs2 的值时，把 pc 的值设置成当前值+偏移值；

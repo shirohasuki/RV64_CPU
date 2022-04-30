@@ -68,6 +68,8 @@ static int decode_exec(Decode *s) {
     INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
     // ebreak: pc重置为0 
 
+    INSTPAT("0000000 ????? ????? 000 ????? 01100 11", add    , R, R(dest) = src1 + src2);
+    // add是 rs1 加上 rs2 并写入 rd 中；
     INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, R(dest) = src1 - src2);
     // sub是 rs1 减去 rs2 并写入 rd 中；
     INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(dest) = src1 + immI(INSTPAT_INST(s))); 

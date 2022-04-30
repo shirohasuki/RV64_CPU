@@ -9,11 +9,11 @@ const char *regs[] = {
 };
 
 void isa_reg_display() {
-  for (int i = 0; i < (sizeof(regs)/sizeof(regs[0])); i++) {
-    printf("%s:0x8%07x\n", regs[i], *regs[i]);
-  }
+    for (int i = 0; i < (sizeof(regs)/sizeof(regs[0])); i++) {
+        printf("%s:0x8%07x\n", regs[i], *regs[i]);
+    }
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
-  return 0;
+    return 0;
 }

@@ -26,7 +26,7 @@ enum {
 
 static word_t immI(uint32_t i) { return SEXT(BITS(i, 31, 20), 12); }
 static word_t immS(uint32_t i) { return (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); }
-static word_t immB(uint32_t i) { return (SEXT(BITS(i, 31, 30), 1) << 12) | BITS(i, 7, 6) << 11 | BITS(i, 30, 25) << 5 | BITS(i, 11, 8) << 1;} // add
+static word_t immB(uint32_t i) { return (SEXT(BITS(i, 31, 30), 1) << 12) | BITS(i, 7, 6) << 11 | BITS(i, 30, 25) << 5 | BITS(i, 11, 8) << 1; } // add
 static word_t immU(uint32_t i) { return SEXT(BITS(i, 31, 12), 20) << 12; }
 static word_t immJ(uint32_t i) { return (SEXT(BITS(i, 31, 30), 1) << 20) | BITS(i, 19, 12) << 12 |  BITS(i, 21, 20) << 11 |BITS(i, 30, 21) << 1; } // add
 // SEXT:sign extern, riscv中所有立即数都需要进行符号拓展为，并且指令的最高位是符号位
@@ -75,7 +75,7 @@ static int decode_exec(Decode *s) {
 
     INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq    , B, if (src1 == src2) s->pc += immB(INSTPAT_INST(s)));
     //beq 是相等条件分支，rs1 和 rs2 的值相等时，把 pc 的值设置成当前值+偏移值；
-    INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne    , B, if (src1 != src2) s->dnpc += immB(INSTPAT_INST(s)));
+    INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne    , B, if (src1 != src2) s->snpc += immB(INSTPAT_INST(s)));
     //bne 是不等条件分支，rs1 和 rs2 的值不等时，把 pc 的值设置成当前值+偏移值；
     //blt 是小于条件分支，rs1 小于 rs2 的值时，把 pc 的值设置成当前值+偏移值；
     //bge是大于等于条件分支，rs1 大于等于 rs2 的值时，把 pc 的值设置成当前值+偏移值；
@@ -85,7 +85,6 @@ static int decode_exec(Decode *s) {
     
     INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, s->dnpc = (R(dest) + src1) & (~1), R(dest) = s->pc + 4);
     // jalr:跳转并链接，把 pc 设置成 rs1+偏移值，然后将 pc+4 写入 rd 中
-    
     
     INSTPAT("??????? ????? ????? 000 ????? 01110 11", addw   , I, R(dest) = src1 + src2); //结果截断为32位是什么？
     //addw:把寄存器 x[rs2]加到寄存器 x[rs1]上, 将结果截断为 32 位, 把符号位扩展的结果写入 x[rd]

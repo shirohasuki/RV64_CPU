@@ -150,19 +150,19 @@ static int cmd_si(char *args) {
 }
 
 static int cmd_info(char *args) {
-    if(args == NULL) {
+    if (args == NULL) {
         printf("Please input the info r/w\n");
         return 0;
     }
     char *arg = strtok(NULL, " ");
-    if(strtok(NULL, " ")!=NULL) {
+    if (strtok(NULL, " ")!=NULL) {
         printf("Too many parameters\n");
         return 0;
     }
-    if(strcmp(arg, "r") == 0) {
+    if (strcmp(arg, "r") == 0) {
         isa_reg_display();
     }
-    if(strcmp(arg, "w") == 0) {
+    else if (strcmp(arg, "w") == 0) {
         print_w_list();
     }
     else {

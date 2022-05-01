@@ -26,9 +26,9 @@ enum {
 
 static word_t immI(uint32_t i) { return SEXT(BITS(i, 31, 20), 12); }
 static word_t immS(uint32_t i) { return (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); }
-static word_t immB(uint32_t i) { return (SEXT(BITS(i, 31, 30), 1) << 12) | BITS(i, 7, 6) << 11 | BITS(i, 30, 25) << 5 | BITS(i, 11, 8) << 1; } // add
+static word_t immB(uint32_t i) { return (SEXT(BITS(i, 31, 30), 1) << 12) | BITS(i, 7, 6) << 11 | BITS(i, 30, 25) << 5 | BITS(i, 11, 8); } // add
 static word_t immU(uint32_t i) { return SEXT(BITS(i, 31, 12), 20) << 12; }
-static word_t immJ(uint32_t i) { return (SEXT(BITS(i, 31, 30), 1) << 20) | BITS(i, 19, 12) << 12 |  BITS(i, 21, 20) << 11 | BITS(i, 30, 21) << 1; } // add
+static word_t immJ(uint32_t i) { return (SEXT(BITS(i, 31, 30), 1) << 20) | BITS(i, 19, 12) << 12 |  BITS(i, 21, 20) << 11 | BITS(i, 30, 21); } // add
 // SEXT:sign extern, riscv中所有立即数都需要进行符号拓展为，并且指令的最高位是符号位
 
 static void decode_operand(Decode *s, word_t *dest, word_t *src1, word_t *src2, int type) {
@@ -90,7 +90,7 @@ static int decode_exec(Decode *s) {
     
     INSTPAT("??????? ????? ????? 000 ????? 01110 11", addw   , R, R(dest) = src1 + src2); //结果截断为32位是什么？
     // addw:把寄存器 x[rs2]加到寄存器 x[rs1]上, 将结果截断为 32 位, 把符号位扩展的结果写入 x[rd]
-    INSTPAT("??????? ????? ????? 000 ????? 00110 11", addiw  , I, SEXT(R(dest) = src1 + immI(INSTPAT_INST(s)),32)); //结果截断为32位是什么？
+    INSTPAT("??????? ????? ????? 000 ????? 00110 11", addiw  , I, R(dest) = src1 + immI(INSTPAT_INST(s))); //结果截断为32位是什么？
     // addiw:把 立即数 加到寄存器 x[rs1]上, 将结果截断为 32 位, 把符号位扩展的结果写入 x[rd]
 
     //lb 是字节加载，读取一个字节写入 rd 中

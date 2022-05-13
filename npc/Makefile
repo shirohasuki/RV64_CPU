@@ -34,6 +34,9 @@ run:
 	$(BIN)
 	  @$^
 
+wave:
+	gtkwave wave.vcd &
+
 sim:
 	$(call git_commit, "sim RTL") 
 	$(BIN)

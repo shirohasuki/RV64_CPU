@@ -6,8 +6,10 @@ module inst_fetch(
     output wire[31:0] inst_o            // to if_id
 ); 
 
-assign if2rom_addr_o = pc_addr_i;
-assign inst_addr_o = pc_addr_i;
-assign inst_o = rom_inst_i;
+    assign if2rom_addr_o = pc_addr_i;
+
+    assign inst_addr_o = pc_addr_i;
+    
+    assign inst_o = rom_inst_i;
 
 endmodule

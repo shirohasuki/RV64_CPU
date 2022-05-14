@@ -1,4 +1,4 @@
-`include "./defines.v"
+`include "/home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/defines.v"
 
 module if_id (
     input wire clk,

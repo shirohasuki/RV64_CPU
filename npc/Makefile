@@ -1,4 +1,4 @@
-TOPNAME = pc_reg
+TOPNAME = soc
 INC_PATH ?= 
 
 VERILATOR = verilator

@@ -5,20 +5,20 @@
 // The class here is then constructed to instantiate the design.
 // See the Verilator manual for examples.
 
-#ifndef VERILATED_VPC_REG_H_
-#define VERILATED_VPC_REG_H_  // guard
+#ifndef VERILATED_VSOC_H_
+#define VERILATED_VSOC_H_  // guard
 
 #include "verilated.h"
 
-class Vpc_reg__Syms;
-class Vpc_reg___024root;
+class Vsoc__Syms;
+class Vsoc___024root;
 class VerilatedVcdC;
 
 // This class is the main interface to the Verilated model
-class Vpc_reg VL_NOT_FINAL {
+class Vsoc VL_NOT_FINAL {
   private:
     // Symbol table holding complete model state (owned by this class)
-    Vpc_reg__Syms* const vlSymsp;
+    Vsoc__Syms* const vlSymsp;
 
   public:
 
@@ -27,7 +27,6 @@ class Vpc_reg VL_NOT_FINAL {
     // propagate new values into/out from the Verilated model.
     VL_IN8(&clk,0,0);
     VL_IN8(&rst,0,0);
-    VL_OUT(&pc_o,31,0);
 
     // CELLS
     // Public to allow access to /* verilator public */ items.
@@ -35,19 +34,19 @@ class Vpc_reg VL_NOT_FINAL {
 
     // Root instance pointer to allow access to model internals,
     // including inlined /* verilator public_flat_* */ items.
-    Vpc_reg___024root* const rootp;
+    Vsoc___024root* const rootp;
 
     // CONSTRUCTORS
     /// Construct the model; called by application code
     /// If contextp is null, then the model will use the default global context
     /// If name is "", then makes a wrapper with a
     /// single model invisible with respect to DPI scope names.
-    explicit Vpc_reg(VerilatedContext* contextp, const char* name = "TOP");
-    explicit Vpc_reg(const char* name = "TOP");
+    explicit Vsoc(VerilatedContext* contextp, const char* name = "TOP");
+    explicit Vsoc(const char* name = "TOP");
     /// Destroy the model; called (often implicitly) by application code
-    virtual ~Vpc_reg();
+    virtual ~Vsoc();
   private:
-    VL_UNCOPYABLE(Vpc_reg);  ///< Copying not allowed
+    VL_UNCOPYABLE(Vsoc);  ///< Copying not allowed
 
   public:
     // API METHODS

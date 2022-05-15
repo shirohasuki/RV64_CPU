@@ -10,8 +10,8 @@ module ex (
 	input wire       reg_wen_i,	 
     
     // to regs 
-    output reg[4:0]  rd_wdata_o,
-    output reg[31:0] rd_waddr_o,
+    output reg[31:0]  rd_wdata_o,
+    output reg[4:0] rd_waddr_o,
     output reg       reg_wen_o
 );
 
@@ -53,12 +53,12 @@ module ex (
             `INST_TYPE_R_M:begin
                 case (func3)
                     `INST_ADD_SUB: begin
-                        if (fun7 == 7'b0) begin//add
+                        if (fun7 == 7'b0) begin // add
                             rd_wdata_o = op1_i + op2_i; 
                             rd_waddr_o = rd;
                             reg_wen_o  = 1'b1;
                         end
-                        else begin
+                        else begin // sub
                             rd_wdata_o = op2_i - op1_i; 
                             rd_waddr_o = rd;
                             reg_wen_o  = 1'b1;

@@ -29,7 +29,6 @@ module id(
     wire[11:0] imm;
     wire[6:0] fun7;
     
-
     assign opcode = inst_i[6:0];
     assign rd     = inst_i[11:7];
     assign func3  = inst_i[14:12];

@@ -3,8 +3,8 @@ module regs (
     input  wire rst,    
     
     // from id 
-    input  wire[31:0] rs1_raddr_i,    
-    input  wire[31:0] rs2_raddr_i,    
+    input  wire[4:0] rs1_raddr_i,    
+    input  wire[4:0] rs2_raddr_i,    
     // to id
     output  reg[31:0] rs1_rdata_o,    
     output  reg[31:0] rs2_rdata_o, 

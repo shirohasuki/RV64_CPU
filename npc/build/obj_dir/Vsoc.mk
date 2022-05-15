@@ -2,9 +2,9 @@
 # DESCRIPTION: Verilator output: Makefile for building Verilated archive or executable
 #
 # Execute this makefile from the object directory:
-#    make -f Vpc_reg.mk
+#    make -f Vsoc.mk
 
-default: /home/shiroha/Code/ysyx/ysyx-workbench/npc/build/pc_reg
+default: /home/shiroha/Code/ysyx/ysyx-workbench/npc/build/soc
 
 ### Constants...
 # Perl executable (from $PERL)
@@ -30,12 +30,12 @@ VM_SC_TARGET_ARCH = linux
 
 ### Vars...
 # Design prefix (from --prefix)
-VM_PREFIX = Vpc_reg
+VM_PREFIX = Vsoc
 # Module prefix (from --prefix)
-VM_MODPREFIX = Vpc_reg
+VM_MODPREFIX = Vsoc
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
-	-DTOP_NAME="Vpc_reg" \
+	-DTOP_NAME="Vsoc" \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
@@ -53,7 +53,7 @@ VM_USER_DIR = \
 
 ### Default rules...
 # Include list of all generated classes
-include Vpc_reg_classes.mk
+include Vsoc_classes.mk
 # Include global rules
 include $(VERILATOR_ROOT)/include/verilated.mk
 
@@ -64,7 +64,7 @@ main.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/main.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 
 ### Link rules... (from --exe)
-/home/shiroha/Code/ysyx/ysyx-workbench/npc/build/pc_reg: $(VK_USER_OBJS) $(VK_GLOBAL_OBJS) $(VM_PREFIX)__ALL.a $(VM_HIER_LIBS)
+/home/shiroha/Code/ysyx/ysyx-workbench/npc/build/soc: $(VK_USER_OBJS) $(VK_GLOBAL_OBJS) $(VM_PREFIX)__ALL.a $(VM_HIER_LIBS)
 	$(LINK) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) $(LIBS) $(SC_LIBS) -o $@
 
 

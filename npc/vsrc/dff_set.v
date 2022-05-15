@@ -17,3 +17,4 @@ module dff_set #(
     end
 
 endmodule // D触发器
+// 作用：在每个上跳沿写数据

@@ -157,7 +157,7 @@ VL_ATTR_COLD void Vsoc___024root__trace_init_sub__TOP__0(Vsoc___024root* vlSelf,
     tracep->declBit(c+65,"clk", false,-1);
     tracep->declBit(c+66,"rst", false,-1);
     tracep->declBus(c+2,"inst_i", false,-1, 31,0);
-    tracep->declBus(c+2,"inst_addr_i", false,-1, 31,0);
+    tracep->declBus(c+1,"inst_addr_i", false,-1, 31,0);
     tracep->declBus(c+3,"inst_addr_o", false,-1, 31,0);
     tracep->declBus(c+4,"inst_o", false,-1, 31,0);
     tracep->pushNamePrefix("dff1 ");
@@ -173,7 +173,7 @@ VL_ATTR_COLD void Vsoc___024root__trace_init_sub__TOP__0(Vsoc___024root* vlSelf,
     tracep->declBit(c+65,"clk", false,-1);
     tracep->declBit(c+66,"rst", false,-1);
     tracep->declBus(c+73,"set_data", false,-1, 31,0);
-    tracep->declBus(c+2,"data_i", false,-1, 31,0);
+    tracep->declBus(c+1,"data_i", false,-1, 31,0);
     tracep->declBus(c+3,"data_o", false,-1, 31,0);
     tracep->popNamePrefix(2);
     tracep->pushNamePrefix("inst_fetch_inst ");

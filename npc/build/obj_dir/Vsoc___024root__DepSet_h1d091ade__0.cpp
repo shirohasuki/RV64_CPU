@@ -33,7 +33,7 @@ VL_INLINE_OPT void Vsoc___024root___sequent__TOP__0(Vsoc___024root* vlSelf) {
         vlSelf->soc__DOT__top_inst__DOT__id_ex_op1_o 
             = vlSelf->soc__DOT__top_inst__DOT__id_ex_op1_o;
         vlSelf->soc__DOT__top_inst__DOT__if_id_inst_addr_o 
-            = vlSelf->soc__DOT__rom_inst_o;
+            = vlSelf->soc__DOT__top_inst__DOT__pc_reg_pc_o;
         vlSelf->soc__DOT__top_inst__DOT__id_ex_inst_o 
             = vlSelf->soc__DOT__top_inst__DOT__if_id_inst_o;
         if (((IData)(vlSelf->soc__DOT__top_inst__DOT__ex_reg_wen_o) 

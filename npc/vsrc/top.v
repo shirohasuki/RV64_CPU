@@ -35,8 +35,8 @@ module top (
     if_id if_id_inst (
         .clk         ( clk               ),
         .rst         ( rst               ),
-        .inst_i      ( inst_i            ),
-        .inst_addr_i ( if_inst_o         ),
+        .inst_i      ( if_inst_o         ),
+        .inst_addr_i ( if_inst_addr_o    ),
         .inst_addr_o ( if_id_inst_addr_o ),
         .inst_o      ( if_id_inst_o      )
     );

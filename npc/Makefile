@@ -1,4 +1,4 @@
-TOPNAME = tb#soc#riscv
+TOPNAME = riscv
 INC_PATH ?= 
 
 VERILATOR = verilator

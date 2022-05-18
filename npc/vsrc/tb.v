@@ -21,7 +21,7 @@ module tb;
     
     // 读入 rom 初始值
     initial begin
-        $readmemh("./tb/inst_data_ADD.txt", tb.soc_inst.rom_inst.rom_mem);
+        $readmemb("./tb/inst_data_ADD.txt", tb.soc_inst.rom_inst.rom_mem);
     end
 
     

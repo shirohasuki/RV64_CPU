@@ -38,7 +38,7 @@ module tb;
 
 
     initial begin
-        $dumpfile("./wave.vcd");
+        $dumpfile("wave.vcd");
         $dumpvars(0, tb);
     end
 

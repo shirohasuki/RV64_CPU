@@ -41,7 +41,6 @@ module id(
         inst_o = inst_i;
         inst_addr_o = inst_addr_i;
         case (opcode)
-            
             `INST_TYPE_I:begin
                 case (func3)
                     `INST_ADDI:begin

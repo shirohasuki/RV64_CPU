@@ -28,7 +28,7 @@ void sim_exit() {
 
 int main() {
     sim_init();
-    top->inst_i = 0000 0010 0110 00000 000 11011 0010011; top->rst =1; top->clk = 0; step_and_dump_wave();
+    top->inst_i = 00000010011000000000110110010011; top->rst =1; top->clk = 0; step_and_dump_wave();
                                                     top->rst =1; top->clk = 1; step_and_dump_wave();
     top->inst_i = 00000111100000000000111000010011; top->rst =1; top->clk = 0; step_and_dump_wave();
                                                     top->rst =1; top->clk = 1; step_and_dump_wave();

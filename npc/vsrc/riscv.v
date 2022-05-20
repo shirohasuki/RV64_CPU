@@ -56,8 +56,8 @@ module riscv (
     id id_inst (
         .inst_i      ( if_id_inst_o     ), // if_id 2 id
         .inst_addr_i ( if_id_inst_addr_o), // if_id 2 id
-        .rs1_data_i  ( regs_rs1_data_o  ),
-        .rs2_data_i  ( regs_rs2_data_o  ), 
+        .rs1_data_i  ( regs_rs1_rdata_o  ),
+        .rs2_data_i  ( regs_rs2_rdata_o  ), 
         .rs1_addr_o  ( id_rs1_addr_o    ), 
         .rs2_addr_o  ( id_rs2_addr_o    ), 
         .inst_o      ( id_inst_o        ),
@@ -69,16 +69,16 @@ module riscv (
     );
 
     //reges 2 id
-    wire[31:0] regs_rs1_data_o;
-    wire[31:0] regs_rs2_data_o;
+    wire[31:0] regs_rs1_rdata_o;
+    wire[31:0] regs_rs2_rdata_o;
 
     regs regs_inst (
         .clk         ( clk             ),
         .rst         ( rst             ),
         .rs1_raddr_i ( id_rs1_addr_o   ),
         .rs2_raddr_i ( id_rs2_addr_o   ),
-        .rs1_rdata_o ( regs_rs1_data_o ),
-        .rs2_rdata_o ( regs_rs2_data_o ),
+        .rs1_rdata_o ( regs_rs1_rdata_o ),
+        .rs2_rdata_o ( regs_rs2_rdata_o ),
         .reg_waddr_i ( ex_rd_addr_o    ),
         .reg_wdata_i ( ex_rd_data_o    ),
         .reg_wen     ( ex_reg_wen_o    )	
@@ -96,11 +96,11 @@ module riscv (
         .clk         ( clk               ),
         .rst         ( rst               ),
         .inst_i      ( id_inst_o         ),
-        .inst_addr_i ( id_ex_inst_addr_o ),
-        .op1_i       ( id_ex_op1_o       ),
-        .op2_i       ( id_ex_op2_o       ),
-        .rd_addr_i   ( id_ex_rd_addr_o   ),
-        .reg_wen_i   ( id_ex_reg_wen     ),
+        .inst_addr_i ( id_inst_addr_o ),
+        .op1_i       ( id_op1_o       ),
+        .op2_i       ( id_op2_o       ),
+        .rd_addr_i   ( id_rd_addr_o   ),
+        .reg_wen_i   ( id_reg_wen     ),
         .inst_o      ( id_ex_inst_o      ),
         .inst_addr_o ( id_ex_inst_addr_o ),
         .op1_o       ( id_ex_op1_o       ),

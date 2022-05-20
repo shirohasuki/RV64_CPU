@@ -2,7 +2,7 @@ TOPNAME = riscv
 INC_PATH ?= 
 
 VERILATOR = verilator
-VERILATOR_CFLAGS += -MMD --build -cc  \
+VERILATOR_CFLAGS += -MMD --build -cc  --trace\
 				-O3 --x-assign fast --x-initial fast --noassert \
 				-Wno-fatal 
 
@@ -29,7 +29,7 @@ $(BIN): $(VSRCS) $(CSRCS)
 		-top $(TOPNAME) $^ \
 		$(addprefix -CFLAGS , $(CFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
 		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN)) \
-		--trace 
+		 
 
 run: 	
 	$(BIN)

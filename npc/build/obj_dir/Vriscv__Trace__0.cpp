@@ -115,7 +115,7 @@ void Vriscv___024root__trace_chg_sub_0(Vriscv___024root* vlSelf, VerilatedVcd* t
         tracep->chgIData(oldp+52,(vlSelf->riscv__DOT__regs_inst__DOT__unnamedblk1__DOT__i),32);
     }
     if (VL_UNLIKELY(vlSelf->__Vm_traceActivity[2U])) {
-        tracep->chgIData(oldp+53,(vlSelf->riscv__DOT__regs_rs1_data_o),32);
+        tracep->chgIData(oldp+53,(vlSelf->riscv__DOT__regs_rs1_rdata_o),32);
         tracep->chgIData(oldp+54,(vlSelf->riscv__DOT__ex_rd_data_o),32);
         tracep->chgCData(oldp+55,(vlSelf->riscv__DOT__ex_rd_addr_o),5);
         tracep->chgBit(oldp+56,(vlSelf->riscv__DOT__ex_reg_wen_o));
@@ -127,7 +127,7 @@ void Vriscv___024root__trace_chg_sub_0(Vriscv___024root* vlSelf, VerilatedVcd* t
     tracep->chgIData(oldp+61,(((0x13U == (0x7fU & vlSelf->riscv__DOT__if_id_inst_o))
                                 ? ((0U == (7U & (vlSelf->riscv__DOT__if_id_inst_o 
                                                  >> 0xcU)))
-                                    ? vlSelf->riscv__DOT__regs_rs1_data_o
+                                    ? vlSelf->riscv__DOT__regs_rs1_rdata_o
                                     : 0U) : ((0x33U 
                                               == (0x7fU 
                                                   & vlSelf->riscv__DOT__if_id_inst_o))
@@ -136,7 +136,7 @@ void Vriscv___024root__trace_chg_sub_0(Vriscv___024root* vlSelf, VerilatedVcd* t
                                                   (7U 
                                                    & (vlSelf->riscv__DOT__if_id_inst_o 
                                                       >> 0xcU)))
-                                                  ? vlSelf->riscv__DOT__regs_rs1_data_o
+                                                  ? vlSelf->riscv__DOT__regs_rs1_rdata_o
                                                   : 0U)
                                               : 0U))),32);
     tracep->chgIData(oldp+62,(((0x13U == (0x7fU & vlSelf->riscv__DOT__if_id_inst_o))

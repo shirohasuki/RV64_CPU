@@ -11,26 +11,88 @@ VL_INLINE_OPT void Vriscv___024root___sequent__TOP__0(Vriscv___024root* vlSelf) 
     Vriscv__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vriscv___024root___sequent__TOP__0\n"); );
     // Init
+    IData/*31:0*/ __Vdly__riscv__DOT__pc_reg_pc_o;
     CData/*4:0*/ __Vdlyvdim0__riscv__DOT__regs_inst__DOT__regs__v0;
     IData/*31:0*/ __Vdlyvval__riscv__DOT__regs_inst__DOT__regs__v0;
     CData/*0:0*/ __Vdlyvset__riscv__DOT__regs_inst__DOT__regs__v0;
     CData/*0:0*/ __Vdlyvset__riscv__DOT__regs_inst__DOT__regs__v1;
     // Body
+    __Vdly__riscv__DOT__pc_reg_pc_o = vlSelf->riscv__DOT__pc_reg_pc_o;
     __Vdlyvset__riscv__DOT__regs_inst__DOT__regs__v0 = 0U;
     __Vdlyvset__riscv__DOT__regs_inst__DOT__regs__v1 = 0U;
     if ((1U & (~ (IData)(vlSelf->rst)))) {
         vlSelf->riscv__DOT__regs_inst__DOT__unnamedblk1__DOT__i = 0x1fU;
     }
     if (vlSelf->rst) {
-        vlSelf->riscv__DOT__id_ex_reg_wen = vlSelf->riscv__DOT__id_ex_reg_wen;
-        vlSelf->riscv__DOT__id_ex_rd_addr_o = vlSelf->riscv__DOT__id_ex_rd_addr_o;
-        vlSelf->riscv__DOT__id_ex_inst_addr_o = vlSelf->riscv__DOT__id_ex_inst_addr_o;
-        vlSelf->riscv__DOT__if_id_inst_addr_o = vlSelf->riscv__DOT__pc_reg_pc_o;
-        vlSelf->riscv__DOT__pc_reg_pc_o = ((IData)(4U) 
+        __Vdly__riscv__DOT__pc_reg_pc_o = ((IData)(4U) 
                                            + vlSelf->riscv__DOT__pc_reg_pc_o);
-        vlSelf->riscv__DOT__id_ex_op2_o = vlSelf->riscv__DOT__id_ex_op2_o;
-        vlSelf->riscv__DOT__id_ex_op1_o = vlSelf->riscv__DOT__id_ex_op1_o;
-        vlSelf->riscv__DOT__id_ex_inst_o = vlSelf->riscv__DOT__if_id_inst_o;
+        vlSelf->riscv__DOT__id_ex_inst_addr_o = vlSelf->riscv__DOT__if_id_inst_addr_o;
+        if ((0x13U == (0x7fU & vlSelf->riscv__DOT__if_id_inst_o))) {
+            if ((0U == (7U & (vlSelf->riscv__DOT__if_id_inst_o 
+                              >> 0xcU)))) {
+                vlSelf->riscv__DOT__id_ex_reg_wen = 1U;
+                vlSelf->riscv__DOT__id_ex_inst_o = vlSelf->riscv__DOT__if_id_inst_o;
+                vlSelf->riscv__DOT__id_ex_rd_addr_o 
+                    = (0x1fU & (vlSelf->riscv__DOT__if_id_inst_o 
+                                >> 7U));
+                vlSelf->riscv__DOT__id_ex_op1_o = vlSelf->riscv__DOT__regs_rs1_rdata_o;
+                vlSelf->riscv__DOT__id_ex_op2_o = (
+                                                   ((- (IData)(
+                                                               (vlSelf->riscv__DOT__if_id_inst_o 
+                                                                >> 0x1fU))) 
+                                                    << 0xcU) 
+                                                   | (vlSelf->riscv__DOT__if_id_inst_o 
+                                                      >> 0x14U));
+            } else {
+                vlSelf->riscv__DOT__id_ex_reg_wen = 0U;
+                vlSelf->riscv__DOT__id_ex_inst_o = vlSelf->riscv__DOT__if_id_inst_o;
+                vlSelf->riscv__DOT__id_ex_rd_addr_o 
+                    = (0x1fU & 0U);
+                vlSelf->riscv__DOT__id_ex_op1_o = 0U;
+                vlSelf->riscv__DOT__id_ex_op2_o = 0U;
+            }
+        } else {
+            vlSelf->riscv__DOT__id_ex_reg_wen = (IData)(
+                                                        (0x33U 
+                                                         == 
+                                                         (0x707fU 
+                                                          & vlSelf->riscv__DOT__if_id_inst_o)));
+            vlSelf->riscv__DOT__id_ex_inst_o = vlSelf->riscv__DOT__if_id_inst_o;
+            if ((0x33U == (0x7fU & vlSelf->riscv__DOT__if_id_inst_o))) {
+                if ((0U == (7U & (vlSelf->riscv__DOT__if_id_inst_o 
+                                  >> 0xcU)))) {
+                    vlSelf->riscv__DOT__id_ex_rd_addr_o 
+                        = (0x1fU & (vlSelf->riscv__DOT__if_id_inst_o 
+                                    >> 7U));
+                    vlSelf->riscv__DOT__id_ex_op1_o 
+                        = vlSelf->riscv__DOT__regs_rs1_rdata_o;
+                    vlSelf->riscv__DOT__id_ex_op2_o 
+                        = ((IData)(vlSelf->rst) ? (
+                                                   (0U 
+                                                    == (IData)(vlSelf->riscv__DOT__id_rs1_addr_o))
+                                                    ? 0U
+                                                    : 
+                                                   (((IData)(vlSelf->riscv__DOT__ex_reg_wen_o) 
+                                                     & ((IData)(vlSelf->riscv__DOT__ex_rd_addr_o) 
+                                                        == (IData)(vlSelf->riscv__DOT__id_rs2_addr_o)))
+                                                     ? vlSelf->riscv__DOT__ex_rd_data_o
+                                                     : 
+                                                    vlSelf->riscv__DOT__regs_inst__DOT__regs
+                                                    [vlSelf->riscv__DOT__id_rs2_addr_o]))
+                            : 0U);
+                } else {
+                    vlSelf->riscv__DOT__id_ex_rd_addr_o 
+                        = (0x1fU & 0U);
+                    vlSelf->riscv__DOT__id_ex_op1_o = 0U;
+                    vlSelf->riscv__DOT__id_ex_op2_o = 0U;
+                }
+            } else {
+                vlSelf->riscv__DOT__id_ex_rd_addr_o 
+                    = (0x1fU & 0U);
+                vlSelf->riscv__DOT__id_ex_op1_o = 0U;
+                vlSelf->riscv__DOT__id_ex_op2_o = 0U;
+            }
+        }
         if (((IData)(vlSelf->riscv__DOT__ex_reg_wen_o) 
              & (0U != (IData)(vlSelf->riscv__DOT__ex_rd_addr_o)))) {
             __Vdlyvval__riscv__DOT__regs_inst__DOT__regs__v0 
@@ -40,14 +102,13 @@ VL_INLINE_OPT void Vriscv___024root___sequent__TOP__0(Vriscv___024root* vlSelf) 
                 = vlSelf->riscv__DOT__ex_rd_addr_o;
         }
     } else {
-        vlSelf->riscv__DOT__id_ex_reg_wen = 0U;
-        vlSelf->riscv__DOT__id_ex_rd_addr_o = 0U;
+        __Vdly__riscv__DOT__pc_reg_pc_o = 0U;
         vlSelf->riscv__DOT__id_ex_inst_addr_o = 0U;
-        vlSelf->riscv__DOT__if_id_inst_addr_o = 0U;
-        vlSelf->riscv__DOT__pc_reg_pc_o = 0U;
-        vlSelf->riscv__DOT__id_ex_op2_o = 0U;
-        vlSelf->riscv__DOT__id_ex_op1_o = 0U;
+        vlSelf->riscv__DOT__id_ex_reg_wen = 0U;
         vlSelf->riscv__DOT__id_ex_inst_o = 0x13U;
+        vlSelf->riscv__DOT__id_ex_rd_addr_o = 0U;
+        vlSelf->riscv__DOT__id_ex_op1_o = 0U;
+        vlSelf->riscv__DOT__id_ex_op2_o = 0U;
         __Vdlyvset__riscv__DOT__regs_inst__DOT__regs__v1 = 1U;
     }
     if (__Vdlyvset__riscv__DOT__regs_inst__DOT__regs__v0) {
@@ -87,10 +148,15 @@ VL_INLINE_OPT void Vriscv___024root___sequent__TOP__0(Vriscv___024root* vlSelf) 
         vlSelf->riscv__DOT__regs_inst__DOT__regs[0x1dU] = 0U;
         vlSelf->riscv__DOT__regs_inst__DOT__regs[0x1eU] = 0U;
     }
+    if (vlSelf->rst) {
+        vlSelf->riscv__DOT__if_id_inst_addr_o = vlSelf->riscv__DOT__pc_reg_pc_o;
+        vlSelf->riscv__DOT__if_id_inst_o = vlSelf->inst_i;
+    } else {
+        vlSelf->riscv__DOT__if_id_inst_addr_o = 0U;
+        vlSelf->riscv__DOT__if_id_inst_o = 0x13U;
+    }
+    vlSelf->riscv__DOT__pc_reg_pc_o = __Vdly__riscv__DOT__pc_reg_pc_o;
     vlSelf->inst_addr_o = vlSelf->riscv__DOT__pc_reg_pc_o;
-    vlSelf->riscv__DOT__if_id_inst_o = ((IData)(vlSelf->rst)
-                                         ? vlSelf->inst_i
-                                         : 0x13U);
     if ((0x13U == (0x7fU & vlSelf->riscv__DOT__if_id_inst_o))) {
         vlSelf->riscv__DOT__id_rs2_addr_o = 0U;
         vlSelf->riscv__DOT__id_rs1_addr_o = (0x1fU 
@@ -133,8 +199,7 @@ VL_INLINE_OPT void Vriscv___024root___combo__TOP__0(Vriscv___024root* vlSelf) {
         if ((0U == (7U & (vlSelf->inst_i >> 0xcU)))) {
             vlSelf->riscv__DOT__ex_reg_wen_o = 1U;
             vlSelf->riscv__DOT__ex_rd_addr_o = (0x1fU 
-                                                & (vlSelf->inst_i 
-                                                   >> 7U));
+                                                & (IData)(vlSelf->riscv__DOT__id_ex_rd_addr_o));
             vlSelf->riscv__DOT__ex_rd_data_o = (vlSelf->riscv__DOT__id_ex_op1_o 
                                                 + vlSelf->riscv__DOT__id_ex_op2_o);
         } else {
@@ -151,14 +216,20 @@ VL_INLINE_OPT void Vriscv___024root___combo__TOP__0(Vriscv___024root* vlSelf) {
                                                      & vlSelf->inst_i)));
         if ((0x33U == (0x7fU & vlSelf->inst_i))) {
             if ((0U == (7U & (vlSelf->inst_i >> 0xcU)))) {
-                vlSelf->riscv__DOT__ex_rd_addr_o = 
-                    (0x1fU & (vlSelf->inst_i >> 7U));
-                vlSelf->riscv__DOT__ex_rd_data_o = 
-                    ((0U == (vlSelf->inst_i >> 0x19U))
-                      ? (vlSelf->riscv__DOT__id_ex_op1_o 
-                         + vlSelf->riscv__DOT__id_ex_op2_o)
-                      : (vlSelf->riscv__DOT__id_ex_op2_o 
-                         - vlSelf->riscv__DOT__id_ex_op1_o));
+                if ((0U == (vlSelf->inst_i >> 0x19U))) {
+                    vlSelf->riscv__DOT__ex_rd_addr_o 
+                        = (0x1fU & (IData)(vlSelf->riscv__DOT__id_ex_rd_addr_o));
+                    vlSelf->riscv__DOT__ex_rd_data_o 
+                        = (vlSelf->riscv__DOT__id_ex_op1_o 
+                           + vlSelf->riscv__DOT__id_ex_op2_o);
+                } else {
+                    vlSelf->riscv__DOT__ex_rd_addr_o 
+                        = (0x1fU & (vlSelf->inst_i 
+                                    >> 7U));
+                    vlSelf->riscv__DOT__ex_rd_data_o 
+                        = (vlSelf->riscv__DOT__id_ex_op2_o 
+                           - vlSelf->riscv__DOT__id_ex_op1_o);
+                }
             } else {
                 vlSelf->riscv__DOT__ex_rd_addr_o = 
                     (0x1fU & 0U);
@@ -170,19 +241,19 @@ VL_INLINE_OPT void Vriscv___024root___combo__TOP__0(Vriscv___024root* vlSelf) {
             vlSelf->riscv__DOT__ex_rd_data_o = 0U;
         }
     }
-    vlSelf->riscv__DOT__regs_rs1_data_o = ((IData)(vlSelf->rst)
-                                            ? ((0U 
-                                                == (IData)(vlSelf->riscv__DOT__id_rs1_addr_o))
-                                                ? 0U
-                                                : (
-                                                   ((IData)(vlSelf->riscv__DOT__ex_reg_wen_o) 
-                                                    & ((IData)(vlSelf->riscv__DOT__ex_rd_addr_o) 
-                                                       == (IData)(vlSelf->riscv__DOT__id_rs1_addr_o)))
-                                                    ? vlSelf->riscv__DOT__ex_rd_data_o
-                                                    : 
-                                                   vlSelf->riscv__DOT__regs_inst__DOT__regs
-                                                   [vlSelf->riscv__DOT__id_rs1_addr_o]))
-                                            : 0U);
+    vlSelf->riscv__DOT__regs_rs1_rdata_o = ((IData)(vlSelf->rst)
+                                             ? ((0U 
+                                                 == (IData)(vlSelf->riscv__DOT__id_rs1_addr_o))
+                                                 ? 0U
+                                                 : 
+                                                (((IData)(vlSelf->riscv__DOT__ex_reg_wen_o) 
+                                                  & ((IData)(vlSelf->riscv__DOT__ex_rd_addr_o) 
+                                                     == (IData)(vlSelf->riscv__DOT__id_rs1_addr_o)))
+                                                  ? vlSelf->riscv__DOT__ex_rd_data_o
+                                                  : 
+                                                 vlSelf->riscv__DOT__regs_inst__DOT__regs
+                                                 [vlSelf->riscv__DOT__id_rs1_addr_o]))
+                                             : 0U);
 }
 
 void Vriscv___024root___eval(Vriscv___024root* vlSelf) {

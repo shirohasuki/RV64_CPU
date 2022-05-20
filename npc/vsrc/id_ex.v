@@ -1,4 +1,4 @@
-`include "vsrc/defines.v"
+`include "./vsrc/defines.v"
 
 module id_ex(
 	input wire clk,

@@ -26,7 +26,7 @@ VL_MODULE(Vriscv___024root) {
     IData/*31:0*/ riscv__DOT__pc_reg_pc_o;
     IData/*31:0*/ riscv__DOT__if_id_inst_addr_o;
     IData/*31:0*/ riscv__DOT__if_id_inst_o;
-    IData/*31:0*/ riscv__DOT__regs_rs1_data_o;
+    IData/*31:0*/ riscv__DOT__regs_rs1_rdata_o;
     IData/*31:0*/ riscv__DOT__id_ex_inst_o;
     IData/*31:0*/ riscv__DOT__id_ex_inst_addr_o;
     IData/*31:0*/ riscv__DOT__id_ex_op1_o;

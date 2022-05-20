@@ -33,8 +33,8 @@ VL_ATTR_COLD void Vriscv___024root__trace_init_sub__TOP__0(Vriscv___024root* vlS
     tracep->declBus(c+63,"id_op2_o", false,-1, 31,0);
     tracep->declBus(c+6,"id_rd_addr_o", false,-1, 4,0);
     tracep->declBit(c+7,"id_reg_wen", false,-1);
-    tracep->declBus(c+54,"regs_rs1_data_o", false,-1, 31,0);
-    tracep->declBus(c+64,"regs_rs2_data_o", false,-1, 31,0);
+    tracep->declBus(c+54,"regs_rs1_rdata_o", false,-1, 31,0);
+    tracep->declBus(c+64,"regs_rs2_rdata_o", false,-1, 31,0);
     tracep->declBus(c+8,"id_ex_inst_o", false,-1, 31,0);
     tracep->declBus(c+9,"id_ex_inst_addr_o", false,-1, 31,0);
     tracep->declBus(c+10,"id_ex_op1_o", false,-1, 31,0);
@@ -60,17 +60,17 @@ VL_ATTR_COLD void Vriscv___024root__trace_init_sub__TOP__0(Vriscv___024root* vlS
     tracep->declBus(c+68,"rs1", false,-1, 4,0);
     tracep->declBus(c+69,"rs2", false,-1, 4,0);
     tracep->declBus(c+70,"imm", false,-1, 11,0);
-    tracep->declBus(c+71,"fun7", false,-1, 6,0);
+    tracep->declBus(c+71,"func7", false,-1, 6,0);
     tracep->popNamePrefix(1);
     tracep->pushNamePrefix("id_ex_inst ");
     tracep->declBit(c+58,"clk", false,-1);
     tracep->declBit(c+59,"rst", false,-1);
     tracep->declBus(c+3,"inst_i", false,-1, 31,0);
-    tracep->declBus(c+9,"inst_addr_i", false,-1, 31,0);
-    tracep->declBus(c+10,"op1_i", false,-1, 31,0);
-    tracep->declBus(c+11,"op2_i", false,-1, 31,0);
-    tracep->declBus(c+12,"rd_addr_i", false,-1, 4,0);
-    tracep->declBit(c+13,"reg_wen_i", false,-1);
+    tracep->declBus(c+2,"inst_addr_i", false,-1, 31,0);
+    tracep->declBus(c+62,"op1_i", false,-1, 31,0);
+    tracep->declBus(c+63,"op2_i", false,-1, 31,0);
+    tracep->declBus(c+6,"rd_addr_i", false,-1, 4,0);
+    tracep->declBit(c+7,"reg_wen_i", false,-1);
     tracep->declBus(c+8,"inst_o", false,-1, 31,0);
     tracep->declBus(c+9,"inst_addr_o", false,-1, 31,0);
     tracep->declBus(c+10,"op1_o", false,-1, 31,0);
@@ -90,7 +90,7 @@ VL_ATTR_COLD void Vriscv___024root__trace_init_sub__TOP__0(Vriscv___024root* vlS
     tracep->declBit(c+58,"clk", false,-1);
     tracep->declBit(c+59,"rst", false,-1);
     tracep->declBus(c+74,"set_data", false,-1, 31,0);
-    tracep->declBus(c+9,"data_i", false,-1, 31,0);
+    tracep->declBus(c+2,"data_i", false,-1, 31,0);
     tracep->declBus(c+9,"data_o", false,-1, 31,0);
     tracep->popNamePrefix(1);
     tracep->pushNamePrefix("dff3 ");
@@ -98,7 +98,7 @@ VL_ATTR_COLD void Vriscv___024root__trace_init_sub__TOP__0(Vriscv___024root* vlS
     tracep->declBit(c+58,"clk", false,-1);
     tracep->declBit(c+59,"rst", false,-1);
     tracep->declBus(c+74,"set_data", false,-1, 31,0);
-    tracep->declBus(c+10,"data_i", false,-1, 31,0);
+    tracep->declBus(c+62,"data_i", false,-1, 31,0);
     tracep->declBus(c+10,"data_o", false,-1, 31,0);
     tracep->popNamePrefix(1);
     tracep->pushNamePrefix("dff4 ");
@@ -106,7 +106,7 @@ VL_ATTR_COLD void Vriscv___024root__trace_init_sub__TOP__0(Vriscv___024root* vlS
     tracep->declBit(c+58,"clk", false,-1);
     tracep->declBit(c+59,"rst", false,-1);
     tracep->declBus(c+74,"set_data", false,-1, 31,0);
-    tracep->declBus(c+11,"data_i", false,-1, 31,0);
+    tracep->declBus(c+63,"data_i", false,-1, 31,0);
     tracep->declBus(c+11,"data_o", false,-1, 31,0);
     tracep->popNamePrefix(1);
     tracep->pushNamePrefix("dff5 ");
@@ -114,7 +114,7 @@ VL_ATTR_COLD void Vriscv___024root__trace_init_sub__TOP__0(Vriscv___024root* vlS
     tracep->declBit(c+58,"clk", false,-1);
     tracep->declBit(c+59,"rst", false,-1);
     tracep->declBus(c+76,"set_data", false,-1, 4,0);
-    tracep->declBus(c+12,"data_i", false,-1, 4,0);
+    tracep->declBus(c+6,"data_i", false,-1, 4,0);
     tracep->declBus(c+12,"data_o", false,-1, 4,0);
     tracep->popNamePrefix(1);
     tracep->pushNamePrefix("dff6 ");
@@ -122,7 +122,7 @@ VL_ATTR_COLD void Vriscv___024root__trace_init_sub__TOP__0(Vriscv___024root* vlS
     tracep->declBit(c+58,"clk", false,-1);
     tracep->declBit(c+59,"rst", false,-1);
     tracep->declBus(c+78,"set_data", false,-1, 0,0);
-    tracep->declBus(c+13,"data_i", false,-1, 0,0);
+    tracep->declBus(c+7,"data_i", false,-1, 0,0);
     tracep->declBus(c+13,"data_o", false,-1, 0,0);
     tracep->popNamePrefix(2);
     tracep->pushNamePrefix("id_inst ");
@@ -144,7 +144,7 @@ VL_ATTR_COLD void Vriscv___024root__trace_init_sub__TOP__0(Vriscv___024root* vlS
     tracep->declBus(c+17,"rs1", false,-1, 4,0);
     tracep->declBus(c+18,"rs2", false,-1, 4,0);
     tracep->declBus(c+19,"imm", false,-1, 11,0);
-    tracep->declBus(c+20,"fun7", false,-1, 6,0);
+    tracep->declBus(c+20,"func7", false,-1, 6,0);
     tracep->popNamePrefix(1);
     tracep->pushNamePrefix("if_id_inst ");
     tracep->declBit(c+58,"clk", false,-1);
@@ -320,7 +320,7 @@ VL_ATTR_COLD void Vriscv___024root__trace_full_sub_0(Vriscv___024root* vlSelf, V
     tracep->fullIData(oldp+51,(vlSelf->riscv__DOT__regs_inst__DOT__regs[30]),32);
     tracep->fullIData(oldp+52,(vlSelf->riscv__DOT__regs_inst__DOT__regs[31]),32);
     tracep->fullIData(oldp+53,(vlSelf->riscv__DOT__regs_inst__DOT__unnamedblk1__DOT__i),32);
-    tracep->fullIData(oldp+54,(vlSelf->riscv__DOT__regs_rs1_data_o),32);
+    tracep->fullIData(oldp+54,(vlSelf->riscv__DOT__regs_rs1_rdata_o),32);
     tracep->fullIData(oldp+55,(vlSelf->riscv__DOT__ex_rd_data_o),32);
     tracep->fullCData(oldp+56,(vlSelf->riscv__DOT__ex_rd_addr_o),5);
     tracep->fullBit(oldp+57,(vlSelf->riscv__DOT__ex_reg_wen_o));
@@ -331,7 +331,7 @@ VL_ATTR_COLD void Vriscv___024root__trace_full_sub_0(Vriscv___024root* vlSelf, V
     tracep->fullIData(oldp+62,(((0x13U == (0x7fU & vlSelf->riscv__DOT__if_id_inst_o))
                                  ? ((0U == (7U & (vlSelf->riscv__DOT__if_id_inst_o 
                                                   >> 0xcU)))
-                                     ? vlSelf->riscv__DOT__regs_rs1_data_o
+                                     ? vlSelf->riscv__DOT__regs_rs1_rdata_o
                                      : 0U) : ((0x33U 
                                                == (0x7fU 
                                                    & vlSelf->riscv__DOT__if_id_inst_o))
@@ -340,7 +340,7 @@ VL_ATTR_COLD void Vriscv___024root__trace_full_sub_0(Vriscv___024root* vlSelf, V
                                                    (7U 
                                                     & (vlSelf->riscv__DOT__if_id_inst_o 
                                                        >> 0xcU)))
-                                                   ? vlSelf->riscv__DOT__regs_rs1_data_o
+                                                   ? vlSelf->riscv__DOT__regs_rs1_rdata_o
                                                    : 0U)
                                                : 0U))),32);
     tracep->fullIData(oldp+63,(((0x13U == (0x7fU & vlSelf->riscv__DOT__if_id_inst_o))

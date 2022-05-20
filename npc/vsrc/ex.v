@@ -21,7 +21,7 @@ module ex (
     wire[4:0] rs1;
     wire[4:0] rs2;
     wire[11:0] imm;
-    wire[6:0] fun7;
+    wire[6:0] func7;
     
 
     assign opcode = inst_i[6:0];
@@ -29,7 +29,7 @@ module ex (
     assign func3  = inst_i[14:12];
     assign rs1    = inst_i[19:15];
     assign rs2    = inst_i[24:20];
-    assign fun7   = inst_i[31:25];
+    assign func7  = inst_i[31:25];
     assign imm    = inst_i[31:20];
 
     always @(*) begin
@@ -39,7 +39,7 @@ module ex (
                 case (func3)
                     `INST_ADDI:begin
                         rd_wdata_o = op1_i + op2_i; 
-                        rd_waddr_o = rd;
+                        rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
                     end 
                     default:begin
@@ -53,9 +53,9 @@ module ex (
             `INST_TYPE_R_M:begin
                 case (func3)
                     `INST_ADD_SUB: begin
-                        if (fun7 == 7'b0) begin // add
+                        if (func7 == 7'b0) begin // add
                             rd_wdata_o = op1_i + op2_i; 
-                            rd_waddr_o = rd;
+                            rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
                         end
                         else begin // sub

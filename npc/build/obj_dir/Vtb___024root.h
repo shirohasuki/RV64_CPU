@@ -24,7 +24,9 @@ VL_MODULE(Vtb___024root) {
     CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_reg_wen;
     CData/*4:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_rd_addr_o;
     CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_reg_wen_o;
-    CData/*0:0*/ __Vclklast__TOP__tb__DOT__clk;
+    CData/*0:0*/ __VinpClk__TOP__tb__DOT__clk;
+    CData/*0:0*/ __Vclklast__TOP____VinpClk__TOP__tb__DOT__clk;
+    CData/*0:0*/ __Vchglast__TOP__tb__DOT__clk;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__rom_inst_o;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_addr_o;

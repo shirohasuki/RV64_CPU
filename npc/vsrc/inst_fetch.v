@@ -1,3 +1,4 @@
+`timescale 1ns/10ps
 module inst_fetch(
     // from pc
     input wire[31:0] pc_addr_i,   

@@ -6,6 +6,14 @@
 
 #include "Vtb___024root.h"
 
+VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
+    if (false && vlSelf) {}  // Prevent unused
+    Vtb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtb___024root___combo__TOP__0\n"); );
+    // Body
+    vlSelf->tb__DOT__clk = (1U & (~ (IData)(vlSelf->tb__DOT__clk)));
+}
+
 VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
     Vtb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
@@ -252,12 +260,40 @@ void Vtb___024root___eval(Vtb___024root* vlSelf) {
     Vtb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtb___024root___eval\n"); );
     // Body
-    if (((IData)(vlSelf->tb__DOT__clk) & (~ (IData)(vlSelf->__Vclklast__TOP__tb__DOT__clk)))) {
+    Vtb___024root___combo__TOP__0(vlSelf);
+    if (((IData)(vlSelf->__VinpClk__TOP__tb__DOT__clk) 
+         & (~ (IData)(vlSelf->__Vclklast__TOP____VinpClk__TOP__tb__DOT__clk)))) {
         Vtb___024root___sequent__TOP__0(vlSelf);
         vlSelf->__Vm_traceActivity[1U] = 1U;
     }
     // Final
-    vlSelf->__Vclklast__TOP__tb__DOT__clk = vlSelf->tb__DOT__clk;
+    vlSelf->__Vclklast__TOP____VinpClk__TOP__tb__DOT__clk 
+        = vlSelf->__VinpClk__TOP__tb__DOT__clk;
+    vlSelf->__VinpClk__TOP__tb__DOT__clk = vlSelf->tb__DOT__clk;
+}
+
+QData Vtb___024root___change_request_1(Vtb___024root* vlSelf);
+
+VL_INLINE_OPT QData Vtb___024root___change_request(Vtb___024root* vlSelf) {
+    if (false && vlSelf) {}  // Prevent unused
+    Vtb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtb___024root___change_request\n"); );
+    // Body
+    return (Vtb___024root___change_request_1(vlSelf));
+}
+
+VL_INLINE_OPT QData Vtb___024root___change_request_1(Vtb___024root* vlSelf) {
+    if (false && vlSelf) {}  // Prevent unused
+    Vtb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtb___024root___change_request_1\n"); );
+    // Body
+    // Change detection
+    QData __req = false;  // Logically a bool
+    __req |= ((vlSelf->tb__DOT__clk ^ vlSelf->__Vchglast__TOP__tb__DOT__clk));
+    VL_DEBUG_IF( if(__req && ((vlSelf->tb__DOT__clk ^ vlSelf->__Vchglast__TOP__tb__DOT__clk))) VL_DBG_MSGF("        CHANGE: /home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/tb.v:6: tb.clk\n"); );
+    // Final
+    vlSelf->__Vchglast__TOP__tb__DOT__clk = vlSelf->tb__DOT__clk;
+    return __req;
 }
 
 #ifdef VL_DEBUG

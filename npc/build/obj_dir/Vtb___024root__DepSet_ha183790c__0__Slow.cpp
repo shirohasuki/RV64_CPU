@@ -11,6 +11,7 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
     Vtb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtb___024root___settle__TOP__0\n"); );
     // Body
+    vlSelf->tb__DOT__clk = (1U & (~ (IData)(vlSelf->tb__DOT__clk)));
     if ((0x13U == (0x7fU & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o))) {
         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_rs2_addr_o = 0U;
         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_rs1_addr_o 
@@ -109,7 +110,8 @@ VL_ATTR_COLD void Vtb___024root___eval_initial(Vtb___024root* vlSelf) {
     Vtb___024root___initial__TOP__0(vlSelf);
     vlSelf->__Vm_traceActivity[1U] = 1U;
     vlSelf->__Vm_traceActivity[0U] = 1U;
-    vlSelf->__Vclklast__TOP__tb__DOT__clk = 0U;
+    vlSelf->__Vclklast__TOP____VinpClk__TOP__tb__DOT__clk 
+        = vlSelf->__VinpClk__TOP__tb__DOT__clk;
 }
 
 VL_ATTR_COLD void Vtb___024root___eval_settle(Vtb___024root* vlSelf) {
@@ -158,6 +160,8 @@ VL_ATTR_COLD void Vtb___024root___ctor_var_reset(Vtb___024root* vlSelf) {
     for (int __Vi0=0; __Vi0<4096; ++__Vi0) {
         vlSelf->tb__DOT__soc_inst__DOT__rom_inst__DOT__rom_mem[__Vi0] = 0;
     }
+    vlSelf->__VinpClk__TOP__tb__DOT__clk = 0;
+    vlSelf->__Vchglast__TOP__tb__DOT__clk = 0;
     for (int __Vi0=0; __Vi0<2; ++__Vi0) {
         vlSelf->__Vm_traceActivity[__Vi0] = 0;
     }

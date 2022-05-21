@@ -10,6 +10,7 @@
 
 Vtb::Vtb(VerilatedContext* _vcontextp__, const char* _vcname__)
     : vlSymsp{new Vtb__Syms(_vcontextp__, _vcname__, this)}
+    , __PVT____024unit{vlSymsp->TOP.__PVT____024unit}
     , rootp{&(vlSymsp->TOP)}
 {
 }

@@ -1,3 +1,6 @@
+`timescale 1ns/10ps
+integer numcycles; 
+
 module tb;//(input clk, input rst ); 
 
     reg clk;
@@ -8,6 +11,14 @@ module tb;//(input clk, input rst );
         rst = 1'b0;
     end
 
+    task step; begin
+        #9  clk = 1'b0;
+        #10 clk = 1'b1;
+        numcycles = numcycles + 1;
+        #1 ;
+    end
+    endtask
+
     // always #10 clk = ~clk; 
     // 10ns翻转一次，为50MHZ的时钟
 
@@ -15,12 +26,6 @@ module tb;//(input clk, input rst );
     //    clk  =~clk;
     //    #50;
     //join
-    parameter clk_period = 10;    
-    initial begin  
-        clk = 0;  
-        forever  
-            #(clk_period/2) clk = ~clk;  
-    end  
 
     //initial begin
     //    clk = 1'b1; 
@@ -31,10 +36,11 @@ module tb;//(input clk, input rst );
     //end
     
     // 读入 rom 初始值
-    initial begin
+
+    task loadtestcase; begin
         $readmemb("./vsrc/tb/inst_data_ADD.txt", tb.soc_inst.rom_inst.rom_mem);
     end
-
+    endtask
     
     //initial begin
 

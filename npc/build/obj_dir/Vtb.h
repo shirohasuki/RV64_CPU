@@ -13,6 +13,8 @@
 class Vtb__Syms;
 class Vtb___024root;
 class VerilatedVcdC;
+class Vtb___024unit;
+
 
 // This class is the main interface to the Verilated model
 class Vtb VL_NOT_FINAL {
@@ -29,6 +31,7 @@ class Vtb VL_NOT_FINAL {
     // CELLS
     // Public to allow access to /* verilator public */ items.
     // Otherwise the application code can consider these internals.
+    Vtb___024unit* const __PVT____024unit;
 
     // Root instance pointer to allow access to model internals,
     // including inlined /* verilator public_flat_* */ items.

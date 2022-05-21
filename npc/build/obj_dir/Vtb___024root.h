@@ -12,15 +12,15 @@ VL_MODULE(Vtb___024root) {
   public:
 
     // DESIGN SPECIFIC STATE
-    VL_IN8(clk,0,0);
-    VL_IN8(rst,0,0);
+    CData/*0:0*/ tb__DOT__clk;
+    CData/*0:0*/ tb__DOT__rst;
     CData/*4:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_rs1_addr_o;
     CData/*4:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_rs2_addr_o;
     CData/*4:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_rd_addr_o;
     CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_reg_wen;
     CData/*4:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_rd_addr_o;
     CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_reg_wen_o;
-    CData/*0:0*/ __Vclklast__TOP__clk;
+    CData/*0:0*/ __Vclklast__TOP__tb__DOT__clk;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__rom_inst_o;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_addr_o;

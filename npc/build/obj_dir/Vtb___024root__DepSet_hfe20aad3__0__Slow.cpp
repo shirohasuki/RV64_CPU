@@ -26,4 +26,10 @@ VL_ATTR_COLD void Vtb___024root___initial__TOP__0(Vtb___024root* vlSelf) {
     VL_READMEM_N(false, 32, 4096, 0, VL_CVT_PACK_STR_NW(7, __Vtemp_h6d578ef8__0)
                  ,  &(vlSelf->tb__DOT__soc_inst__DOT__rom_inst__DOT__rom_mem)
                  , 0, ~0ULL);
+    vlSelf->tb__DOT__clk = 0U;
+    while (1U) {
+        vlSelf->tb__DOT__clk = (1U & (~ (IData)(vlSelf->tb__DOT__clk)));
+    }
+    vlSelf->tb__DOT__clk = 0U;
+    vlSelf->tb__DOT__rst = 0U;
 }

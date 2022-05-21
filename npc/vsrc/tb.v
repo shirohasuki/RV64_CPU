@@ -1,15 +1,26 @@
-module tb(input clk, input rst ); 
+module tb;//(input clk, input rst ); 
 
-    //reg clk;
-    //reg rst;
+    reg clk;
+    reg rst;
 
-    //initial begin
-    //    clk = 1'b0;
-    //    rst = 1'b0;
-    //end
+    initial begin
+        clk = 1'b0;
+        rst = 1'b0;
+    end
 
-    //always #10 clk = ~clk; 
+    // always #10 clk = ~clk; 
     // 10ns翻转一次，为50MHZ的时钟
+
+    //always@(*) fork
+    //    clk  =~clk;
+    //    #50;
+    //join
+    parameter clk_period = 10;    
+    initial begin  
+        clk = 0;  
+        forever  
+            #(clk_period/2) clk = ~clk;  
+    end  
 
     //initial begin
     //    clk = 1'b1; 

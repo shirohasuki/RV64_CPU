@@ -71,11 +71,11 @@ void sim_exit() {
 
 int main() {
     sim_init();
-    int i = 10;
-    while (i--) {
-        top->clk = ~top->clk;
-        top->rst = 1;step_and_dump_wave();
-    }
+    //int i = 10;
+    //while (i--) {
+    //   top->clk = ~top->clk;
+    //    top->rst = 1;step_and_dump_wave();
+    //}
 
     sim_exit();
 }

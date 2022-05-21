@@ -26,30 +26,33 @@ module id(
     wire[2:0] func3;
     wire[4:0] rs1;
     wire[4:0] rs2;
-    wire[11:0] imm;
     wire[6:0] func7;
+    wire[11:0] imm;
     
     assign opcode = inst_i[6:0];
     assign rd     = inst_i[11:7];
     assign func3  = inst_i[14:12];
     assign rs1    = inst_i[19:15];
     assign rs2    = inst_i[24:20];
-    assign func7   = inst_i[31:25];
+    assign func7  = inst_i[31:25];
     assign imm    = inst_i[31:20];
 
     always @(*) begin
         inst_o = inst_i;
         inst_addr_o = inst_addr_i;
         case (opcode)
-            `INST_TYPE_I:begin
+            7'b0010011:begin
+            //`INST_TYPE_I:begin
                 case (func3)
-                    `INST_ADDI:begin
+                    //`INST_ADDI:begin
+                        3'b001:begin
                         rs1_addr_o = rs1;
                         rs2_addr_o = 5'b0;
                         op1_o = rs1_data_i;
                         op2_o = {{20{imm[11]}}, imm}; // 符号位拓展，imm[11]向前偏移20位
                         rd_addr_o = rd;
                         reg_wen = 1'b1; // 要回写 
+                        //$display("good hit!");
                     end 
                     default:begin
                         rs1_addr_o = 5'b0;
@@ -64,7 +67,7 @@ module id(
 
             `INST_TYPE_R_M:begin
                 case (func3)
-                    `INST_ADD_SUB:begin //ADD和SUB的fun3相同，fun7不同
+                    `INST_ADD_SUB:begin //ADD和SUB的func3相同，func7不同
                         rs1_addr_o = rs1;
                         rs2_addr_o = rs2;
                         op1_o = rs1_data_i;

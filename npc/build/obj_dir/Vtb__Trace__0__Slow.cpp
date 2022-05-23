@@ -207,25 +207,12 @@ VL_ATTR_COLD void Vtb___024root__trace_init_sub__TOP__0(Vtb___024root* vlSelf, V
     tracep->popNamePrefix(3);
 }
 
-VL_ATTR_COLD void Vtb___024root__trace_init_sub__TOP____024unit__0(Vtb___024root* vlSelf, VerilatedVcd* tracep) {
-    if (false && vlSelf) {}  // Prevent unused
-    Vtb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtb___024root__trace_init_sub__TOP____024unit__0\n"); );
-    // Init
-    const int c = vlSymsp->__Vm_baseCode;
-    // Body
-    tracep->declBus(c+78,"numcycles", false,-1, 31,0);
-}
-
 VL_ATTR_COLD void Vtb___024root__trace_init_top(Vtb___024root* vlSelf, VerilatedVcd* tracep) {
     if (false && vlSelf) {}  // Prevent unused
     Vtb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtb___024root__trace_init_top\n"); );
     // Body
     Vtb___024root__trace_init_sub__TOP__0(vlSelf, tracep);
-    tracep->pushNamePrefix("$unit ");
-    Vtb___024root__trace_init_sub__TOP____024unit__0(vlSelf, tracep);
-    tracep->popNamePrefix(1);
 }
 
 VL_ATTR_COLD void Vtb___024root__trace_full_top_0(void* voidSelf, VerilatedVcd* tracep);
@@ -424,5 +411,4 @@ VL_ATTR_COLD void Vtb___024root__trace_full_sub_0(Vtb___024root* vlSelf, Verilat
     tracep->fullCData(oldp+75,(0U),5);
     tracep->fullIData(oldp+76,(1U),32);
     tracep->fullBit(oldp+77,(0U));
-    tracep->fullIData(oldp+78,(vlSymsp->TOP____024unit.__PVT__numcycles),32);
 }

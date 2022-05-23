@@ -290,7 +290,7 @@ VL_INLINE_OPT QData Vtb___024root___change_request_1(Vtb___024root* vlSelf) {
     // Change detection
     QData __req = false;  // Logically a bool
     __req |= ((vlSelf->tb__DOT__clk ^ vlSelf->__Vchglast__TOP__tb__DOT__clk));
-    VL_DEBUG_IF( if(__req && ((vlSelf->tb__DOT__clk ^ vlSelf->__Vchglast__TOP__tb__DOT__clk))) VL_DBG_MSGF("        CHANGE: /home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/tb.v:6: tb.clk\n"); );
+    VL_DEBUG_IF( if(__req && ((vlSelf->tb__DOT__clk ^ vlSelf->__Vchglast__TOP__tb__DOT__clk))) VL_DBG_MSGF("        CHANGE: /home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/tb.v:5: tb.clk\n"); );
     // Final
     vlSelf->__Vchglast__TOP__tb__DOT__clk = vlSelf->tb__DOT__clk;
     return __req;

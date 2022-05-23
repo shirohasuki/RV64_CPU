@@ -1,15 +1,14 @@
 `timescale 1ns/10ps
-integer numcycles; 
 
-module tb;//(input clk, input rst ); 
+module tb;//(input wire clk, input wire rst); 
 
     reg clk;
     reg rst;
 
-    initial begin
-        clk = 1'b0;
-        rst = 1'b0;
-    end
+    //initial begin
+    //    clk = 1'b0;
+    //    rst = 1'b0;
+    //end
 
     //task step; begin
     //    #9  clk = 1'b0;
@@ -21,15 +20,13 @@ module tb;//(input clk, input rst );
 
     always #10 clk = ~clk; 
     // 10ns翻转一次，为50MHZ的时钟
-    
-  
-    //initial begin
-    //    clk = 1'b1; 
-    //    rst = 1'b0;
 
-    //    #30
-    //    rst = 1'b1;    
-    //end
+    initial begin
+		clk = 1'b1;
+		rst = 1'b0;
+		#30;
+		rst = 1'b1;	
+	end
     
     // 读入 rom 初始值
     initial begin
@@ -41,12 +38,12 @@ module tb;//(input clk, input rst );
     //endtask
     
     //initial begin
-            always @(posedge clk) begin
-                $display("x27 register value is %d", tb.soc_inst.riscv_inst.regs_inst.regs[27]);
-                $display("x28 register value is %d", tb.soc_inst.riscv_inst.regs_inst.regs[28]);
-                $display("x29 register value is %d", tb.soc_inst.riscv_inst.regs_inst.regs[29]);
-                $display("--------------------------------------------------------");
-            end
+    always @(posedge clk) begin
+        $display("x27 register value is %d", tb.soc_inst.riscv_inst.regs_inst.regs[27]);
+        $display("x28 register value is %d", tb.soc_inst.riscv_inst.regs_inst.regs[28]);
+        $display("x29 register value is %d", tb.soc_inst.riscv_inst.regs_inst.regs[29]);
+        $display("--------------------------------------------------------");
+    end
             
 
     //end

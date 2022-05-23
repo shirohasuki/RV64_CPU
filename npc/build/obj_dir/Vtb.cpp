@@ -10,7 +10,6 @@
 
 Vtb::Vtb(VerilatedContext* _vcontextp__, const char* _vcname__)
     : vlSymsp{new Vtb__Syms(_vcontextp__, _vcname__, this)}
-    , __PVT____024unit{vlSymsp->TOP.__PVT____024unit}
     , rootp{&(vlSymsp->TOP)}
 {
 }
@@ -57,7 +56,7 @@ static void _eval_initial_loop(Vtb__Syms* __restrict vlSymsp) {
             Verilated::debug(1);
             __Vchange = Vtb___024root___change_request(&(vlSymsp->TOP));
             Verilated::debug(__Vsaved_debug);
-            VL_FATAL_MT("/home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/tb.v", 4, "",
+            VL_FATAL_MT("/home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/tb.v", 3, "",
                 "Verilated model didn't DC converge\n"
                 "- See https://verilator.org/warn/DIDNOTCONVERGE");
         } else {
@@ -88,7 +87,7 @@ void Vtb::eval_step() {
             Verilated::debug(1);
             __Vchange = Vtb___024root___change_request(&(vlSymsp->TOP));
             Verilated::debug(__Vsaved_debug);
-            VL_FATAL_MT("/home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/tb.v", 4, "",
+            VL_FATAL_MT("/home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/tb.v", 3, "",
                 "Verilated model didn't converge\n"
                 "- See https://verilator.org/warn/DIDNOTCONVERGE");
         } else {

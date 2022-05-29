@@ -38,7 +38,9 @@ module ex (
     assign rs2    = inst_i[24:20];
     assign func7  = inst_i[31:25];
     //assign imm   = inst_i[31:20];
+
     assign immB   = {{20{inst_i[31]}}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+    
     assign op1_i_equal_op2_i = (op1_i == op2_i) ? 1'b1 : 1'b0;
 
 

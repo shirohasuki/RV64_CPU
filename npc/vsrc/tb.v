@@ -1,8 +1,4 @@
 `timescale 1ns/1ps
-//`include "./vsrc/soc.v"
-//`include "./vsrc/riscv.v"
-//`include "./vsrc/regs.v"
-//`include "./vsrc/rom.v"
 
 module tb(
     input clk,
@@ -33,11 +29,6 @@ module tb(
             end
         end
     end 
-
-    initial begin
-        $dumpfile("wave.vcd");
-        $dumpvars(0, tb);
-    end
 
     soc soc_inst (
         .clk  ( clk ),

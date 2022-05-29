@@ -32,7 +32,6 @@ VM_CLASSES_FAST += \
 VM_CLASSES_SLOW += \
 	Vtb__ConstPool_0 \
 	Vtb___024root__Slow \
-	Vtb___024root__DepSet_hfe20aad3__0__Slow \
 	Vtb___024root__DepSet_ha183790c__0__Slow \
 
 # Generated support classes, fast-path, compile with highest optimization

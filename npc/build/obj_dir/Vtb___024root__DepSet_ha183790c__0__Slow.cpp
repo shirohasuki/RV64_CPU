@@ -535,18 +535,28 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
     }
 }
 
-VL_ATTR_COLD void Vtb___024root___initial__TOP__0(Vtb___024root* vlSelf);
+extern const VlWide<9>/*287:0*/ Vtb__ConstPool__CONST_ha92b97d7_0;
+
+VL_ATTR_COLD void Vtb___024root___initial__TOP__0(Vtb___024root* vlSelf) {
+    if (false && vlSelf) {}  // Prevent unused
+    Vtb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtb___024root___initial__TOP__0\n"); );
+    // Body
+    VL_READMEM_N(true, 32, 4096, 0, VL_CVT_PACK_STR_NW(9, Vtb__ConstPool__CONST_ha92b97d7_0)
+                 ,  &(vlSelf->tb__DOT__soc_inst__DOT__rom_inst__DOT__rom_mem)
+                 , 0, ~0ULL);
+}
 
 VL_ATTR_COLD void Vtb___024root___eval_initial(Vtb___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
     Vtb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtb___024root___eval_initial\n"); );
     // Body
+    vlSelf->__Vclklast__TOP__clk = vlSelf->clk;
     Vtb___024root___initial__TOP__0(vlSelf);
     vlSelf->__Vm_traceActivity[2U] = 1U;
     vlSelf->__Vm_traceActivity[1U] = 1U;
     vlSelf->__Vm_traceActivity[0U] = 1U;
-    vlSelf->__Vclklast__TOP__clk = vlSelf->clk;
 }
 
 VL_ATTR_COLD void Vtb___024root___eval_settle(Vtb___024root* vlSelf) {

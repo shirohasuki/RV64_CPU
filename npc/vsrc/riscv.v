@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module riscv (
     input  wire clk, 
     input  wire rst,
@@ -116,15 +118,15 @@ module riscv (
 	wire       ex_reg_wen_o;
 
     ex ex_inst(
-        .inst_i      ( id_ex_inst_o          ),
-        .inst_addr_i ( id_ex_inst_addr_o    ),
+        .inst_i      ( id_ex_inst_o    ),
+        .inst_addr_i ( id_ex_inst_addr_o ),
         .op1_i       ( id_ex_op1_o     ),
         .op2_i       ( id_ex_op2_o     ),
         .rd_addr_i   ( id_ex_rd_addr_o ),
         .reg_wen_i   ( id_ex_reg_wen   ),
         .rd_wdata_o  ( ex_rd_data_o    ),
         .rd_waddr_o  ( ex_rd_addr_o    ),
-        .reg_wen_o   ( ex_reg_wen_o   )
+        .reg_wen_o   ( ex_reg_wen_o    )
     );
 
 

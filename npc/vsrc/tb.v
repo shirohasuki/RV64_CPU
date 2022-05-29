@@ -1,5 +1,10 @@
-module tb; 
+`timescale 1ns/1ps
 
+module tb(
+    input clk,
+    input rst 
+);
+/*
     reg clk;
     reg rst;
 
@@ -18,7 +23,7 @@ module tb;
         #30
         rst = 1'b1;    
     end
-    
+*/    
     // 读入 rom 初始值
     initial begin
         $readmemb("./tb/inst_data_ADD.txt", tb.soc_inst.rom_inst.rom_mem);

@@ -43,12 +43,12 @@ int main() {
 
 #include "verilated.h"
 #include "verilated_vcd_c.h"
-#include "Vriscv.h"
+#include "Vtb.h"
 
 VerilatedContext* contextp = NULL;
 VerilatedVcdC* tfp = NULL;
 
-static Vriscv* top;
+static Vtb* top;
 
 void step_and_dump_wave() {
     top->eval();
@@ -58,7 +58,7 @@ void step_and_dump_wave() {
 void sim_init() {
     contextp = new VerilatedContext;
     tfp = new VerilatedVcdC;
-    top = new Vriscv;
+    top = new Vtb;
     contextp->traceEverOn(true);
     top->trace(tfp, 0);
     tfp->open("dump.vcd");
@@ -71,13 +71,13 @@ void sim_exit() {
 
 int main() {
     sim_init();
-    //int i = 10;
-    //while (i--) {
-    top->rst = 1;   top->clk = 0;   step_and_dump_wave();
-    top->rst = 1;   top->clk = 1;   step_and_dump_wave();
+    int i = 10;
+    while (i--) {
+        top->rst = 1;   top->clk = 0;   step_and_dump_wave();
+                        top->clk = 1;   step_and_dump_wave();
         //top->rst = 1;   top->clk = 0;   step_and_dump_wave();
         //                top->clk = 1;   step_and_dump_wave();
-   // }
+    }
 
     sim_exit();
 } 

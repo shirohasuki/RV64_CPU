@@ -2,9 +2,9 @@
 # DESCRIPTION: Verilator output: Makefile for building Verilated archive or executable
 #
 # Execute this makefile from the object directory:
-#    make -f Vriscv.mk
+#    make -f Vtb.mk
 
-default: /home/shiroha/Code/ysyx/ysyx-workbench/npc/build/riscv
+default: /home/shiroha/Code/ysyx/ysyx-workbench/npc/build/tb
 
 ### Constants...
 # Perl executable (from $PERL)
@@ -30,12 +30,12 @@ VM_SC_TARGET_ARCH = linux
 
 ### Vars...
 # Design prefix (from --prefix)
-VM_PREFIX = Vriscv
+VM_PREFIX = Vtb
 # Module prefix (from --prefix)
-VM_MODPREFIX = Vriscv
+VM_MODPREFIX = Vtb
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
-	-DTOP_NAME="Vriscv" \
+	-DTOP_NAME="Vtb" \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
@@ -53,7 +53,7 @@ VM_USER_DIR = \
 
 ### Default rules...
 # Include list of all generated classes
-include Vriscv_classes.mk
+include Vtb_classes.mk
 # Include global rules
 include $(VERILATOR_ROOT)/include/verilated.mk
 
@@ -64,7 +64,7 @@ main.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/main.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 
 ### Link rules... (from --exe)
-/home/shiroha/Code/ysyx/ysyx-workbench/npc/build/riscv: $(VK_USER_OBJS) $(VK_GLOBAL_OBJS) $(VM_PREFIX)__ALL.a $(VM_HIER_LIBS)
+/home/shiroha/Code/ysyx/ysyx-workbench/npc/build/tb: $(VK_USER_OBJS) $(VK_GLOBAL_OBJS) $(VM_PREFIX)__ALL.a $(VM_HIER_LIBS)
 	$(LINK) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) $(LIBS) $(SC_LIBS) -o $@
 
 

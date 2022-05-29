@@ -18,21 +18,21 @@ module tb(
 		$readmemh("./vsrc/tb/inst_txt/rv32ui-p-add.txt",tb.soc_inst.rom_inst.rom_mem);
 	end
 
-	initial begin
-         $display(" register value is %d",tb.soc_inst.riscv_inst.regs_inst.regs[26]);
-		while (x26 == 32'b1) begin	
-            if (x27 == 32'b1) begin
-                $display("########  pass  !!!#########");
+        always @(posedge clk) begin
+            if (x26 == 32'b1) begin	begin
+                    if (x27 == 32'b1) begin
+                        $display("########  pass  !!!#########");
+                    end
+                    else begin
+                        $display("########  fail  !!!#########");
+                        $display("fail testnum = %2d", x3);
+                        for (integer r = 0;r < 32; r = r + 1)begin
+                            $display("x%2d register value is %d",r,tb.soc_inst.riscv_inst.regs_inst.regs[r]);	
+                        end	
+                    end
+                end
             end
-            else begin
-                $display("########  fail  !!!#########");
-                $display("fail testnum = %2d", x3);
-                for (integer r = 0;r < 32; r = r + 1)begin
-                    $display("x%2d register value is %d",r,tb.soc_inst.riscv_inst.regs_inst.regs[r]);	
-                end	
-            end
-        end
-	end
+        end 
 
     initial begin
         $dumpfile("wave.vcd");

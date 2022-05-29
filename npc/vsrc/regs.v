@@ -1,7 +1,7 @@
 module regs (
     input  wire clk,    
     input  wire rst,    
-    
+
     // from id 
     input  wire[4:0] rs1_raddr_i,    
     input  wire[4:0] rs2_raddr_i,    

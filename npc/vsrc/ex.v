@@ -94,10 +94,16 @@ module ex (
                 reg_wen_o  = 1'b0; 
                 case (func3)
                     `INST_BNE: begin
-                        jump_addr_o = (inst_addr_i + immB) & {32{(op1_i_equal_op2_i)}};
+                        jump_addr_o = (inst_addr_i + immB) & {32{(~op1_i_equal_op2_i)}};
                         jump_en_o   = ~op1_i_equal_op2_i;
                         hold_flag_o = 1'b0;
                     end
+                    `INST_BEQ: begin
+                        jump_addr_o = (inst_addr_i + immB) & {32{(op1_i_equal_op2_i)}};
+                        jump_en_o   = op1_i_equal_op2_i;
+                        hold_flag_o = 1'b0;
+                    end
+                    
                     default: begin
                         jump_addr_o = 32'b0;
                         jump_en_o   = 1'b0;
@@ -106,7 +112,22 @@ module ex (
                         
                 endcase
             end
-
+            `INST_JAL: begin
+                rd_wdata_o = inst_addr_i + 32'h4; 
+                rd_waddr_o = rd_addr_i;
+                reg_wen_o  = 1'b1; 
+                jump_addr_o = op1_i + inst_addr_i;
+                jump_en_o   = 1'b1;
+                hold_flag_o = 1'b0;
+            end
+            `INST_LUI: begin
+                rd_wdata_o  = op1_i; 
+                rd_waddr_o  = rd_addr_i;
+                reg_wen_o   = 1'b1; 
+                jump_addr_o = 32'b0; //不跳转 
+                jump_en_o   = 1'b1;
+                hold_flag_o = 1'b0;      
+            end
             default: begin
                 jump_addr_o = 32'b0;
                 jump_en_o   = 1'b0;

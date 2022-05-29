@@ -9,9 +9,9 @@ module tb(
     input rst 
 );
 
-    wire[31:0] x3 = tb.soc_inst.riscv_inst.regs_inst.regs[3];
-	wire[31:0] x26 = tb.soc_inst.riscv_inst.regs_inst.regs[26];
-	wire[31:0] x27 = tb.soc_inst.riscv_inst.regs_inst.regs[27];
+    wire x3 = tb.soc_inst.riscv_inst.regs_inst.regs[3];
+	wire x26 = tb.soc_inst.riscv_inst.regs_inst.regs[26];
+	wire x27 = tb.soc_inst.riscv_inst.regs_inst.regs[27];
 	
 	//rom 初始值
 	initial begin
@@ -22,14 +22,10 @@ module tb(
 		//wait(x26 == 32'b1);
 
 		if(x27 == 32'b1) begin
-			$display("############################");
 			$display("########  pass  !!!#########");
-			$display("############################");
 		end
 		else begin
-			$display("############################");
 			$display("########  fail  !!!#########");
-			$display("############################");
 			$display("fail testnum = %2d", x3);
 			for (integer r = 0;r < 32; r = r + 1)begin
 				$display("x%2d register value is %d",r,tb.soc_inst.riscv_inst.regs_inst.regs[r]);	

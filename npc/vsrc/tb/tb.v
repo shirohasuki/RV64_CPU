@@ -1,8 +1,8 @@
 `timescale 1ns/1ps
-`include "./vsrc/soc.v"
-`include "./vsrc/riscv.v"
-`include "./vsrc/regs.v"
-`include "./vsrc/rom.v"
+//`include "./vsrc/soc.v"
+//`include "./vsrc/riscv.v"
+//`include "./vsrc/regs.v"
+//`include "./vsrc/rom.v"
 
 module tb(
     input clk,
@@ -18,8 +18,6 @@ module tb(
 		$readmemh("./vsrc/tb/inst_txt/rv32ui-p-addi.txt",tb.soc_inst.rom_inst.rom_mem);
 	end
 
-
-	integer r;
 	initial begin
 /* 		while(1)begin
 			@(posedge clk) 
@@ -41,7 +39,7 @@ module tb(
 			$display("########  fail  !!!#########");
 			$display("############################");
 			$display("fail testnum = %2d", x3);
-			for(r = 0;r < 31; r = r + 1)begin
+			for (integer r = 0;r < 31; r = r + 1)begin
 				$display("x%2d register value is %d",r,tb.soc_inst.riscv_inst.regs_inst.regs[r]);	
 			end	
 		end

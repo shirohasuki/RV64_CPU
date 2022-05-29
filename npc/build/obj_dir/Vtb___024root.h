@@ -26,7 +26,7 @@ VL_MODULE(Vtb___024root) {
     CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ctrl_hold_flag_o;
     CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_equal_op2_i;
     CData/*0:0*/ __Vclklast__TOP__clk;
-    IData/*31:0*/ tb__DOT__r;
+    IData/*31:0*/ tb__DOT__unnamedblk1__DOT__r;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_addr_o;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o;

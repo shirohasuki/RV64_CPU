@@ -16,6 +16,9 @@ module tb(
 
     always @(posedge clk) begin
         //$display("x26 register value is %d",tb.soc_inst.riscv_inst.regs_inst.regs[26]);
+        for (integer r = 0;r < 32; r = r + 1)begin
+                    $display("x%2d register value is %d",r,tb.soc_inst.riscv_inst.regs_inst.regs[r]);	
+                end	
         if (x26 == 32'b1) begin	
             if (x27 == 32'b1) begin
                 $display("########  pass  !!!#########");

@@ -27,12 +27,12 @@ void Vtb___024root__trace_chg_sub_0(Vtb___024root* vlSelf, VerilatedVcd* tracep)
         tracep->chgIData(oldp+0,(vlSelf->tb__DOT__unnamedblk1__DOT__r),32);
     }
     if (VL_UNLIKELY(vlSelf->__Vm_traceActivity[1U])) {
-        tracep->chgBit(oldp+1,((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs
-                                [3U])));
-        tracep->chgBit(oldp+2,((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs
-                                [0x1aU])));
-        tracep->chgBit(oldp+3,((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs
-                                [0x1bU])));
+        tracep->chgIData(oldp+1,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs
+                                 [3U]),32);
+        tracep->chgIData(oldp+2,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs
+                                 [0x1aU]),32);
+        tracep->chgIData(oldp+3,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs
+                                 [0x1bU]),32);
         tracep->chgIData(oldp+4,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o),32);
         tracep->chgIData(oldp+5,(vlSelf->tb__DOT__soc_inst__DOT__rom_inst__DOT__rom_mem
                                  [(0xfffU & (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o 

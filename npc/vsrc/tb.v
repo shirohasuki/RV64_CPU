@@ -19,8 +19,8 @@ module tb(
 	end
 
 	initial begin
-		while (x26 == 32'b1) begin
-            $display(" register value is %d",tb.soc_inst.riscv_inst.regs_inst.regs[26]);	
+         $display(" register value is %d",tb.soc_inst.riscv_inst.regs_inst.regs[26]);
+		while (x26 == 32'b1) begin	
             if (x27 == 32'b1) begin
                 $display("########  pass  !!!#########");
             end

@@ -19,14 +19,6 @@ module tb(
 	end
 
 	initial begin
-/* 		while(1)begin
-			@(posedge clk) 
-			$display("x27 register value is %d",tb.open_risc_v_soc_inst.open_risc_v_inst.regs_inst.regs[27]);
-			$display("x28 register value is %d",tb.open_risc_v_soc_inst.open_risc_v_inst.regs_inst.regs[28]);
-			$display("x29 register value is %d",tb.open_risc_v_soc_inst.open_risc_v_inst.regs_inst.regs[29]);
-			$display("---------------------------");
-			$display("---------------------------");
-		end */
 		//wait(x26 == 32'b1);
 
 		if(x27 == 32'b1) begin
@@ -39,7 +31,7 @@ module tb(
 			$display("########  fail  !!!#########");
 			$display("############################");
 			$display("fail testnum = %2d", x3);
-			for (integer r = 0;r < 31; r = r + 1)begin
+			for (integer r = 0;r < 32; r = r + 1)begin
 				$display("x%2d register value is %d",r,tb.soc_inst.riscv_inst.regs_inst.regs[r]);	
 			end	
 		end

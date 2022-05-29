@@ -18,6 +18,8 @@ VL_ATTR_COLD void Vtb___024root___initial__TOP__0(Vtb___024root* vlSelf) {
     vlSymsp->_traceDumpOpen();
     while ((1U == vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs
             [0x1aU])) {
+        VL_WRITEF(" register value is %10#\n",32,vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs
+                  [0x1aU]);
         if (VL_LIKELY((1U == vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs
                        [0x1bU]))) {
             VL_WRITEF("########  pass  !!!#########\n");

@@ -47,7 +47,7 @@ module id(
                         rs1_addr_o = rs1;
                         rs2_addr_o = 5'b0;
                         op1_o = rs1_data_i;
-                        op2_o = {{20{imm[11]}}, imm}; // 符号位拓展，imm[11]向前偏移20位
+                        op2_o = {{20{imm[11]}}, imm}; // 符号位拓展，imm[11]向前拓展为20位
                         rd_addr_o = rd;
                         reg_wen = 1'b1; // 要回写 
                     end 
@@ -79,6 +79,27 @@ module id(
                         op2_o = 32'b0;
                         rd_addr_o = 5'b0;
                         reg_wen = 1'b1; 
+                    end 
+                endcase
+            end
+
+            `INST_TYPE_B:begin
+                case (func3)
+                    `INST_BNE: begin
+                        rs1_addr_o = rs1;
+                        rs2_addr_o = rs2;
+                        op1_o = rs1_data_i;
+                        op2_o = rs2_data_i;
+                        rd_addr_o = 5'b0;
+                        reg_wen = 1'b0; 
+                    end
+                    default: begin
+                        rs1_addr_o = 5'b0;
+                        rs2_addr_o = 5'b0;
+                        op1_o = 32'b0;
+                        op2_o = 32'b0;
+                        rd_addr_o = 5'b0;
+                        reg_wen = 1'b0; 
                     end 
                 endcase
             end

@@ -41,18 +41,15 @@ module id(
         inst_o = inst_i;
         inst_addr_o = inst_addr_i;
         case (opcode)
-            7'b0010011:begin
-            //`INST_TYPE_I:begin
+            `INST_TYPE_I:begin
                 case (func3)
-                    //`INST_ADDI:begin
-                        3'b001:begin
+                    `INST_ADDI:begin
                         rs1_addr_o = rs1;
                         rs2_addr_o = 5'b0;
                         op1_o = rs1_data_i;
                         op2_o = {{20{imm[11]}}, imm}; // 符号位拓展，imm[11]向前偏移20位
                         rd_addr_o = rd;
                         reg_wen = 1'b1; // 要回写 
-                        //$display("good hit!");
                     end 
                     default:begin
                         rs1_addr_o = 5'b0;
@@ -81,7 +78,7 @@ module id(
                         op1_o = 32'b0;
                         op2_o = 32'b0;
                         rd_addr_o = 5'b0;
-                        reg_wen = 1'b0; 
+                        reg_wen = 1'b1; 
                     end 
                 endcase
             end

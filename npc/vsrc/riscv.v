@@ -56,10 +56,10 @@ module riscv (
     id id_inst (
         .inst_i      ( if_id_inst_o     ), // if_id 2 id
         .inst_addr_i ( if_id_inst_addr_o), // if_id 2 id
-        .rs1_data_i  ( regs_rs1_rdata_o  ),
-        .rs2_data_i  ( regs_rs2_rdata_o  ), 
         .rs1_addr_o  ( id_rs1_addr_o    ), 
         .rs2_addr_o  ( id_rs2_addr_o    ), 
+        .rs1_data_i  ( regs_rs1_rdata_o  ),
+        .rs2_data_i  ( regs_rs2_rdata_o  ), 
         .inst_o      ( id_inst_o        ),
         .inst_addr_o ( id_inst_addr_o   ),
         .op1_o       ( id_op1_o         ),
@@ -116,8 +116,8 @@ module riscv (
 	wire       ex_reg_wen_o;
 
     ex ex_inst(
-        .inst_i      ( inst_i          ),
-        .inst_addr_i ( id_ex_inst_o    ),
+        .inst_i      ( id_ex_inst_o          ),
+        .inst_addr_i ( id_ex_inst_addr_o    ),
         .op1_i       ( id_ex_op1_o     ),
         .op2_i       ( id_ex_op2_o     ),
         .rd_addr_i   ( id_ex_rd_addr_o ),

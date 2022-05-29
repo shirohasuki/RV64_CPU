@@ -33,41 +33,44 @@ module ex (
     assign imm    = inst_i[31:20];
 
     always @(*) begin
-        case (opcode)
-            
+        case (opcode) 
             `INST_TYPE_I:begin
                 case (func3)
                     `INST_ADDI:begin
                         rd_wdata_o = op1_i + op2_i; 
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
+                        //$display("addi");
                     end 
                     default:begin
                         rd_wdata_o = 32'b0; 
                         rd_waddr_o = 5'b0;
                         reg_wen_o  = 1'b0;
+                        //$display("bad trap1");
                     end 
                 endcase
             end
-
             `INST_TYPE_R_M:begin
                 case (func3)
                     `INST_ADD_SUB: begin
-                        if (func7 == 7'b0) begin // add
+                        if (func7 == 7'b0000000) begin // add
                             rd_wdata_o = op1_i + op2_i; 
                             rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
+                            //$display("add");
                         end
                         else begin // sub
                             rd_wdata_o = op2_i - op1_i; 
                             rd_waddr_o = rd;
                             reg_wen_o  = 1'b1;
+                            //$display("sub");
                         end
                     end 
                     default: begin
                         rd_wdata_o = 32'b0; 
                         rd_waddr_o = 5'b0;
                         reg_wen_o  = 1'b0;
+                        //$display("bad trap2");
                     end 
                 endcase
             end
@@ -76,6 +79,7 @@ module ex (
                 rd_wdata_o = 32'b0; 
                 rd_waddr_o = 5'b0;
                 reg_wen_o  = 1'b0;
+                //$display("bad trap3");
             end 
         endcase
     end

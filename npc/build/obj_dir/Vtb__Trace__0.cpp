@@ -165,15 +165,16 @@ void Vtb___024root__trace_chg_sub_0(Vtb___024root* vlSelf, VerilatedVcd* tracep)
         tracep->chgIData(oldp+69,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs[31]),32);
         tracep->chgIData(oldp+70,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__unnamedblk1__DOT__i),32);
         tracep->chgIData(oldp+71,(vlSelf->tb__DOT__unnamedblk1__DOT__r),32);
+        tracep->chgIData(oldp+72,(vlSelf->tb__DOT__unnamedblk2__DOT__r),32);
     }
     if (VL_UNLIKELY(vlSelf->__Vm_traceActivity[2U])) {
-        tracep->chgIData(oldp+72,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o),32);
-        tracep->chgIData(oldp+73,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o),32);
-        tracep->chgIData(oldp+74,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o),32);
-        tracep->chgIData(oldp+75,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o),32);
+        tracep->chgIData(oldp+73,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o),32);
+        tracep->chgIData(oldp+74,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o),32);
+        tracep->chgIData(oldp+75,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o),32);
+        tracep->chgIData(oldp+76,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o),32);
     }
-    tracep->chgBit(oldp+76,(vlSelf->clk));
-    tracep->chgBit(oldp+77,(vlSelf->rst));
+    tracep->chgBit(oldp+77,(vlSelf->clk));
+    tracep->chgBit(oldp+78,(vlSelf->rst));
 }
 
 void Vtb___024root__trace_cleanup(void* voidSelf, VerilatedVcd* /*unused*/) {

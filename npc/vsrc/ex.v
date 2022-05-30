@@ -127,7 +127,7 @@ module ex (
                 rd_waddr_o  = rd_addr_i;
                 reg_wen_o   = 1'b1; 
                 jump_addr_o = 32'b0; //不跳转 
-                jump_en_o   = 1'b1;
+                jump_en_o   = 1'b0;
                 hold_flag_o = 1'b0;      
             end
             default: begin

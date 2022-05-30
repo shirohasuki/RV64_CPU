@@ -47,7 +47,7 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
               [0x11U],32,vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs
               [0x12U],32,vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs
               [0x13U]);
-    VL_WRITEF("x20 register value is %10#\nx21 register value is %10#\nx22 register value is %10#\nx23 register value is %10#\nx24 register value is %10#\nx25 register value is %10#\nx26 register value is %10#\nx27 register value is %10#\nx28 register value is %10#\nx29 register value is %10#\nx30 register value is %10#\nx31 register value is %10#\n",
+    VL_WRITEF("x20 register value is %10#\nx21 register value is %10#\nx22 register value is %10#\nx23 register value is %10#\nx24 register value is %10#\nx25 register value is %10#\nx26 register value is %10#\nx27 register value is %10#\nx28 register value is %10#\nx29 register value is %10#\nx30 register value is %10#\nx31 register value is %10#\n-------------------\n",
               32,vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs
               [0x14U],32,vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs
               [0x15U],32,vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs

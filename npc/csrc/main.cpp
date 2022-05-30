@@ -71,7 +71,7 @@ void sim_exit() {
 
 int main() {
     sim_init();
-    int i = 20;
+    int i = 2020;
     //top->rst = 1;   top->clk = 0;   step_and_dump_wave();
     //                top->clk = 1;   step_and_dump_wave();
     while (i--) {

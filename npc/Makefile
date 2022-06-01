@@ -45,6 +45,7 @@ sim:
 		
 clean:
 	rm -rf $(BUILD_DIR)
+	rm dump.vcd
 
 include ../Makefile
 

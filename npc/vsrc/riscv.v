@@ -39,7 +39,7 @@ module riscv (
     if_id if_id_inst (
         .clk         ( clk               ),
         .rst         ( rst               ),
-        .hold_flag_i ( ctrl_hold_flag_o     ),
+        .hold_flag_i ( ctrl_hold_flag_o  ),
         .inst_i      ( if_inst_o         ),
         .inst_addr_i ( if_inst_addr_o    ),
         .inst_addr_o ( if_id_inst_addr_o ),

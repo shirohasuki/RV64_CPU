@@ -78,7 +78,7 @@ module id(
                         op1_o = 32'b0;
                         op2_o = 32'b0;
                         rd_addr_o = 5'b0;
-                        reg_wen = 1'b1; 
+                        reg_wen = 1'b0; 
                     end 
                 endcase
             end

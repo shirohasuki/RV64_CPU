@@ -798,6 +798,11 @@ VL_ATTR_COLD void Vtb___024root___ctor_var_reset(Vtb___024root* vlSelf) {
     vlSelf->clk = 0;
     vlSelf->rst = 0;
     vlSelf->tb__DOT__r = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__ram_w_en = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__ram_w_addr_o = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__ram_w_data_o = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__ram_r_en = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__ram_r_addr_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_addr_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o = 0;
@@ -840,6 +845,12 @@ VL_ATTR_COLD void Vtb___024root___ctor_var_reset(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_less_op2_i_unsigned = 0;
     for (int __Vi0=0; __Vi0<4096; ++__Vi0) {
         vlSelf->tb__DOT__soc_inst__DOT__rom_inst__DOT__rom_mem[__Vi0] = 0;
+    }
+    vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__rd_wr_equ_flag = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__w_data_reg = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__r_data_write = 0;
+    for (int __Vi0=0; __Vi0<4096; ++__Vi0) {
+        vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_template_inst__DOT__memory[__Vi0] = 0;
     }
     for (int __Vi0=0; __Vi0<3; ++__Vi0) {
         vlSelf->__Vm_traceActivity[__Vi0] = 0;

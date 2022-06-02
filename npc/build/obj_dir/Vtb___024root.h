@@ -14,6 +14,8 @@ VL_MODULE(Vtb___024root) {
     // DESIGN SPECIFIC STATE
     VL_IN8(clk,0,0);
     VL_IN8(rst,0,0);
+    CData/*0:0*/ tb__DOT__soc_inst__DOT__ram_w_en;
+    CData/*0:0*/ tb__DOT__soc_inst__DOT__ram_r_en;
     CData/*4:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_rs1_addr_o;
     CData/*4:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_rs2_addr_o;
     CData/*4:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_rd_addr_o;
@@ -27,8 +29,12 @@ VL_MODULE(Vtb___024root) {
     CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_equal_op2_i;
     CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_less_op2_i_signed;
     CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_less_op2_i_unsigned;
+    CData/*0:0*/ tb__DOT__soc_inst__DOT__ram_inst__DOT__rd_wr_equ_flag;
     CData/*0:0*/ __Vclklast__TOP__clk;
+    SData/*11:0*/ tb__DOT__soc_inst__DOT__ram_w_addr_o;
+    SData/*11:0*/ tb__DOT__soc_inst__DOT__ram_r_addr_o;
     IData/*31:0*/ tb__DOT__r;
+    IData/*31:0*/ tb__DOT__soc_inst__DOT__ram_w_data_o;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_addr_o;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o;
@@ -53,8 +59,11 @@ VL_MODULE(Vtb___024root) {
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_shift_left_op2_i;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_shift_right_op2_i;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__base_addr_add_addr_offset;
+    IData/*31:0*/ tb__DOT__soc_inst__DOT__ram_inst__DOT__w_data_reg;
+    IData/*31:0*/ tb__DOT__soc_inst__DOT__ram_inst__DOT__r_data_write;
     VlUnpacked<IData/*31:0*/, 32> tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs;
     VlUnpacked<IData/*31:0*/, 4096> tb__DOT__soc_inst__DOT__rom_inst__DOT__rom_mem;
+    VlUnpacked<IData/*31:0*/, 4096> tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_template_inst__DOT__memory;
     VlUnpacked<CData/*0:0*/, 3> __Vm_traceActivity;
 
     // INTERNAL VARIABLES

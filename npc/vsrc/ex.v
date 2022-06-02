@@ -228,15 +228,15 @@ module ex (
                 endcase
             end
             `INST_JAL: begin
-                rd_wdata_o = inst_addr_i + 32'h4; 
+                rd_wdata_o = inst_addr_i + 32'h4; // rd = PC + 4
                 rd_waddr_o = rd_addr_i;
                 reg_wen_o  = 1'b1; 
-                jump_addr_o = op1_i + inst_addr_i; // PC = PC + imm
+                jump_addr_o = inst_addr_i + op2_i; // PC = PC + imm
                 jump_en_o   = 1'b1;
                 hold_flag_o = 1'b0;
             end // Jump And Link (PC += imm, rd = PC + 4)
             `INST_JALR: begin
-                rd_wdata_o = inst_addr_i + 32'h4; 
+                rd_wdata_o = inst_addr_i + 32'h4; // rd = PC + 4
                 rd_waddr_o = rd_addr_i;
                 reg_wen_o  = 1'b1; 
                 jump_addr_o = op1_i + op2_i; // PC = rs1 + imm
@@ -244,13 +244,21 @@ module ex (
                 hold_flag_o = 1'b0;
             end // Jump And Link Reg (PC = rs1 + imm, rd = PC + 4)
             `INST_LUI: begin
-                rd_wdata_o  = op1_i; 
+                rd_wdata_o  = op2_i; 
                 rd_waddr_o  = rd_addr_i;
                 reg_wen_o   = 1'b1; 
                 jump_addr_o = 32'b0; //不跳转 
                 jump_en_o   = 1'b0;
                 hold_flag_o = 1'b0;      
-            end
+            end // Load Upper Imm (rd = imm << 12)
+            `INST_AUIPC: begin
+                rd_wdata_o  = op1_i + op2_i; 
+                rd_waddr_o  = rd_addr_i;
+                reg_wen_o   = 1'b1; 
+                jump_addr_o = 32'b0; //不跳转 
+                jump_en_o   = 1'b0;
+                hold_flag_o = 1'b0;      
+            end // Add Upper Imm to PC
             default: begin
                 jump_addr_o = 32'b0;
                 jump_en_o   = 1'b0;

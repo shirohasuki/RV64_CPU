@@ -159,25 +159,25 @@ module id(
                 offset_addr_o = {{20{imm[11]}},imm}; // 偏移地址 
             end 
             `INST_LUI: begin
-                rs1_addr_o  = 5'b0;
-                rs2_addr_o  = 5'b0;
-                op1_o       = 32'b0;
-                op2_o       = {inst_i[31:12],12'b0};
-                rd_addr_o   = rd;
-                reg_wen     = 1'b1; 
-                base_addr_o   = 32'b0; // 基地址
-                offset_addr_o = {inst_i[31:12],12'b0}; // 偏移地址 
-            end
+                rs1_addr_o    = 5'b0;
+                rs2_addr_o    = 5'b0;
+                op1_o         = 32'b0;
+                op2_o         = {inst_i[31:12],12'b0};
+                rd_addr_o     = rd;
+                reg_wen       = 1'b1; 
+                base_addr_o   = 32'b0;
+                offset_addr_o = 32'b0;
+            end // 不跳转
             `INST_AUIPC: begin
                 rs1_addr_o  = 5'b0;
                 rs2_addr_o  = 5'b0;
                 op1_o       = inst_addr_i;
-                op2_o       = 32'h4;
+                op2_o       = {inst_i[31:12],12'b0};
                 rd_addr_o   = rd;
                 reg_wen     = 1'b1;
                 base_addr_o   = 32'b0; // 基地址
                 offset_addr_o = {inst_i[31:12], 12'b0}; // 偏移地址  
-            end
+            end// 不跳转
             default: begin
                 rs1_addr_o = 5'b0;
                 rs2_addr_o = 5'b0;

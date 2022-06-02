@@ -38,9 +38,9 @@ module ex (
     assign func3  = inst_i[14:12];
     assign rs1    = inst_i[19:15];
     assign rs2    = inst_i[24:20];
-    //assign shamt    = inst_i[24:20];
+    //assign shamt= inst_i[24:20];
     assign func7  = inst_i[31:25];
-    //assign imm   = inst_i[31:20];
+    //assign imm  = inst_i[31:20];
 
 
     // ALU
@@ -56,23 +56,23 @@ module ex (
     wire op1_i_less_op2_i_signed;
     wire op1_i_less_op2_i_unsigned;
 
-    assign op1_i_add_op2_i           = op1_i + op2_i;  // 加法器
-    assign op1_i_sub_op2_i           = op1_i - op2_i;  // 减(待改进)
-    assign op1_i_and_op2_i           = op1_i & op2_i;  // 与
-    assign op1_i_xor_op2_i           = op1_i ^ op2_i;  // 异或
-    assign op1_i_or_op2_i            = op1_i | op2_i;  // 或
-    assign op1_i_shift_left_op2_i    = op1_i << op2_i; // 左移
-    assign op1_i_shift_right_op2_i   = op1_i >> op2_i; // 右移
+    assign op1_i_add_op2_i           = op1_i + op2_i;               // 加法器
+    assign op1_i_sub_op2_i           = op1_i - op2_i;               // 减(待改进)
+    assign op1_i_and_op2_i           = op1_i & op2_i;               // 与
+    assign op1_i_xor_op2_i           = op1_i ^ op2_i;               // 异或
+    assign op1_i_or_op2_i            = op1_i | op2_i;               // 或
+    assign op1_i_shift_left_op2_i    = op1_i << op2_i;              // 左移
+    assign op1_i_shift_right_op2_i   = op1_i >> op2_i;              // 右移
     assign base_addr_add_addr_offset = base_addr_i + offset_addr_i; // 计算地址单元
-    assign op1_i_equal_op2_i = (op1_i == op2_i)? 1'b1 : 1'b0;
-    assign op1_i_less_op2_i_signed = ($signed(op1_i) < $signed(op2_i))? 1'b1 : 1'b0;
+    assign op1_i_equal_op2_i         = (op1_i == op2_i)? 1'b1 : 1'b0;
+    assign op1_i_less_op2_i_signed   = ($signed(op1_i) < $signed(op2_i))? 1'b1 : 1'b0;
     assign op1_i_less_op2_i_unsigned = (op1_i < op2_i)? 1'b1 : 1'b0;
 
 
     // type I
     wire[31:0]  SRA_mask;
     assign      SRA_mask = (32'hffff_ffff) >> op2_i[4:0];// 为了保持复用，不用shmat
-    // 通过掩码求移动
+    // 通过掩码移位
 
     
 

@@ -32,7 +32,7 @@ module regs (
     always @(*) begin
         if (rst == 1'b0) 
             rs2_rdata_o = 32'b0;  
-        else if (rs1_raddr_i == 5'b0)
+        else if (rs2_raddr_i == 5'b0)
             rs2_rdata_o = 32'b0; // x0恒为0
         else if (reg_wen && reg_waddr_i == rs2_raddr_i)
             rs2_rdata_o = reg_wdata_i; // 防止指令相关性冲突
@@ -42,7 +42,7 @@ module regs (
 
     always @(posedge clk) begin
         if (rst == 1'b0) begin
-            for (integer i = 0; i < 31; i = i + 1) begin
+            for (integer i = 0; i < 32; i = i + 1) begin
                 regs[i] <= 32'b0;
             end // 初始化寄存器
         end

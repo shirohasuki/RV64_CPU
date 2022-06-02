@@ -28,8 +28,8 @@ module ex (
     //wire[11:0] imm;
     wire[6:0] func7;
 
-    wire[31:0] immB;
-    wire op1_i_equal_op2_i; // 判断分支标志位
+    //wire[31:0] immB;
+    
 
     assign opcode = inst_i[6:0];
     assign rd     = inst_i[11:7];
@@ -39,14 +39,13 @@ module ex (
     assign func7  = inst_i[31:25];
     //assign imm   = inst_i[31:20];
 
-    assign immB   = {{20{inst_i[31]}}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
-    
-    assign op1_i_equal_op2_i = (op1_i == op2_i) ? 1'b1 : 1'b0;
+    wire[31:0] immB   = {{20{inst_i[31]}}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+    wire op1_i_equal_op2_i; // 判断分支标志位
+    assign op1_i_equal_op2_i = (op1_i == op2_i)? 1'b1 : 1'b0;
 
 
     always @(*) begin
         case (opcode) 
-
             `INST_TYPE_I:begin
                 jump_addr_o = 32'b0;
                 jump_en_o = 1'b0;
@@ -64,21 +63,20 @@ module ex (
                     end 
                 endcase
             end
-
             `INST_TYPE_R_M:begin
                 jump_addr_o = 32'b0;
                 jump_en_o = 1'b0;
                 hold_flag_o = 1'b0;// 设置初值，防止出现锁存器
                 case (func3)
                     `INST_ADD_SUB: begin
-                        if (func7 == 7'b0000000) begin // add
+                        if (func7 == 7'b000_0000) begin // add
                             rd_wdata_o = op1_i + op2_i; 
                             rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
                         end
                         else begin // sub
                             rd_wdata_o = op2_i - op1_i; 
-                            rd_waddr_o = rd;
+                            rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
                         end
                     end 
@@ -105,7 +103,6 @@ module ex (
                         jump_en_o   = op1_i_equal_op2_i;
                         hold_flag_o = 1'b0;
                     end
-                    
                     default: begin
                         jump_addr_o = 32'b0;
                         jump_en_o   = 1'b0;

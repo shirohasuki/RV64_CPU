@@ -140,9 +140,10 @@ module riscv (
         .hold_flag_o ( ex_hold_flag_o   )
     );
     
-    // ctrl 2 regs/if_id/id_ex
+    // ctrl 2 regs
     wire[31:0]  ctrl_jump_addr_o;
     wire        ctrl_jump_en_o;
+    // ctrl 2 if_id/id_ex
     wire        ctrl_hold_flag_o;
 
     ctrl ctrl_inst(

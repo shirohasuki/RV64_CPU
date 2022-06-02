@@ -17,6 +17,7 @@ module tb(
     integer r;
 	initial begin
 		if (x26 == 32'b1) begin
+            
             //always @(posedge clk) begin
                 if(x27 == 32'b1) begin
 			    $display("############################");
@@ -28,7 +29,7 @@ module tb(
 			    $display("########  fail  !!!#########");
 	    		$display("############################");
     			$display("fail testnum = %2d", x3);
-		    	for(r = 0;r < 31; r = r + 1)begin
+		    	for(r = 0;r < 32; r = r + 1)begin
 		    		$display("x%2d register value is %d",r,tb.soc_inst.riscv_inst.regs_inst.regs[r]);	
 		    	end	
 		    end

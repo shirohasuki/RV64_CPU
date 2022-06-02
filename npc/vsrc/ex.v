@@ -27,7 +27,7 @@ module ex (
     wire[4:0] rs2;
     //wire[11:0] imm;
     wire[6:0] func7;
-
+    wire[4:0] shamt;
     //wire[31:0] immB;
     
 
@@ -36,25 +36,79 @@ module ex (
     assign func3  = inst_i[14:12];
     assign rs1    = inst_i[19:15];
     assign rs2    = inst_i[24:20];
+    assign shamt    = inst_i[24:20];
     assign func7  = inst_i[31:25];
     //assign imm   = inst_i[31:20];
 
-    wire[31:0] immB   = {{20{inst_i[31]}}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+    wire[31:0] immB = {{20{inst_i[31]}}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+    
     wire op1_i_equal_op2_i; // 判断分支标志位
+    wire op1_i_less_op2_i_signed;
+    wire op1_i_less_op2_i_unsigned;
     assign op1_i_equal_op2_i = (op1_i == op2_i)? 1'b1 : 1'b0;
+    assign op1_i_less_op2_i_signed = ($signed(op1_i) < $signed(op2_i))? 1'b1 : 1'b0;
+    assign op1_i_less_op2_i_unsigned = (op1_i < op2_i)? 1'b1 : 1'b0;
 
+    // type I
+    wire[31:0]  SRA_mask;
+    assign      SRA_mask = (32'hffff_ffff) >> op2_i[4:0];// 为了保持复用，不用shmat
+    // 通过掩码求移动
+
+    
 
     always @(*) begin
         case (opcode) 
             `INST_TYPE_I:begin
                 jump_addr_o = 32'b0;
                 jump_en_o = 1'b0;
-                hold_flag_o = 1'b0;// 设置初值，防止出现锁存器
+                hold_flag_o = 1'b0; // 设置初值，防止出现锁存器
                 case (func3)
                     `INST_ADDI:begin
                         rd_wdata_o = op1_i + op2_i; 
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
+                    end
+                    `INST_SLTI:begin
+                        rd_wdata_o = {31'b0, op1_i_less_op2_i_signed};
+                        rd_waddr_o = rd_addr_i;
+                        reg_wen_o  = 1'b1;
+                    end 
+                    `INST_SLTIU:begin
+                        rd_wdata_o = {31'b0, op1_i_less_op2_i_unsigned}; 
+                        rd_waddr_o = rd_addr_i;
+                        reg_wen_o  = 1'b1;
+                    end 
+                    `INST_XORI:begin
+                        rd_wdata_o = op1_i ^ op2_i; 
+                        rd_waddr_o = rd_addr_i;
+                        reg_wen_o  = 1'b1;
+                    end 
+                    `INST_ORI:begin
+                        rd_wdata_o = op1_i | op2_i; 
+                        rd_waddr_o = rd_addr_i;
+                        reg_wen_o  = 1'b1;
+                    end 
+                    `INST_ANDI:begin
+                        rd_wdata_o = op1_i & op2_i; 
+                        rd_waddr_o = rd_addr_i;
+                        reg_wen_o  = 1'b1;
+                    end 
+                    `INST_SLLI:begin
+                        rd_wdata_o = op1_i << shamt; 
+                        rd_waddr_o = rd_addr_i;
+                        reg_wen_o  = 1'b1;
+                    end // 逻辑左移
+                    `INST_SRI:begin // SRI包含srli和srai
+                        if (func7[5] == 1'b1) begin // SRAI
+                            rd_wdata_o = ((op1_i >> shamt) & SRA_mask) | ({32{op1_i[31]}} & (~SRA_mask));
+                            rd_waddr_o = rd_addr_i;
+                            reg_wen_o  = 1'b1;
+                        end 
+                        else begin // SRLI 逻辑右移
+                            rd_wdata_o = op1_i >> shamt; 
+                            rd_waddr_o = rd_addr_i;
+                            reg_wen_o  = 1'b1;
+                        end                         
                     end 
                     default:begin
                         rd_wdata_o = 32'b0; 
@@ -68,17 +122,59 @@ module ex (
                 jump_en_o = 1'b0;
                 hold_flag_o = 1'b0;// 设置初值，防止出现锁存器
                 case (func3)
-                    `INST_ADD_SUB: begin
-                        if (func7 == 7'b000_0000) begin // add
+                    `INST_ADD_SUB: begin //ADD和SUB的func3相同，func7不同
+                        if (func7[5] == 1'b0) begin // add
                             rd_wdata_o = op1_i + op2_i; 
                             rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
                         end
                         else begin // sub
-                            rd_wdata_o = op2_i - op1_i; 
+                            rd_wdata_o = op1_i - op2_i; 
                             rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
                         end
+                    end
+                    `INST_SLL: begin 
+                            rd_wdata_o = op1_i << op2_i[4:0]; 
+                            rd_waddr_o = rd_addr_i;
+                            reg_wen_o  = 1'b1;
+                    end // 逻辑左移
+                    `INST_SLT: begin 
+                            rd_wdata_o = {31'b0, op1_i_less_op2_i_signed}; 
+                            rd_waddr_o = rd_addr_i;
+                            reg_wen_o  = 1'b1;
+                    end 
+                    `INST_SLTU: begin 
+                            rd_wdata_o = {31'b0, op1_i_less_op2_i_unsigned}; 
+                            rd_waddr_o = rd_addr_i;
+                            reg_wen_o  = 1'b1;
+                    end 
+                    `INST_XOR: begin 
+                            rd_wdata_o = op1_i ^ op2_i; 
+                            rd_waddr_o = rd_addr_i;
+                            reg_wen_o  = 1'b1;
+                    end 
+                    `INST_SR: begin 
+                        if (func7[5] == 1'b1) begin // SRA 算术右移
+                            rd_wdata_o = ((op1_i >> op2_i[4:0]) & SRA_mask) | ({32{op1_i[31]}} & (~SRA_mask));
+                            rd_waddr_o = rd_addr_i;
+                            reg_wen_o  = 1'b1;
+                        end 
+                        else begin // SRL 逻辑右移
+                            rd_wdata_o = op1_i >> op2_i[4:0]; 
+                            rd_waddr_o = rd_addr_i;
+                            reg_wen_o  = 1'b1;
+                        end
+                    end  
+                    `INST_OR: begin 
+                            rd_wdata_o = op1_i | op2_i; 
+                            rd_waddr_o = rd_addr_i;
+                            reg_wen_o  = 1'b1;
+                    end 
+                    `INST_AND: begin 
+                            rd_wdata_o = op1_i & op2_i; 
+                            rd_waddr_o = rd_addr_i;
+                            reg_wen_o  = 1'b1;
                     end 
                     default: begin
                         rd_wdata_o = 32'b0; 
@@ -97,12 +193,32 @@ module ex (
                         jump_addr_o = (inst_addr_i + immB) & {32{(~op1_i_equal_op2_i)}};
                         jump_en_o   = ~op1_i_equal_op2_i;
                         hold_flag_o = 1'b0;
-                    end
+                    end // 不等跳转
                     `INST_BEQ: begin
                         jump_addr_o = (inst_addr_i + immB) & {32{(op1_i_equal_op2_i)}};
                         jump_en_o   = op1_i_equal_op2_i;
                         hold_flag_o = 1'b0;
-                    end
+                    end // 相等跳转
+                    `INST_BLT: begin
+                        jump_addr_o = (inst_addr_i + immB) & {32{(op1_i_less_op2_i_signed)}};
+                        jump_en_o   = op1_i_less_op2_i_signed;
+                        hold_flag_o = 1'b0;
+                    end // 小于跳转(有符号)
+                    `INST_BLTU: begin
+                        jump_addr_o = (inst_addr_i + immB) & {32{(op1_i_less_op2_i_unsigned)}};
+                        jump_en_o   = op1_i_less_op2_i_unsigned;
+                        hold_flag_o = 1'b0;
+                    end //小于跳转(无符号)
+                    `INST_BGE: begin
+                        jump_addr_o = (inst_addr_i + immB) & {32{(~op1_i_less_op2_i_signed)}};
+                        jump_en_o   = ~op1_i_less_op2_i_signed;
+                        hold_flag_o = 1'b0;
+                    end // 大于等于跳转(有符号)
+                    `INST_BGEU: begin
+                        jump_addr_o = (inst_addr_i + immB) & {32{(~op1_i_less_op2_i_unsigned)}};
+                        jump_en_o   = ~op1_i_less_op2_i_unsigned;
+                        hold_flag_o = 1'b0;
+                    end // 大于等于跳转(无符号)
                     default: begin
                         jump_addr_o = 32'b0;
                         jump_en_o   = 1'b0;

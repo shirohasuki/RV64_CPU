@@ -25,6 +25,8 @@ VL_MODULE(Vtb___024root) {
     CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_jump_en_o;
     CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ctrl_hold_flag_o;
     CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_equal_op2_i;
+    CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_less_op2_i_signed;
+    CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_less_op2_i_unsigned;
     CData/*0:0*/ __Vclklast__TOP__clk;
     IData/*31:0*/ tb__DOT__r;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o;
@@ -39,6 +41,7 @@ VL_MODULE(Vtb___024root) {
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_op1_o;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_op2_o;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_rd_data_o;
+    IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_jump_addr_o;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__unnamedblk1__DOT__i;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__immB;
     VlUnpacked<IData/*31:0*/, 32> tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs;

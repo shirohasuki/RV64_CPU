@@ -6,12 +6,12 @@ module tb(
 );
 
     wire[31:0] x3  = tb.soc_inst.riscv_inst.regs_inst.regs[3];     // x3:表示在第几个测试
-	wire[31:0] x26 = tb.soc_inst.riscv_inst.regs_inst.regs[26];   // x26:表示测试结束
-	wire[31:0] x27 = tb.soc_inst.riscv_inst.regs_inst.regs[27];   // x27:表示是否成功
+	wire[31:0] x26 = tb.soc_inst.riscv_inst.regs_inst.regs[26];    // x26:表示测试结束
+	wire[31:0] x27 = tb.soc_inst.riscv_inst.regs_inst.regs[27];    // x27:表示是否成功
 	
 	//rom 初始值
 	initial begin
-		$readmemh("./vsrc/tb/inst_txt/rv32ui-p-addi.txt",tb.soc_inst.rom_inst.rom_mem);
+		$readmemh("./vsrc/tb/inst_txt/rv32ui-p-bge.txt",tb.soc_inst.rom_inst.rom_mem);
 	end
 
     integer r;

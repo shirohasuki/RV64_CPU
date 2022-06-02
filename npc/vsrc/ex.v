@@ -30,8 +30,7 @@ module ex (
     wire[4:0] rs2;
     //wire[11:0] imm;
     wire[6:0] func7;
-    wire[4:0] shamt;
-    //wire[31:0] immB;
+    //wire[4:0] shamt;
     
 
     assign opcode = inst_i[6:0];
@@ -39,18 +38,10 @@ module ex (
     assign func3  = inst_i[14:12];
     assign rs1    = inst_i[19:15];
     assign rs2    = inst_i[24:20];
-    assign shamt    = inst_i[24:20];
+    //assign shamt    = inst_i[24:20];
     assign func7  = inst_i[31:25];
     //assign imm   = inst_i[31:20];
 
-    //wire[31:0] immB = {{20{inst_i[31]}}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
-    
-    wire op1_i_equal_op2_i; // 判断分支标志位
-    wire op1_i_less_op2_i_signed;
-    wire op1_i_less_op2_i_unsigned;
-    assign op1_i_equal_op2_i = (op1_i == op2_i)? 1'b1 : 1'b0;
-    assign op1_i_less_op2_i_signed = ($signed(op1_i) < $signed(op2_i))? 1'b1 : 1'b0;
-    assign op1_i_less_op2_i_unsigned = (op1_i < op2_i)? 1'b1 : 1'b0;
 
     // ALU
     wire[31:0] op1_i_add_op2_i;
@@ -61,6 +52,9 @@ module ex (
     wire[31:0] op1_i_shift_left_op2_i;
     wire[31:0] op1_i_shift_right_op2_i;
     wire[31:0] base_addr_add_addr_offset; // 偏移地址计算
+    wire op1_i_equal_op2_i; // 判断分支标志位
+    wire op1_i_less_op2_i_signed;
+    wire op1_i_less_op2_i_unsigned;
 
     assign op1_i_add_op2_i           = op1_i + op2_i;  // 加法器
     assign op1_i_sub_op2_i           = op1_i - op2_i;  // 减(待改进)
@@ -70,6 +64,9 @@ module ex (
     assign op1_i_shift_left_op2_i    = op1_i << op2_i; // 左移
     assign op1_i_shift_right_op2_i   = op1_i >> op2_i; // 右移
     assign base_addr_add_addr_offset = base_addr_i + offset_addr_i; // 计算地址单元
+    assign op1_i_equal_op2_i = (op1_i == op2_i)? 1'b1 : 1'b0;
+    assign op1_i_less_op2_i_signed = ($signed(op1_i) < $signed(op2_i))? 1'b1 : 1'b0;
+    assign op1_i_less_op2_i_unsigned = (op1_i < op2_i)? 1'b1 : 1'b0;
 
 
     // type I
@@ -251,18 +248,18 @@ module ex (
                 endcase
             end
             `INST_JAL: begin
-                rd_wdata_o = inst_addr_i + 32'h4; // rd = PC + 4
+                rd_wdata_o = op1_i_add_op2_i; // rd = PC + 4
                 rd_waddr_o = rd_addr_i;
                 reg_wen_o  = 1'b1; 
-                jump_addr_o = inst_addr_i + op2_i; // PC = PC + imm
+                jump_addr_o = base_addr_add_addr_offset; // PC = PC + imm
                 jump_en_o   = 1'b1;
                 hold_flag_o = 1'b0;
             end // Jump And Link (PC += imm, rd = PC + 4)
             `INST_JALR: begin
-                rd_wdata_o = inst_addr_i + 32'h4; // rd = PC + 4
+                rd_wdata_o = op1_i_add_op2_i; // rd = PC + 4
                 rd_waddr_o = rd_addr_i;
                 reg_wen_o  = 1'b1; 
-                jump_addr_o = op1_i + op2_i; // PC = rs1 + imm
+                jump_addr_o = base_addr_add_addr_offset; // PC = rs1 + imm
                 jump_en_o   = 1'b1;
                 hold_flag_o = 1'b0;
             end // Jump And Link Reg (PC = rs1 + imm, rd = PC + 4)
@@ -275,7 +272,7 @@ module ex (
                 hold_flag_o = 1'b0;      
             end // Load Upper Imm (rd = imm << 12)
             `INST_AUIPC: begin
-                rd_wdata_o  = op1_i + op2_i; 
+                rd_wdata_o  = op1_i_add_op2_i; 
                 rd_waddr_o  = rd_addr_i;
                 reg_wen_o   = 1'b1; 
                 jump_addr_o = 32'b0; //不跳转 

@@ -11,7 +11,7 @@ module tb(
 	
 	//rom 初始值
 	initial begin
-		$readmemh("./vsrc/tb/inst_txt/rv32ui-p-lui.txt",tb.soc_inst.rom_inst.rom_mem);
+		$readmemh("./vsrc/tb/inst_txt/rv32ui-p-auipc.txt",tb.soc_inst.rom_inst.rom_mem);
 	end
 
     integer r;

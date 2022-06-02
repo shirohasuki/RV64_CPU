@@ -36,7 +36,7 @@ void Vtb___024root__trace_chg_sub_0(Vtb___024root* vlSelf, VerilatedVcd* tracep)
                                  [(0xfffU & (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o 
                                              >> 2U))]),32);
         tracep->chgIData(oldp+6,(((IData)(vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__rd_wr_equ_flag)
-                                   ? vlSelf->tb__DOT__soc_inst__DOT__ram_w_data_o
+                                   ? vlSelf->tb__DOT__soc_inst__DOT__riscv_w_data_o
                                    : vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__r_data_write)),32);
         tracep->chgBit(oldp+7,(vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__rd_wr_equ_flag));
         tracep->chgIData(oldp+8,(vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__w_data_reg),32);

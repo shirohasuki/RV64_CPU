@@ -7,7 +7,17 @@ module riscv (
     // form rom
     input  wire [31:0] inst_i, 
     // to rom    
-    output wire [31:0] inst_addr_o 
+    output wire [31:0] inst_addr_o ,
+
+    //read  mem
+    input	wire [31:0]	  mem_r_data_i		,	
+	output  wire 	   	  mem_r_req_o		,
+	output  wire [11:0]   mem_r_addr_o		,
+	
+	//write mem
+	output  wire	 	  mem_w_req_o		,
+	output  wire  [11:0]  mem_w_addr_o		,
+	output  wire  [31:0]  mem_w_data_o
 );
     // pc 2 if
     wire[31:0] pc_reg_pc_o;

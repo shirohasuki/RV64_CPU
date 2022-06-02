@@ -25,11 +25,11 @@ VL_ATTR_COLD void Vtb___024root__trace_init_sub__TOP__0(Vtb___024root* vlSelf, V
     tracep->declBit(c+96,"rst", false,-1);
     tracep->declBus(c+5,"riscv_inst_addr_o", false,-1, 31,0);
     tracep->declBus(c+6,"rom_inst_o", false,-1, 31,0);
-    tracep->declBit(c+98,"ram_w_en", false,-1);
-    tracep->declBus(c+99,"ram_w_addr_o", false,-1, 11,0);
-    tracep->declBus(c+100,"ram_w_data_o", false,-1, 31,0);
-    tracep->declBit(c+101,"ram_r_en", false,-1);
-    tracep->declBus(c+102,"ram_r_addr_o", false,-1, 11,0);
+    tracep->declBit(c+98,"riscv_w_en", false,-1);
+    tracep->declBus(c+99,"riscv_w_addr_o", false,-1, 11,0);
+    tracep->declBus(c+100,"riscv_w_data_o", false,-1, 31,0);
+    tracep->declBit(c+101,"riscv_r_en", false,-1);
+    tracep->declBus(c+102,"riscv_r_addr_o", false,-1, 11,0);
     tracep->declBus(c+7,"ram_r_data_o", false,-1, 31,0);
     tracep->pushNamePrefix("ram_inst ");
     tracep->declBus(c+103,"DW", false,-1, 31,0);
@@ -64,6 +64,12 @@ VL_ATTR_COLD void Vtb___024root__trace_init_sub__TOP__0(Vtb___024root* vlSelf, V
     tracep->declBit(c+96,"rst", false,-1);
     tracep->declBus(c+6,"inst_i", false,-1, 31,0);
     tracep->declBus(c+5,"inst_addr_o", false,-1, 31,0);
+    tracep->declBus(c+7,"mem_r_data_i", false,-1, 31,0);
+    tracep->declBit(c+101,"mem_r_req_o", false,-1);
+    tracep->declBus(c+102,"mem_r_addr_o", false,-1, 11,0);
+    tracep->declBit(c+98,"mem_w_req_o", false,-1);
+    tracep->declBus(c+99,"mem_w_addr_o", false,-1, 11,0);
+    tracep->declBus(c+100,"mem_w_data_o", false,-1, 31,0);
     tracep->declBus(c+5,"pc_reg_pc_o", false,-1, 31,0);
     tracep->declBus(c+5,"if_inst_addr_o", false,-1, 31,0);
     tracep->declBus(c+6,"if_inst_o", false,-1, 31,0);
@@ -371,7 +377,7 @@ VL_ATTR_COLD void Vtb___024root__trace_full_sub_0(Vtb___024root* vlSelf, Verilat
                               [(0xfffU & (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o 
                                           >> 2U))]),32);
     tracep->fullIData(oldp+7,(((IData)(vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__rd_wr_equ_flag)
-                                ? vlSelf->tb__DOT__soc_inst__DOT__ram_w_data_o
+                                ? vlSelf->tb__DOT__soc_inst__DOT__riscv_w_data_o
                                 : vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__r_data_write)),32);
     tracep->fullBit(oldp+8,(vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__rd_wr_equ_flag));
     tracep->fullIData(oldp+9,(vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__w_data_reg),32);
@@ -570,11 +576,11 @@ VL_ATTR_COLD void Vtb___024root__trace_full_sub_0(Vtb___024root* vlSelf, Verilat
                                                      : 0U)
                                                     : 0U))))
                                      : 0U) : 0U)),32);
-    tracep->fullBit(oldp+98,(vlSelf->tb__DOT__soc_inst__DOT__ram_w_en));
-    tracep->fullSData(oldp+99,(vlSelf->tb__DOT__soc_inst__DOT__ram_w_addr_o),12);
-    tracep->fullIData(oldp+100,(vlSelf->tb__DOT__soc_inst__DOT__ram_w_data_o),32);
-    tracep->fullBit(oldp+101,(vlSelf->tb__DOT__soc_inst__DOT__ram_r_en));
-    tracep->fullSData(oldp+102,(vlSelf->tb__DOT__soc_inst__DOT__ram_r_addr_o),12);
+    tracep->fullBit(oldp+98,(vlSelf->tb__DOT__soc_inst__DOT__riscv_w_en));
+    tracep->fullSData(oldp+99,(vlSelf->tb__DOT__soc_inst__DOT__riscv_w_addr_o),12);
+    tracep->fullIData(oldp+100,(vlSelf->tb__DOT__soc_inst__DOT__riscv_w_data_o),32);
+    tracep->fullBit(oldp+101,(vlSelf->tb__DOT__soc_inst__DOT__riscv_r_en));
+    tracep->fullSData(oldp+102,(vlSelf->tb__DOT__soc_inst__DOT__riscv_r_addr_o),12);
     tracep->fullIData(oldp+103,(0x20U),32);
     tracep->fullIData(oldp+104,(0xcU),32);
     tracep->fullIData(oldp+105,(0x1000U),32);

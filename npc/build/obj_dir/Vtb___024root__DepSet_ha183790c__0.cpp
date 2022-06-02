@@ -76,23 +76,23 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
         }
     }
     vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__w_data_reg 
-        = vlSelf->tb__DOT__soc_inst__DOT__ram_w_data_o;
-    if (((IData)(vlSelf->rst) & (IData)(vlSelf->tb__DOT__soc_inst__DOT__ram_r_en))) {
+        = vlSelf->tb__DOT__soc_inst__DOT__riscv_w_data_o;
+    if (((IData)(vlSelf->rst) & (IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_r_en))) {
         vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__r_data_write 
             = vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_template_inst__DOT__memory
-            [vlSelf->tb__DOT__soc_inst__DOT__ram_r_addr_o];
+            [vlSelf->tb__DOT__soc_inst__DOT__riscv_r_addr_o];
     }
     vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__rd_wr_equ_flag 
-        = ((((IData)(vlSelf->rst) & (IData)(vlSelf->tb__DOT__soc_inst__DOT__ram_w_en)) 
-            & (IData)(vlSelf->tb__DOT__soc_inst__DOT__ram_r_en)) 
-           & ((IData)(vlSelf->tb__DOT__soc_inst__DOT__ram_r_addr_o) 
-              == (IData)(vlSelf->tb__DOT__soc_inst__DOT__ram_w_addr_o)));
-    if (((IData)(vlSelf->rst) & (IData)(vlSelf->tb__DOT__soc_inst__DOT__ram_w_en))) {
+        = ((((IData)(vlSelf->rst) & (IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_w_en)) 
+            & (IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_r_en)) 
+           & ((IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_r_addr_o) 
+              == (IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_w_addr_o)));
+    if (((IData)(vlSelf->rst) & (IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_w_en))) {
         __Vdlyvval__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_template_inst__DOT__memory__v0 
-            = vlSelf->tb__DOT__soc_inst__DOT__ram_w_data_o;
+            = vlSelf->tb__DOT__soc_inst__DOT__riscv_w_data_o;
         __Vdlyvset__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_template_inst__DOT__memory__v0 = 1U;
         __Vdlyvdim0__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_template_inst__DOT__memory__v0 
-            = vlSelf->tb__DOT__soc_inst__DOT__ram_w_addr_o;
+            = vlSelf->tb__DOT__soc_inst__DOT__riscv_w_addr_o;
     }
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_reg_wen 
         = ((~ ((~ (IData)(vlSelf->rst)) | (IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ctrl_hold_flag_o))) 

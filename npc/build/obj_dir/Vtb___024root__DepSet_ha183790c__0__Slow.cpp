@@ -798,11 +798,11 @@ VL_ATTR_COLD void Vtb___024root___ctor_var_reset(Vtb___024root* vlSelf) {
     vlSelf->clk = 0;
     vlSelf->rst = 0;
     vlSelf->tb__DOT__r = 0;
-    vlSelf->tb__DOT__soc_inst__DOT__ram_w_en = 0;
-    vlSelf->tb__DOT__soc_inst__DOT__ram_w_addr_o = 0;
-    vlSelf->tb__DOT__soc_inst__DOT__ram_w_data_o = 0;
-    vlSelf->tb__DOT__soc_inst__DOT__ram_r_en = 0;
-    vlSelf->tb__DOT__soc_inst__DOT__ram_r_addr_o = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_w_en = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_w_addr_o = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_w_data_o = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_r_en = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_r_addr_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_addr_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o = 0;

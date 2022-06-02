@@ -16,10 +16,10 @@ VL_ATTR_COLD void Vtb___024root__trace_init_sub__TOP__0(Vtb___024root* vlSelf, V
     tracep->pushNamePrefix("tb ");
     tracep->declBit(c+77,"clk", false,-1);
     tracep->declBit(c+78,"rst", false,-1);
-    tracep->declBus(c+2,"x3", false,-1, 31,0);
-    tracep->declBus(c+3,"x26", false,-1, 31,0);
-    tracep->declBus(c+4,"x27", false,-1, 31,0);
-    tracep->declBus(c+1,"r", false,-1, 31,0);
+    tracep->declBus(c+1,"x3", false,-1, 31,0);
+    tracep->declBus(c+2,"x26", false,-1, 31,0);
+    tracep->declBus(c+3,"x27", false,-1, 31,0);
+    tracep->declBus(c+4,"r", false,-1, 31,0);
     tracep->pushNamePrefix("soc_inst ");
     tracep->declBit(c+77,"clk", false,-1);
     tracep->declBit(c+78,"rst", false,-1);
@@ -283,13 +283,13 @@ VL_ATTR_COLD void Vtb___024root__trace_full_sub_0(Vtb___024root* vlSelf, Verilat
     // Init
     vluint32_t* const oldp VL_ATTR_UNUSED = tracep->oldp(vlSymsp->__Vm_baseCode);
     // Body
-    tracep->fullIData(oldp+1,(vlSelf->tb__DOT__r),32);
-    tracep->fullIData(oldp+2,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs
+    tracep->fullIData(oldp+1,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs
                               [3U]),32);
-    tracep->fullIData(oldp+3,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs
+    tracep->fullIData(oldp+2,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs
                               [0x1aU]),32);
-    tracep->fullIData(oldp+4,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs
+    tracep->fullIData(oldp+3,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs
                               [0x1bU]),32);
+    tracep->fullIData(oldp+4,(vlSelf->tb__DOT__r),32);
     tracep->fullIData(oldp+5,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o),32);
     tracep->fullIData(oldp+6,(vlSelf->tb__DOT__soc_inst__DOT__rom_inst__DOT__rom_mem
                               [(0xfffU & (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o 

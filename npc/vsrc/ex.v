@@ -231,10 +231,18 @@ module ex (
                 rd_wdata_o = inst_addr_i + 32'h4; 
                 rd_waddr_o = rd_addr_i;
                 reg_wen_o  = 1'b1; 
-                jump_addr_o = op1_i + inst_addr_i;
+                jump_addr_o = op1_i + inst_addr_i; // PC = PC + imm
                 jump_en_o   = 1'b1;
                 hold_flag_o = 1'b0;
-            end
+            end // Jump And Link (PC += imm, rd = PC + 4)
+            `INST_JALR: begin
+                rd_wdata_o = inst_addr_i + 32'h4; 
+                rd_waddr_o = rd_addr_i;
+                reg_wen_o  = 1'b1; 
+                jump_addr_o = op1_i + op2_i; // PC = rs1 + imm
+                jump_en_o   = 1'b1;
+                hold_flag_o = 1'b0;
+            end // Jump And Link Reg (PC = rs1 + imm, rd = PC + 4)
             `INST_LUI: begin
                 rd_wdata_o  = op1_i; 
                 rd_waddr_o  = rd_addr_i;

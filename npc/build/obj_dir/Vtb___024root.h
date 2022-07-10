@@ -50,6 +50,7 @@ VL_MODULE(Vtb___024root) {
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_base_addr_o;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_offset_addr_o;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_rd_data_o;
+    IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immI;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immB;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__unnamedblk1__DOT__i;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_add_op2_i;

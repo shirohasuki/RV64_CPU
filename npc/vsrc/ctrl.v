@@ -8,15 +8,16 @@ module ctrl (
     output reg       hold_flag_o
 );
 
-  always @(*) begin
+    always @(*) begin
         jump_addr_o = jump_addr_i;
         jump_en_o = jump_en_i; 
-        if (jump_en_i || hold_flag_ex_i) begin
-            hold_flag_o = 1'b1; // 冲刷流水线
-        end
-        else begin
-            hold_flag_o = 1'b0;
-        end
-  end
+        // if (jump_en_i || hold_flag_ex_i) begin
+        //     hold_flag_o = 1'b1; // 冲刷流水线
+        // end
+        // else begin
+        //     hold_flag_o = 1'b0;
+        // end
+        assign hold_flag_o = jump_en_i || hold_flag_ex_i ? 1'b1 : 1'b0;
+    end
 
 endmodule 

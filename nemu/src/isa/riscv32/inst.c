@@ -68,6 +68,6 @@ static int decode_exec(Decode *s) {
 }
 
 int isa_exec_once(Decode *s) {
-    s->isa.inst.val = inst_fetch(&s->snpc, 4); // 取指:1.访问，2.更新pc
+    s->isa.inst.val = inst_fetch(&s->dnpc, 4); // 取指:1.访问，2.更新pc
     return decode_exec(s); // 译码
 } 

@@ -51,7 +51,7 @@ static int decode_exec(Decode *s) {
     word_t dest = 0, src1 = 0, src2 = 0;
     s->dnpc = s->snpc;
     // dest 目的操作数 src 源操作数
-    // s->pc就是当前指令的PC, 而s->snpc则是下一条指令的PC.snpc为静态,dnpc为动态
+    // s->pc就是当前指令的PC, 而s->snpc则是下一条指令的PC.snpc为静态PC,dnpc为动态PC
 
 #define INSTPAT_INST(s) ((s)->isa.inst.val)
 #define INSTPAT_MATCH(s, name, type, ... /* body */ ) { \
@@ -86,7 +86,7 @@ static int decode_exec(Decode *s) {
     INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(dest) = src1 + immI(INSTPAT_INST(s))); // addi:把符号位扩展的立即数加到寄存器 x[rs1]上, 结果写入x[rd],忽略算术溢出
     
     // B-Type
-    INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq    , B, if (src1 == src2) s->dnpc = s->pc + immB(INSTPAT_INST(s))); //beq 是相等条件分支，rs1 和 rs2 的值相等时，把 pc 的值设置成当前值+偏移值；
+    INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq    , B, if (src1 == src2) s->dnpc = s->pc + immB(INSTPAT_INST(s)) -4); //beq 是相等条件分支，rs1 和 rs2 的值相等时，把 pc 的值设置成当前值+偏移值；
     INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne    , B, if (src1 != src2) s->dnpc = s->pc + immB(INSTPAT_INST(s))); //bne 是不等条件分支，rs1 和 rs2 的值不等时，把 pc 的值设置成当前值+偏移值；
     INSTPAT("??????? ????? ????? 100 ????? 11000 11", blt    , B, if (src1 < src2)  s->dnpc = s->pc + immB(INSTPAT_INST(s))); //blt 是小于条件分支，rs1 小于 rs2 的值时，把 pc 的值设置成当前值+偏移值；
     INSTPAT("??????? ????? ????? 101 ????? 11000 11", bge    , B, if (src1 >= src2) s->dnpc = s->pc + immB(INSTPAT_INST(s))); //bge是大于等于条件分支，rs1 大于等于 rs2 的值时，把 pc 的值设置成当前值+偏移值；
@@ -127,6 +127,6 @@ static int decode_exec(Decode *s) {
 }
 
 int isa_exec_once(Decode *s) {
-    s->isa.inst.val = inst_fetch(&s->dnpc, 4); // 取指:1.访问，2.更新pc
+    s->isa.inst.val = inst_fetch(&s->snpc, 4); // 取指:1.访问，2.更新pc
     return decode_exec(s); // 译码
 }

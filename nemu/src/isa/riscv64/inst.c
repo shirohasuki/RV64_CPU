@@ -66,6 +66,7 @@ static int decode_exec(Decode *s) {
 
     INSTPAT_START();
     INSTPAT("??????? ????? ????? ??? ????? 00101 11", auipc  , U, R(dest) = src1 + s->pc);  // auipc: Add Upper Immediate to PC
+    INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10)));     // ebreak: pc重置为0, R(10) is $a0
 
     // R-Type
     INSTPAT("0000000 ????? ????? 000 ????? 01100 11", add    , R, R(dest) = src1 + src2);  // add: rs1 加上 rs2 并写入 rd 中；
@@ -119,7 +120,7 @@ static int decode_exec(Decode *s) {
 
     // N-Type
     INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
-    INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10)));     // ebreak: pc重置为0, R(10) is $a0  
+  
 
     INSTPAT_END();
 

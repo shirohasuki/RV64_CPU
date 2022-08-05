@@ -24,6 +24,11 @@ enum {
 #define src2I(i) do { *src2 = i; } while (0)
 #define destI(i) do { *dest = i; } while (0)
 
+#define S32(i) ((int32_t)i)
+#define S64(i) ((int64_t)i)
+#define U32(i) ((uint32_t)i)
+#define U64(i) ((uint64_t)i)
+
 static word_t immI(uint32_t i) { return SEXT(BITS(i, 31, 20), 12); }
 static word_t immS(uint32_t i) { return (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); }
 static word_t immB(uint32_t i) { return (SEXT(BITS(i, 31, 31), 1) << 12) | BITS(i, 7, 7) << 11 | BITS(i, 30, 25) << 5 | BITS(i, 11, 8) << 1; } // add
@@ -72,13 +77,13 @@ static int decode_exec(Decode *s) {
     INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, R(dest) = src1 - src2);  // sub: rs1 减去 rs2 并写入 rd 中；
     INSTPAT("0000000 ????? ????? 001 ????? 01100 11", sll    , R, R(dest) = src1 << src2); // sll: 逻辑左移 并写入 rd 中；
     INSTPAT("0000000 ????? ????? 010 ????? 01100 11", slt    , R, R(dest) = (src1 < src2));  // slt: 小于则置位 1
-    INSTPAT("0000000 ????? ????? 011 ????? 01100 11", sltu   , R, R(dest) = ((unsigned int)src1 < (unsigned int)src2)); // sltu: (无符号)小于则置位 1 
+    INSTPAT("0000000 ????? ????? 011 ????? 01100 11", sltu   , R, R(dest) = U64(src1) < U64(src2)); // sltu: (无符号)小于则置位 1 
     INSTPAT("0000000 ????? ????? 100 ????? 01100 11", xor    , R, R(dest) = src1 ^ src2);  // xor: rs1 异或 rs2 并写入 rd 中；
     INSTPAT("0000000 ????? ????? 101 ????? 01100 11", srl    , R, R(dest) = src1 >> src2); // srl: 逻辑右移 并写入 rd 中；
-    INSTPAT("0100000 ????? ????? 101 ????? 01100 11", sra    , R, R(dest) = ((unsigned int)src1 >> (unsigned int)src2)); // sra: 算术右移 
+    INSTPAT("0100000 ????? ????? 101 ????? 01100 11", sra    , R, R(dest) = U64(src1) >> U64(src2)); // sra: 算术右移 
     INSTPAT("0000000 ????? ????? 110 ????? 01100 11", or     , R, R(dest) = src1 | src2);  // or: rs1 或 rs2 并写入 rd 中；
     INSTPAT("0000000 ????? ????? 111 ????? 01100 11", and    , R, R(dest) = src1 & src2);  // and: rs1 和 rs2 并写入 rd 中；
-    INSTPAT("??????? ????? ????? 000 ????? 01110 11", addw   , R, R(dest) = src1 + src2); //结果截断为32位是什么？ // addw:把寄存器 x[rs2]加到寄存器 x[rs1]上, 将结果截断为 32 位, 把符号位扩展的结果写入 x[rd]
+    INSTPAT("??????? ????? ????? 000 ????? 01110 11", addw   , R, R(dest) = SEXT(BITS(src1 + src2, 31, 0), 32)); // addw:把寄存器 x[rs2]加到寄存器 x[rs1]上, 将结果截断为 32 位, 把符号位扩展的结果写入 x[rd]
     INSTPAT("0000000 ????? ????? 001 ????? 01110 11", sllw   , R, R(dest) = src1 << src2); // sllw:把寄存器 x[rs1]的低 32 位左移 x[rs2]位，空出的位置填入 0，结果进行有符号扩展后写入x[rd]。 x[rs2]的低 5 位代表移动位数，其高位则被忽略。
 
     // I-Type

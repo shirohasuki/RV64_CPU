@@ -71,8 +71,8 @@ static int decode_exec(Decode *s) {
     // R-Type
     INSTPAT("0000000 ????? ????? 000 ????? 01100 11", add    , R, R(dest) = src1 + src2);                                       // add: rs1 加上 rs2 并写入 rd 中；
     INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, R(dest) = src1 - src2);                                       // sub: rs1 减去 rs2 并写入 rd 中；
-    INSTPAT("0000000 ????? ????? 001 ????? 01100 11", sll    , R, R(dest) = U64(src1) << src2);                                 // sll: 逻辑左移 并写入 rd 中；
-    INSTPAT("0000000 ????? ????? 010 ????? 01100 11", slt    , R, R(dest) = (src1 < src2));                                     // slt: 小于则置位 1
+    INSTPAT("0000000 ????? ????? 001 ????? 01100 11", sll    , R, R(dest) = src1 << src2);                                 // sll: 逻辑左移 并写入 rd 中；
+    INSTPAT("0000000 ????? ????? 010 ????? 01100 11", slt    , R, R(dest) = src1 < src2);                                     // slt: 小于则置位 1
     INSTPAT("0000000 ????? ????? 011 ????? 01100 11", sltu   , R, R(dest) = U64(src1) < U64(src2));                             // sltu: (无符号)小于则置位 1 
     INSTPAT("0000000 ????? ????? 100 ????? 01100 11", xor    , R, R(dest) = src1 ^ src2);                                       // xor: rs1 异或 rs2 并写入 rd 中；
     INSTPAT("0000000 ????? ????? 101 ????? 01100 11", srl    , R, R(dest) = U64(src1) >> src2);                                 // srl: 逻辑右移 并写入 rd 中；

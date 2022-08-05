@@ -84,7 +84,7 @@ static int decode_exec(Decode *s) {
     INSTPAT("0000000 ????? ????? 110 ????? 01100 11", or     , R, R(dest) = src1 | src2);  // or: rs1 或 rs2 并写入 rd 中；
     INSTPAT("0000000 ????? ????? 111 ????? 01100 11", and    , R, R(dest) = src1 & src2);  // and: rs1 和 rs2 并写入 rd 中；
     INSTPAT("??????? ????? ????? 000 ????? 01110 11", addw   , R, R(dest) = SEXT(BITS(src1 + src2, 31, 0), 32)); // addw:把寄存器 x[rs2]加到寄存器 x[rs1]上, 将结果截断为 32 位, 把符号位扩展的结果写入 x[rd]
-    INSTPAT("0000000 ????? ????? 001 ????? 01110 11", sllw   , R, R(dest) = src1 << src2); // sllw:把寄存器 x[rs1]的低 32 位左移 x[rs2]位，空出的位置填入 0，结果进行有符号扩展后写入x[rd]。 x[rs2]的低 5 位代表移动位数，其高位则被忽略。
+    INSTPAT("0000000 ????? ????? 001 ????? 01110 11", sllw   , R, R(dest) = SEXT(BITS(src1 << BITS(src2, 4, 0), 31, 0), 32)); // sllw:把寄存器 x[rs1]的低 32 位左移 x[rs2]位，空出的位置填入 0，结果进行有符号扩展后写入x[rd]。 x[rs2]的低 5 位代表移动位数，其高位则被忽略。
 
     // I-Type
     /* TODO: srai 有问题*/

@@ -71,8 +71,8 @@ static int decode_exec(Decode *s) {
     // R-Type
     INSTPAT("0000000 ????? ????? 000 ????? 01100 11", add    , R, R(dest) = src1 + src2);                                       // add: rs1 加上 rs2 并写入 rd 中；
     INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, R(dest) = src1 - src2);                                       // sub: rs1 减去 rs2 并写入 rd 中；
-    INSTPAT("0100000 ????? ????? 000 ????? 01100 11", divw   , R, R(dest) = SEXT(S32(BITS(src1, 31, 0)) / S32(BITS(src2, 31, 0)), 32));                // divw: 把寄存器 x[rs2]除以寄存器 x[rs1], 将结果截断为 32 位, 把符号位扩展的结果写入 x[rd]
-    INSTPAT("0100000 ????? ????? 000 ????? 01100 11", divuw  , R, R(dest) = SEXT(U32(BITS(src1, 31, 0)) / U32(BITS(src2, 31, 0)), 32));                // divuw: 把寄存器 x[rs2]除以寄存器 x[rs1], 将结果截断为 32 位, 把符号位扩展的结果写入 x[rd]    
+    INSTPAT("0000001 ????? ????? 100 ????? 01110 11", divw   , R, R(dest) = SEXT(S32(BITS(src1, 31, 0)) / S32(BITS(src2, 31, 0)), 32));                // divw: 把寄存器 x[rs2]除以寄存器 x[rs1], 将结果截断为 32 位, 把符号位扩展的结果写入 x[rd]
+    INSTPAT("0000001 ????? ????? 101 ????? 01110 11", divuw  , R, R(dest) = SEXT(U32(BITS(src1, 31, 0)) / U32(BITS(src2, 31, 0)), 32));                // divuw: 把寄存器 x[rs2]除以寄存器 x[rs1], 将结果截断为 32 位, 把符号位扩展的结果写入 x[rd]    
     INSTPAT("0000000 ????? ????? 001 ????? 01100 11", sll    , R, R(dest) = src1 << src2);                                      // sll: 逻辑左移 并写入 rd 中；
     INSTPAT("0000000 ????? ????? 010 ????? 01100 11", slt    , R, R(dest) = src1 < src2);                                       // slt: 小于则置位 1
     INSTPAT("0000000 ????? ????? 011 ????? 01100 11", sltu   , R, R(dest) = U64(src1) < U64(src2));                             // sltu: (无符号)小于则置位 1 

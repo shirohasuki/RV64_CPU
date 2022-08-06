@@ -11,9 +11,8 @@ typedef struct Decode {
   IFDEF(CONFIG_ITRACE, char logbuf[128]);
 } Decode;
 
-// snpc是指代码中的下一条指令, 而dnpc是指程序运行过程中的下一条指令。
-// 对于顺序执行的指令, 它们的snpc和dnpc是一样的; 
-// 但对于跳转指令, snpc和dnpc就会有所不同, dnpc应该指向跳转目标的指令
+// snpc是指内存中紧挨着的代码中的下一条指令, 而dnpc是指程序运行过程中的下一条指令。
+
 
 // --- pattern matching mechanism ---
 __attribute__((always_inline))

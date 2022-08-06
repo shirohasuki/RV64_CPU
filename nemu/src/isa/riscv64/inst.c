@@ -76,7 +76,7 @@ static int decode_exec(Decode *s) {
     INSTPAT("0000001 ????? ????? 101 ????? 01100 11", divu   , R, R(dest) = U64(src1) / U64(src2));                                      // divu: 把寄存器 x[rs2]除以寄存器 x[rs1], 无符号
     INSTPAT("0000001 ????? ????? 100 ????? 01110 11", divw   , R, R(dest) = SEXT(S32(BITS(src1, 31, 0)) / S32(BITS(src2, 31, 0)), 32)); // divw: 把寄存器 x[rs2]除以寄存器 x[rs1], 将结果截断为 32 位, 把符号位扩展的结果写入 x[rd]
     INSTPAT("0000001 ????? ????? 101 ????? 01110 11", divuw  , R, R(dest) = SEXT(U32(BITS(src1, 31, 0)) / U32(BITS(src2, 31, 0)), 32)); // divuw: 把寄存器 x[rs2]除以寄存器 x[rs1], 将结果截断为 32 位, 把符号位扩展的结果写入 x[rd]    
-    INSTPAT("0000000 ????? ????? 001 ????? 01100 11", sll    , R, R(dest) = src1 << src2);                                              // sll: 逻辑左移 并写入 rd 中；
+    INSTPAT("000000? ????? ????? 001 ????? 01100 11", sll    , R, R(dest) = src1 << src2);                                              // sll: 逻辑左移 并写入 rd 中；
     INSTPAT("0000000 ????? ????? 010 ????? 01100 11", slt    , R, R(dest) = S64(src1) < S64(src2));                                     // slt: 小于则置位 1
     INSTPAT("0000000 ????? ????? 011 ????? 01100 11", sltu   , R, R(dest) = U64(src1) < U64(src2));                                     // sltu: (无符号)小于则置位 1 
     INSTPAT("0000000 ????? ????? 100 ????? 01100 11", xor    , R, R(dest) = src1 ^ src2);                                               // xor: rs1 异或 rs2 并写入 rd 中；
@@ -85,7 +85,7 @@ static int decode_exec(Decode *s) {
     INSTPAT("0000000 ????? ????? 110 ????? 01100 11", or     , R, R(dest) = src1 | src2);                                               // or: rs1 或 rs2 并写入 rd 中；
     INSTPAT("0000000 ????? ????? 111 ????? 01100 11", and    , R, R(dest) = src1 & src2);                                               // and: rs1 和 rs2 并写入 rd 中；
     INSTPAT("??????? ????? ????? 000 ????? 01110 11", addw   , R, R(dest) = SEXT(BITS(src1 + src2, 31, 0), 32));                        // addw: 把寄存器 x[rs2]加到寄存器 x[rs1]上, 将结果截断为 32 位, 把符号位扩展的结果写入 x[rd]
-    INSTPAT("0000000 ????? ????? 001 ????? 01110 11", sllw   , R, R(dest) = SEXT(BITS(src1 << BITS(src2, 4, 0), 31, 0), 32));           // sllw: 把寄存器 x[rs1]的低 32 位左移 x[rs2]位，空出的位置填入 0，结果进行有符号扩展后写入x[rd]。 x[rs2]的低 5 位代表移动位数，其高位则被忽略。
+    INSTPAT("000000? ????? ????? 001 ????? 01110 11", sllw   , R, R(dest) = SEXT(BITS(src1 << BITS(src2, 4, 0), 31, 0), 32));           // sllw: 把寄存器 x[rs1]的低 32 位左移 x[rs2]位，空出的位置填入 0，结果进行有符号扩展后写入x[rd]。 x[rs2]的低 5 位代表移动位数，其高位则被忽略。
 
     // I-Type       
     INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(dest) = src1 + src2);                                               // addi:把符号位扩展的立即数加到寄存器 x[rs1]上, 结果写入x[rd],忽略算术溢出
@@ -93,16 +93,16 @@ static int decode_exec(Decode *s) {
     INSTPAT("??????? ????? ????? 100 ????? 00100 11", xori   , I, R(dest) = src1 ^ src2);                                               // xori是立即数异或，rs1和立即数按位异或并写入 rd中；
     INSTPAT("??????? ????? ????? 110 ????? 00100 11", ori    , I, R(dest) = src1 | src2);                                               // ori是 rs1 和立即数按位取或并写入 rd 中；
     INSTPAT("??????? ????? ????? 000 ????? 00110 11", addiw  , I, R(dest) = SEXT(BITS(src1 + src2, 31, 0), 32));                        // addiw:把 立即数 加到寄存器 x[rs1]上, 将结果截断为 32 位, 把符号位扩展的结果写入 x[rd]
-    INSTPAT("??????? ????? ????? 001 ????? 00110 11", slliw  , I, R(dest) = SEXT(BITS(src1 << src2, 31, 0), 32));                       // sllw: 把寄存器 x[rs1]的低 32 位左移立即数位，空出的位置填入 0，将结果截断为 32 位,结果进行有符号扩展后写入x[rd]。
+    INSTPAT("000000? ????? ????? 001 ????? 00110 11", slliw  , I, R(dest) = SEXT(BITS(src1 << src2, 31, 0), 32));                       // sllw: 把寄存器 x[rs1]的低 32 位左移立即数位，空出的位置填入 0，将结果截断为 32 位,结果进行有符号扩展后写入x[rd]。
     INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, R(dest) = s->pc + 4; s->dnpc = ((src1 + src2) & (~U64(1))));          // jalr:跳转并链接，把 pc 设置成 rs1+偏移值，然后将 pc+4 写入 rd 中
     INSTPAT("0000000 ????? ????? 001 ????? 00100 11", slli   , I, R(dest) = src1 << src2);                                              // slli:立即数逻辑左移，rs1 左移 shamt 位，空位填 0 并写入 rd 中；
     INSTPAT("0000000 ????? ????? 101 ????? 00100 11", srli   , I, R(dest) = U64(src1) >> src2);                                         // srli:立即数逻辑右移，rs1 右移 shamt 位，空位填 0 并写入rd 中；
     INSTPAT("0100000 ????? ????? 101 ????? 00100 11", srai   , I, R(dest) = S64(src1) >> src2);                                         // srai:立即数算数右移，rs1 右移 shamt 位，空位填 rs1 的最高位并写入 rd 中；
     INSTPAT("??????? ????? ????? 011 ????? 00100 11", sltiu  , I, R(dest) = U64(src1) < U64(src2));                                     // sltiu: rs1 小于立即数则 rd 置 1，否者置 0(无符号比较)
-    INSTPAT("??????? ????? ????? 011 ????? 00000 11", ld     , I, R(dest) = Mr(src1 + src2, 8));                                        // ld: 加载双字指令
     INSTPAT("??????? ????? ????? 000 ????? 00000 11", lb     , I, R(dest) = SEXT(Mr(src1 + src2, 1), 32));                              // lb: 字节加载，读取一个字节写入 rd 中；
     INSTPAT("??????? ????? ????? 001 ????? 00000 11", lh     , I, R(dest) = SEXT(Mr(src1 + src2, 2), 32));                              // lh: 是半字加载，读取两个字节写入 rd 中；
     INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw     , I, R(dest) = SEXT(Mr(src1 + src2, 4), 32));                              // lw: 是字加载，读取四个字节写入 rd 中；
+    INSTPAT("??????? ????? ????? 011 ????? 00000 11", ld     , I, R(dest) = Mr(src1 + src2, 8));                                        // ld: 加载双字指令
     INSTPAT("??????? ????? ????? 100 ????? 00000 11", lbu    , I, R(dest) = Mr(src1 + src2, 1));                                        // lbu: 是无符号字节加载，读取一个字节写入 rd 中；
     INSTPAT("??????? ????? ????? 101 ????? 00000 11", lhu    , I, R(dest) = Mr(src1 + src2, 2));                                        // lhu: 是无符号半字加载，读取两个字节写入 rd中；
 

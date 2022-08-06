@@ -13,7 +13,7 @@
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0; // unit: us
-static bool g_print_step = false;
+static bool g_print_step = true;
 
 void device_update();
 
@@ -26,13 +26,13 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 }
 
 static void exec_once(Decode *s, vaddr_t pc) {
-    s->pc = pc; // 当前PC设置为PC
+    s->pc = pc;   // 当前PC设置为PC
     s->snpc = pc; // 下一个PC也设置为PC
     isa_exec_once(s);
     cpu.pc = s->dnpc;
 #ifdef CONFIG_ITRACE
     char *p = s->logbuf;
-    p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
+    p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc); // C 库函数 int snprintf(char *str, size_t size, const char *format, ...) 设将可变参数(...)按照 format 格式化成字符串，并将字符串复制到 str 中，size 为要写入的字符的最大数目，超过 size 会被截断。
     int ilen = s->snpc - s->pc;
     int i;
     uint8_t *inst = (uint8_t *)&s->isa.inst.val;

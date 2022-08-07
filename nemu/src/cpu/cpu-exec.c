@@ -113,7 +113,7 @@ void cpu_exec(uint64_t n) {
 			for (int i = 0; i < RING_LEN; i++) {
 				if (i == ringptr) {
                     printf("---> %s\n", ringbuf[i]);
-                    printf("-------------------------------------");
+                    printf("-------------------------------------\n");
                 } 
 				else { printf("     %s\n", ringbuf[i]);}
 			}

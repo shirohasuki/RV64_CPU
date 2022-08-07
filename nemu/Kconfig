@@ -148,8 +148,8 @@ config ITRACE_COND
 
 config IRINGBUF
   depends on ITRACE
-	bool "Enable instruction ring buffer"
-	default n
+	bool "Enable instruction ring buffer(iringbuf)"
+	default y
 
 config DIFFTEST
   depends on TARGET_NATIVE_ELF

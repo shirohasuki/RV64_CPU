@@ -10,7 +10,7 @@
  */
 #define MAX_INST_TO_PRINT 1001
 
-
+// #define CONFIG_IRINGBUF 1
 #define CONFIG_MTRACE 1
 
 #ifdef CONFIG_IRINGBUF

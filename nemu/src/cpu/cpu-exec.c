@@ -10,6 +10,8 @@
  */
 #define MAX_INST_TO_PRINT 1001
 
+#define CONFIG_IRINGBUF 1
+#define CONFIG_MTRACE 1
 
 #ifdef CONFIG_IRINGBUF
 #define RING_LEN 16 // iringbuf环形里单次存储指令条数目

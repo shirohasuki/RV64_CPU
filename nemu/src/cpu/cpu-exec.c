@@ -110,12 +110,9 @@ void cpu_exec(uint64_t n) {
         case NEMU_ABORT:
 #ifdef CONFIG_IRINGBUF
 			printf("========== IRingBuf Result ==========\n");
-			for (int i = 0; i < RING_LEN; i++) {
-				if (i == ringptr) {
-                    printf("---> %s\n", ringbuf[i]);
-                    printf("-------------------------------------\n");
-                } 
-				else { printf("     %s\n", ringbuf[i]);}
+			for (int i = ringptr + 1; ; i = (ringptr + 1) % RING_LEN) {
+				if (i == ringptr) { printf("---> %s\n", ringbuf[i]); break;}
+				else printf("     %s\n", ringbuf[i]);
 			}
 			printf("\n");
 #endif

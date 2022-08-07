@@ -111,9 +111,11 @@ void cpu_exec(uint64_t n) {
 #ifdef CONFIG_IRINGBUF
 			printf("========== IRingBuf Result ==========\n");
 			for (int i = 0; i < RING_LEN; i++) {
-				if (i == ringptr) printf("--->");
-				else printf("    ");
-				printf("%s\n", ringbuf[i]);
+				if (i == ringptr) {
+                    printf("---> %s\n", ringbuf[i]);
+                    printf("-------------------------------------");
+                } 
+				else { printf("     %s\n", ringbuf[i]);}
 			}
 			printf("\n");
 #endif

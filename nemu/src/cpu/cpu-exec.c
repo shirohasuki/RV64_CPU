@@ -11,8 +11,9 @@
 #define MAX_INST_TO_PRINT 1001
 
 #ifdef CONFIG_IRINGBUF
-int ringptr = 15;
-char ringbuf[16][128];
+#define RING_LEN 16 // iringbuf环形里单次存储指令条数目
+int ringptr = RING_LEN - 1;
+char ringbuf[RING_LEN - 1][128];
 #endif
 
 CPU_state cpu = {};
@@ -56,7 +57,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
         MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
 #endif
 #ifdef CONFIG_IRINGBUF
-	ringptr = (ringptr + 1) % 16;
+	ringptr = (ringptr + 1) % RING_LEN; // ringptr < 16 时,ringptr = ringptr; ringptr = 16 时,ringptr = 0;
 	strcpy(ringbuf[ringptr], s->logbuf);
 #endif
 }
@@ -109,7 +110,7 @@ void cpu_exec(uint64_t n) {
         case NEMU_ABORT:
 #ifdef CONFIG_IRINGBUF
 			printf("========== IRingBuf Result ==========\n");
-			for (int i = 0; i < 16; i++) {
+			for (int i = 0; i < RING_LEN; i++) {
 				if (i == ringptr) printf("--->");
 				else printf("    ");
 				printf("%s\n", ringbuf[i]);

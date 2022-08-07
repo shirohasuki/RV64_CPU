@@ -10,10 +10,8 @@
  */
 #define MAX_INST_TO_PRINT 1001
 
-// #define CONFIG_IRINGBUF 1
-#define CONFIG_MTRACE 1
 
-#ifdef CONFIG_IRINGBUF
+#ifdef IRINGBUF
 #define RING_LEN 16 // iringbuf环形里单次存储指令条数目
 int ringptr = RING_LEN - 1;
 char ringbuf[RING_LEN - 1][128];
@@ -59,7 +57,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
     disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
         MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
 #endif
-#ifdef CONFIG_IRINGBUF
+#ifdef IRINGBUF
 	ringptr = (ringptr + 1) % RING_LEN; // ringptr < 16 时,ringptr = ringptr; ringptr = 16 时,ringptr = 0;
 	strcpy(ringbuf[ringptr], s->logbuf);
 #endif
@@ -111,7 +109,7 @@ void cpu_exec(uint64_t n) {
         case NEMU_RUNNING: nemu_state.state = NEMU_STOP; break;
 
         case NEMU_ABORT:
-#ifdef CONFIG_IRINGBUF
+#ifdef IRINGBUF
 			printf("========== IRingBuf Result ==========\n"); // 把环形的拉直输出了
 			for (int i = ringptr + 1; ; i = (i + 1) % RING_LEN) {
 				if (i == ringptr) { printf("---> %s\n", ringbuf[i]); break;}

@@ -146,11 +146,10 @@ config ITRACE_COND
   string "Only trace instructions when the condition is true"
   default "true"
 
-config CONFIG_IRINGBUF
-  depends on ITRACE 
-  bool "Enable instruction tracer with a ring-buffer"
-  default y
-
+config IRINGBUF
+  depends on ITRACE
+	bool "Enable instruction ring buffer"
+	default n
 
 config DIFFTEST
   depends on TARGET_NATIVE_ELF

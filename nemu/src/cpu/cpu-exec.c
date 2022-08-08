@@ -17,6 +17,11 @@ int ringptr = RING_LEN - 1;
 char ringbuf[RING_LEN - 1][128];
 #endif
 
+#ifdef CONFIG_FTRACE
+void ftrace_record(uint64_t pc, uint64_t addr, bool is_return);
+void ftrace_output();
+#endif
+
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0; // unit: us
@@ -26,7 +31,7 @@ void device_update();
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
-    if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
+    if (CONFIG_ITRACE_COND) { log_write("%s\n", _this->logbuf); }
 #endif
     if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
     IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));

@@ -147,9 +147,19 @@ config ITRACE_COND
   default "true"
 
 config IRINGBUF
-  depends on ITRACE
-	bool "Enable instruction ring buffer(iringbuf)"
+    depends on ITRACE
+    bool "Enable instruction ring buffer(iringbuf)"
 	default y
+
+config MTRACE
+    depends on TRACE && ENGINE_INTERPRETER
+    bool "Enable memory tracer(MTRACE)"
+    default n
+  
+config FTRACE
+    depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
+    bool "Enable function tracer(FTRACE)"
+    default n
 
 config DIFFTEST
   depends on TARGET_NATIVE_ELF

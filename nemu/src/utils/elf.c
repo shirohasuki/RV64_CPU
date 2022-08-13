@@ -27,6 +27,7 @@ void init_elf(const char *elf_file) {
   // open elf file -> elf_fp (like log_fp)
     elf_fp = stdin;
     if (elf_fp != NULL) {
+        elf_file = "/home/shiroha/Code/ysyx/ysyx-workbench/am-kernels/tests/cpu-tests/build/add-riscv64-nemu.elf";
         FILE *fp = fopen(elf_file, "r");
         Assert(fp, "Can not open '%s'", elf_file);
         elf_fp = fp;

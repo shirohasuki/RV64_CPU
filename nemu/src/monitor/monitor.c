@@ -59,8 +59,8 @@ static int parse_args(int argc, char *argv[]) {
   const struct option table[] = {
     {"batch"    , no_argument      , NULL, 'b'},
     {"log"      , required_argument, NULL, 'l'},
-    {"elf"	    , required_argument, NULL, 'e'},	// ELF read
     {"diff"     , required_argument, NULL, 'd'},
+    {"elf"	    , required_argument, NULL, 'e'},	// ELF read
     {"port"     , required_argument, NULL, 'p'},
     {"help"     , no_argument      , NULL, 'h'},
     {0          , 0                , NULL,  0 },
@@ -72,7 +72,7 @@ static int parse_args(int argc, char *argv[]) {
       case 'p': sscanf(optarg, "%d", &difftest_port); break;
       case 'l': log_file = optarg; break;
       case 'd': diff_so_file = optarg; break;
-      case 'e': elf_file = optarg; break;		// ELF read
+      case 'e': elf_file = "/home/shiroha/Code/ysyx/ysyx-workbench/am-kernels/tests/cpu-tests/build/add-riscv64-nemu.elf"; break;		// ELF read
       case 1: img_file = optarg; return 0;
       default:
         printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);

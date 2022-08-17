@@ -5,6 +5,7 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
+typedef long long ll;
 
 char* num2str(char *str, ll num, ll base) {
     char tmp[32];

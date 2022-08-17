@@ -4,10 +4,9 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-// 指针大小为size_t,八字节
 
 size_t strlen(const char *s) {
-    size_t len;
+    size_t len = 0;
     while (s[len] != '\0') {
         len++;
     }
@@ -18,7 +17,7 @@ char *strcpy(char *dst, const char *src) {
     for (size_t i = 0; src[i] != '\0'; i++) {
         dst[i] = src[i];
     }
-    ++dst = '\0';
+    *(++dst) = '\0';
     return dst; 
 }
 
@@ -40,7 +39,7 @@ char *strcat(char *dst, const char *src) {
 	}
 	dst[dst_len + i] = '\0';
 	return dst;
-} //append
+} // append
 
 int strcmp(const char *s1, const char *s2) {
   	size_t i = 0;
@@ -62,7 +61,7 @@ int strncmp(const char *s1, const char *s2, size_t n) {
 void *memset(void *s, int c, size_t n) {
     char *prt = s;
     while (n--) {
-        *prt++ = c; 
+        *(prt++) = c; 
     }
     return s;
 }

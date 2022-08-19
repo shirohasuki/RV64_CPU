@@ -3,6 +3,11 @@
 
 #include <common.h>
 
+enum {
+  mtvec, mepc, mstatus, mcause,
+  csr_regnum, // none
+};
+
 typedef struct {
     word_t gpr[32];
     vaddr_t pc;

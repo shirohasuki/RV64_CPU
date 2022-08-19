@@ -13,6 +13,7 @@ void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
 // `direction`指定拷贝的方向, `DIFFTEST_TO_DUT`表示往DUT拷贝, `DIFFTEST_TO_REF`表示往REF拷贝
 
 void difftest_regcpy(void *dut, bool direction) {
+    printf("hello\n");
     if (direction == DIFFTEST_TO_REF) {
         cpu.pc = ((uint64_t*)dut)[32];
         for (int i = 0; i < 32; i++) {

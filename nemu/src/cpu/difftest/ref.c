@@ -13,23 +13,24 @@ void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
 // `direction`指定拷贝的方向, `DIFFTEST_TO_DUT`表示往DUT拷贝, `DIFFTEST_TO_REF`表示往REF拷贝
 
 void difftest_regcpy(void *dut, bool direction) {
-  if (direction == DIFFTEST_TO_REF) {
-    cpu.pc = ((uint64_t*)dut)[32];
-    for (int i = 0; i < 32; ++i) {
-      cpu.gpr[i] = ((uint64_t*)dut)[i];
+    if (direction == DIFFTEST_TO_REF) {
+        cpu.pc = ((uint64_t*)dut)[32];
+        for (int i = 0; i < 32; i++) {
+            cpu.gpr[i] = ((uint64_t*)dut)[i];
+        }
+        for (int i = 0; i < 4; i++) {
+            cpu.csr[i] = ((uint64_t*)dut)[i];
+        }
+        } else {
+        ((uint64_t*)dut)[32] = cpu.pc;
+        for (int i = 0; i < 32; i++) {
+            ((uint64_t*)dut)[i] = cpu.gpr[i];
+        }
+        for (int i = 0; i < 4; i++) {
+            printf("cpu.csr: %ld ", cpu.csr[i]);
+            ((uint64_t*)dut)[i] = cpu.csr[i];
+        }
     }
-    for (int i = 0; i < 4; ++i) {
-      cpu.csr[i] = ((uint64_t*)dut)[i];
-    }
-  } else {
-    ((uint64_t*)dut)[32] = cpu.pc;
-    for (int i = 0; i < 32; ++i) {
-      ((uint64_t*)dut)[i] = cpu.gpr[i];
-    }
-    for (int i = 0; i < 4; ++i) {
-      ((uint64_t*)dut)[i] = cpu.csr[i];
-    }
-  }
 }// `direction`为`DIFFTEST_TO_DUT`时, 获取REF的寄存器状态到`dut`;
 // `direction`为`DIFFTEST_TO_REF`时, 设置REF的寄存器状态为`dut`;
 

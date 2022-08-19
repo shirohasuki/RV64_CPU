@@ -26,7 +26,6 @@ config ISA64
   bool
   default y
 
-
 choice
   prompt "NEMU execution engine"
   default ENGINE_INTERPRETER

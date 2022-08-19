@@ -14,7 +14,7 @@ void (*ref_difftest_raise_intr)(uint64_t NO) = NULL;
 #ifdef CONFIG_DIFFTEST
 
 static bool is_skip_ref = false;
-static int skip_dut_nr_inst = 1;
+static int skip_dut_nr_inst = 0;
 
 // this is used to let ref skip instructions which
 // can not produce consistent behavior with NEMU
@@ -88,6 +88,7 @@ void difftest_step(vaddr_t pc, vaddr_t npc) {
   CPU_state ref_r;
 
   if (skip_dut_nr_inst > 0) {
+    printf("hello\n");
     ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT); // `direction`为`DIFFTEST_TO_DUT`时, 获取REF的寄存器状态到`dut`;
     if (ref_r.pc == npc) {
       skip_dut_nr_inst = 0;

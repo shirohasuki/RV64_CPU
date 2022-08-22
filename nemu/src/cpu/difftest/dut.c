@@ -77,6 +77,7 @@ void init_difftest(char *ref_so_file, long img_size, int port) {
   printf("hello\n");
   ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
   printf("hello\n");
+  printf("cpu.csr: %ld ", cpu.csr[1]);
 }
 
 static void checkregs(CPU_state *ref, vaddr_t pc) {

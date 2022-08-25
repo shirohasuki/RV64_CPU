@@ -8,8 +8,12 @@
 #include "verilated.h"
 
 class Vtb__Syms;
+class Vtb___024unit;
+
 VL_MODULE(Vtb___024root) {
   public:
+    // CELLS
+    Vtb___024unit* __PVT____024unit;
 
     // DESIGN SPECIFIC STATE
     VL_IN8(clk,0,0);

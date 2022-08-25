@@ -1,6 +1,6 @@
 // DPI-C
 #include <svdpi.h>
-#include <VCPU__Dpi.h>
+#include <Vtb__Dpi.h>
 #include <verilated_dpi.h>
 // Verilator
 #include <verilated.h>
@@ -9,20 +9,67 @@
 // Difftest
 #include <dlfcn.h>
 
+// ========================= Environment =========================
 VerilatedContext* contextp = NULL;
-VerilatedVcdC* tfp = NULL;
 
 static Vtb* top;
 
+// =============== GtkWave ===============
+#ifdef CONFIG_GTKWAVE
+VerilatedVcdC* tfp = NULL;
+vluint64_t sim_time = 0;	// time of gtkwave
+#endif
+
+typedef long long ll;
+
+#define COLOR_RED     "\33[1;31m"
+#define COLOR_GREEN   "\33[1;32m"
+#define COLOR_NONE    "\33[0m"
 
 void debug_exit(int status);
 
-// Ebreak
-void ebreak() {
-  debug_exit(cpu_gpr[10]);
+// =============== Memory ===============
+#define MEM_BASE 0x80000000
+#define MEM_SIZE 65536
+ll img_size = 0;
+uint8_t mem[MEM_SIZE];
+// Memory transfer
+uint8_t* cpu2mem(ll addr) { return mem + (addr - MEM_BASE); }
+
+
+// =============== DPI-C ===============
+
+// Memory Read
+extern "C" void pmem_read(ll raddr, ll *rdata) {
+  if (raddr < MEM_BASE) return;
+  uint8_t *pt = cpu2mem(raddr) + 7;
+  ll ret = 0;
+  for (int i = 0; i < 8; ++i) {
+    ret = (ret << 8) | (*pt--);
+  }
+  *rdata = ret;
 }
 
+// Memory Write
+extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
+  if (waddr < MEM_BASE) return;
+  uint8_t *pt = cpu2mem(waddr);
+  for (int i = 0; i < 8; ++i) {
+    if (mask & 1) *pt = (wdata & 0xff);
+    wdata >>= 8, mask >>= 1, pt++;
+  }
+}
 
+// Get Registers
+uint64_t *cpu_gpr = NULL;
+extern "C" void get_regs(const svOpenArrayHandle r) {
+    cpu_gpr = (uint64_t *)(((VerilatedDpiOpenVar*)r) -> datap());
+}
+
+// Ebreak
+void ebreak() {
+    debug_exit(cpu_gpr[10]);
+}
 
 // ========================= Functions =========================
 
@@ -36,36 +83,39 @@ void load_image() {
     fclose(fp);
 }
 
-void cpu_reset() {
-    top -> clock = 0;
-    top -> reset = 1;
+void cpu_rst() {
+    top -> clk = 0;
+    top -> rst = 1;
     top -> eval();
 #ifdef CONFIG_GTKWAVE
-    m_trace -> dump(sim_time++);
+    tfp -> dump(sim_time++);
 #endif
-    top -> clock = 1;
-    top -> reset = 1;
+    top -> clk = 1;
+    top -> rst = 1;
     top -> eval();
 #ifdef CONFIG_GTKWAVE
-    m_trace -> dump(sim_time++);
+    tfp -> dump(sim_time++);
 #endif
-    top -> reset = 0;
+    top -> rst = 0;
 }
 
 void exec_once() {
-    top -> clock = 0;
+    top -> clk = 0;
     top -> eval();
 #ifdef CONFIG_GTKWAVE
-    m_trace -> dump(sim_time++);
+    tfp -> dump(sim_time++);
 #endif
-    top -> clock = 1;
+    top -> clk = 1;
     top -> eval();
 #ifdef CONFIG_GTKWAVE
-    m_trace -> dump(sim_time++);
+    tfp -> dump(sim_time++);
 #endif
-}
+} // dut->clk ^= 1;
 
 void debug_exit(int status) {
+#ifdef CONFIG_GTKWAVE
+    tfp -> close();
+#endif
     if (status == 0) puts("\33[1;32mSim Result: HIT GOOD TRAP\33[0m");
     else puts("\33[1;31mSim Result: HIT BAD TRAP\33[0m");
     exit(status);
@@ -76,16 +126,16 @@ int main(int argc, char **argv, char **env) {
     // Prepare environment
     contextp = new VerilatedContext;
     contextp -> commandArgs(argc, argv);
-    tb = new Vtb(contextp);
+    top = new Vtb(contextp);
 #ifdef CONFIG_GTKWAVE
     Verilated::traceEverOn(true);
-    m_trace = new VerilatedVcdC;
-    tb -> trace(m_trace, 5);
-    m_trace -> open("waveform.vcd");
+    tfp = new VerilatedVcdC;
+    top -> trace(tfp, 5);
+    tfp -> open("waveform.vcd");
 #endif
 
     load_image();
-    cpu_reset();
+    cpu_rst();
 
 
 #ifdef CONFIG_DIFFTEST
@@ -100,3 +150,5 @@ int main(int argc, char **argv, char **env) {
     }
     return 0;
 }
+
+// DPI-C 可参考 https://www.itsembedded.com/dhd_list/

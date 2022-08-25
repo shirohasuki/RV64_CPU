@@ -22,6 +22,10 @@ void ftrace_record(uint64_t pc, uint64_t addr, bool is_return);
 void ftrace_output();
 #endif
 
+#ifdef CONFIG_WATCHPOINT
+bool watchpoints_check();
+#endif
+
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0; // unit: us
@@ -35,16 +39,30 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #endif
     if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
     IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
+#ifdef CONFIG_WATCHPOINT
+	if (watchpoints_check() == true) {
+		nemu_state.state = NEMU_STOP;
+		printf("Watchpoint(s) changed.\n");
+	}
+#endif
 }
 
 static void exec_once(Decode *s, vaddr_t pc) {
     s->pc = pc;   // 当前PC设置为PC
     s->snpc = pc; // 下一个PC也设置为PC
     isa_exec_once(s);
-    cpu.pc = s->dnpc;
 #ifdef CONFIG_FTRACE
-
+    uint32_t finst = s->isa.inst.val;
+	if (finst == 0x00008067) {
+		// ret: jalr x0, 0(x1)
+	  ftrace_record(pc, pc, true);
+	} else if (BITS(finst, 6, 0) == 0x6f && BITS(finst, 11, 7) != 0) {
+		ftrace_record(pc, s->dnpc, false);
+	}	else if (BITS(finst, 6, 0) == 0x67 && BITS(finst, 11, 7) != 0) {
+		ftrace_record(pc, s->dnpc, false);
+	}
 #endif
+    cpu.pc = s->dnpc;
 #ifdef CONFIG_ITRACE
     char *p = s->logbuf;
     p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc); // C 库函数 int snprintf(char *str, size_t size, const char *format, ...) 设将可变参数(...)按照 format 格式化成字符串，并将字符串复制到 str 中，size 为要写入的字符的最大数目，超过 size 会被截断。

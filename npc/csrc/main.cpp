@@ -14,34 +14,89 @@ VerilatedVcdC* tfp = NULL;
 
 static Vtb* top;
 
-void step_and_dump_wave() {
-    top->eval();
-    contextp->timeInc(1);
-    tfp->dump(contextp->time());
+
+void debug_exit(int status);
+
+// Ebreak
+void ebreak() {
+  debug_exit(cpu_gpr[10]);
 }
-void sim_init() {
+
+
+
+// ========================= Functions =========================
+
+void load_image() {
+    char image_path[] = "/home/shiroha/Code/ysyx/ysyx-workbench/npc/image.bin";
+    FILE *fp = fopen(image_path, "rb");
+    fseek(fp, 0, SEEK_END);
+    img_size = ftell(fp);
+    fseek(fp, 0, SEEK_SET);
+    int ret = fread(mem, img_size, 1, fp);
+    fclose(fp);
+}
+
+void cpu_reset() {
+    top -> clock = 0;
+    top -> reset = 1;
+    top -> eval();
+#ifdef CONFIG_GTKWAVE
+    m_trace -> dump(sim_time++);
+#endif
+    top -> clock = 1;
+    top -> reset = 1;
+    top -> eval();
+#ifdef CONFIG_GTKWAVE
+    m_trace -> dump(sim_time++);
+#endif
+    top -> reset = 0;
+}
+
+void exec_once() {
+    top -> clock = 0;
+    top -> eval();
+#ifdef CONFIG_GTKWAVE
+    m_trace -> dump(sim_time++);
+#endif
+    top -> clock = 1;
+    top -> eval();
+#ifdef CONFIG_GTKWAVE
+    m_trace -> dump(sim_time++);
+#endif
+}
+
+void debug_exit(int status) {
+    if (status == 0) puts("\33[1;32mSim Result: HIT GOOD TRAP\33[0m");
+    else puts("\33[1;31mSim Result: HIT BAD TRAP\33[0m");
+    exit(status);
+}
+
+
+int main(int argc, char **argv, char **env) {
+    // Prepare environment
     contextp = new VerilatedContext;
-    tfp = new VerilatedVcdC;
-    top = new Vtb;
-    contextp->traceEverOn(true);
-    top->trace(tfp, 0);
-    tfp->open("dump.vcd");
-}
+    contextp -> commandArgs(argc, argv);
+    tb = new Vtb(contextp);
+#ifdef CONFIG_GTKWAVE
+    Verilated::traceEverOn(true);
+    m_trace = new VerilatedVcdC;
+    tb -> trace(m_trace, 5);
+    m_trace -> open("waveform.vcd");
+#endif
 
-void sim_exit() {
-    step_and_dump_wave();
-    tfp->close();
-}
+    load_image();
+    cpu_reset();
 
-int main() {
-    sim_init();
-    int i = 1000;
-    //top->rst = 1;   top->clk = 0;   step_and_dump_wave();
-    //                top->clk = 1;   step_and_dump_wave();
-    while (i--) {
-        top->rst = 1;   top->clk = 1;   step_and_dump_wave();
-                        top->clk = 0;   step_and_dump_wave();
+
+#ifdef CONFIG_DIFFTEST
+    init_difftest();
+#endif
+    
+    while (1) {
+        exec_once();
+#ifdef CONFIG_DIFFTEST
+    difftest_exec_once();
+#endif
     }
-
-    sim_exit();
-} 
+    return 0;
+}

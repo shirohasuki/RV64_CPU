@@ -22,7 +22,7 @@ image: $(IMAGE).elf
 	@$(OBJCOPY) -S --set-section-flags .bss=alloc,contents -O binary $(IMAGE).elf $(IMAGE).bin
 
 
-# NPC_HOME = ~/ysyx-workbench/npc
+# NPC_HOME = 
 
 run: image
 	cp $(IMAGE).bin $(NPC_HOME)/image.bin

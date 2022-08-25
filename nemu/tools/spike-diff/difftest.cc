@@ -51,7 +51,7 @@ void sim_t::diff_get_regs(void* diff_context) {
   ctx->csr[0] = state->mtvec;
   ctx->csr[1] = state->mepc;
   ctx->csr[2] = state->mstatus;
-  ctx->csr[3] = state->mcause;
+  ctx->csr[3] = state->mcause; // 芜湖终于接入difftest了，8.25
 }
 
 void sim_t::diff_set_regs(void* diff_context) {

@@ -25,6 +25,7 @@ struct elf_result {
 
 void init_elf(const char *elf_file) {
   // open elf file -> elf_fp (like log_fp)
+    printf("%s", elf_file);
     elf_fp = stdin;
     if (elf_fp != NULL) {
         // elf_file = "/home/shiroha/Code/ysyx/ysyx-workbench/am-kernels/tests/cpu-tests/build/add-riscv64-nemu.elf"; // ftrace有bug,目前不知道怎么指定elf文件加载

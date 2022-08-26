@@ -26,5 +26,5 @@ image: $(IMAGE).elf
 
 run: image
 	cp $(IMAGE).bin $(NPC_HOME)/image.bin
-	$(MAKE) -C $(NPC_HOME) sim
+	# $(MAKE) -C $(NPC_HOME) sim
 	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) sim ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin

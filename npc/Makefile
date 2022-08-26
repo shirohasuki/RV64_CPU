@@ -29,6 +29,7 @@ $(BIN): $(VSRCS) $(CSRCS)
 		-top $(TOPNAME) $^ \
 		$(addprefix -CFLAGS , $(CFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
 		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN)) \
+		# gtkwave wave.vcd &
 		 
 
 run: 	

@@ -67,11 +67,11 @@ static int decode_exec(Decode *s) {
     INSTPAT_START();
     // U-Type
     INSTPAT("??????? ????? ????? ??? ????? 00101 11", auipc  , U, R(dest) = src1 + s->pc);                                              // auipc: Add Upper Immediate to PC
-    // INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui    , U, R(dest) = src1);                                                      // lui: 把立即数高20位写入rd，rd的低12位补零(存疑)
+    INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui    , U, R(dest) = src1);                                                      // lui: 把立即数高20位写入rd，rd的低12位补零(存疑)
 
     // R-Type
-    // INSTPAT("0000000 ????? ????? 000 ????? 01100 11", add    , R, R(dest) = src1 + src2);                                               // add: rs1 加上 rs2 并写入 rd 中；
-    // INSTPAT("0000000 ????? ????? 000 ????? 01110 11", addw   , R, R(dest) = SEXT(BITS(src1 + src2, 31, 0), 32));                        // addw: 把寄存器 x[rs2]加到寄存器 x[rs1]上, 将结果截断为 32 位, 把符号位扩展的结果写入 x[rd]
+    INSTPAT("0000000 ????? ????? 000 ????? 01100 11", add    , R, R(dest) = src1 + src2);                                               // add: rs1 加上 rs2 并写入 rd 中；
+    INSTPAT("0000000 ????? ????? 000 ????? 01110 11", addw   , R, R(dest) = SEXT(BITS(src1 + src2, 31, 0), 32));                        // addw: 把寄存器 x[rs2]加到寄存器 x[rs1]上, 将结果截断为 32 位, 把符号位扩展的结果写入 x[rd]
     INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, R(dest) = src1 - src2);                                               // sub: rs1 减去 rs2 并写入 rd 中；
     INSTPAT("0100000 ????? ????? 000 ????? 01110 11", subw   , R, R(dest) = SEXT(BITS(src1 - src2, 31, 0), 32));                         // subw: 把寄存器 x[rs2]减去寄存器 x[rs1], 将结果截断为 32 位, 把符号位扩展的结果写入 x[rd]
     INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul    , R, R(dest) = src1 * src2);                                               // mlu: 把寄存器 x[rs2]乘以寄存器 x[rs1]

@@ -17,6 +17,7 @@ static Vtb* top;
 // =============== GtkWave ===============
 #ifdef CONFIG_GTKWAVE
 VerilatedVcdC* tfp = NULL;
+#define MAX_SIM_TIME 20;
 vluint64_t sim_time = 0;	// time of gtkwave
 #endif
 
@@ -111,6 +112,13 @@ void exec_once() {
     tfp -> dump(sim_time++);
 #endif
 } // dut->clk ^= 1;
+
+// while (sim_time < MAX_SIM_TIME) {
+//     dut->clk ^= 1;
+//     dut->eval();
+//     m_trace->dump(sim_time);
+//     sim_time++;
+// }
 
 void debug_exit(int status) {
 #ifdef CONFIG_GTKWAVE

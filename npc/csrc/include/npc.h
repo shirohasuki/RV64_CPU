@@ -1,7 +1,7 @@
-#include "VMain.h"
+#include "Vtb.h"
 #include "verilated.h"
 #include "verilated_dpi.h"
-#include "VMain__Dpi.h"
+#include "Vtb__Dpi.h"
 #include <stdio.h>
 #include <verilated_vcd_c.h>
 #include <assert.h>

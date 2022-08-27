@@ -39,7 +39,7 @@ sim:
 	$(VERILATOR) $(VERILATOR_CFLAGS) \
 		--top $(TOPNAME) $^\
 		--LDFLAGS "-ldl $(shell llvm-config --cxxflags) -fPIE $(shell llvm-config --libs)" \
-		--Mdir $(OBJ_DIR) --exe ${CSRCS} ${VSRCS}\
+		--Mdir $(OBJ_DIR) --exe ${CSRCS} ${VSRCS}
 	make -C ./obj_dir/ -f V$(TOPNAME).mk V$(TOPNAME)
 	./obj_dir/V$(TOPNAME)
 	# gtkwave waveform.vcd

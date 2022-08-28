@@ -13,7 +13,7 @@ module pc_reg(
         //     pc_o <= jump_addr_i;
         // else
         //     pc_o <= pc_o + 32'd4;
-        pc_o <= ~rst ? 32'b0 :  // 如果复位(默认低电平复位，PC指向32'b0)
+        pc_o <= ~rst ? 32'h80000000 :  // 如果复位(默认低电平复位，PC指向0x80000000)
                 jump_en_i ? jump_addr_i : 
                 pc_o + 32'd4;
 end

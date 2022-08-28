@@ -5,17 +5,17 @@ module soc (
     input  wire rst 
 );
     // riscv 2 rom
-    wire[31:0] riscv_inst_addr_o;
+    wire[63:0] riscv_inst_addr_o;
     // rom 2 riscv
-    wire[31:0] rom_inst_o;
+    wire[63:0] rom_inst_o;
     // riscv 2 ram
     wire riscv_w_en;
     wire[11:0] riscv_w_addr_o;
-    wire[31:0] riscv_w_data_o;
+    wire[63:0] riscv_w_data_o;
     wire riscv_r_en;   
     wire[11:0] riscv_r_addr_o;
     // ram 2 riscv
-    wire[31:0] ram_r_data_o;  
+    wire[63:0] ram_r_data_o;  
     /*
     riscv riscv_inst (
         .clk          ( clk             ),

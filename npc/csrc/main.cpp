@@ -1,60 +1,19 @@
-/*
-#include "verilated.h"
-#include "verilated_vcd_c.h"
-#include "Vriscv.h"
+#include "npc.h"
+
+#define MAX_SIM_TIME 1000
+vluint64_t sim_time = 0;
+// 使用 sim_time 变量来跟踪何时完成模拟。一旦我们模拟了 20 个时钟边沿，我们就可以简单地退出。之后由ebreak替代
 
 VerilatedContext* contextp = NULL;
 VerilatedVcdC* tfp = NULL;
-
-static Vriscv* top;
-
-void step_and_dump_wave() {
-    top->eval();
-    contextp->timeInc(1);
-    tfp->dump(contextp->time());
-}
-void sim_init() {
-    contextp = new VerilatedContext;
-    tfp = new VerilatedVcdC;
-    top = new Vriscv;
-    contextp->traceEverOn(true);
-    top->trace(tfp, 0);
-    tfp->open("dump.vcd");
-}
-
-void sim_exit() {
-    step_and_dump_wave();
-    tfp->close();
-}
-
-int main() {
-    sim_init();
-    top->inst_i = 00000010011000000000110110010011; top->rst =1; top->clk = 0; step_and_dump_wave();
-                                                    top->rst =1; top->clk = 1; step_and_dump_wave();
-    top->inst_i = 00000111100000000000111000010011; top->rst =1; top->clk = 0; step_and_dump_wave();
-                                                    top->rst =1; top->clk = 1; step_and_dump_wave();
-    top->inst_i = 00000001110011011000111010110011; top->rst =1; top->clk = 0; step_and_dump_wave();
-                                                    top->rst =1; top->clk = 1; step_and_dump_wave();
-
-    sim_exit();
-} 
-*/
-
-
-#include "verilated.h"
-#include "verilated_vcd_c.h"
-#include "Vtb.h"
-
-VerilatedContext* contextp = NULL;
-VerilatedVcdC* tfp = NULL;
-
 static Vtb* top;
 
-void step_and_dump_wave() {
-    top->eval();
-    contextp->timeInc(1);
-    tfp->dump(contextp->time());
-}
+
+
+//--------------------function--------------//
+
+
+//--------------sim-----------------//
 void sim_init() {
     contextp = new VerilatedContext;
     tfp = new VerilatedVcdC;
@@ -62,6 +21,16 @@ void sim_init() {
     contextp->traceEverOn(true);
     top->trace(tfp, 0);
     tfp->open("dump.vcd");
+
+    top->rst = 1;
+    top->clk = 0;
+}
+
+void step_and_dump_wave() {
+    top->eval();
+    contextp->timeInc(1);
+    tfp->dump(contextp->time());
+    sim_time++;
 }
 
 void sim_exit() {
@@ -69,15 +38,12 @@ void sim_exit() {
     tfp->close();
 }
 
+
 int main() {
     sim_init();
-    int i = 1000;
-    //top->rst = 1;   top->clk = 0;   step_and_dump_wave();
-    //                top->clk = 1;   step_and_dump_wave();
-    while (i--) {
-        top->rst = 1;   top->clk = 1;   step_and_dump_wave();
-                        top->clk = 0;   step_and_dump_wave();
+    while (sim_time < MAX_SIM_TIME) {
+        top->clk ^= 1;
+        step_and_dump_wave();
     }
-
     sim_exit();
 } 

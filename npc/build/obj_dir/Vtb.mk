@@ -4,7 +4,7 @@
 # Execute this makefile from the object directory:
 #    make -f Vtb.mk
 
-default: /home/shiroha/Code/ysyx/ysyx-workbench/npc/build/tb
+default: Vtb
 
 ### Constants...
 # Perl executable (from $PERL)
@@ -35,6 +35,7 @@ VM_PREFIX = Vtb
 VM_MODPREFIX = Vtb
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
+	-I/home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/include \
 	-DTOP_NAME="Vtb" \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
@@ -45,10 +46,12 @@ VM_USER_LDLIBS = \
 # User .cpp files (from .cpp's on Verilator command line)
 VM_USER_CLASSES = \
 	main \
+	utils \
 
 # User .cpp directories (from .cpp's on Verilator command line)
 VM_USER_DIR = \
 	/home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc \
+	/home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils \
 
 
 ### Default rules...
@@ -62,9 +65,11 @@ VPATH += $(VM_USER_DIR)
 
 main.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/main.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+utils.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils/utils.c
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 
 ### Link rules... (from --exe)
-/home/shiroha/Code/ysyx/ysyx-workbench/npc/build/tb: $(VK_USER_OBJS) $(VK_GLOBAL_OBJS) $(VM_PREFIX)__ALL.a $(VM_HIER_LIBS)
+Vtb: $(VK_USER_OBJS) $(VK_GLOBAL_OBJS) $(VM_PREFIX)__ALL.a $(VM_HIER_LIBS)
 	$(LINK) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) $(LIBS) $(SC_LIBS) -o $@
 
 

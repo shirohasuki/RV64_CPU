@@ -9,7 +9,7 @@ vluint64_t sim_time = 0;
 
 VerilatedContext* contextp = NULL;
 VerilatedVcdC* tfp = NULL;
-static Vtb* top;
+static Vsoc* top;
 
 // =============== Memory ===============
 #define MEM_BASE 0x80000000
@@ -44,7 +44,7 @@ static long load_image(char *img_file) {
 void sim_init() {
     contextp = new VerilatedContext;
     tfp = new VerilatedVcdC;
-    top = new Vtb;
+    top = new Vsoc;
     contextp->traceEverOn(true);
     top->trace(tfp, 0);
     tfp->open("dump.vcd");

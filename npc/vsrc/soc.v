@@ -53,6 +53,10 @@ module soc (
         .r_addr_i ( riscv_r_addr_o  ),
         .r_data_o ( ram_r_data_o  )
     );
+    
+    initial begin
+        $display("########  pass  !!!#########");
+    end
 
 endmodule //soc
 

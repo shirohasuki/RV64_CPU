@@ -1,4 +1,4 @@
-TOPNAME = tb
+TOPNAME = soc
 INC_PATH ?= /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/include \
 			# /usr/lib/llvm-11/include \ 
 

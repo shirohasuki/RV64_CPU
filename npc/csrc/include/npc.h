@@ -4,7 +4,7 @@
 // verilator
 #include "verilated.h"
 #include "verilated_vcd_c.h"
-#include "Vtb.h"
+#include "Vsoc.h"
 
 
 // #define CONFIG_DIFFTEST 1

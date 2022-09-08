@@ -1,16 +1,16 @@
 // Verilated -*- C++ -*-
 // DESCRIPTION: Verilator output: Symbol table implementation internals
 
-#include "Vtb__Syms.h"
-#include "Vtb.h"
-#include "Vtb___024root.h"
+#include "Vsoc__Syms.h"
+#include "Vsoc.h"
+#include "Vsoc___024root.h"
 
 // FUNCTIONS
-Vtb__Syms::~Vtb__Syms()
+Vsoc__Syms::~Vsoc__Syms()
 {
 }
 
-Vtb__Syms::Vtb__Syms(VerilatedContext* contextp, const char* namep,Vtb* modelp)
+Vsoc__Syms::Vsoc__Syms(VerilatedContext* contextp, const char* namep,Vsoc* modelp)
     : VerilatedSyms{contextp}
     // Setup internal state of the Syms class
     , __Vm_modelp{modelp}

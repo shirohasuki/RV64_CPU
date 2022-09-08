@@ -30,7 +30,7 @@ static long load_image(char *img_file) {
     fseek(fp, 0, SEEK_END);  // fseek:把与fp有关的文件位置指针放到一个指定位置 // fseek(fp, 0, SEEK_END)文件指针定位到文件末尾，偏移0个字节
     long img_size = ftell(fp);    // ftell:返回文件大小
 
-    printf("The image is %s, size = %ld", img_file, img_size);
+    printf("The image is %s, size = %ld\n", img_file, img_size);
 
     fseek(fp, 0, SEEK_SET); // fseek(fp, 0, SEEK_SET)文件指针定位到文件末尾，偏移0个字节
     int ret = fread(mem, img_size, 1, fp); // 从fp向mem读img_size大小

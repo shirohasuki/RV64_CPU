@@ -36,16 +36,20 @@ VM_MODPREFIX = Vtb
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
 	-I/home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/include \
+	-I/usr/lib/llvm-11/include \
 	-DTOP_NAME="Vtb" \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
 	-lSDL2 \
 	-lSDL2_image \
+	-ldl -LDFLAGS -I/usr/lib/llvm-11/include -LDFLAGS -std=c++14 -LDFLAGS -fno-exceptions -LDFLAGS -D_GNU_SOURCE -LDFLAGS -D__STDC_CONSTANT_MACROS -LDFLAGS -D__STDC_FORMAT_MACROS -LDFLAGS -D__STDC_LIMIT_MACROS -LDFLAGS -fPIE -LDFLAGS -lLLVM-11 \
 
 # User .cpp files (from .cpp's on Verilator command line)
 VM_USER_CLASSES = \
 	main \
+	disasm \
+	mem \
 	utils \
 
 # User .cpp directories (from .cpp's on Verilator command line)
@@ -64,6 +68,10 @@ include $(VERILATOR_ROOT)/include/verilated.mk
 VPATH += $(VM_USER_DIR)
 
 main.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/main.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+disasm.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils/disasm.c
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+mem.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils/mem.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 utils.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils/utils.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<

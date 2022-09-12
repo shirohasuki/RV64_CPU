@@ -1,4 +1,5 @@
 `include "./defines.v"
+// import "DPI-C" function void ebreak();
 
 module ex (
     // from id_ex // 
@@ -77,6 +78,9 @@ module ex (
     
 
     always @(*) begin
+        // if (inst_i == `INST_EBREAK) begin 
+        //     ebreak();
+        // end 
         case (opcode) 
             `INST_TYPE_I:begin
                 jump_addr_o = 64'b0;

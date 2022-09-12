@@ -1,7 +1,6 @@
 TOPNAME = tb
 INC_PATH ?= /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/include \
-			# ./vsrc/ \
-# /usr/lib/llvm-11/include \ 
+			/usr/lib/llvm-11/include # for disasm 
 
 VERILATOR = verilator
 VERILATOR_CFLAGS += -MMD --build -cc  --trace \
@@ -26,7 +25,8 @@ CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*
 # rules for verilator
 INCFLAGS = $(addprefix -I, $(INC_PATH))
 CFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
-LDFLAGS += -lSDL2 -lSDL2_image # "-ldl $(shell llvm-config --cxxflags) -fPIE $(shell llvm-config --libs)"
+LDFLAGS += -lSDL2 -lSDL2_image "-ldl $(shell llvm-config-11 --cxxflags) -fPIE $(shell llvm-config-11 --libs)"
+
 
 $(BIN): ${VSRCS} ${CSRCS} 
 	@rm -rf $(OBJ_DIR)

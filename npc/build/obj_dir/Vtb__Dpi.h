@@ -16,7 +16,9 @@ extern "C" {
 
 
     // DPI IMPORTS
-    // DPI import at /home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/inst_fetch.v:3:30
+    // DPI import at /home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/inst_fetch.v:5:30
+    extern void ebreak();
+    // DPI import at /home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/inst_fetch.v:4:30
     extern void pmem_read(long long raddr, long long* rdata);
 
 #ifdef __cplusplus

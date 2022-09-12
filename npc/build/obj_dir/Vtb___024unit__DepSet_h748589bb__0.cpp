@@ -19,3 +19,11 @@ VL_INLINE_OPT void Vtb___024unit____Vdpiimwrap_pmem_read_TOP____024unit(QData/*6
     pmem_read(raddr__Vcvt, &rdata__Vcvt);
     rdata = rdata__Vcvt;
 }
+
+extern "C" void ebreak();
+
+VL_INLINE_OPT void Vtb___024unit____Vdpiimwrap_ebreak_TOP____024unit() {
+    VL_DEBUG_IF(VL_DBG_MSGF("+        Vtb___024unit____Vdpiimwrap_ebreak_TOP____024unit\n"); );
+    // Body
+    ebreak();
+}

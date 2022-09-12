@@ -1,9 +1,10 @@
 TOPNAME = tb
 INC_PATH ?= /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/include \
-			# /usr/lib/llvm-11/include \ 
+			# ./vsrc/ \
+# /usr/lib/llvm-11/include \ 
 
 VERILATOR = verilator
-VERILATOR_CFLAGS += -MMD --build -cc  --trace\
+VERILATOR_CFLAGS += -MMD --build -cc  --trace \
 				-O3 --x-assign fast --x-initial fast --noassert \
 				-Wno-fatal 
 #  --cc 参数告诉 Verilator 转换为 C++。 Verilator 还支持转换为 SystemC，这可以通过使用 --sc 来完成，但我们暂时不会使用此功能。
@@ -29,8 +30,8 @@ LDFLAGS += -lSDL2 -lSDL2_image # "-ldl $(shell llvm-config --cxxflags) -fPIE $(s
 
 $(BIN): ${VSRCS} ${CSRCS} 
 	@rm -rf $(OBJ_DIR)
-	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	verilator $(VERILATOR_CFLAGS) \
+# $(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
+	verilator $(VERILATOR_CFLAGS) +incdir+./vsrc\
 		--top $(TOPNAME) $^\
 		$(addprefix -CFLAGS , $(CFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
 		--Mdir $(OBJ_DIR) --exe 

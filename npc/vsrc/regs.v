@@ -16,7 +16,7 @@ module regs (
     // r:read, w:write
 );
 
-    reg[63:0] regs[0:63];
+    reg[63:0] regs[0:31]; // 32个64位宽
 
     always @(*) begin
         if (rst == 1'b0) 
@@ -31,7 +31,7 @@ module regs (
 
     always @(*) begin
         if (rst == 1'b0) 
-            rs2_rdata_o = 64'b0;  
+            rs2_rdata_o = 64'b0;   
         else if (rs2_raddr_i == 5'b0)
             rs2_rdata_o = 64'b0; // x0恒为0
         else if (reg_wen && reg_waddr_i == rs2_raddr_i)
@@ -42,7 +42,7 @@ module regs (
 
     always @(posedge clk) begin
         if (rst == 1'b0) begin
-            for (integer i = 0; i < 64; i = i + 1) begin
+            for (integer i = 0; i < 32; i = i + 1) begin
                 regs[i] <= 64'b0;
             end // 初始化寄存器
         end

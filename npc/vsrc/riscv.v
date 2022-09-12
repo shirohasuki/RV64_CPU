@@ -5,19 +5,19 @@ module riscv (
     input  wire rst,
 
     // form rom
-    input  wire [63:0] inst_i, 
+    input  wire [31:0] inst_i, 
     // to rom    
     output wire [63:0] inst_addr_o ,
 
     //read  mem
-    input	wire [63:0]	  mem_r_data_i		,	
+    input	wire [31:0]	  mem_r_data_i		,	
 	output  wire 	   	  mem_r_req_o		,
 	output  wire [11:0]   mem_r_addr_o		,
 	
 	//write mem
 	output  wire	 	  mem_w_req_o		,
 	output  wire  [11:0]  mem_w_addr_o		,
-	output  wire  [63:0]  mem_w_data_o
+	output  wire  [31:0]  mem_w_data_o
 );
     // pc 2 if
     wire[63:0] pc_reg_pc_o;
@@ -32,19 +32,19 @@ module riscv (
 
     // if 2 if_id
     wire[63:0] if_inst_addr_o;
-    wire[63:0] if_inst_o;
+    wire[31:0] if_inst_o;
 
     inst_fetch inst_fetch_inst (
         .pc_addr_i     ( pc_reg_pc_o   ),
-        .rom2if_inst_i ( inst_i        ),
-        .if2rom_addr_o ( inst_addr_o   ),
+        // .rom2if_inst_i ( inst_i        ),
+        // .if2rom_addr_o ( inst_addr_o   ),
         .inst_addr_o   ( if_inst_addr_o),
         .inst_o        ( if_inst_o     )
     );
 
     // if_id 2 id
     wire[63:0] if_id_inst_addr_o;
-    wire[63:0] if_id_inst_o;
+    wire[31:0] if_id_inst_o;
     
     if_id if_id_inst (
         .clk         ( clk               ),
@@ -61,7 +61,7 @@ module riscv (
     wire[4:0] id_rs2_addr_o;
     
     // id 2 id_ex
-    wire[63:0]  id_inst_o;  
+    wire[31:0]  id_inst_o;  
     wire[63:0]  id_inst_addr_o; 
     wire[63:0]  id_op1_o; 
     wire[63:0]  id_op2_o;
@@ -104,7 +104,7 @@ module riscv (
     );
 
     // id_ex 2 ex
-    wire[63:0]  id_ex_inst_o;  
+    wire[31:0]  id_ex_inst_o;  
     wire[63:0]  id_ex_inst_addr_o; 
     wire[63:0]  id_ex_op1_o; 
     wire[63:0]  id_ex_op2_o;

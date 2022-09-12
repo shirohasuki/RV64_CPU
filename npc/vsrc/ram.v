@@ -1,5 +1,5 @@
 module ram #(
-    parameter DW = 64, // 数据位宽
+    parameter DW = 32, // 数据位宽
     parameter AW = 12, // 地址位宽
     parameter MEM_NUM = 4096 // 深度 
 )
@@ -15,8 +15,8 @@ module ram #(
 );
 
     reg rd_wr_equ_flag;
-    reg[63:0] w_data_reg;
-    wire[63:0] r_data_write;
+    reg[31:0] w_data_reg;
+    wire[31:0] r_data_write;
     assign r_data_o = rd_wr_equ_flag ? w_data_i : r_data_write; // 二选一选择器 
     // 若同时读写同一地址(冲突)，则读的数据为写的数据(w_data_i)
     // 若不冲突,则连至ram_template
@@ -59,7 +59,7 @@ endmodule
 
 
 module ram_template #(
-    parameter DW = 64, // 数据位宽
+    parameter DW = 32, // 数据位宽
     parameter AW = 12, // 地址位宽
     parameter MEM_NUM = 4096 // 深度 
 )

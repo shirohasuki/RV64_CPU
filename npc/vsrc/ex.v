@@ -1,8 +1,8 @@
-`include "./vsrc/defines.v"
+`include "./defines.v"
 
 module ex (
     // from id_ex // 
-    input wire[63:0] inst_i,
+    input wire[31:0] inst_i,
 	input wire[63:0] inst_addr_i,
 	input wire[63:0] op1_i,	
 	input wire[63:0] op2_i,
@@ -39,8 +39,8 @@ module ex (
     assign rs1    = inst_i[19:15];
     assign rs2    = inst_i[24:20];
     //assign shamt= inst_i[24:20];
-    assign func7  = inst_i[63:25];
-    //assign imm  = inst_i[63:20];
+    assign func7  = inst_i[31:25];
+    //assign imm  = inst_i[31:20];
 
 
     // ALU
@@ -120,7 +120,8 @@ module ex (
                     end // 逻辑左移
                     `INST_SRI:begin // SRI包含srli和srai
                         if (func7[5] == 1'b1) begin // SRAI
-                            rd_wdata_o = ((op1_i_shift_right_op2_i) & SRA_mask) | ({64{op1_i[63]}} & (~SRA_mask));
+                            // rd_wdata_o = ((op1_i_shift_right_op2_i) & SRA_mask) | ({32{op1_i[31]}} & (~SRA_mask));
+                            rd_wdata_o = 64'b0; 
                             rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
                         end 
@@ -176,7 +177,8 @@ module ex (
                     end 
                     `INST_SR: begin 
                         if (func7[5] == 1'b1) begin // SRA 算术右移
-                            rd_wdata_o = ((op1_i_shift_right_op2_i) & SRA_mask) | ({64{op1_i[63]}} & (~SRA_mask));
+                            // rd_wdata_o = ((op1_i_shift_right_op2_i) & SRA_mask) | ({32{op1_i[31]}} & (~SRA_mask));
+                            rd_wdata_o = 64'b0;
                             rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
                         end 

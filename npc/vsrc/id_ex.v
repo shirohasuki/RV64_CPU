@@ -1,4 +1,4 @@
-`include "./vsrc/defines.v"
+`include "./defines.v"
 
 module id_ex(
 	input wire clk,
@@ -8,7 +8,7 @@ module id_ex(
     input wire hold_flag_i,
 
     //from id
-	input wire[63:0] inst_i,
+	input wire[31:0] inst_i,
 	input wire[63:0] inst_addr_i,
 	input wire[63:0] op1_i,	
 	input wire[63:0] op2_i,
@@ -18,7 +18,7 @@ module id_ex(
     input wire[63:0] offset_addr_i, 
 	
     //to ex
-	output wire[63:0] inst_o,
+	output wire[31:0] inst_o,
 	output wire[63:0] inst_addr_o,
 	output wire[63:0] op1_o,	
 	output wire[63:0] op2_o,
@@ -28,7 +28,7 @@ module id_ex(
     output wire[63:0] offset_addr_o 	
 );
 
-    dff_set #(64) dff1(clk, rst, hold_flag_i,`INST_NOP, inst_i, inst_o);
+    dff_set #(32) dff1(clk, rst, hold_flag_i,`INST_NOP, inst_i, inst_o);
 	
 	dff_set #(64) dff2(clk, rst, hold_flag_i, 64'b0, inst_addr_i, inst_addr_o);
 	

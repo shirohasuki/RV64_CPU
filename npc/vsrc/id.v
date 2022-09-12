@@ -1,8 +1,8 @@
-`include "./vsrc/defines.v"
+`include "./defines.v"
 
 module id(
 	//from if_id
-	input wire[63:0] inst_i,
+	input wire[31:0] inst_i,
 	input wire[63:0] inst_addr_i,
 		
 	// from regs
@@ -13,7 +13,7 @@ module id(
 	output reg[4:0]  rs2_addr_o,
 	
 	//to id_ex
-	output reg[63:0] inst_o,
+	output reg[31:0] inst_o,
 	output reg[63:0] inst_addr_o,
 	output reg[63:0] op1_o,	
 	output reg[63:0] op2_o,
@@ -34,11 +34,11 @@ module id(
     wire[11:0] imm;
     wire[4:0] shamt; // I形的移位
 
-    wire[63:0] immI = {{20{inst_i[63]}}, inst_i[63:20]}; // 符号位拓展，imm[11]向前拓展为20位
-    wire[63:0] immU = {inst_i[63:12], 12'b0};
-    wire[63:0] immS = {{20{inst_i[63]}}, inst_i[63:25], inst_i[11:7]};
-    wire[63:0] immB = {{20{inst_i[63]}}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
-    wire[63:0] immJ = {{12{inst_i[63]}}, inst_i[19:12], inst_i[20], inst_i[30:21], 1'b0};
+    wire[63:0] immI = {32'b0, {20{inst_i[31]}}, inst_i[31:20]}; // 符号位拓展，imm[11]向前拓展为20位
+    wire[63:0] immU = {32'b0, inst_i[31:12], 12'b0};
+    wire[63:0] immS = {32'b0, {20{inst_i[31]}}, inst_i[31:25], inst_i[11:7]};
+    wire[63:0] immB = {32'b0, {20{inst_i[31]}}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+    wire[63:0] immJ = {32'b0, {12{inst_i[31]}}, inst_i[19:12], inst_i[20], inst_i[30:21], 1'b0};
 
     assign opcode = inst_i[6:0];
     assign rd     = inst_i[11:7];
@@ -46,15 +46,15 @@ module id(
     assign rs1    = inst_i[19:15];
     assign rs2    = inst_i[24:20];
     assign shamt  = inst_i[24:20];
-    assign func7  = inst_i[63:25];
-    assign imm    = inst_i[63:20];
+    assign func7  = inst_i[31:25];
+    assign imm    = inst_i[31:20];
 
 
     always @(*) begin
         inst_o = inst_i;
         inst_addr_o = inst_addr_i;
         case (opcode)
-            `INST_TYPE_I:begin
+            `INST_TYPE_I: begin
                 base_addr_o   = 64'b0;// 基地址
                 offset_addr_o = 64'b0;// 偏移地址
                 case (func3)
@@ -70,7 +70,7 @@ module id(
                         rs1_addr_o = rs1;
                         rs2_addr_o = 5'b0;
                         op1_o      = rs1_data_i;
-                        op2_o      = {27'b0, shamt}; 
+                        op2_o      = {59'b0, shamt}; 
                         rd_addr_o  = rd;
                         reg_wen    = 1'b1; // 要回写 
                     end
@@ -101,7 +101,7 @@ module id(
                         rs1_addr_o = rs1;
                         rs2_addr_o = rs2;
                         op1_o = rs1_data_i;
-                        op2_o = {27'b0, rs2_data_i[4:0]}; // 移位不能超过五位
+                        op2_o = {59'b0, rs2_data_i[4:0]}; // 移位不能超过五位
                         rd_addr_o = rd;
                         reg_wen = 1'b1; // 要回写 
                     end 
@@ -131,8 +131,8 @@ module id(
                     default: begin
                         rs1_addr_o = 5'b0;
                         rs2_addr_o = 5'b0;
-                        op1_o      = 64'b0;
-                        op2_o      = 64'b0;
+                        op1_o = 64'b0;
+                        op2_o = 64'b0;
                         rd_addr_o  = 5'b0;
                         reg_wen    = 1'b0; 
                         base_addr_o   = 64'b0; // 基地址

@@ -15,6 +15,9 @@
 
 // INCLUDE MODULE CLASSES
 #include "Vtb___024root.h"
+#include "Vtb___024unit.h"
+
+// DPI TYPES for DPI Export callbacks (Internal use)
 
 // SYMS CLASS (contains all model state)
 class Vtb__Syms final : public VerilatedSyms {
@@ -27,6 +30,7 @@ class Vtb__Syms final : public VerilatedSyms {
 
     // MODULE INSTANCE STATE
     Vtb___024root                  TOP;
+    Vtb___024unit                  TOP____024unit;
 
     // CONSTRUCTORS
     Vtb__Syms(VerilatedContext* contextp, const char* namep, Vtb* modelp);

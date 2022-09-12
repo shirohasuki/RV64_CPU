@@ -6,21 +6,21 @@
 #include "verilated_dpi.h"
 
 #include "Vtb__Syms.h"
-#include "Vtb___024root.h"
+#include "Vtb___024unit.h"
 
-void Vtb___024root___ctor_var_reset(Vtb___024root* vlSelf);
+void Vtb___024unit___ctor_var_reset(Vtb___024unit* vlSelf);
 
-Vtb___024root::Vtb___024root(const char* _vcname__)
+Vtb___024unit::Vtb___024unit(const char* _vcname__)
     : VerilatedModule(_vcname__)
  {
     // Reset structure values
-    Vtb___024root___ctor_var_reset(this);
+    Vtb___024unit___ctor_var_reset(this);
 }
 
-void Vtb___024root::__Vconfigure(Vtb__Syms* _vlSymsp, bool first) {
+void Vtb___024unit::__Vconfigure(Vtb__Syms* _vlSymsp, bool first) {
     if (false && first) {}  // Prevent unused
     this->vlSymsp = _vlSymsp;
 }
 
-Vtb___024root::~Vtb___024root() {
+Vtb___024unit::~Vtb___024unit() {
 }

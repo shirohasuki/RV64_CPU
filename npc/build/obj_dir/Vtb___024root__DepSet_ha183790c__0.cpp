@@ -109,9 +109,8 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
                     = ((2U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)
                         ? ((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)
-                            ? ((QData)((IData)((vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
-                                                >> 0xcU))) 
-                               << 0xcU) : 0ULL) : 0ULL);
+                            ? vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immU
+                            : 0ULL) : 0ULL);
             } else if ((2U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                 if ((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
@@ -145,9 +144,7 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
                         = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_addr_o;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
-                        = ((QData)((IData)((vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
-                                            >> 0xcU))) 
-                           << 0xcU);
+                        = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immU;
                 } else {
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;

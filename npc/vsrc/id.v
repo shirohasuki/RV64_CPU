@@ -1,5 +1,7 @@
 `include "./defines.v"
 
+// import "DPI-C" function void ebreak();
+
 module id(
 	//from if_id
 	input wire[31:0] inst_i,
@@ -34,11 +36,11 @@ module id(
     wire[11:0] imm;
     wire[4:0] shamt; // I形的移位
 
-    wire[63:0] immI = {32'b0, {20{inst_i[31]}}, inst_i[31:20]}; // 符号位拓展，imm[11]向前拓展为20位
-    wire[63:0] immU = {32'b0, inst_i[31:12], 12'b0};
-    wire[63:0] immS = {32'b0, {20{inst_i[31]}}, inst_i[31:25], inst_i[11:7]};
-    wire[63:0] immB = {32'b0, {20{inst_i[31]}}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
-    wire[63:0] immJ = {32'b0, {12{inst_i[31]}}, inst_i[19:12], inst_i[20], inst_i[30:21], 1'b0};
+    wire[63:0] immI = {{52{inst_i[31]}}, inst_i[31:20]}; // 符号位拓展，imm[11]向前拓展为20位
+    wire[63:0] immU = {{32{inst_i[31]}}, inst_i[31:12], 12'b0};
+    wire[63:0] immS = {{52{inst_i[31]}}, inst_i[31:25], inst_i[11:7]};
+    wire[63:0] immB = {{52{inst_i[31]}}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+    wire[63:0] immJ = {{44{inst_i[31]}}, inst_i[19:12], inst_i[20], inst_i[30:21], 1'b0};
 
     assign opcode = inst_i[6:0];
     assign rd     = inst_i[11:7];
@@ -142,12 +144,12 @@ module id(
             end
             // J型指令此处统一立即数为op2_i 
             `INST_JAL: begin
-                rs1_addr_o = 5'b0;
-                rs2_addr_o = 5'b0;
-                op1_o =  inst_addr_i;
-                op2_o = 64'h4;
-                rd_addr_o = rd;
-                reg_wen = 1'b1; 
+                rs1_addr_o    = 5'b0;
+                rs2_addr_o    = 5'b0;
+                op1_o         =  inst_addr_i;
+                op2_o         = 64'h4;
+                rd_addr_o     = rd;
+                reg_wen       = 1'b1; 
                 base_addr_o   = inst_addr_i; // 基地址
                 offset_addr_o = immJ; // 偏移地址 
             end
@@ -182,12 +184,12 @@ module id(
                 offset_addr_o = immU ; // 偏移地址  
             end// 不跳转
             default: begin
-                rs1_addr_o = 5'b0;
-                rs2_addr_o = 5'b0;
-                op1_o      = 64'b0;
-                op2_o      = 64'b0;
-                rd_addr_o  = 5'b0;
-                reg_wen    = 1'b0; 
+                rs1_addr_o    = 5'b0;
+                rs2_addr_o    = 5'b0;
+                op1_o         = 64'b0;
+                op2_o         = 64'b0;
+                rd_addr_o     = 5'b0;
+                reg_wen       = 1'b0; 
                 base_addr_o   = 64'b0; // 基地址
                 offset_addr_o = 64'b0; // 偏移地址 
             end 

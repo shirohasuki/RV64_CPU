@@ -34,8 +34,8 @@ $(BIN): ${VSRCS} ${CSRCS}
 	verilator $(VERILATOR_CFLAGS) +incdir+./vsrc\
 		--top $(TOPNAME) $^\
 		$(addprefix -CFLAGS , $(CFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
-		--Mdir $(OBJ_DIR) --exe 
-	make -C ${OBJ_DIR} -f V$(TOPNAME).mk V$(TOPNAME)
+		--Mdir $(OBJ_DIR) --exe
+	make -C ${OBJ_DIR} -f V$(TOPNAME).mk V$(TOPNAME) -j2
 
 # 使用 --exe main.cpp 构建仿真可执行文件 	
  

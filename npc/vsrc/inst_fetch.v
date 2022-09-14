@@ -2,7 +2,7 @@
 `include "./defines.v"
 
 import "DPI-C" function void pmem_read(input longint raddr, output longint rdata);
-import "DPI-C" function void ebreak();
+
 
 module inst_fetch(
     // from pc
@@ -15,22 +15,18 @@ module inst_fetch(
 
     reg[63:0] inst_get;
 
+
     assign inst_addr_o = pc_addr_i;
 
     always @(*) begin
-        pmem_read(pc_addr_i, inst_get);
+        pmem_read(pc_addr_i, inst_get); // 读指令
     end
 
     assign inst_o = inst_get[31:0];
     
     always @(*) begin
-        $display("1. pc_addr: %x\n2. inst: %x", pc_addr_i, inst_o);
-        // $display("3. %b", inst_get);
+        $display("IFU: 1. pc_addr: %x\nIFU: 2. inst: %x", pc_addr_i, inst_o);
         $display("===========================");
-        if (inst_o == `INST_EBREAK) begin 
-            $display("HIT EBREAK");
-            ebreak();
-        end 
     end
     
 endmodule

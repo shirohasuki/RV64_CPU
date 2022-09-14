@@ -1,7 +1,7 @@
 #include "npc.h"
 
 
-#define MAX_SIM_TIME 30 // 最大仿真周期，中途读取到ebreak自动退出
+#define MAX_SIM_TIME 200 // 最大仿真周期，中途读取到ebreak自动退出
 vluint64_t sim_time = 0;
 
 
@@ -9,7 +9,7 @@ VerilatedContext* contextp = NULL;
 VerilatedVcdC* tfp = NULL;
 static Vtb* top;
 
-
+extern uint64_t cpu_pc;
 
 //================ SIM FUNCTION =====================//
 void sim_init() {
@@ -33,6 +33,14 @@ void step_and_dump_wave() {
     sim_time++;
 }
 
+void exec_once() {
+#ifdef CONFIG_NPC_ITRACE 
+    itrace_record(cpu_pc);
+#endif
+    top->clk ^= 1;
+    step_and_dump_wave();
+}
+
 void sim_exit() {
     step_and_dump_wave();
     tfp->close();
@@ -40,14 +48,17 @@ void sim_exit() {
 
 
 int main() {
-    
+
     load_image("/home/shiroha/Code/ysyx/ysyx-workbench/npc/image.bin");
 
     sim_init();
-    
+
+#ifdef CONFIG_NPC_ITRACE
+    init_disasm("riscv64-pc-linux-gnu");
+#endif
+
     while (sim_time < MAX_SIM_TIME) {
-        top->clk ^= 1;
-        step_and_dump_wave();
+        exec_once();
     }
     sim_exit();
 } 

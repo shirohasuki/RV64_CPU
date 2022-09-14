@@ -50,6 +50,7 @@ VM_USER_CLASSES = \
 	main \
 	disasm \
 	mem \
+	trace \
 	utils \
 
 # User .cpp directories (from .cpp's on Verilator command line)
@@ -72,6 +73,8 @@ main.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/main.cpp
 disasm.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils/disasm.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 mem.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils/mem.c
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+trace.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils/trace.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 utils.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils/utils.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<

@@ -71,8 +71,10 @@ void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte) {
     MCInst inst;
     llvm::ArrayRef<uint8_t> arr(code, nbyte);
     uint64_t dummy_size = 0;
+    // printf("7.pc:%lx\n", pc);
+    // printf("7.inst:%lx\n", inst);
     gDisassembler->getInstruction(inst, dummy_size, arr, pc, llvm::nulls());
-
+    // printf("8.pc:%lx\n", pc);
     std::string s;
     raw_string_ostream os(s);
     gIP->printInst(&inst, pc, "", *gSTI, os);
@@ -82,3 +84,18 @@ void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte) {
     assert((int)s.length() - skip < size);
     strcpy(str, p);
 }
+
+// void disassemble(char *str, uint64_t pc, uint8_t *code, int nbyte) {
+//     MCInst inst;
+//     llvm::ArrayRef<uint8_t> arr(code, nbyte);
+//     uint64_t dummy_size = 0;
+//     gDisassembler->getInstruction(inst, dummy_size, arr, pc, llvm::nulls());
+
+//     std::string s;
+//     raw_string_ostream os(s);
+//     gIP->printInst(&inst, pc, "", *gSTI, os);
+
+//     int skip = s.find_first_not_of('\t');
+//     const char *p = s.c_str() + skip;
+//     strcpy(str, p);
+// }

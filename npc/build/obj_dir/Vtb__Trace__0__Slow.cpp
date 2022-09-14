@@ -442,13 +442,10 @@ VL_ATTR_COLD void Vtb___024root__trace_full_sub_0(Vtb___024root* vlSelf, Verilat
     tracep->fullSData(oldp+67,((vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
                                 >> 0x14U)),12);
     tracep->fullQData(oldp+68,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immI),64);
-    tracep->fullQData(oldp+70,(((QData)((IData)((vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
-                                                 >> 0xcU))) 
-                                << 0xcU)),64);
-    tracep->fullQData(oldp+72,((((QData)((IData)((0xfffffU 
-                                                  & (- (IData)(
-                                                               (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
-                                                                >> 0x1fU)))))) 
+    tracep->fullQData(oldp+70,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immU),64);
+    tracep->fullQData(oldp+72,((((- (QData)((IData)(
+                                                    (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
+                                                     >> 0x1fU)))) 
                                  << 0xcU) | (QData)((IData)(
                                                             ((0xfe0U 
                                                               & (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
@@ -457,10 +454,9 @@ VL_ATTR_COLD void Vtb___024root__trace_full_sub_0(Vtb___024root* vlSelf, Verilat
                                                                 & (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
                                                                    >> 7U))))))),64);
     tracep->fullQData(oldp+74,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immB),64);
-    tracep->fullQData(oldp+76,((((QData)((IData)((0xfffU 
-                                                  & (- (IData)(
-                                                               (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
-                                                                >> 0x1fU)))))) 
+    tracep->fullQData(oldp+76,((((- (QData)((IData)(
+                                                    (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
+                                                     >> 0x1fU)))) 
                                  << 0x14U) | (QData)((IData)(
                                                              ((0xff000U 
                                                                & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o) 

@@ -58,6 +58,7 @@ VL_MODULE(Vtb___024root) {
     QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_rd_data_o;
     QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__inst_fetch_inst__DOT__inst_get;
     QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immI;
+    QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immU;
     QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immB;
     QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_add_op2_i;
     QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_and_op2_i;
@@ -66,7 +67,7 @@ VL_MODULE(Vtb___024root) {
     QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_shift_left_op2_i;
     QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_shift_right_op2_i;
     QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__base_addr_add_addr_offset;
-    QData/*63:0*/ __Vtask_pmem_read__0__rdata;
+    QData/*63:0*/ __Vtask_pmem_read__1__rdata;
     VlUnpacked<QData/*63:0*/, 32> tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs;
     VlUnpacked<CData/*0:0*/, 3> __Vm_traceActivity;
 

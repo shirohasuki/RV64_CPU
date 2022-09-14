@@ -1,3 +1,5 @@
+import "DPI-C" function void get_regs(input logic [63:0] regs[]);
+
 module regs (
     input  wire clk,    
     input  wire rst,    
@@ -10,7 +12,7 @@ module regs (
     output  reg[63:0] rs2_rdata_o, 
 
     // from ex
-    input wire[4:0] reg_waddr_i,
+    input wire[4:0]  reg_waddr_i,
 	input wire[63:0] reg_wdata_i,
 	input wire reg_wen
     // r:read, w:write
@@ -51,6 +53,8 @@ module regs (
         end 
         // 组合逻辑要补全else，时序不需要
     end // 回写rd
+
+    initial get_regs(regs);
 
 endmodule 
 

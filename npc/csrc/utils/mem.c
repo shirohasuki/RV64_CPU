@@ -7,7 +7,7 @@ uint8_t* cpu2mem(ll addr) { return mem + (addr - MEM_BASE); }
 
 extern "C" void pmem_read(ll raddr, ll *rdata) {
     if (raddr < MEM_BASE) {
-        printf("raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
+        printf("[pmem_read] raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
         return;
     }
     uint8_t *pt = cpu2mem(raddr) + 7;
@@ -16,7 +16,7 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
         ret = (ret << 8) | (*pt--);
     }
     *rdata = ret;
-    printf("addr is:%llx, data is:%llx\n", raddr, *rdata);
+    printf("[pmem_read] addr is:%llx, data is:%llx\n", raddr, *rdata);
 }
 
 // Memory Write

@@ -1,6 +1,6 @@
 #include "npc.h"
 
-CPU_state ref_cpu;
+extern CPU_state ref_cpu;
 
 //=====================Difftest=========================
 #ifdef CONFIG_NPC_DIFFTEST

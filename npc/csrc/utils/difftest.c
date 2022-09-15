@@ -53,7 +53,7 @@ int check_regs_npc(uint64_t *ref_regs) {
 
 uint64_t ref_regs[33];
 void difftest_exec_once() {
-
+    
     printf("check at nemu_pc=%lx, npc_pc=%lx\n", ref_regs[32], cpu_pc);
 
     ref_difftest_exec(1);

@@ -1,9 +1,9 @@
-TOPNAME = soc
+TOPNAME = tb
 INC_PATH ?= /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/include \
-			# /usr/lib/llvm-11/include \ 
+			/usr/lib/llvm-11/include # for disasm 
 
 VERILATOR = verilator
-VERILATOR_CFLAGS += -MMD --build -cc  --trace\
+VERILATOR_CFLAGS += -MMD --build -cc  --trace \
 				-O3 --x-assign fast --x-initial fast --noassert \
 				-Wno-fatal 
 #  --cc 参数告诉 Verilator 转换为 C++。 Verilator 还支持转换为 SystemC，这可以通过使用 --sc 来完成，但我们暂时不会使用此功能。
@@ -25,16 +25,17 @@ CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*
 # rules for verilator
 INCFLAGS = $(addprefix -I, $(INC_PATH))
 CFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
-LDFLAGS += -lSDL2 -lSDL2_image # "-ldl $(shell llvm-config --cxxflags) -fPIE $(shell llvm-config --libs)"
+LDFLAGS += -lSDL2 -lSDL2_image "-ldl $(shell llvm-config-11 --cxxflags) -fPIE $(shell llvm-config-11 --libs)"
+
 
 $(BIN): ${VSRCS} ${CSRCS} 
 	@rm -rf $(OBJ_DIR)
 # $(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	verilator $(VERILATOR_CFLAGS) \
+	verilator $(VERILATOR_CFLAGS) +incdir+./vsrc\
 		--top $(TOPNAME) $^\
 		$(addprefix -CFLAGS , $(CFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
-		--Mdir $(OBJ_DIR) --exe 
-	make -C ${OBJ_DIR} -f V$(TOPNAME).mk V$(TOPNAME)
+		--Mdir $(OBJ_DIR) --exe
+	make -C ${OBJ_DIR} -f V$(TOPNAME).mk V$(TOPNAME) -j4
 
 # 使用 --exe main.cpp 构建仿真可执行文件 	
  

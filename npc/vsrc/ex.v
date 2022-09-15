@@ -1,24 +1,25 @@
-`include "./vsrc/defines.v"
+`include "./defines.v"
+import "DPI-C" function void ebreak();
 
 module ex (
     // from id_ex // 
     input wire[31:0] inst_i,
-	input wire[31:0] inst_addr_i,
-	input wire[31:0] op1_i,	
-	input wire[31:0] op2_i,
+	input wire[63:0] inst_addr_i,
+	input wire[63:0] op1_i,	
+	input wire[63:0] op2_i,
 	input wire[4:0]  rd_addr_i,	
 	input wire       reg_wen_i,	 
 
-    input wire[31:0] base_addr_i, // 基地址
-    input wire[31:0] offset_addr_i, // 偏移地址
+    input wire[63:0] base_addr_i, // 基地址
+    input wire[63:0] offset_addr_i, // 偏移地址
     
     // to regs 
-    output reg[31:0] rd_wdata_o,
+    output reg[63:0] rd_wdata_o,
     output reg[4:0]  rd_waddr_o,
     output reg       reg_wen_o,
 
     // to ctrl
-    output reg[31:0] jump_addr_o,
+    output reg[63:0] jump_addr_o,
     output reg       jump_en_o,
     output reg       hold_flag_o
 );
@@ -44,14 +45,14 @@ module ex (
 
 
     // ALU
-    wire[31:0] op1_i_add_op2_i;
-    wire[31:0] op1_i_sub_op2_i;
-    wire[31:0] op1_i_and_op2_i;
-    wire[31:0] op1_i_xor_op2_i;
-    wire[31:0] op1_i_or_op2_i;
-    wire[31:0] op1_i_shift_left_op2_i;
-    wire[31:0] op1_i_shift_right_op2_i;
-    wire[31:0] base_addr_add_addr_offset; // 偏移地址计算
+    wire[63:0] op1_i_add_op2_i;
+    wire[63:0] op1_i_sub_op2_i;
+    wire[63:0] op1_i_and_op2_i;
+    wire[63:0] op1_i_xor_op2_i;
+    wire[63:0] op1_i_or_op2_i;
+    wire[63:0] op1_i_shift_left_op2_i;
+    wire[63:0] op1_i_shift_right_op2_i;
+    wire[63:0] base_addr_add_addr_offset; // 偏移地址计算
     wire op1_i_equal_op2_i; // 判断分支标志位
     wire op1_i_less_op2_i_signed;
     wire op1_i_less_op2_i_unsigned;
@@ -70,16 +71,19 @@ module ex (
 
 
     // type I
-    wire[31:0]  SRA_mask;
-    assign      SRA_mask = (32'hffff_ffff) >> op2_i[4:0];// 为了保持复用，不用shmat
+    wire[63:0]  SRA_mask;
+    assign      SRA_mask = (64'hffff_ffff) >> op2_i[4:0];// 为了保持复用，不用shmat
     // 通过掩码移位
 
     
 
     always @(*) begin
+        if (inst_i == `INST_EBREAK) begin 
+            ebreak();
+        end 
         case (opcode) 
             `INST_TYPE_I:begin
-                jump_addr_o = 32'b0;
+                jump_addr_o = 64'b0;
                 jump_en_o = 1'b0;
                 hold_flag_o = 1'b0; // 设置初值，防止出现锁存器
                 case (func3)
@@ -89,12 +93,12 @@ module ex (
                         reg_wen_o  = 1'b1;
                     end
                     `INST_SLTI:begin
-                        rd_wdata_o = {31'b0, op1_i_less_op2_i_signed};
+                        rd_wdata_o = {63'b0, op1_i_less_op2_i_signed};
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
                     end 
                     `INST_SLTIU:begin
-                        rd_wdata_o = {31'b0, op1_i_less_op2_i_unsigned}; 
+                        rd_wdata_o = {63'b0, op1_i_less_op2_i_unsigned}; 
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
                     end 
@@ -120,7 +124,8 @@ module ex (
                     end // 逻辑左移
                     `INST_SRI:begin // SRI包含srli和srai
                         if (func7[5] == 1'b1) begin // SRAI
-                            rd_wdata_o = ((op1_i_shift_right_op2_i) & SRA_mask) | ({32{op1_i[31]}} & (~SRA_mask));
+                            // rd_wdata_o = ((op1_i_shift_right_op2_i) & SRA_mask) | ({32{op1_i[31]}} & (~SRA_mask));
+                            rd_wdata_o = 64'b0; 
                             rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
                         end 
@@ -131,14 +136,14 @@ module ex (
                         end                         
                     end 
                     default:begin
-                        rd_wdata_o = 32'b0; 
+                        rd_wdata_o = 64'b0; 
                         rd_waddr_o = 5'b0;
                         reg_wen_o  = 1'b0;
                     end 
                 endcase
             end
             `INST_TYPE_R_M:begin
-                jump_addr_o = 32'b0;
+                jump_addr_o = 64'b0;
                 jump_en_o = 1'b0;
                 hold_flag_o = 1'b0;// 设置初值，防止出现锁存器
                 case (func3)
@@ -160,12 +165,12 @@ module ex (
                             reg_wen_o  = 1'b1;
                     end // 逻辑左移
                     `INST_SLT: begin 
-                            rd_wdata_o = {31'b0, op1_i_less_op2_i_signed}; 
+                            rd_wdata_o = {63'b0, op1_i_less_op2_i_signed}; 
                             rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
                     end 
                     `INST_SLTU: begin 
-                            rd_wdata_o = {31'b0, op1_i_less_op2_i_unsigned}; 
+                            rd_wdata_o = {63'b0, op1_i_less_op2_i_unsigned}; 
                             rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
                     end 
@@ -176,7 +181,8 @@ module ex (
                     end 
                     `INST_SR: begin 
                         if (func7[5] == 1'b1) begin // SRA 算术右移
-                            rd_wdata_o = ((op1_i_shift_right_op2_i) & SRA_mask) | ({32{op1_i[31]}} & (~SRA_mask));
+                            // rd_wdata_o = ((op1_i_shift_right_op2_i) & SRA_mask) | ({32{op1_i[31]}} & (~SRA_mask));
+                            rd_wdata_o = 64'b0;
                             rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
                         end 
@@ -197,7 +203,7 @@ module ex (
                             reg_wen_o  = 1'b1;
                     end 
                     default: begin
-                        rd_wdata_o = 32'b0; 
+                        rd_wdata_o = 64'b0; 
                         rd_waddr_o = 5'b0;
                         reg_wen_o  = 1'b0;
                     end 
@@ -205,7 +211,7 @@ module ex (
             end
 
             `INST_TYPE_B:begin
-                rd_wdata_o = 32'b0; 
+                rd_wdata_o = 64'b0; 
                 rd_waddr_o = 5'b0;
                 reg_wen_o  = 1'b0; 
                 case (func3)
@@ -240,7 +246,7 @@ module ex (
                         hold_flag_o = 1'b0;
                     end // 大于等于跳转(无符号)
                     default: begin
-                        jump_addr_o = 32'b0;
+                        jump_addr_o = 64'b0;
                         jump_en_o   = 1'b0;
                         hold_flag_o = 1'b0;
                     end 
@@ -267,7 +273,7 @@ module ex (
                 rd_wdata_o  = op2_i; 
                 rd_waddr_o  = rd_addr_i;
                 reg_wen_o   = 1'b1; 
-                jump_addr_o = 32'b0; //不跳转 
+                jump_addr_o = 64'b0; //不跳转 
                 jump_en_o   = 1'b0;
                 hold_flag_o = 1'b0;      
             end // Load Upper Imm (rd = imm << 12)
@@ -275,15 +281,15 @@ module ex (
                 rd_wdata_o  = op1_i_add_op2_i; 
                 rd_waddr_o  = rd_addr_i;
                 reg_wen_o   = 1'b1; 
-                jump_addr_o = 32'b0; //不跳转 
+                jump_addr_o = 64'b0; //不跳转 
                 jump_en_o   = 1'b0;
                 hold_flag_o = 1'b0;      
             end // Add Upper Imm to PC
             default: begin
-                jump_addr_o = 32'b0;
+                jump_addr_o = 64'b0;
                 jump_en_o   = 1'b0;
                 hold_flag_o = 1'b0;// 设置初值，防止出现锁存器
-                rd_wdata_o  = 32'b0; 
+                rd_wdata_o  = 64'b0; 
                 rd_waddr_o  = 5'b0;
                 reg_wen_o   = 1'b0;
             end 

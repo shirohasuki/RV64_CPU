@@ -1,57 +1,32 @@
 #include "npc.h"
-#include <stdio.h> 
-#include <assert.h> 
-#include <stdlib.h> 
 
-#define MAX_SIM_TIME 1000
+
+#define MAX_SIM_TIME 200 // 最大仿真周期，中途读取到ebreak自动退出
 vluint64_t sim_time = 0;
-// 使用 sim_time 变量来跟踪何时完成模拟。一旦我们模拟了 20 个时钟边沿，我们就可以简单地退出。之后由ebreak替代
+
 
 VerilatedContext* contextp = NULL;
 VerilatedVcdC* tfp = NULL;
-static Vsoc* top;
+static Vtb* top;
 
-// =============== Memory ===============
-#define MEM_BASE 0x80000000
-#define MEM_SIZE 65536
+extern uint64_t cpu_pc;
+ll img_size = 0;
 
-static uint8_t mem[MEM_SIZE];
-// ========================= Functions =========================
-
-// Load image from am-kernels (Makefile -> ./image.bin)
-static long load_image(char *img_file) {
-    if (img_file == NULL) {
-        printf("No image is given. Use the default build-in image.");
-        return 4096; // built-in image size
-    }
-    FILE *fp = fopen(img_file, "rb");
-    assert(fp);
-
-    fseek(fp, 0, SEEK_END);  // fseek:把与fp有关的文件位置指针放到一个指定位置 // fseek(fp, 0, SEEK_END)文件指针定位到文件末尾，偏移0个字节
-    long img_size = ftell(fp);    // ftell:返回文件大小
-
-    printf("The image is %s, size = %ld\n", img_file, img_size);
-
-    fseek(fp, 0, SEEK_SET); // fseek(fp, 0, SEEK_SET)文件指针定位到文件末尾，偏移0个字节
-    int ret = fread(mem, img_size, 1, fp); // 从fp向mem读img_size大小
-    assert(ret == 1);
-
-    fclose(fp);
-    return img_size;
-}
-
-//--------------sim-----------------//
+// void init_difftest(const char *ref_so_file);
+//================ SIM FUNCTION =====================//
 void sim_init() {
     contextp = new VerilatedContext;
     tfp = new VerilatedVcdC;
-    top = new Vsoc;
+    top = new Vtb;
+
     contextp->traceEverOn(true);
     top->trace(tfp, 0);
     tfp->open("dump.vcd");
 
-    top->rst = 1;
-    top->clk = 0;
-}
+    top->rst = 0; top->clk = 0; top->eval();
+    top->rst = 0; top->clk = 1; top->eval();
+    top->rst = 1; top->clk = 0; top->eval();    
+} // 低电平复位
 
 void step_and_dump_wave() {
     top->eval();
@@ -60,6 +35,16 @@ void step_and_dump_wave() {
     sim_time++;
 }
 
+void exec_once() {
+#ifdef CONFIG_NPC_ITRACE 
+    itrace_record(cpu_pc);
+#endif
+    top->clk ^= 1;
+    step_and_dump_wave();
+    top->clk ^= 1;
+    step_and_dump_wave();
+} // 翻转两次走一条指令
+
 void sim_exit() {
     step_and_dump_wave();
     tfp->close();
@@ -67,13 +52,21 @@ void sim_exit() {
 
 
 int main() {
-    
-    load_image("/home/shiroha/Code/ysyx/ysyx-workbench/npc/image.bin");
-    
+
+    img_size = load_image("/home/shiroha/Code/ysyx/ysyx-workbench/npc/image.bin");
+
     sim_init();
+
+#ifdef CONFIG_NPC_ITRACE
+    init_disasm("riscv64-pc-linux-gnu");
+#endif
+    // printf("%d\n", img_size);
+#ifdef CONFIG_NPC_DIFFTEST
+    init_difftest("/home/shiroha/Code/ysyx/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size);
+#endif
+
     while (sim_time < MAX_SIM_TIME) {
-        top->clk ^= 1;
-        step_and_dump_wave();
+        exec_once();
     }
     sim_exit();
 } 

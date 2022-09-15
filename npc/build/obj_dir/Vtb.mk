@@ -2,9 +2,9 @@
 # DESCRIPTION: Verilator output: Makefile for building Verilated archive or executable
 #
 # Execute this makefile from the object directory:
-#    make -f Vsoc.mk
+#    make -f Vtb.mk
 
-default: Vsoc
+default: Vtb
 
 ### Constants...
 # Perl executable (from $PERL)
@@ -30,22 +30,28 @@ VM_SC_TARGET_ARCH = linux
 
 ### Vars...
 # Design prefix (from --prefix)
-VM_PREFIX = Vsoc
+VM_PREFIX = Vtb
 # Module prefix (from --prefix)
-VM_MODPREFIX = Vsoc
+VM_MODPREFIX = Vtb
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
 	-I/home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/include \
-	-DTOP_NAME="Vsoc" \
+	-I/usr/lib/llvm-11/include \
+	-DTOP_NAME="Vtb" \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
 	-lSDL2 \
 	-lSDL2_image \
+	-ldl -LDFLAGS -I/usr/lib/llvm-11/include -LDFLAGS -std=c++14 -LDFLAGS -fno-exceptions -LDFLAGS -D_GNU_SOURCE -LDFLAGS -D__STDC_CONSTANT_MACROS -LDFLAGS -D__STDC_FORMAT_MACROS -LDFLAGS -D__STDC_LIMIT_MACROS -LDFLAGS -fPIE -LDFLAGS -lLLVM-11 \
 
 # User .cpp files (from .cpp's on Verilator command line)
 VM_USER_CLASSES = \
 	main \
+	difftest \
+	disasm \
+	mem \
+	trace \
 	utils \
 
 # User .cpp directories (from .cpp's on Verilator command line)
@@ -56,7 +62,7 @@ VM_USER_DIR = \
 
 ### Default rules...
 # Include list of all generated classes
-include Vsoc_classes.mk
+include Vtb_classes.mk
 # Include global rules
 include $(VERILATOR_ROOT)/include/verilated.mk
 
@@ -65,11 +71,19 @@ VPATH += $(VM_USER_DIR)
 
 main.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/main.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+difftest.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils/difftest.c
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+disasm.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils/disasm.c
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+mem.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils/mem.c
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+trace.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils/trace.c
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 utils.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils/utils.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 
 ### Link rules... (from --exe)
-Vsoc: $(VK_USER_OBJS) $(VK_GLOBAL_OBJS) $(VM_PREFIX)__ALL.a $(VM_HIER_LIBS)
+Vtb: $(VK_USER_OBJS) $(VK_GLOBAL_OBJS) $(VM_PREFIX)__ALL.a $(VM_HIER_LIBS)
 	$(LINK) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) $(LIBS) $(SC_LIBS) -o $@
 
 

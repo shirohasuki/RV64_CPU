@@ -4,33 +4,37 @@
 // Internal details; most calling programs do not need this header,
 // unless using verilator public meta comments.
 
-#ifndef VERILATED_VSOC__SYMS_H_
-#define VERILATED_VSOC__SYMS_H_  // guard
+#ifndef VERILATED_VTB__SYMS_H_
+#define VERILATED_VTB__SYMS_H_  // guard
 
 #include "verilated.h"
 
 // INCLUDE MODEL CLASS
 
-#include "Vsoc.h"
+#include "Vtb.h"
 
 // INCLUDE MODULE CLASSES
-#include "Vsoc___024root.h"
+#include "Vtb___024root.h"
+#include "Vtb___024unit.h"
+
+// DPI TYPES for DPI Export callbacks (Internal use)
 
 // SYMS CLASS (contains all model state)
-class Vsoc__Syms final : public VerilatedSyms {
+class Vtb__Syms final : public VerilatedSyms {
   public:
     // INTERNAL STATE
-    Vsoc* const __Vm_modelp;
+    Vtb* const __Vm_modelp;
     bool __Vm_activity = false;  ///< Used by trace routines to determine change occurred
     uint32_t __Vm_baseCode = 0;  ///< Used by trace routines when tracing multiple models
     bool __Vm_didInit = false;
 
     // MODULE INSTANCE STATE
-    Vsoc___024root                 TOP;
+    Vtb___024root                  TOP;
+    Vtb___024unit                  TOP____024unit;
 
     // CONSTRUCTORS
-    Vsoc__Syms(VerilatedContext* contextp, const char* namep, Vsoc* modelp);
-    ~Vsoc__Syms();
+    Vtb__Syms(VerilatedContext* contextp, const char* namep, Vtb* modelp);
+    ~Vtb__Syms();
 
     // METHODS
     const char* name() { return TOP.name(); }

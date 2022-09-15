@@ -7,7 +7,7 @@ module riscv (
     // form rom
     input  wire [31:0] inst_i, 
     // to rom    
-    output wire [31:0] inst_addr_o ,
+    output wire [63:0] inst_addr_o ,
 
     //read  mem
     input	wire [31:0]	  mem_r_data_i		,	
@@ -20,7 +20,7 @@ module riscv (
 	output  wire  [31:0]  mem_w_data_o
 );
     // pc 2 if
-    wire[31:0] pc_reg_pc_o;
+    wire[63:0] pc_reg_pc_o;
 
     pc_reg pc_reg_inst (
         .rst            ( rst               ),
@@ -31,19 +31,19 @@ module riscv (
     );
 
     // if 2 if_id
-    wire[31:0] if_inst_addr_o;
+    wire[63:0] if_inst_addr_o;
     wire[31:0] if_inst_o;
 
     inst_fetch inst_fetch_inst (
         .pc_addr_i     ( pc_reg_pc_o   ),
-        .rom2if_inst_i ( inst_i        ),
-        .if2rom_addr_o ( inst_addr_o   ),
+        // .rom2if_inst_i ( inst_i        ),
+        // .if2rom_addr_o ( inst_addr_o   ),
         .inst_addr_o   ( if_inst_addr_o),
         .inst_o        ( if_inst_o     )
     );
 
     // if_id 2 id
-    wire[31:0] if_id_inst_addr_o;
+    wire[63:0] if_id_inst_addr_o;
     wire[31:0] if_id_inst_o;
     
     if_id if_id_inst (
@@ -62,13 +62,13 @@ module riscv (
     
     // id 2 id_ex
     wire[31:0]  id_inst_o;  
-    wire[31:0]  id_inst_addr_o; 
-    wire[31:0]  id_op1_o; 
-    wire[31:0]  id_op2_o;
+    wire[63:0]  id_inst_addr_o; 
+    wire[63:0]  id_op1_o; 
+    wire[63:0]  id_op2_o;
     wire[4:0]   id_rd_addr_o; 
     wire        id_reg_wen; 
-    wire[31:0]  id_base_addr_o; 
-    wire[31:0]  id_offset_addr_o;
+    wire[63:0]  id_base_addr_o; 
+    wire[63:0]  id_offset_addr_o;
 
     id id_inst (
         .inst_i         ( if_id_inst_o     ), // if_id 2 id
@@ -88,8 +88,8 @@ module riscv (
     );
 
     //reges 2 id
-    wire[31:0] regs_rs1_rdata_o;
-    wire[31:0] regs_rs2_rdata_o;
+    wire[63:0] regs_rs1_rdata_o;
+    wire[63:0] regs_rs2_rdata_o;
 
     regs regs_inst (
         .clk         ( clk             ),
@@ -105,13 +105,13 @@ module riscv (
 
     // id_ex 2 ex
     wire[31:0]  id_ex_inst_o;  
-    wire[31:0]  id_ex_inst_addr_o; 
-    wire[31:0]  id_ex_op1_o; 
-    wire[31:0]  id_ex_op2_o;
+    wire[63:0]  id_ex_inst_addr_o; 
+    wire[63:0]  id_ex_op1_o; 
+    wire[63:0]  id_ex_op2_o;
     wire[4:0]   id_ex_rd_addr_o; 
     wire        id_ex_reg_wen; 
-    wire[31:0]  id_ex_base_addr_o; 
-    wire[31:0]  id_ex_offset_addr_o;
+    wire[63:0]  id_ex_base_addr_o; 
+    wire[63:0]  id_ex_offset_addr_o;
 
     id_ex id_ex_inst (
         .clk         ( clk               ),
@@ -136,12 +136,12 @@ module riscv (
     );
 
     // ex 2 reg
-	wire[31:0]  ex_rd_data_o;
+	wire[63:0]  ex_rd_data_o;
 	wire[4:0]   ex_rd_addr_o;
 	wire        ex_reg_wen_o;
 
     // ex 2 ctrl
-    wire[31:0]  ex_jump_addr_o;    
+    wire[63:0]  ex_jump_addr_o;    
     wire        ex_jump_en_o;      
     wire        ex_hold_flag_o; 
 
@@ -163,7 +163,7 @@ module riscv (
     );
     
     // ctrl 2 regs
-    wire[31:0]  ctrl_jump_addr_o;
+    wire[63:0]  ctrl_jump_addr_o;
     wire        ctrl_jump_en_o;
     // ctrl 2 if_id/id_ex
     wire        ctrl_hold_flag_o;

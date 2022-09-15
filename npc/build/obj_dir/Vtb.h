@@ -5,20 +5,23 @@
 // The class here is then constructed to instantiate the design.
 // See the Verilator manual for examples.
 
-#ifndef VERILATED_VSOC_H_
-#define VERILATED_VSOC_H_  // guard
+#ifndef VERILATED_VTB_H_
+#define VERILATED_VTB_H_  // guard
 
 #include "verilated.h"
+#include "svdpi.h"
 
-class Vsoc__Syms;
-class Vsoc___024root;
+class Vtb__Syms;
+class Vtb___024root;
 class VerilatedVcdC;
+class Vtb___024unit;
+
 
 // This class is the main interface to the Verilated model
-class Vsoc VL_NOT_FINAL {
+class Vtb VL_NOT_FINAL {
   private:
     // Symbol table holding complete model state (owned by this class)
-    Vsoc__Syms* const vlSymsp;
+    Vtb__Syms* const vlSymsp;
 
   public:
 
@@ -31,22 +34,23 @@ class Vsoc VL_NOT_FINAL {
     // CELLS
     // Public to allow access to /* verilator public */ items.
     // Otherwise the application code can consider these internals.
+    Vtb___024unit* const __PVT____024unit;
 
     // Root instance pointer to allow access to model internals,
     // including inlined /* verilator public_flat_* */ items.
-    Vsoc___024root* const rootp;
+    Vtb___024root* const rootp;
 
     // CONSTRUCTORS
     /// Construct the model; called by application code
     /// If contextp is null, then the model will use the default global context
     /// If name is "", then makes a wrapper with a
     /// single model invisible with respect to DPI scope names.
-    explicit Vsoc(VerilatedContext* contextp, const char* name = "TOP");
-    explicit Vsoc(const char* name = "TOP");
+    explicit Vtb(VerilatedContext* contextp, const char* name = "TOP");
+    explicit Vtb(const char* name = "TOP");
     /// Destroy the model; called (often implicitly) by application code
-    virtual ~Vsoc();
+    virtual ~Vtb();
   private:
-    VL_UNCOPYABLE(Vsoc);  ///< Copying not allowed
+    VL_UNCOPYABLE(Vtb);  ///< Copying not allowed
 
   public:
     // API METHODS

@@ -51,7 +51,6 @@ static void exec_once(Decode *s, vaddr_t pc) {
     s->pc = pc;   // 当前PC设置为PC
     s->snpc = pc; // 下一个PC也设置为PC
     isa_exec_once(s);
-    cpu.pc = s->dnpc;
 #ifdef CONFIG_FTRACE
     uint32_t finst = s->isa.inst.val;
 	if (finst == 0x00008067) {

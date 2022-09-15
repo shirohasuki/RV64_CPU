@@ -24,12 +24,16 @@ typedef uint64_t word_t;
 typedef word_t vaddr_t;
 // ================ CPU ===================
 static int status = 0;
-typedef struct {
-    word_t gpr[32];
-    vaddr_t pc;
-} CPU_state;
-extern CPU_state cpu_npc;
-extern CPU_state ref_cpu;
+// typedef struct {
+//     word_t gpr[32];
+//     vaddr_t pc;
+// } CPU_state;
+// typedef struct { 
+//     word_t gpr[33];
+//     // pc = gpr[32]
+// } CPU_state;
+extern word_t cpu_npc[33];
+extern word_t ref_cpu[33];
 
 void npc_exit(int status);
 

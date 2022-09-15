@@ -12,10 +12,10 @@ static Vtb* top;
 extern uint64_t cpu_pc;
 ll img_size = 0;
 
-CPU_state cpu_npc;
-// extern CPU_state ref_cpu;
-CPU_state ref_cpu;
-
+// CPU_state cpu_npc;
+// CPU_state ref_cpu;
+word_t cpu_npc[33];
+word_t ref_cpu[33];
 
 //================ SIM FUNCTION =====================//
 void sim_init() {
@@ -65,7 +65,7 @@ int main() {
     init_disasm("riscv64-pc-linux-gnu");
 #endif
 
-    // exec_once();
+    exec_once();
     // exec_once();
 
 #ifdef CONFIG_NPC_DIFFTEST

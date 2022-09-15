@@ -6,14 +6,14 @@ uint64_t cpu_pc = 80000000;
 extern "C" void get_pc(long long int pc) {
     cpu_pc = (uint64_t)pc;
     // printf("cpu_pc: %lx\n", cpu_pc);
-    cpu_npc.pc = cpu_pc; // give pc and regs to CPU status
+    cpu_npc[32] = cpu_pc; // give pc and regs to CPU status
 }
 
 
 extern "C" void get_regs(const svOpenArrayHandle r) {
     cpu_gpr = (uint64_t *)(((VerilatedDpiOpenVar*)r) -> datap());
     // give regs to CPU status
-    for (int i = 0; i < 32; i++) { cpu_npc.gpr[i] = cpu_gpr[i];}
+    for (int i = 0; i < 32; i++) { cpu_npc[i] = cpu_gpr[i];}
 }
 
 

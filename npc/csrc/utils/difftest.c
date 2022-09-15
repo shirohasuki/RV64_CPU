@@ -1,9 +1,9 @@
 #include "npc.h"
 
+CPU_state ref_npc;
+
 //=====================Difftest=========================
 #ifdef CONFIG_NPC_DIFFTEST
-
-extern uint64_t *cpu_gpr;
 
 // Definations of Ref
 void (*ref_difftest_memcpy)(paddr_t addr, void *buf, size_t n, bool direction) = NULL;
@@ -34,38 +34,39 @@ void init_difftest(const char *ref_so_file, ll img_size) {
 
     ref_difftest_init();
     ref_difftest_memcpy(MEM_BASE, mem, img_size, DIFFTEST_TO_REF);
-    ref_difftest_regcpy(cpu_gpr, DIFFTEST_TO_REF);
+    ref_difftest_regcpy(&cpu_npc, DIFFTEST_TO_REF);
 }
 
 
 
-int check_regs_npc(uint64_t *ref_regs) {
+int check_regs_npc(CPU_state ref_cpu) {
     for (int i = 0; i < 32; i++) {
-        if (cpu_gpr[i] != ref_regs[i]) {
-        printf("Missing match reg[%d], npc_val=%lx, nemu_val=%lx\n", i, cpu_gpr[i], ref_regs[i]);
+        if (cpu_npc.gpr[i] != ref_npc.gpr[i]) {
+        printf("Missing match reg[%d], npc_val=%lx, nemu_val=%lx\n", i, cpu_npc.gpr[i], ref_npc.gpr[i]);
         return 0;
         }
     }
-    if (cpu_pc != ref_regs[32]) {
-        printf("Missing match at pc, npc_val=%lx,nemu_val=%lx\n", cpu_pc, ref_regs[32]);
+    if (cpu_npc.pc != ref_npc.pc) {
+        printf("Missing match at pc, npc_val=%lx,nemu_val=%lx\n", cpu_npc.pc, ref_npc.pc);
         return 0;
     }
     return 1;
 }
 
-uint64_t ref_regs[33];
+// uint64_t ref_regs[33];
 void difftest_exec_once() {
     
-    printf("check at nemu_pc=%lx, npc_pc=%lx\n", ref_regs[32], cpu_pc);
+    printf("check at nemu_pc=%lx, npc_pc=%lx\n", ref_npc.pc, cpu_npc.pc);
 
     ref_difftest_exec(1);
+    
+    
+    printf("check at nemu_pc=%lx, npc_pc=%lx\n", ref_npc.pc, cpu_npc.pc);
 
-    printf("check at nemu_pc=%lx, npc_pc=%lx\n", ref_regs[32], cpu_pc);
+    ref_difftest_regcpy(&ref_npc, DIFFTEST_TO_DUT);
 
-    ref_difftest_regcpy(ref_regs, DIFFTEST_TO_DUT);
+    printf("check at nemu_pc=%lx, npc_pc=%lx\n", ref_npc.pc, cpu_npc.pc);
 
-    printf("check at nemu_pc=%lx, npc_pc=%lx\n", ref_regs[32], cpu_pc);
-
-    if (!check_regs_npc(ref_regs)) npc_exit(-1);
+    if (!check_regs_npc(ref_npc)) npc_exit(-1);
 }
 #endif

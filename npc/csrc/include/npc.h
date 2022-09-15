@@ -14,15 +14,23 @@
 
 
 #define CONFIG_NPC_ITRACE 1
-#define CONFIG_NPC_GPRTRACE 1
+// #define CONFIG_NPC_GPRTRACE 1
 #define CONFIG_NPC_DIFFTEST 1
 
 // ================ Typedef ===============
 typedef long long ll;
 typedef uint32_t paddr_t;
-
+typedef uint64_t word_t;
+typedef word_t vaddr_t;
 // ================ CPU ===================
 static int status = 0;
+typedef struct {
+    word_t gpr[32];
+    vaddr_t pc;
+} CPU_state;
+extern CPU_state cpu_npc;
+extern CPU_state ref_npc;
+
 void npc_exit(int status);
 
 // =============== Memory ===============

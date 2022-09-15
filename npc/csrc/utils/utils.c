@@ -3,14 +3,17 @@
 uint64_t *cpu_gpr = NULL;
 uint64_t cpu_pc = 80000000;
 
-
-extern "C" void get_regs(const svOpenArrayHandle r) {
-    cpu_gpr = (uint64_t *)(((VerilatedDpiOpenVar*)r) -> datap());
-}
-
 extern "C" void get_pc(long long int pc) {
     cpu_pc = (uint64_t)pc;
     // printf("cpu_pc: %lx\n", cpu_pc);
+    cpu_npc.pc = cpu_pc; // give pc and regs to CPU status
+}
+
+
+extern "C" void get_regs(const svOpenArrayHandle r) {
+    cpu_gpr = (uint64_t *)(((VerilatedDpiOpenVar*)r) -> datap());
+    // give regs to CPU status
+    for (int i = 0; i < 32; i++) { cpu_npc.gpr[i] = cpu_gpr[i];}
 }
 
 
@@ -30,9 +33,9 @@ void npc_exit(int status) {
 #ifdef CONFIG_NPC_ITRACE
     itrace_output();
 #endif
-#ifdef CONFIG_NPC_GPRTRACE
+// #ifdef CONFIG_NPC_GPRTRACE
     dump_gpr(); 
-#endif
+// #endif
         puts("\33[1;31m[Sim Result]: HIT BAD TRAP\33[0m");
     }
     exit(status);

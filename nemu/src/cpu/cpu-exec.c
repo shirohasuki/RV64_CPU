@@ -51,6 +51,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
     s->pc = pc;   // 当前PC设置为PC
     s->snpc = pc; // 下一个PC也设置为PC
     isa_exec_once(s);
+    cpu.pc = s->dnpc;
 #ifdef CONFIG_FTRACE
     uint32_t finst = s->isa.inst.val;
 	if (finst == 0x00008067) {
@@ -92,8 +93,8 @@ static void exec_once(Decode *s, vaddr_t pc) {
 static void execute(uint64_t n) {
     Decode s;
     for (;n > 0; n --) {
-        printf("2.[cpu-exec.c(execute)]:hello\n");
-        printf("2.[cpu-exec.c(execute)]%lx\n", cpu.pc);
+        // printf("2.[cpu-exec.c(execute)]:hello\n");
+        // printf("2.[cpu-exec.c(execute)] pc %lx\n", cpu.pc);
         exec_once(&s, cpu.pc);
         g_nr_guest_inst ++;
         trace_and_difftest(&s, cpu.pc);

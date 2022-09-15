@@ -29,7 +29,7 @@ typedef struct {
     vaddr_t pc;
 } CPU_state;
 extern CPU_state cpu_npc;
-extern CPU_state ref_npc;
+extern CPU_state ref_cpu;
 
 void npc_exit(int status);
 

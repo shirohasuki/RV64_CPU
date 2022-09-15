@@ -21,7 +21,7 @@ extern "C" void get_regs(const svOpenArrayHandle r) {
 void dump_gpr() {
     printf("============= Regs =================\n");
     for (int i = 0; i < 32; i++) {
-        printf("gpr[%d] = 0x%lx\n", i, cpu_gpr[i]);
+        printf("gpr[%2d] = 0x%lx\n", i, cpu_gpr[i]);
     }
     printf("====================================\n");
 }

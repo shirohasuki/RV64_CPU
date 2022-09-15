@@ -45,5 +45,5 @@ void difftest_raise_intr(word_t NO) {
 
 void difftest_init(int port) {
   /* Perform ISA dependent initialization. */
-  init_isa();
+    init_isa();
 }// 初始化REF的DiffTest功能

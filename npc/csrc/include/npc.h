@@ -23,6 +23,7 @@ typedef uint32_t paddr_t;
 
 // ================ CPU ===================
 static int status = 0;
+void npc_exit(int status);
 
 // =============== Memory ===============
 #define MEM_BASE 0x80000000
@@ -36,7 +37,6 @@ long load_image(char const *img_file);
 
 
 // ============== Reg ===================
-
 extern uint64_t *cpu_gpr;
 extern uint64_t cpu_pc;
 
@@ -57,7 +57,12 @@ void dump_gpr(); // 打印寄存器
 
 // ============= Difftest ==============
 #ifdef CONFIG_NPC_DIFFTEST
+
 void init_difftest(const char *ref_so_file, ll img_size);
+void difftest_exec_once();
+
+extern uint64_t ref_regs[33];
+
 enum {
     DIFFTEST_TO_DUT,
     DIFFTEST_TO_REF

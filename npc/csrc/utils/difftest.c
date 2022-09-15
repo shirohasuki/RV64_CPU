@@ -12,11 +12,9 @@ void (*ref_difftest_init)() = NULL;
 
 void init_difftest(const char *ref_so_file, ll img_size) {
     void *handle;
-    // printf("%s", ref_so_file);
     handle = dlopen(ref_so_file, RTLD_LAZY);
-        printf("hello\n");
     assert(handle);
-        printf("hello\n");
+    
     ref_difftest_memcpy = (void (*)(uint32_t addr, void *buf, size_t n, bool direction))(dlsym(handle, "difftest_memcpy"));
     assert(ref_difftest_memcpy);
 
@@ -37,21 +35,7 @@ void init_difftest(const char *ref_so_file, ll img_size) {
     ref_difftest_regcpy(cpu_gpr, DIFFTEST_TO_REF);
 }
 
-// void checkregs(uint64_t *ref_regs) {
-//     for (int i = 0; i <= 32; ++i) {
-//         if (ref_regs[i] != cpu_gpr[i]) {
-//             printf("Error: Difftest failed at reg %d, pc = 0x%016lx\n", i, cpu_gpr[32]);
-//         for (int j = 0; j <= 32; ++j) {
-//             if (cpu_gpr[j] != ref_regs[j]) printf(COLOR_RED);
-//                 printf("reg %02d: dut = 0x%016lx, ref = 0x%016lx\n", j, cpu_gpr[j], ref_regs[j]);
-//             if (cpu_gpr[j] != ref_regs[j]) printf(COLOR_NONE);
-//         }
-//         debug_exit(1);
-//         }
-//     }
-// }
 
-uint64_t ref_regs[33];
 
 int check_regs_npc(uint64_t *ref_regs) {
     for (int i = 0; i < 32; i++) {
@@ -67,9 +51,13 @@ int check_regs_npc(uint64_t *ref_regs) {
     return 1;
 }
 
+uint64_t ref_regs[33];
 void difftest_exec_once() {
+    printf("check at nemu_pc=%lx, npc_pc=%lx\n", ref_regs[32], cpu_pc);
     ref_difftest_exec(1);
+    printf("check at nemu_pc=%lx, npc_pc=%lx\n", ref_regs[32], cpu_pc);
     ref_difftest_regcpy(ref_regs, DIFFTEST_TO_DUT);
-    check_regs_npc(ref_regs);
+    printf("check at nemu_pc=%lx, npc_pc=%lx\n", ref_regs[32], cpu_pc);
+    if (!check_regs_npc(ref_regs)) npc_exit(-1);
 }
 #endif

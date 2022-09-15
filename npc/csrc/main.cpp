@@ -12,7 +12,7 @@ static Vtb* top;
 extern uint64_t cpu_pc;
 ll img_size = 0;
 
-// void init_difftest(const char *ref_so_file);
+
 //================ SIM FUNCTION =====================//
 void sim_init() {
     contextp = new VerilatedContext;
@@ -60,13 +60,15 @@ int main() {
 #ifdef CONFIG_NPC_ITRACE
     init_disasm("riscv64-pc-linux-gnu");
 #endif
-    // printf("%d\n", img_size);
 #ifdef CONFIG_NPC_DIFFTEST
     init_difftest("/home/shiroha/Code/ysyx/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size);
 #endif
 
     while (sim_time < MAX_SIM_TIME) {
         exec_once();
+#ifdef CONFIG_NPC_DIFFTEST
+        difftest_exec_once();
+#endif
     }
     sim_exit();
 } 

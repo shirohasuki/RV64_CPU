@@ -48,14 +48,13 @@ void init_difftest(const char *ref_so_file, ll img_size) {
 
 int check_regs_npc(CPU_state ref_cpu) {
     for (int i = 0; i < 32; i++) {
-        // printf(GREEN("[difftest] reg[%2d], npc_val=%lx, nemu_val=%lx\n"), i, cpu_npc.gpr[i], ref_cpu.gpr[i]);
         if (cpu_npc.gpr[i] != ref_cpu.gpr[i]) {
-            printf(RED("Missing match reg[%d], npc_val=%lx, nemu_val=%lx\n"), i, cpu_npc.gpr[i], ref_cpu.gpr[i]);
+            printf(RED("Missing match reg[%d], nemu_val=%lx, npc_val=%lx\n"), i, ref_cpu.gpr[i], cpu_npc.gpr[i]);
             return 0;
         }
     }
     if (cpu_npc.pc != ref_cpu.pc) {
-        printf(RED("Missing match at pc, npc_val=%lx,nemu_val=%lx\n"), cpu_npc.pc, ref_cpu.pc);
+        printf(RED("Missing match at pc, nemu_val=%lx, npc_val=%lx\n"), ref_cpu.pc, cpu_npc.pc);
         return 0;
     }
     return 1;

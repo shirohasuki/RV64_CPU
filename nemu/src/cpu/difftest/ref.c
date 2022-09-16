@@ -15,10 +15,13 @@ void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
         buf = (void *)guest_to_host(addr);
     }
     else if (direction == DIFFTEST_TO_REF) {
-        Log("%x,%lx", addr, n);
-        char *buf_char = (char *)buf;
-        for (int i = 0; i < n; i++) {
-            paddr_write(addr + i, 1, buf_char[i]);
+        // Log("%x,%lx", addr, n);
+        // char *buf_char = (char *)buf;
+        // for (int i = 0; i < n; i++) {
+        //     paddr_write(addr + i, 1, buf_char[i]);
+        // }
+        for (size_t i = 0; i < n; i++) {
+            paddr_write(addr + i, 1, *((uint8_t*)buf + i));
         }
     }
 }

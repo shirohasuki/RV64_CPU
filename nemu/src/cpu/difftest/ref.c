@@ -22,7 +22,7 @@ void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
         // }
         for (size_t i = 0; i < n; i++) {
             paddr_write(addr + i, 1, *((uint8_t*)buf + i));
-            printf("CHAR IS %ld\n", *(uint8_t*)buf + i);
+            // printf("CHAR IS %ld\n", *(uint8_t*)buf + i);
         }
     }
 }

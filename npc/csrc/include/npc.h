@@ -43,7 +43,7 @@ void npc_exit(int status);
 
 // #define MEM_SIZE 8000000
 
-static uint8_t mem[MEM_SIZE];
+extern uint8_t mem[MEM_SIZE];
 // Memory transfer
 uint8_t* cpu2mem(ll addr);
 

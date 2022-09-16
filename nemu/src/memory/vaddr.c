@@ -2,8 +2,8 @@
 #include <memory/paddr.h>
 
 word_t vaddr_ifetch(vaddr_t addr, int len) {
-    printf("1.[vaddr.c]%lx\n", addr);
-    printf("2.[vaddr.c]%lx\n", paddr_read(addr, len));
+    // printf("1.[vaddr.c]%lx\n", addr);
+    // printf("2.[vaddr.c]%lx\n", paddr_read(addr, len));
     return paddr_read(addr, len);
 }
 

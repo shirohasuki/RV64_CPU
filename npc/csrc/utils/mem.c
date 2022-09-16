@@ -1,6 +1,6 @@
 #include "npc.h"
 
-
+uint8_t mem[MEM_SIZE] = {0};
 // Memory Read
 
 uint8_t* cpu2mem(ll addr) { return mem + (addr - MEM_BASE); }

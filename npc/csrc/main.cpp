@@ -12,10 +12,10 @@ static Vtb* top;
 extern uint64_t cpu_pc;
 ll img_size = 0;
 
-// CPU_state cpu_npc;
-// CPU_state ref_cpu;
-word_t cpu_npc[33];
-word_t ref_cpu[33];
+CPU_state cpu_npc;
+CPU_state ref_cpu;
+// word_t cpu_npc[33];
+// word_t ref_cpu[33];
 
 //================ SIM FUNCTION =====================//
 void sim_init() {

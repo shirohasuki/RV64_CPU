@@ -39,9 +39,9 @@ void npc_exit(int status);
 
 // =============== Memory ===============
 #define MEM_BASE 0x80000000
-// #define MEM_SIZE 65536
+#define MEM_SIZE 65536
 
-#define MEM_SIZE 8000000
+// #define MEM_SIZE 8000000
 
 static uint8_t mem[MEM_SIZE];
 // Memory transfer

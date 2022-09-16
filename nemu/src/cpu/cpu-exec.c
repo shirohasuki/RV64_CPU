@@ -145,11 +145,11 @@ void cpu_exec(uint64_t n) {
 			}
 			printf("\n");
 #endif
-#ifdef CONFIG_FTRACE
-			printf("========== Ftrace Result ==========\n");
-			ftrace_output();
-			printf("\n");
-#endif
+// #ifdef CONFIG_FTRACE
+// 			printf("========== Ftrace Result ==========\n");
+// 			ftrace_output();
+// 			printf("\n");
+// #endif
 
         case NEMU_END:
             Log("nemu: %s at pc = " FMT_WORD,

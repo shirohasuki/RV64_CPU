@@ -64,11 +64,11 @@ int main() {
     init_disasm("riscv64-pc-linux-gnu");
 #endif
 
-    exec_once();
+    // exec_once();
     // exec_once();
 
 #ifdef CONFIG_NPC_DIFFTEST
-    ref_cpu.pc = 0x80000000;
+    // ref_cpu.pc = 0x80000000;
     init_difftest("/home/shiroha/Code/ysyx/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size);
     
     // printf(RED("check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);

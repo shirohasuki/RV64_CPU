@@ -15,7 +15,7 @@
 
 #define CONFIG_NPC_ITRACE 1
 // #define CONFIG_NPC_GPRTRACE 1
-#define CONFIG_NPC_DIFFTEST 1
+// #define CONFIG_NPC_DIFFTEST 1
 
 // ================ Typedef ===============
 typedef long long ll;
@@ -72,9 +72,8 @@ void dump_gpr(); // 打印寄存器
 
 void init_difftest(const char *ref_so_file, ll img_size);
 void difftest_exec_once();
-// int check_regs_npc(CPU_state ref_cpu);
+int check_regs_npc(CPU_state ref_cpu);
 
-// extern uint64_t ref_regs[33];
 
 enum {
     DIFFTEST_TO_DUT,

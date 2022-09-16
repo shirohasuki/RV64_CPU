@@ -1,7 +1,7 @@
 #include "npc.h"
 
-// extern CPU_state ref_cpu;
-
+extern CPU_state ref_cpu;
+// CPU_state ref_cpu;
 //=====================Difftest=========================
 #ifdef CONFIG_NPC_DIFFTEST
 
@@ -32,12 +32,12 @@ void init_difftest(const char *ref_so_file, ll img_size) {
     void (*ref_difftest_init)() = (void (*)())(dlsym(handle, "difftest_init"));
     assert(ref_difftest_init);
 
-    printf(GREEN("0. check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
+    // printf(GREEN("0. check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
     
     ref_difftest_init();
     ref_difftest_memcpy(MEM_BASE, mem, img_size, DIFFTEST_TO_REF);
     ref_difftest_regcpy(&cpu_npc, DIFFTEST_TO_REF);
-    printf(GREEN("0. check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
+    // printf(GREEN("0. check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
 }
 
 
@@ -57,7 +57,7 @@ int check_regs_npc(CPU_state ref_cpu) {
     return 1;
 }
 
-// uint64_t ref_regs[33];
+
 void difftest_exec_once() {
     
     printf(GREEN("1. check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);

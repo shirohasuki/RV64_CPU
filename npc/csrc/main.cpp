@@ -14,8 +14,7 @@ ll img_size = 0;
 
 CPU_state cpu_npc;
 CPU_state ref_cpu;
-// word_t cpu_npc[33];
-// word_t ref_cpu[33];
+
 
 //================ SIM FUNCTION =====================//
 void sim_init() {
@@ -58,7 +57,6 @@ void sim_exit() {
 int main() {
 
     img_size = load_image("/home/shiroha/Code/ysyx/ysyx-workbench/npc/image.bin");
-    printf(GREEN("imgsize: %lld\n"), img_size);
     sim_init();
 
 #ifdef CONFIG_NPC_ITRACE
@@ -72,7 +70,7 @@ int main() {
     // ref_cpu.pc = 0x80000000;
     init_difftest("/home/shiroha/Code/ysyx/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size);
     
-    printf(RED("check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
+    // printf(RED("check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
     // printf(RED("OK\n"));
 #endif
 

@@ -46,6 +46,7 @@ void exec_once() {
     step_and_dump_wave();
     top->clk ^= 1;
     step_and_dump_wave();
+    // dump_gpr(); 
 } // 翻转两次走一条指令
 
 void sim_exit() {

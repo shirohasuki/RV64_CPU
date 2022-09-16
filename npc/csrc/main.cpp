@@ -9,7 +9,7 @@ VerilatedContext* contextp = NULL;
 VerilatedVcdC* tfp = NULL;
 static Vtb* top;
 
-extern uint64_t cpu_pc;
+// extern uint64_t cpu_pc;
 ll img_size = 0;
 
 CPU_state cpu_npc;
@@ -40,12 +40,10 @@ void step_and_dump_wave() {
 
 void exec_once() {
 #ifdef CONFIG_NPC_ITRACE 
-    itrace_record(cpu_pc);
+    itrace_record(cpu_npc.pc);
 #endif
-    top->clk ^= 1;
-    step_and_dump_wave();
-    top->clk ^= 1;
-    step_and_dump_wave();
+    top->clk ^= 1; step_and_dump_wave();
+    top->clk ^= 1; step_and_dump_wave();
     // dump_gpr(); 
 } // 翻转两次走一条指令
 
@@ -56,23 +54,20 @@ void sim_exit() {
 
 
 int main() {
-
     img_size = load_image("/home/shiroha/Code/ysyx/ysyx-workbench/npc/image.bin");
+    
     sim_init();
 
 #ifdef CONFIG_NPC_ITRACE
     init_disasm("riscv64-pc-linux-gnu");
 #endif
-
-    // exec_once();
-    // exec_once();
-
-#ifdef CONFIG_NPC_DIFFTEST
-    // ref_cpu.pc = 0x80000000;
-    init_difftest("/home/shiroha/Code/ysyx/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size);
     
+    exec_once();
+    // exec_once();
+#ifdef CONFIG_NPC_DIFFTEST
+    init_difftest("/home/shiroha/Code/ysyx/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size);
     // printf(RED("check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
-    // printf(RED("OK\n"));
+    // ref_cpu.pc = 0x80000004;
 #endif
 
     while (sim_time < MAX_SIM_TIME) {

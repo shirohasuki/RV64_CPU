@@ -49,8 +49,8 @@ long load_image(char const *img_file);
 
 
 // ============== Reg ===================
-extern uint64_t *cpu_gpr;
-extern uint64_t cpu_pc;
+// extern uint64_t *cpu_gpr; //  改为CPU_state.gpr
+// extern uint64_t cpu_pc; //  改为CPU_state.pc
 
 // ============= ITRACE ================
 void init_disasm(const char *triple);

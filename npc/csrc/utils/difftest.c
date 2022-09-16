@@ -33,13 +33,13 @@ void init_difftest(const char *ref_so_file, ll img_size) {
     assert(ref_difftest_init);
 
     // printf(GREEN("0. check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
-    ref_cpu.pc = 0x80000000;
+    // ref_cpu.pc = 0x80000000;
     ref_difftest_init();
-    ref_cpu.pc = 0x80000000;
+    // ref_cpu.pc = 0x80000000;
     ref_difftest_memcpy(MEM_BASE, mem, img_size, DIFFTEST_TO_REF);
-    ref_cpu.pc = 0x80000000;
+    // ref_cpu.pc = 0x80000000;
     ref_difftest_regcpy(&cpu_npc, DIFFTEST_TO_REF);
-    ref_cpu.pc = 0x80000000;
+    // ref_cpu.pc = 0x80000004;
     // printf(GREEN("0. check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
     
 }

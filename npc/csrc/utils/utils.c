@@ -6,7 +6,7 @@ uint64_t cpu_pc = 0x80000000;
 extern "C" void get_pc(long long int pc) {
     cpu_pc = (uint64_t)pc;
     // printf("cpu_pc: %lx\n", cpu_pc);
-    cpu_npc.gpr[32] = cpu_pc; // give pc and regs to CPU status
+    cpu_npc.pc = cpu_pc; // give pc and regs to CPU status
 }
 
 
@@ -23,6 +23,7 @@ void dump_gpr() {
     for (int i = 0; i < 32; i++) {
         printf("gpr[%2d] = 0x%lx\n", i, cpu_gpr[i]);
     }
+    printf("pc      = 0x%lx\n", cpu_pc);
     printf("====================================\n");
 }
 

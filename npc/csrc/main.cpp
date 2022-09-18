@@ -17,6 +17,13 @@ CPU_state ref_cpu;
 
 
 //================ SIM FUNCTION =====================//
+void step_and_dump_wave() {
+    top->eval();
+    contextp->timeInc(1);
+    tfp->dump(contextp->time());
+    sim_time++;
+}
+
 void sim_init() {
     contextp = new VerilatedContext;
     tfp = new VerilatedVcdC;
@@ -26,17 +33,10 @@ void sim_init() {
     top->trace(tfp, 0);
     tfp->open("dump.vcd");
 
-    top->rst = 0; top->clk = 0; top->eval();
-    top->rst = 0; top->clk = 1; top->eval();
-    top->rst = 1; top->clk = 0; top->eval();    
+    top->rst = 0; top->clk = 0; step_and_dump_wave();
+    top->rst = 0; top->clk = 1; step_and_dump_wave();
+    top->rst = 1; top->clk = 0; step_and_dump_wave();   
 } // 低电平复位
-
-void step_and_dump_wave() {
-    top->eval();
-    contextp->timeInc(1);
-    tfp->dump(contextp->time());
-    sim_time++;
-}
 
 void exec_once() {
 #ifdef CONFIG_NPC_ITRACE 
@@ -63,16 +63,19 @@ int main() {
 #endif
     
     exec_once();
+    
     // exec_once();
 #ifdef CONFIG_NPC_DIFFTEST
     init_difftest("/home/shiroha/Code/ysyx/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size);
     // printf(RED("check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
     // ref_cpu.pc = 0x80000004;
 #endif
+    
 
     while (sim_time < MAX_SIM_TIME) {
         // printf(RED("check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
         exec_once();
+        // dump_gpr();
         // printf(RED("check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
 #ifdef CONFIG_NPC_DIFFTEST
         difftest_exec_once();

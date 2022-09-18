@@ -48,9 +48,9 @@ void init_difftest(const char *ref_so_file, ll img_size) {
 
 
 int check_regs_npc(CPU_state ref_cpu) {
-    printf(GREEN("[difftest] pc     , nemu_val=%lx, npc_val=%lx\n"), ref_cpu.pc, cpu_npc.pc);
+    // printf(GREEN("[difftest] pc     , nemu_val=%lx, npc_val=%lx\n"), ref_cpu.pc, cpu_npc.pc);
     for (int i = 0; i < 32; i++) {
-        printf(GREEN("[difftest] reg[%2d], nemu_val=%lx, npc_val=%lx\n"), i, ref_cpu.gpr[i], cpu_npc.gpr[i]);
+        // printf(GREEN("[difftest] reg[%2d], nemu_val=%lx, npc_val=%lx\n"), i, ref_cpu.gpr[i], cpu_npc.gpr[i]);
         if (cpu_npc.gpr[i] != ref_cpu.gpr[i]) {
             printf(RED("Missing match reg[%d], nemu_val=%lx, npc_val=%lx\n"), i, ref_cpu.gpr[i], cpu_npc.gpr[i]);
             return 0;
@@ -65,17 +65,11 @@ int check_regs_npc(CPU_state ref_cpu) {
 
 
 void difftest_exec_once() {
-    
-    printf(GREEN("1. check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
-
+    // printf(GREEN("1. check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
     ref_difftest_exec(1);
-    
-    printf(GREEN("2. check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
-
+    // printf(GREEN("2. check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
     ref_difftest_regcpy(&ref_cpu, DIFFTEST_TO_DUT);
-
-    printf(GREEN("3. check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
-
+    // printf(GREEN("3. check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
     if (!check_regs_npc(ref_cpu)) npc_exit(-1);
 }
 #endif

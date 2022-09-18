@@ -100,7 +100,8 @@ module riscv (
         .rs2_rdata_o ( regs_rs2_rdata_o ),
         .reg_waddr_i ( ex_rd_addr_o    ),
         .reg_wdata_i ( ex_rd_data_o    ),
-        .reg_wen     ( ex_reg_wen_o    )	
+        .reg_wen     ( ex_reg_wen_o    )
+        // .reg_o       ( reg_2_trace     ) 
     );
 
     // id_ex 2 ex
@@ -175,7 +176,15 @@ module riscv (
         .jump_addr_o    ( ctrl_jump_addr_o   ),
         .jump_en_o      ( ctrl_jump_en_o     ),
         .hold_flag_o    ( ctrl_hold_flag_o   )
-);
+    );  
+
+
+    // reg 2 traceregs
+    // wire[63:0]  reg_2_trace;    
+
+    // traceregs traceregs_inst(
+    //     .regs    ( reg_2_trace )
+    // );
 
 
 endmodule 

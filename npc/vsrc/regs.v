@@ -16,6 +16,9 @@ module regs (
 	input wire[63:0] reg_wdata_i,
 	input wire reg_wen
     // r:read, w:write
+
+    // to trace
+    // output  wire[63:0] reg_o
 );
 
     reg[63:0] regs[0:31]; // 32个64位宽
@@ -51,10 +54,11 @@ module regs (
         else if (reg_wen && reg_waddr_i != 5'b0) begin // x0不准写
             regs[reg_waddr_i] <= reg_wdata_i;
         end 
+        get_regs(regs);
         // 组合逻辑要补全else，时序不需要
     end // 回写rd
 
-    initial get_regs(regs);
+    // initial get_regs(regs);
 
 endmodule 
 

@@ -1,7 +1,7 @@
 #include "npc.h"
 
 
-#define MAX_SIM_TIME 200 // 最大仿真周期，中途读取到ebreak自动退出
+#define MAX_SIM_TIME 400 // 最大仿真周期，中途读取到ebreak自动退出
 vluint64_t sim_time = 0;
 
 
@@ -77,7 +77,7 @@ int main() {
         // dump_gpr();
         // printf(RED("check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
 #ifdef CONFIG_NPC_DIFFTEST
-        // difftest_exec_once();
+        difftest_exec_once();
 #endif
     }
     sim_exit();

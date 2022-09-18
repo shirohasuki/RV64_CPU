@@ -15,7 +15,7 @@
 
 #define CONFIG_NPC_ITRACE 1
 // #define CONFIG_NPC_GPRTRACE 1
-#define CONFIG_NPC_DIFFTEST 1
+// #define CONFIG_NPC_DIFFTEST 1
 
 // ================ Typedef ===============
 typedef long long ll;

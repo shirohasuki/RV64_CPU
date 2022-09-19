@@ -35,7 +35,7 @@ $(BIN): ${VSRCS} ${CSRCS}
 		--top $(TOPNAME) $^\
 		$(addprefix -CFLAGS , $(CFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
 		--Mdir $(OBJ_DIR) --exe
-	make -C ${OBJ_DIR} -f V$(TOPNAME).mk V$(TOPNAME) -j2
+	make -C ${OBJ_DIR} -f V$(TOPNAME).mk V$(TOPNAME) -j4
 
 # 使用 --exe main.cpp 构建仿真可执行文件 	
  

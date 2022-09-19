@@ -1,11 +1,11 @@
-`include "./vsrc/defines.v"
+`include "./defines.v"
 
 module if_id (
-    input wire clk,
-    input wire rst,
-    input wire hold_flag_i, // from ctrl 
-    input wire[31:0] inst_i,    
-    input wire[63:0] inst_addr_i,    
+    input  wire       clk,
+    input  wire       rst,
+    input  wire       hold_flag_i, // from ctrl 
+    input  wire[31:0] inst_i,    
+    input  wire[63:0] inst_addr_i,    // pc
     output wire[63:0] inst_addr_o,    
     output wire[31:0] inst_o
 );
@@ -15,5 +15,3 @@ module if_id (
     dff_set #(64) dff2(clk, rst, hold_flag_i, 64'b0, inst_addr_i, inst_addr_o);
 
 endmodule 
-
-

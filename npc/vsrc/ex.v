@@ -1,27 +1,29 @@
 `include "./defines.v"
+
 import "DPI-C" function void ebreak();
 
 module ex (
     // from id_ex // 
-    input wire[31:0] inst_i,
-	input wire[63:0] inst_addr_i,
-	input wire[63:0] op1_i,	
-	input wire[63:0] op2_i,
-	input wire[4:0]  rd_addr_i,	
-	input wire       reg_wen_i,	 
-
-    input wire[63:0] base_addr_i, // 基地址
-    input wire[63:0] offset_addr_i, // 偏移地址
-    
-    // to regs 
-    output reg[63:0] rd_wdata_o,
-    output reg[4:0]  rd_waddr_o,
-    output reg       reg_wen_o,
+    input wire[31:0]  inst_i,
+	input wire[63:0]  inst_addr_i, // pc
+	input wire[63:0]  op1_i,	
+	input wire[63:0]  op2_i,
+	input wire[4:0]   rd_addr_i,	
+	input wire        reg_wen_i,	 
+ 
+    input wire[63:0]  base_addr_i, // 基地址
+    input wire[63:0]  offset_addr_i, // 偏移地址
+     
+    // to regs  
+    output reg[63:0]  rd_wdata_o,
+    output reg[4:0]   rd_waddr_o,
+    output reg        reg_wen_o,
+    output reg[63:0]  inst_addr_o, // 用于验证每级传递的pc
 
     // to ctrl
-    output reg[63:0] jump_addr_o,
-    output reg       jump_en_o,
-    output reg       hold_flag_o
+    output reg[63:0]  jump_addr_o,
+    output reg        jump_en_o,
+    output reg        hold_flag_o
 );
 
     wire[6:0] opcode; // 7byte (6~0)
@@ -75,9 +77,13 @@ module ex (
     assign      SRA_mask = (64'hffff_ffff) >> op2_i[4:0];// 为了保持复用，不用shmat
     // 通过掩码移位
 
-    
+    // to regs (pc传递)
+    // assign inst_addr_o = inst_addr_i;
+
 
     always @(*) begin
+        inst_addr_o = inst_addr_i;
+        $display("EXU: %x", inst_addr_o);
         if (inst_i == `INST_EBREAK) begin 
             ebreak();
         end 

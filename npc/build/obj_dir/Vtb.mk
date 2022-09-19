@@ -48,6 +48,7 @@ VM_USER_LDLIBS = \
 # User .cpp files (from .cpp's on Verilator command line)
 VM_USER_CLASSES = \
 	main \
+	difftest \
 	disasm \
 	mem \
 	trace \
@@ -69,6 +70,8 @@ include $(VERILATOR_ROOT)/include/verilated.mk
 VPATH += $(VM_USER_DIR)
 
 main.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/main.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+difftest.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils/difftest.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 disasm.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils/disasm.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<

@@ -55,6 +55,7 @@ module id(
     always @(*) begin
         inst_o = inst_i;
         inst_addr_o = inst_addr_i;
+        $display("IDU: %x", inst_addr_i);   
         case (opcode)
             `INST_TYPE_I: begin
                 base_addr_o   = 64'b0;// 基地址

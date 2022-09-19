@@ -44,7 +44,7 @@ void exec_once() {
 #endif
     top->clk ^= 1; step_and_dump_wave();
     top->clk ^= 1; step_and_dump_wave();
-    dump_gpr(); 
+    // dump_gpr(); 
 } // 翻转两次走一条指令
 
 void sim_exit() {
@@ -62,20 +62,18 @@ int main() {
     init_disasm("riscv64-pc-linux-gnu");
 #endif
     
-    exec_once();
     
     // exec_once();
 #ifdef CONFIG_NPC_DIFFTEST
+    while (cpu_npc.pc != MEM_BASE) {
+        exec_once();
+    } // pc先走三拍到EXU
     init_difftest("/home/shiroha/Code/ysyx/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size);
-    // printf(RED("check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
 #endif
     
 
     while (sim_time < MAX_SIM_TIME) {
-        // printf(RED("check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
         exec_once();
-        // dump_gpr();
-        // printf(RED("check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
 #ifdef CONFIG_NPC_DIFFTEST
         difftest_exec_once();
 #endif

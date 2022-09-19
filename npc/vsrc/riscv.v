@@ -19,8 +19,10 @@ module riscv (
 	output  wire  [11:0]  mem_w_addr_o		,
 	output  wire  [31:0]  mem_w_data_o
 );
-    // pc 2 if
+    // pc 2 if and reg(for trace)
     wire[63:0] pc_reg_pc_o;
+    // pc 2 regs
+    // wire[63:0] pc_reg_reg_o;
 
     pc_reg pc_reg_inst (
         .rst            ( rst               ),
@@ -28,6 +30,7 @@ module riscv (
         .jump_addr_i    ( ctrl_jump_addr_o  ), 
         .jump_en_i      ( ctrl_jump_en_o    ), 
         .pc_o           ( pc_reg_pc_o       )
+        // .pc_reg_o       (pc_reg_reg_o) 
     );
 
     // if 2 if_id
@@ -100,8 +103,8 @@ module riscv (
         .rs2_rdata_o ( regs_rs2_rdata_o ),
         .reg_waddr_i ( ex_rd_addr_o    ),
         .reg_wdata_i ( ex_rd_data_o    ),
-        .reg_wen     ( ex_reg_wen_o    )
-        // .reg_o       ( reg_2_trace     ) 
+        .reg_wen     ( ex_reg_wen_o    ),
+        .inst_addr_i ( ex_reg_inst_addr_o  ) 
     );
 
     // id_ex 2 ex
@@ -136,10 +139,14 @@ module riscv (
         .offset_addr_o  ( id_ex_offset_addr_o ) 
     );
 
-    // ex 2 reg
+    // ex 2 
 	wire[63:0]  ex_rd_data_o;
 	wire[4:0]   ex_rd_addr_o;
 	wire        ex_reg_wen_o;
+    wire[63:0]  ex_reg_inst_addr_o; // pc 传递
+
+    // // ex 2 ex_wb
+    // wire[63:0]  ex_ex_wb_o;
 
     // ex 2 ctrl
     wire[63:0]  ex_jump_addr_o;    
@@ -158,6 +165,7 @@ module riscv (
         .rd_wdata_o  ( ex_rd_data_o     ),
         .rd_waddr_o  ( ex_rd_addr_o     ),
         .reg_wen_o   ( ex_reg_wen_o     ),
+        .inst_addr_o ( ex_reg_inst_addr_o     ),
         .jump_addr_o ( ex_jump_addr_o      ),
         .jump_en_o   ( ex_jump_en_o        ),
         .hold_flag_o ( ex_hold_flag_o   )
@@ -185,6 +193,17 @@ module riscv (
     // traceregs traceregs_inst(
     //     .regs    ( reg_2_trace )
     // );
+
+    // wire[63:0]  ex_wb_wb_addr_o;
+
+    // ex_wb ex_wb_inst(
+    // .clk            ( clk         ),
+    // .rst            ( rst         ),
+    // .inst_addr_i    ( ex_ex_wb_o  ),
+    // .inst_addr_o    ( ex_wb_wb_addr_o  )
+    // );
+
+
 
 
 endmodule 

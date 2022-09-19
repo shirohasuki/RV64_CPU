@@ -66,6 +66,7 @@ VL_ATTR_COLD void Vtb___024root__trace_init_sub__TOP__0(Vtb___024root* vlSelf, V
     tracep->declQuad(c+26,"ex_rd_data_o", false,-1, 63,0);
     tracep->declBus(c+28,"ex_rd_addr_o", false,-1, 4,0);
     tracep->declBit(c+29,"ex_reg_wen_o", false,-1);
+    tracep->declQuad(c+14,"ex_reg_inst_addr_o", false,-1, 63,0);
     tracep->declQuad(c+30,"ex_jump_addr_o", false,-1, 63,0);
     tracep->declBit(c+32,"ex_jump_en_o", false,-1);
     tracep->declBit(c+166,"ex_hold_flag_o", false,-1);
@@ -92,6 +93,7 @@ VL_ATTR_COLD void Vtb___024root__trace_init_sub__TOP__0(Vtb___024root* vlSelf, V
     tracep->declQuad(c+26,"rd_wdata_o", false,-1, 63,0);
     tracep->declBus(c+28,"rd_waddr_o", false,-1, 4,0);
     tracep->declBit(c+29,"reg_wen_o", false,-1);
+    tracep->declQuad(c+14,"inst_addr_o", false,-1, 63,0);
     tracep->declQuad(c+30,"jump_addr_o", false,-1, 63,0);
     tracep->declBit(c+32,"jump_en_o", false,-1);
     tracep->declBit(c+166,"hold_flag_o", false,-1);
@@ -284,9 +286,11 @@ VL_ATTR_COLD void Vtb___024root__trace_init_sub__TOP__0(Vtb___024root* vlSelf, V
     tracep->declBus(c+28,"reg_waddr_i", false,-1, 4,0);
     tracep->declQuad(c+26,"reg_wdata_i", false,-1, 63,0);
     tracep->declBit(c+29,"reg_wen", false,-1);
+    tracep->declQuad(c+14,"inst_addr_i", false,-1, 63,0);
     for (int i = 0; i < 32; ++i) {
         tracep->declQuad(c+80+i*2,"regs", true,(i+0), 63,0);
     }
+    tracep->declQuad(c+14,"pc_reg", false,-1, 63,0);
     tracep->pushNamePrefix("unnamedblk1 ");
     tracep->declBus(c+144,"i", false,-1, 31,0);
     tracep->popNamePrefix(5);

@@ -2,7 +2,8 @@
 `include "./defines.v"
 
 import "DPI-C" function void pmem_read(input longint raddr, output longint rdata);
-
+// import "DPI-C" function void get_regs(input logic [63:0] regs[]);
+// import "DPI-C" function void get_pc(input longint pc);
 
 module inst_fetch(
     // from pc
@@ -10,7 +11,7 @@ module inst_fetch(
     
     // to if_id
     output wire[63:0] inst_addr_o,      
-    output wire[31:0] inst_o            
+    output wire[31:0] inst_o       
 );  
 
     reg[63:0] inst_get;
@@ -28,5 +29,6 @@ module inst_fetch(
         $display("IFU: 1. pc_addr: %x\nIFU: 2. inst: %x", pc_addr_i, inst_o);
         $display("===========================");
     end
+
     
 endmodule

@@ -93,7 +93,7 @@ static void execute(uint64_t n) {
     Decode s;
     for (;n > 0; n --) {
         // printf("2.[cpu-exec.c(execute)]:hello\n");
-        printf("2.[cpu-exec.c(execute)] pc %lx\n", cpu.pc);
+        // printf("2.[cpu-exec.c(execute)] pc %lx\n", cpu.pc);
         exec_once(&s, cpu.pc);
         g_nr_guest_inst ++;
         trace_and_difftest(&s, cpu.pc);

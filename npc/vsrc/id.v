@@ -147,7 +147,7 @@ module id(
             `INST_JAL: begin
                 rs1_addr_o    = 5'b0;
                 rs2_addr_o    = 5'b0;
-                op1_o         =  inst_addr_i;
+                op1_o         = inst_addr_i;
                 op2_o         = 64'h4;
                 rd_addr_o     = rd;
                 reg_wen       = 1'b1; 

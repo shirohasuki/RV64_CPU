@@ -74,7 +74,13 @@ int main() {
 
     while (sim_time < MAX_SIM_TIME) {
         exec_once();
+
 #ifdef CONFIG_NPC_DIFFTEST
+        if (cpu_npc.pc == 0x0) {
+            exec_once();
+            exec_once();
+            // exec_once();
+        } // 遇到流水线冲刷，pc再走两拍到EXU
         difftest_exec_once();
 #endif
     }

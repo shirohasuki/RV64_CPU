@@ -17,21 +17,10 @@ module regs (
 	input wire       reg_wen,
     input reg[63:0]  inst_addr_i
     // r:read, w:write
-
-    // from pc
-    // input reg[63:0]  pc_i
-    // to trace
-    // output  wire[63:0] reg_o
 );
 
     reg[63:0] regs[0:31]; // 32个64位宽
     reg[63:0] pc_reg  = inst_addr_i;
-
-    // always @(*) begin
-    //     $display("REGS: %x", inst_addr_i);   
-    //     $display("REGS: %x", pc_reg);   
-    //     $display("REGS!!!");   
-    // end
 
     always @(*) begin
         if (rst == 1'b0) 
@@ -64,9 +53,7 @@ module regs (
         else if (reg_wen && reg_waddr_i != 5'b0) begin // x0不准写
             regs[reg_waddr_i] <= reg_wdata_i;
         end 
-
-        $display("REGS: %x", inst_addr_i);   
-        $display("REGS: %x", pc_reg);   
+        // $display("REGS: %x", pc_reg);   
         get_regs(regs);
         get_pc(pc_reg);
         // 组合逻辑要补全else，时序不需要

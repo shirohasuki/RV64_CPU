@@ -3,6 +3,13 @@
 uint64_t *cpu_gpr = NULL;
 uint64_t cpu_pc = 0x80000000;
 
+const char *riscv64_regs[] = {
+  "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
+  "s0", "s1", "a0", "a1", "a2", "a3", "a4", "a5",
+  "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
+  "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
+};
+
 extern "C" void get_pc(long long int pc) {
     cpu_pc = (uint64_t)pc;
     // printf("cpu_pc: %lx\n", cpu_pc);
@@ -21,8 +28,8 @@ extern "C" void get_regs(const svOpenArrayHandle r) {
 void dump_gpr() {
     printf("============= Regs =================\n");
     for (int i = 0; i < 32; i++) {
-        printf("gpr[%2d] = 0x%lx\n", i, cpu_gpr[i]);
-    }
+        printf("gpr[%2d] = 0x%-14lx\t%s\n", i, cpu_gpr[i], riscv64_regs[i]);
+    } // -:左对齐
     printf("pc      = 0x%lx\n", cpu_pc);
     printf("====================================\n");
 }
@@ -33,6 +40,9 @@ void npc_exit(int status) {
     else {
 #ifdef CONFIG_NPC_ITRACE
     itrace_output();
+#endif
+#ifdef CONFIG_MTRACE
+    print_mtrace();
 #endif
 // #ifdef CONFIG_NPC_GPRTRACE
     dump_gpr(); 

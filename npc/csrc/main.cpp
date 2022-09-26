@@ -1,7 +1,7 @@
 #include "npc.h"
 
 
-#define MAX_SIM_TIME 400 // 最大仿真周期，中途读取到ebreak自动退出
+#define MAX_SIM_TIME 3000 // 最大仿真周期，中途读取到ebreak自动退出
 vluint64_t sim_time = 0;
 
 
@@ -44,7 +44,7 @@ void exec_once() {
 #endif
     top->clk ^= 1; step_and_dump_wave();
     top->clk ^= 1; step_and_dump_wave();
-    dump_gpr(); 
+    // dump_gpr(); 
 } // 翻转两次走一条指令
 
 void sim_exit() {
@@ -73,11 +73,14 @@ int main() {
     
 
     while (sim_time < MAX_SIM_TIME) {
-        // printf(RED("check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
         exec_once();
-        // dump_gpr();
-        // printf(RED("check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
+
 #ifdef CONFIG_NPC_DIFFTEST
+        if (cpu_npc.pc == 0x0) {
+            exec_once();
+            exec_once();
+            // exec_once();
+        } // 遇到流水线冲刷，pc再走两拍到EXU
         difftest_exec_once();
 #endif
     }

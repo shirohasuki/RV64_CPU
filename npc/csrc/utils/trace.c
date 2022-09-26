@@ -39,3 +39,29 @@ void itrace_output() {
     printf("====================================\n");
 }
 #endif
+
+
+//=====================MTRACE=========================
+#ifdef CONFIG_MTRACE
+char mtrace_buf[16][100] = {0};
+int mtrace_count = 0;
+#endif
+
+#ifdef CONFIG_MTRACE
+void print_mtrace() {
+    puts("========== MTRACE Result ==========");
+    // for (int i = 0; i < 16; i++) {
+    //     if (strlen(mtrace_buf[i]) == 0) break;
+    //     if ((i+1)%16 == mtrace_count) printf("-->");
+    //     else printf("   ");
+    //     printf("%s\n", mtrace_count);
+    // }
+
+    for (int i = mtrace_count; ; i = (i + 1) % SIZE_MTRACEBUF) {
+		if (i == mtrace_count - 1) { printf("---> %s\n", mtrace_buf[i]); break;}
+		else printf("     %s\n", mtrace_buf[i]);
+	}
+
+    puts("====================================");
+}
+#endif

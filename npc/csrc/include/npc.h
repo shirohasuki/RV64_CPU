@@ -16,6 +16,7 @@
 #define CONFIG_NPC_ITRACE 1
 // #define CONFIG_NPC_GPRTRACE 1
 #define CONFIG_NPC_DIFFTEST 1
+#define CONFIG_MTRACE 1
 
 // ================ Typedef ===============
 typedef long long ll;
@@ -60,8 +61,20 @@ void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 void itrace_record(uint64_t pc);
 void itrace_output();
 
+// ============= MTRACE ===============
+extern char mtrace_buf[16][100];
+extern int mtrace_count;
+void print_mtrace();
+#define SIZE_MTRACEBUF 16 // mtrace_buf环形里单次存储指令条数目
+
 // ============= GPR ===================
 void dump_gpr(); // 打印寄存器
+// const char *riscv64_regs[] = {
+//   "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
+//   "s0", "s1", "a0", "a1", "a2", "a3", "a4", "a5",
+//   "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
+//   "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
+// };
 
 // ============= Format ================
 #define COLOR(a, b) "\033[" #b "m" a "\033[0m"

@@ -13,14 +13,6 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtb___024root___combo__TOP__0\n"); );
     // Body
     if (vlSelf->rst) {
-        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o 
-            = ((0U == (IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_rs1_addr_o))
-                ? 0ULL : (((IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_reg_wen_o) 
-                           & ((IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_rd_addr_o) 
-                              == (IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_rs1_addr_o)))
-                           ? vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_rd_data_o
-                           : vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs
-                          [vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_rs1_addr_o]));
         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o 
             = ((0U == (IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_rs2_addr_o))
                 ? 0ULL : (((IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_reg_wen_o) 
@@ -29,92 +21,137 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
                            ? vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_rd_data_o
                            : vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs
                           [vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_rs2_addr_o]));
+        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o 
+            = ((0U == (IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_rs1_addr_o))
+                ? 0ULL : (((IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_reg_wen_o) 
+                           & ((IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_rd_addr_o) 
+                              == (IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_rs1_addr_o)))
+                           ? vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_rd_data_o
+                           : vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs
+                          [vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_rs1_addr_o]));
     } else {
-        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o = 0ULL;
         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o = 0ULL;
+        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o = 0ULL;
     }
     if ((0x40U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
         if ((0x20U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
             if ((0x10U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
-                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
             } else if ((8U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                 if ((4U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                     if ((2U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                         if ((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
+                            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 4ULL;
                             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
                                 = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_addr_o;
-                            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 4ULL;
+                            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o 
+                                = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_addr_o;
                         } else {
-                            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+                            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
                         }
                     } else {
-                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
                     }
                 } else {
-                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
                 }
             } else if ((4U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                 if ((2U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                     if ((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 4ULL;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
                             = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_addr_o;
-                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 4ULL;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o 
+                            = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                     } else {
-                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
                     }
                 } else {
-                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
                 }
             } else if ((2U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                 if ((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                     if ((0x4000U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
-                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
-                            = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
                             = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
+                            = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o 
+                            = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_addr_o;
                     } else if ((0x2000U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
-                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
                     } else {
-                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
-                            = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
                             = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
+                            = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o 
+                            = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_addr_o;
                     }
                 } else {
-                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
                 }
             } else {
-                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
             }
         } else {
-            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
         }
     } else if ((0x20U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
         if ((0x10U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
             if ((8U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
-                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
-                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                if ((4U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+                } else if ((2U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
+                    if ((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
+                        if ((0U == (7U & (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
+                                          >> 0xcU)))) {
+                            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
+                                = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o;
+                            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
+                                = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
+                        } else {
+                            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+                        }
+                    } else {
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+                    }
+                } else {
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+                }
             } else if ((4U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
-                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
                     = ((2U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)
                         ? ((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)
                             ? vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immU
                             : 0ULL) : 0ULL);
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
             } else if ((2U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                 if ((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
-                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
-                        = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
                         = ((0x2000U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)
                             ? vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o
@@ -122,41 +159,108 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
                                 ? (QData)((IData)((0x1fU 
                                                    & (IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o))))
                                 : vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o));
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
+                        = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                 } else {
-                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                 }
             } else {
-                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+            }
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
+        } else if ((8U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
+        } else if ((4U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
+        } else if ((2U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
+            if ((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
+                if ((((0U == (7U & (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
+                                    >> 0xcU))) | (1U 
+                                                  == 
+                                                  (7U 
+                                                   & (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
+                                                      >> 0xcU)))) 
+                     | (2U == (7U & (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
+                                     >> 0xcU))))) {
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
+                        = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
+                        = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o 
+                        = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
+                } else {
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
+                }
+            } else {
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
             }
         } else {
-            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
         }
     } else if ((0x10U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
         if ((8U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
-            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
-            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+            if ((4U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+            } else if ((2U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
+                if ((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
+                    if ((0U == (7U & (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
+                                      >> 0xcU)))) {
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
+                            = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immI;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
+                            = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
+                    } else if (((1U == (7U & (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
+                                              >> 0xcU))) 
+                                | (5U == (7U & (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
+                                                >> 0xcU))))) {
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
+                            = (QData)((IData)((0x1fU 
+                                               & (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
+                                                  >> 0x14U))));
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
+                            = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
+                    } else {
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+                    }
+                } else {
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+                }
+            } else {
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+            }
         } else if ((4U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
             if ((2U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                 if ((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
-                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
-                        = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_addr_o;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
                         = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immU;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
+                        = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_addr_o;
                 } else {
-                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                 }
             } else {
-                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
             }
         } else if ((2U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
             if ((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
-                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
-                    = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
                     = ((0x2000U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)
                         ? vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immI
@@ -165,17 +269,33 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
                                                & (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
                                                   >> 0x14U))))
                             : vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immI));
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
+                    = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
             } else {
-                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
             }
         } else {
-            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
         }
+        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
     } else {
-        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o 
+            = ((8U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)
+                ? 0ULL : ((4U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)
+                           ? 0ULL : ((2U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)
+                                      ? ((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)
+                                          ? ((0x4000U 
+                                              & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)
+                                              ? ((0x2000U 
+                                                  & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)
+                                                  ? 0ULL
+                                                  : vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o)
+                                              : vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o)
+                                          : 0ULL) : 0ULL)));
     }
 }
 

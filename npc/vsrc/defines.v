@@ -8,12 +8,23 @@
 `define INST_ANDI   3'b111
 `define INST_SLLI   3'b001
 `define INST_SRI    3'b101
+    // 结果截断系列
+`define INST_TYPE_I_W 7'b0011011
+`define INST_ADDIW   3'b000
+// `define INST_SLTIW   3'b010
+// `define INST_SLTIUW  3'b011
+// `define INST_XORIW   3'b100
+// `define INST_ORIW   3'b110
+// `define INST_ANDIW   3'b111
+`define INST_SLLIW   3'b001
+`define INST_SRIW    3'b101
 
 // L type inst
 `define INST_TYPE_L 7'b0000011
 `define INST_LB     3'b000
 `define INST_LH     3'b001
 `define INST_LW     3'b010
+`define INST_LD     3'b011
 `define INST_LBU    3'b100
 `define INST_LHU    3'b101
 
@@ -34,6 +45,17 @@
 `define INST_SR     3'b101
 `define INST_OR     3'b110
 `define INST_AND    3'b111
+  // 结果截断系列
+`define INST_TYPE_R_M_W 7'b0111011
+`define INST_ADDW_SUBW 3'b000
+// `define INST_SLL    3'b001
+// `define INST_SLT    3'b010
+// `define INST_SLTU   3'b011
+// `define INST_XOR    3'b100
+// `define INST_SR     3'b101
+// `define INST_OR     3'b110
+// `define INST_AND    3'b111
+
 // M type inst
 `define INST_MUL    3'b000
 `define INST_MULH   3'b001

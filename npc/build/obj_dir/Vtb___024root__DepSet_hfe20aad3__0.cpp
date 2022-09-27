@@ -177,7 +177,7 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
                                                                        ((0x1000U 
                                                                          & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)
                                                                          ? 0xffU
-                                                                         : 0xf0U)
+                                                                         : 0xfU)
                                                                         : 
                                                                        ((0x1000U 
                                                                          & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)

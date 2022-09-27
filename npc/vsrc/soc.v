@@ -4,18 +4,26 @@ module soc (
     input  wire clk, 
     input  wire rst 
 );
-    // riscv 2 rom
-    wire[63:0] riscv_inst_addr_o;
-    // rom 2 riscv
-    wire[31:0] rom_inst_o;
-    // riscv 2 ram
-    wire riscv_w_en;
-    wire[11:0] riscv_w_addr_o;
-    wire[31:0] riscv_w_data_o;
-    wire riscv_r_en;   
-    wire[11:0] riscv_r_addr_o;
-    // ram 2 riscv
-    wire[31:0] ram_r_data_o;  
+
+    // riscv to ram 
+    //  write
+    wire               riscv_ram_wen;
+    wire[63:0]         riscv_ram_waddr_o;
+    wire[63:0]         riscv_ram_wdata_o;
+    wire[7:0]          riscv_ram_wmask;
+    // read
+    wire                riscv_ram_ren;
+    wire[63:0]          riscv_ram_raddr_o; 
+    // flush 
+    wire                riscv_ram_hold_flag_o;
+
+
+    // ram to riscv
+    wire[63:0]          ram_riscv_rdata_o;
+
+
+
+
     /*
     riscv riscv_inst (
         .clk          ( clk             ),
@@ -25,18 +33,31 @@ module soc (
     );*/
     
     riscv riscv_inst(
-        .clk            ( clk            ),
-        .rst            ( rst            ),
-        .inst_i         ( rom_inst_o         ),
-        .inst_addr_o    ( riscv_inst_addr_o    ),
-        .mem_r_data_i   ( ram_r_data_o  ),
-        .mem_r_req_o    ( riscv_r_en    ),
-        .mem_r_addr_o   ( riscv_r_addr_o  ),
-        .mem_w_req_o    ( riscv_w_en  ),
-        .mem_w_addr_o   ( riscv_w_addr_o  ),
-        .mem_w_data_o   ( riscv_w_data_o  )
+        .clk          ( clk         ),
+        .rst          ( rst         ),
+        .hold_flag_o  ( riscv_ram_hold_flag_o ),
+        .mem_rdata_i  ( ram_riscv_rdata_o ),
+        .mem_ren_o    ( riscv_ram_ren  ),
+        .mem_raddr_o  ( riscv_ram_raddr_o ),
+        .mem_wen_o    ( riscv_ram_wen   ),
+        .mem_waddr_o  ( riscv_ram_waddr_o ),
+        .mem_wdata_o  ( riscv_ram_wdata_o ),
+        .mem_wmask_o  ( riscv_ram_wmask  )
     );
 
+
+    ram ram_inst(
+        .clk         ( clk               ),
+        .rst         ( rst               ),
+        .hold_flag_i ( riscv_ram_hold_flag_o ),
+        .mem_wen     ( riscv_ram_wen     ),
+        .mem_waddr_i ( riscv_ram_waddr_o ),
+        .mem_wdata_i ( riscv_ram_wdata_o ),
+        .mem_wmask   ( riscv_ram_wmask   ),
+        .mem_ren     ( riscv_ram_ren     ),
+        .mem_raddr_i ( riscv_ram_raddr_o ),
+        .mem_rdata_o  ( ram_riscv_rdata_o )
+    );
 
 
 
@@ -44,19 +65,6 @@ module soc (
     //     .inst_addr_i   (riscv_inst_addr_o),
     //     .inst_o        ( rom_inst_o      )
     // );
-
-
-    // ram ram_inst(
-    //     .clk      ( clk           ),
-    //     .rst      ( rst           ),
-    //     .w_en     ( riscv_w_en      ),
-    //     .w_addr_i ( riscv_w_addr_o  ),
-    //     .w_data_i ( riscv_w_data_o  ),
-    //     .r_en     ( riscv_r_en      ),
-    //     .r_addr_i ( riscv_r_addr_o  ),
-    //     .r_data_o ( ram_r_data_o  )
-    // );
-
 
 
 endmodule //soc

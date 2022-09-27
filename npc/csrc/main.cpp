@@ -1,7 +1,7 @@
 #include "npc.h"
 
 
-#define MAX_SIM_TIME 400 // 最大仿真周期，中途读取到ebreak自动退出
+#define MAX_SIM_TIME 15000 // 最大仿真周期，中途读取到ebreak自动退出
 vluint64_t sim_time = 0;
 
 
@@ -83,6 +83,7 @@ int main() {
         } // 遇到流水线冲刷，pc再走两拍到EXU
         difftest_exec_once();
 #endif
+    dump_gpr();
     }
     sim_exit();
 } 

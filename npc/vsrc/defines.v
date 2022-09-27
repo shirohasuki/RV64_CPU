@@ -8,12 +8,23 @@
 `define INST_ANDI   3'b111
 `define INST_SLLI   3'b001
 `define INST_SRI    3'b101
+    // 结果截断系列
+`define INST_TYPE_I_W 7'b0011011
+`define INST_ADDIW   3'b000
+// `define INST_SLTIW   3'b010
+// `define INST_SLTIUW  3'b011
+// `define INST_XORIW   3'b100
+// `define INST_ORIW   3'b110
+// `define INST_ANDIW   3'b111
+`define INST_SLLIW   3'b001
+`define INST_SRIW    3'b101
 
 // L type inst
 `define INST_TYPE_L 7'b0000011
 `define INST_LB     3'b000
 `define INST_LH     3'b001
 `define INST_LW     3'b010
+`define INST_LD     3'b011
 `define INST_LBU    3'b100
 `define INST_LHU    3'b101
 
@@ -22,27 +33,40 @@
 `define INST_SB     3'b000
 `define INST_SH     3'b001
 `define INST_SW     3'b010
+`define INST_SD     3'b011
 
 // R and M type inst
 `define INST_TYPE_R_M 7'b0110011
 // R type inst
-`define INST_ADD_SUB 3'b000
-`define INST_SLL    3'b001
-`define INST_SLT    3'b010
-`define INST_SLTU   3'b011
-`define INST_XOR    3'b100
-`define INST_SR     3'b101
-`define INST_OR     3'b110
-`define INST_AND    3'b111
+`define INST_ADD_SUB_MUL 3'b000
+`define INST_SLL     3'b001
+`define INST_SLT     3'b010
+`define INST_SLTU    3'b011
+`define INST_XOR     3'b100
+`define INST_SR      3'b101
+`define INST_OR_REM  3'b110
+`define INST_AND     3'b111
+  // 结果截断系列
+`define INST_TYPE_R_M_W 7'b0111011
+`define INST_ADDW_SUBW_MULW 3'b000
+`define INST_SLLW      3'b001
+// `define INST_SLT    3'b010
+// `define INST_SLTU   3'b011
+// `define INST_XOR    3'b100
+`define INST_SRW       3'b101
+`define INST_REMW      3'b110 // 无orw
+// `define INST_AND    3'b111
+`define INST_DIVW   3'b100
+
 // M type inst
-`define INST_MUL    3'b000
-`define INST_MULH   3'b001
-`define INST_MULHSU 3'b010
-`define INST_MULHU  3'b011
-`define INST_DIV    3'b100
-`define INST_DIVU   3'b101
-`define INST_REM    3'b110
-`define INST_REMU   3'b111
+// `define INST_MUL    3'b000
+// `define INST_MULH   3'b001
+// `define INST_MULHSU 3'b010
+// `define INST_MULHU  3'b011
+// `define INST_DIV    3'b100
+// `define INST_DIVU   3'b101
+// `define INST_REM    3'b110
+// `define INST_REMU   3'b111
 
 // J type inst
 `define INST_JAL    7'b1101111

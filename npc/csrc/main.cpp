@@ -83,7 +83,7 @@ int main() {
         } // 遇到流水线冲刷，pc再走两拍到EXU
         difftest_exec_once();
 #endif
-    dump_gpr();
+    // dump_gpr();
     }
     sim_exit();
 } 

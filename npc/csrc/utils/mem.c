@@ -25,6 +25,7 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 
 // Memory Write
 extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
+    printf("mask = %x\n", mask);
     if (waddr < MEM_BASE) return;
     uint8_t *pt = cpu2mem(waddr);
     for (int i = 0; i < 8; ++i) {

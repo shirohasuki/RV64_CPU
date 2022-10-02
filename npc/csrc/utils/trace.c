@@ -50,11 +50,11 @@ int mtrace_count = 0;
 #ifdef CONFIG_MTRACE
 void print_mtrace() {
     puts("========== MTRACE Result ==========");
-    // for (int i = 0; i < 16; i++) {
+    // for (int i = 0; i < SIZE_MTRACEBUF; i++) {
     //     if (strlen(mtrace_buf[i]) == 0) break;
-    //     if ((i+1)%16 == mtrace_count) printf("-->");
+    //     if ((i+1)%SIZE_MTRACEBUF == mtrace_count) printf("-->");
     //     else printf("   ");
-    //     printf("%s\n", mtrace_count);
+    //     printf("%s\n", mtrace_buf[i]);
     // }
 
     for (int i = mtrace_count; ; i = (i + 1) % SIZE_MTRACEBUF) {

@@ -236,8 +236,8 @@ module id(
                         rd_addr_o     = rd;
                         reg_wen       = 1'b1;
                         base_addr_o   = rs1_data_i;        // 基地址
-                        // offset_addr_o = immL;           // 偏移地址 
-                        offset_addr_o = 64'b0;
+                        offset_addr_o = immL;           // 偏移地址 
+                        // offset_addr_o = 64'b0;
                         mem_ren       = 1'b1;              // 访存使能
                         mem_raddr_o   = rs1_data_i + immL; // 访存地址 需要符号位拓展
                         // $display("mem_raddr_o = %x", mem_raddr_o);
@@ -265,14 +265,14 @@ module id(
                     `INST_SB,`INST_SH,`INST_SW,`INST_SD: begin
                         rs1_addr_o    = rs1;
                         rs2_addr_o    = rs2;
-                        op1_o         = rs1_data_i;
+                        op1_o         = 64'b0;
                         op2_o         = rs2_data_i;
                         rd_addr_o     = 5'b0;
                         reg_wen       = 1'b0;
                         base_addr_o   = rs1_data_i;  // 基地址
-                        offset_addr_o = immS;  // 偏移地址 
-                        mem_ren       = 1'b0;// 访存使能
-                        mem_raddr_o   = 64'b0;//访存地址
+                        offset_addr_o = immS;        // 偏移地址 
+                        mem_ren       = 1'b0;        // 访存使能
+                        mem_raddr_o   = 64'b0;       //访存地址
                     end
                     default: begin
                         rs1_addr_o    = 5'b0;

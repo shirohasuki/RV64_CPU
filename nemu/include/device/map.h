@@ -7,12 +7,12 @@ typedef void(*io_callback_t)(uint32_t, int, bool);
 uint8_t* new_space(int size);
 
 typedef struct {
-  const char *name;
-  // we treat ioaddr_t as paddr_t here
-  paddr_t low;
-  paddr_t high;
-  void *space;
-  io_callback_t callback;
+    const char *name;
+    // we treat ioaddr_t as paddr_t here
+    paddr_t low;
+    paddr_t high;
+    void *space;
+    io_callback_t callback;
 } IOMap;
 
 static inline bool map_inside(IOMap *map, paddr_t addr) {
@@ -20,14 +20,14 @@ static inline bool map_inside(IOMap *map, paddr_t addr) {
 }
 
 static inline int find_mapid_by_addr(IOMap *maps, int size, paddr_t addr) {
-  int i;
-  for (i = 0; i < size; i ++) {
-    if (map_inside(maps + i, addr)) {
-      difftest_skip_ref();
-      return i;
+    int i;
+    for (i = 0; i < size; i ++) {
+        if (map_inside(maps + i, addr)) {
+        difftest_skip_ref();
+        return i;
+        }
     }
-  }
-  return -1;
+    return -1;
 }
 
 void add_pio_map(const char *name, ioaddr_t addr,

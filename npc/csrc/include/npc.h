@@ -29,10 +29,7 @@ typedef struct {
     word_t gpr[32];
     vaddr_t pc;
 } CPU_state;
-// typedef struct { 
-//     word_t gpr[33];
-//     // pc = gpr[32]
-// } CPU_state;
+
 extern CPU_state cpu_npc;
 extern CPU_state ref_cpu;
 
@@ -40,16 +37,15 @@ void npc_exit(int status);
 
 // =============== Memory ===============
 #define MEM_BASE 0x80000000
-#define MEM_SIZE 65536
+// #define MEM_SIZE 65536
 
-// #define MEM_SIZE 8000000
+#define MEM_SIZE 0x8000000
 
 extern uint8_t mem[MEM_SIZE];
+
 // Memory transfer
 uint8_t* cpu2mem(ll addr);
-
 long load_image(char const *img_file); 
-
 
 // ============== Reg ===================
 // extern uint64_t *cpu_gpr; //  改为CPU_state.gpr
@@ -62,10 +58,11 @@ void itrace_record(uint64_t pc);
 void itrace_output();
 
 // ============= MTRACE ===============
-extern char mtrace_buf[16][100];
+#define SIZE_MTRACEBUF 16  // mtrace_buf环形里单次存储指令条数目
+extern char mtrace_buf[SIZE_MTRACEBUF][100];
 extern int mtrace_count;
 void print_mtrace();
-#define SIZE_MTRACEBUF 16 // mtrace_buf环形里单次存储指令条数目
+
 
 // ============= GPR ===================
 void dump_gpr(); // 打印寄存器

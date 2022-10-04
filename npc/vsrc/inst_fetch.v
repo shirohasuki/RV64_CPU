@@ -27,10 +27,10 @@ module inst_fetch(
 
     assign inst_o = inst_get[31:0];
     
-    always @(*) begin
-        $display("IFU: 1. pc_addr: %x\nIFU: 2. inst: %x", pc_addr_i, inst_o);
-        $display("===========================");
-    end
+    // always @(*) begin
+    //     $display("IFU: 1. pc_addr: %x\nIFU: 2. inst: %x", pc_addr_i, inst_o);
+    //     $display("===========================");
+    // end
 
     
 endmodule

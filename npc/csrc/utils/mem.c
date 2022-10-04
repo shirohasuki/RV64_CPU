@@ -25,6 +25,7 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 
 // Memory Write
 extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
+    printf("mask = %x\n", mask);
     if (waddr < MEM_BASE) return;
     uint8_t *pt = cpu2mem(waddr);
     for (int i = 0; i < 8; ++i) {
@@ -32,7 +33,7 @@ extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
         wdata >>= 8, mask >>= 1, pt++;
     }
 #ifdef CONFIG_MTRACE
-    sprintf(mtrace_buf[mtrace_count],"write: addr:%016llx wmask:%08d data:%016llx", waddr, mask, wdata);
+    sprintf(mtrace_buf[mtrace_count],"write: addr:%016llx data:%016llx\n            wmask:%08x", waddr,  wdata, mask);
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
 #endif
 }

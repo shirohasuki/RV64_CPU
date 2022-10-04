@@ -128,9 +128,9 @@ module ram (
   
     mem mem1(clk, rst, hold_flag_i, mem_ren, mem_wen, mem_raddr_i, mem_rdata_o, mem_waddr_i, mem_wdata_i, mem_wmask);
    
-    always @(*) begin
-        $display("[ram] mem_rdata_o = %x", mem_rdata_o); 
-    end
+    // always @(*) begin
+    //     $display("[ram] mem_rdata_o = %x", mem_rdata_o); 
+    // end
 
     // end
     

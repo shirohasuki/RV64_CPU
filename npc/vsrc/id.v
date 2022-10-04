@@ -38,7 +38,7 @@ module id(
     wire[4:0] rs2;
     wire[6:0] func7;
     wire[11:0] imm;
-    wire[4:0] shamt; // I形的移位
+    wire[5:0] shamt; // I形的移位
 
     wire[63:0] immI = {{52{inst_i[31]}}, inst_i[31:20]}; // 符号位拓展，imm[11]向前拓展为20位
     wire[63:0] immU = {{32{inst_i[31]}}, inst_i[31:12], 12'b0};
@@ -52,7 +52,7 @@ module id(
     assign func3  = inst_i[14:12];
     assign rs1    = inst_i[19:15];
     assign rs2    = inst_i[24:20];
-    assign shamt  = inst_i[24:20];
+    assign shamt  = inst_i[25:20]; // 64的shamt为5位
     assign func7  = inst_i[31:25];
     assign imm    = inst_i[31:20];
 
@@ -77,12 +77,14 @@ module id(
                         reg_wen    = 1'b1; // 要回写 
                     end
                     `INST_SLLI,`INST_SRI: begin // SRI包含srli和srai
-                        rs1_addr_o = rs1;
-                        rs2_addr_o = 5'b0;
-                        op1_o      = rs1_data_i;
-                        op2_o      = {59'b0, shamt}; 
-                        rd_addr_o  = rd;
-                        reg_wen    = 1'b1; // 要回写 
+                        // if (shamt[5] == 0) begin
+                            rs1_addr_o = rs1;
+                            rs2_addr_o = 5'b0;
+                            op1_o      = rs1_data_i;
+                            op2_o      = {58'b0, shamt}; 
+                            rd_addr_o  = rd;
+                            reg_wen    = 1'b1; // 要回写 
+                        // end
                     end
                     default: begin
                         rs1_addr_o = 5'b0;
@@ -110,12 +112,14 @@ module id(
                         reg_wen    = 1'b1; // 要回写 
                     end
                     `INST_SLLIW,`INST_SRIW: begin // SRI包含srli和srai
-                        rs1_addr_o = rs1;
-                        rs2_addr_o = 5'b0;
-                        op1_o      = rs1_data_i;
-                        op2_o      = {59'b0, shamt}; 
-                        rd_addr_o  = rd;
-                        reg_wen    = 1'b1; // 要回写 
+                        // if (shamt[5] == 0) begin
+                            rs1_addr_o = rs1;
+                            rs2_addr_o = 5'b0;
+                            op1_o      = rs1_data_i;
+                            op2_o      = {58'b0, shamt}; 
+                            rd_addr_o  = rd;
+                            reg_wen    = 1'b1; // 要回写
+                        // end 
                     end
                     default: begin
                         rs1_addr_o = 5'b0;
@@ -134,7 +138,7 @@ module id(
                 mem_ren    = 1'b0;// 访存使能
                 mem_raddr_o = 64'b0;//访存地址
                 case (func3)
-                    `INST_ADD_SUB,`INST_SLT,`INST_SLTU,`INST_XOR,`INST_OR,`INST_AND:begin 
+                    `INST_ADD_SUB_MUL,`INST_SLT,`INST_SLTU,`INST_XOR,`INST_OR_REM,`INST_AND:begin 
                         rs1_addr_o = rs1;
                         rs2_addr_o = rs2;
                         op1_o = rs1_data_i;
@@ -164,10 +168,10 @@ module id(
             `INST_TYPE_R_M_W:begin
                 base_addr_o   = 64'b0;// 基地址
                 offset_addr_o = 64'b0;// 偏移地址
-                mem_ren    = 1'b0;// 访存使能
-                mem_raddr_o = 64'b0;//访存地址
+                mem_ren       = 1'b0;// 访存使能
+                mem_raddr_o   = 64'b0;//访存地址
                 case (func3)
-                    `INST_ADDW_SUBW:begin 
+                    `INST_ADDW_SUBW_MULW,`INST_DIVW,`INST_SLLW,`INST_REMW,`INST_SRW:begin 
                         rs1_addr_o = rs1;
                         rs2_addr_o = rs2;
                         op1_o = rs1_data_i;
@@ -200,12 +204,12 @@ module id(
                 mem_raddr_o = 64'b0;//访存地址
                 case (func3)
                     `INST_BNE,`INST_BEQ,`INST_BLT,`INST_BLTU,`INST_BGE,`INST_BGEU: begin
-                        rs1_addr_o = rs1;
-                        rs2_addr_o = rs2;
-                        op1_o      = rs1_data_i;
-                        op2_o      = rs2_data_i;
-                        rd_addr_o  = 5'b0;
-                        reg_wen    = 1'b0;
+                        rs1_addr_o    = rs1;
+                        rs2_addr_o    = rs2;
+                        op1_o         = rs1_data_i;
+                        op2_o         = rs2_data_i;
+                        rd_addr_o     = 5'b0;
+                        reg_wen       = 1'b0;
                         base_addr_o   = inst_addr_i; // 基地址
                         offset_addr_o = immB; // 偏移地址 
                     end
@@ -231,22 +235,13 @@ module id(
                         op2_o         = 64'b0;
                         rd_addr_o     = rd;
                         reg_wen       = 1'b1;
-                        base_addr_o   = rs1_data_i;;             // 基地址
-                        offset_addr_o = immL;              // 偏移地址 
+                        base_addr_o   = rs1_data_i;        // 基地址
+                        offset_addr_o = immL;           // 偏移地址 
+                        // offset_addr_o = 64'b0;
                         mem_ren       = 1'b1;              // 访存使能
                         mem_raddr_o   = rs1_data_i + immL; // 访存地址 需要符号位拓展
                         // $display("mem_raddr_o = %x", mem_raddr_o);
                     end
-                    	// mem_rd_req_o	= 1'b1 ;
-						// mem_rd_addr_o 	= rs1_data_i + {{20{imm[11]}},imm};
-						// rs1_addr_o  	= rs1;
-						// rs2_addr_o  	= 5'b0;
-						// op1_o 	    	= 32'b0;
-						// op2_o       	= 32'b0;
-						// rd_addr_o   	= rd;
-						// reg_wen     	= 1'b1;	
-						// base_addr_o   	= rs1_data_i;
-						// addr_offset_o 	= {{20{imm[11]}},imm};	
 
                     default: begin
                         rs1_addr_o    = 5'b0;
@@ -267,17 +262,17 @@ module id(
             // S为寄存器->内存
             `INST_TYPE_S: begin
                 case (func3)
-                    `INST_SB,`INST_SH,`INST_SW: begin
+                    `INST_SB,`INST_SH,`INST_SW,`INST_SD: begin
                         rs1_addr_o    = rs1;
                         rs2_addr_o    = rs2;
-                        op1_o         = rs1_data_i;
+                        op1_o         = 64'b0;
                         op2_o         = rs2_data_i;
                         rd_addr_o     = 5'b0;
                         reg_wen       = 1'b0;
                         base_addr_o   = rs1_data_i;  // 基地址
-                        offset_addr_o = immS;  // 偏移地址 
-                        mem_ren       = 1'b0;// 访存使能
-                        mem_raddr_o   = 64'b0;//访存地址
+                        offset_addr_o = immS;        // 偏移地址 
+                        mem_ren       = 1'b0;        // 访存使能
+                        mem_raddr_o   = 64'b0;       //访存地址
                     end
                     default: begin
                         rs1_addr_o    = 5'b0;
@@ -288,8 +283,8 @@ module id(
                         reg_wen       = 1'b0; 
                         base_addr_o   = 64'b0; // 基地址
                         offset_addr_o = 64'b0; // 偏移地址 
-                        mem_ren       = 1'b0;// 访存使能
-                        mem_raddr_o   = 64'b0;//访存地址
+                        mem_ren       = 1'b0;  // 访存使能
+                        mem_raddr_o   = 64'b0; //访存地址
                     end 
                 endcase
             end

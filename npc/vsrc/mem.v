@@ -22,8 +22,8 @@ module mem(clk, rst, hold_flag_i, ren, wen, raddr, rdata, waddr, wdata, mask);
         // if (ren || rst == 1'b1 || hold_flag_i == 1'b0) pmem_read(raddr, rdata);
         if (ren) pmem_read(raddr, rdata); 
         else rdata = 64'b0;
-        $display("[mem] ren = %x", ren);
-        $display("[mem] rdata = %x", rdata);
+        // $display("[mem] ren = %x", ren);
+        // $display("[mem] rdata = %x", rdata);
         if (wen) pmem_write(waddr, wdata, mask);
     end
 endmodule

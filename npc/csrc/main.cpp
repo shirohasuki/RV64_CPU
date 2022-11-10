@@ -1,7 +1,7 @@
 #include "npc.h"
 
 
-#define MAX_SIM_TIME 150000 // 最大仿真周期，中途读取到ebreak自动退出
+#define MAX_SIM_TIME 1500000 // 最大仿真周期，中途读取到ebreak自动退出
 vluint64_t sim_time = 0;
 
 

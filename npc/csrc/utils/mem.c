@@ -11,9 +11,9 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
         printf("[pmem_read] raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
         return;
     }
-    
+
     time_t t;
-    if (raddr == 0xa1000048) time(&t);//获取Unix时间戳。
+    if (raddr == 0xa0000048) time(&t);//获取Unix时间戳。
 
     uint8_t *pt = cpu2mem(raddr) + 7;
     ll ret = 0;
@@ -32,7 +32,7 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
     //printf("mask = %x\n", mask);
     if (waddr < MEM_BASE) return;
-    if (waddr == 0xa010003f8) printf("%llx", wdata); // 写串口
+    if (waddr == 0xa00003f8) printf("%llx", wdata); // 写串口
     uint8_t *pt = cpu2mem(waddr);
     for (int i = 0; i < 8; ++i) {
         if (mask & 1) *pt = (wdata & 0xff);

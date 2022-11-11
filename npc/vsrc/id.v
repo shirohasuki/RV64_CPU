@@ -150,7 +150,7 @@ module id(
                         rs1_addr_o = rs1;
                         rs2_addr_o = rs2;
                         op1_o = rs1_data_i;
-                        op2_o = {59'b0, rs2_data_i[4:0]}; // 移位不能超过五位
+                        op2_o = {58'b0, rs2_data_i[5:0]}; // 移位不能超过六位(64位为6，32位为5)
                         rd_addr_o = rd;
                         reg_wen = 1'b1; // 要回写 
                     end 
@@ -214,12 +214,12 @@ module id(
                         offset_addr_o = immB; // 偏移地址 
                     end
                     default: begin
-                        rs1_addr_o = 5'b0;
-                        rs2_addr_o = 5'b0;
-                        op1_o = 64'b0;
-                        op2_o = 64'b0;
-                        rd_addr_o  = 5'b0;
-                        reg_wen    = 1'b0; 
+                        rs1_addr_o    = 5'b0;
+                        rs2_addr_o    = 5'b0;
+                        op1_o         = 64'b0;
+                        op2_o         = 64'b0;
+                        rd_addr_o     = 5'b0;
+                        reg_wen       = 1'b0; 
                         base_addr_o   = 64'b0; // 基地址
                         offset_addr_o = 64'b0; // 偏移地址 
                     end 
@@ -228,7 +228,7 @@ module id(
             // L为内存->寄存器
             `INST_TYPE_L: begin
                 case (func3)
-                    `INST_LB,`INST_LH,`INST_LW,`INST_LD,`INST_LBU,`INST_LHU: begin
+                    `INST_LB,`INST_LH,`INST_LW,`INST_LD,`INST_LBU,`INST_LHU,`INST_LWU: begin
                         rs1_addr_o    = rs1;
                         rs2_addr_o    = 5'b0;
                         op1_o         = 64'b0;

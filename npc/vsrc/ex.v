@@ -477,6 +477,11 @@ module ex (
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
                     end
+                    `INST_LWU: begin
+                        rd_wdata_o = {32'b0,mem_rdata_i[31:0]};
+                        rd_waddr_o = rd_addr_i;
+                        reg_wen_o  = 1'b1;
+                    end
                     default begin
                         rd_wdata_o  = 64'b0; 
                         rd_waddr_o  = 5'b0;
@@ -517,7 +522,7 @@ module ex (
                         mem_wdata_o = {32'b0, op2_i[31:0]};
                         // mem_wdata_o = {op2_i[31:0], 32'b0};
                         mem_wmask   = 8'b00001111;
-                        // $display("SW: mem_wdata_o = %l", op2_i);
+                        //$display("SW: mem_wdata_o = %l", op2_i);
                     end
                     `INST_SD: begin
                         mem_wen_o   = 1'b1;

@@ -24,80 +24,9 @@ void Vtb___024root__trace_chg_sub_0(Vtb___024root* vlSelf, VerilatedVcd* tracep)
     vluint32_t* const oldp VL_ATTR_UNUSED = tracep->oldp(vlSymsp->__Vm_baseCode + 1);
     // Body
     if (VL_UNLIKELY(vlSelf->__Vm_traceActivity[1U])) {
-        tracep->chgBit(oldp+0,((IData)((0x23U == (0x407fU 
-                                                  & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)))));
-        tracep->chgQData(oldp+1,(((0x40U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)
-                                   ? 0ULL : ((0x20U 
-                                              & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)
-                                              ? ((0x10U 
-                                                  & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)
-                                                  ? 0ULL
-                                                  : 
-                                                 ((8U 
-                                                   & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)
-                                                   ? 0ULL
-                                                   : 
-                                                  ((4U 
-                                                    & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)
-                                                    ? 0ULL
-                                                    : 
-                                                   ((2U 
-                                                     & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)
-                                                     ? 
-                                                    ((1U 
-                                                      & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)
-                                                      ? 
-                                                     ((0x4000U 
-                                                       & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)
-                                                       ? 0ULL
-                                                       : vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__base_addr_add_addr_offset)
-                                                      : 0ULL)
-                                                     : 0ULL))))
-                                              : 0ULL))),64);
-        tracep->chgQData(oldp+3,(((0x40U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)
-                                   ? 0ULL : ((0x20U 
-                                              & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)
-                                              ? ((0x10U 
-                                                  & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)
-                                                  ? 0ULL
-                                                  : 
-                                                 ((8U 
-                                                   & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)
-                                                   ? 0ULL
-                                                   : 
-                                                  ((4U 
-                                                    & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)
-                                                    ? 0ULL
-                                                    : 
-                                                   ((2U 
-                                                     & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)
-                                                     ? 
-                                                    ((1U 
-                                                      & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)
-                                                      ? 
-                                                     ((0x4000U 
-                                                       & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)
-                                                       ? 0ULL
-                                                       : 
-                                                      ((0x2000U 
-                                                        & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)
-                                                        ? 
-                                                       ((0x1000U 
-                                                         & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)
-                                                         ? vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_op2_o
-                                                         : (QData)((IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_op2_o)))
-                                                        : 
-                                                       ((0x1000U 
-                                                         & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)
-                                                         ? (QData)((IData)(
-                                                                           (0xffffU 
-                                                                            & (IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_op2_o))))
-                                                         : (QData)((IData)(
-                                                                           (0xffU 
-                                                                            & (IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_op2_o)))))))
-                                                      : 0ULL)
-                                                     : 0ULL))))
-                                              : 0ULL))),64);
+        tracep->chgBit(oldp+0,(vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_wen));
+        tracep->chgQData(oldp+1,(vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_waddr_o),64);
+        tracep->chgQData(oldp+3,(vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_wdata_o),64);
         tracep->chgCData(oldp+5,(((0x40U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)
                                    ? 0U : ((0x20U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o)
                                             ? ((0x10U 
@@ -137,13 +66,7 @@ void Vtb___024root__trace_chg_sub_0(Vtb___024root* vlSelf, VerilatedVcd* tracep)
                                                        : 0U)
                                                       : 0U))))
                                             : 0U))),8);
-        tracep->chgBit(oldp+6,((1U & (IData)(((3U == 
-                                               (0x7fU 
-                                                & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) 
-                                              & (0x6000U 
-                                                 != 
-                                                 (0x6000U 
-                                                  & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)))))));
+        tracep->chgBit(oldp+6,(vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_ren));
         tracep->chgBit(oldp+7,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ctrl_hold_flag_o));
         tracep->chgQData(oldp+8,(vlSelf->tb__DOT__soc_inst__DOT__ram_riscv_rdata_o),64);
         tracep->chgQData(oldp+10,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o),64);
@@ -375,48 +298,15 @@ void Vtb___024root__trace_chg_sub_0(Vtb___024root* vlSelf, VerilatedVcd* tracep)
         tracep->chgIData(oldp+185,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__unnamedblk1__DOT__i),32);
     }
     if (VL_UNLIKELY(vlSelf->__Vm_traceActivity[2U])) {
-        tracep->chgQData(oldp+186,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o),64);
-        tracep->chgQData(oldp+188,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o),64);
-        tracep->chgQData(oldp+190,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o),64);
-        tracep->chgQData(oldp+192,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o),64);
-        tracep->chgQData(oldp+194,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o),64);
+        tracep->chgQData(oldp+186,(vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o),64);
+        tracep->chgQData(oldp+188,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o),64);
+        tracep->chgQData(oldp+190,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o),64);
+        tracep->chgQData(oldp+192,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o),64);
+        tracep->chgQData(oldp+194,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o),64);
+        tracep->chgQData(oldp+196,(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o),64);
     }
-    tracep->chgBit(oldp+196,(vlSelf->clk));
-    tracep->chgBit(oldp+197,(vlSelf->rst));
-    tracep->chgQData(oldp+198,(((0x40U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)
-                                 ? 0ULL : ((0x20U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)
-                                            ? 0ULL : 
-                                           ((0x10U 
-                                             & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)
-                                             ? 0ULL
-                                             : ((8U 
-                                                 & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)
-                                                 ? 0ULL
-                                                 : 
-                                                ((4U 
-                                                  & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)
-                                                  ? 0ULL
-                                                  : 
-                                                 ((2U 
-                                                   & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)
-                                                   ? 
-                                                  ((1U 
-                                                    & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)
-                                                    ? 
-                                                   ((0x4000U 
-                                                     & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)
-                                                     ? 
-                                                    ((0x2000U 
-                                                      & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)
-                                                      ? 0ULL
-                                                      : 
-                                                     (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o 
-                                                      + vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immL))
-                                                     : 
-                                                    (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o 
-                                                     + vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immL))
-                                                    : 0ULL)
-                                                   : 0ULL))))))),64);
+    tracep->chgBit(oldp+198,(vlSelf->clk));
+    tracep->chgBit(oldp+199,(vlSelf->rst));
 }
 
 void Vtb___024root__trace_cleanup(void* voidSelf, VerilatedVcd* /*unused*/) {

@@ -27,6 +27,7 @@
 `define INST_LD     3'b011
 `define INST_LBU    3'b100
 `define INST_LHU    3'b101
+`define INST_LWU    3'b110
 
 // S type inst
 `define INST_TYPE_S 7'b0100011
@@ -56,7 +57,7 @@
 `define INST_SRW       3'b101
 `define INST_REMW      3'b110 // 无orw
 // `define INST_AND    3'b111
-`define INST_DIVW   3'b100
+`define INST_DIVW      3'b100
 
 // M type inst
 // `define INST_MUL    3'b000

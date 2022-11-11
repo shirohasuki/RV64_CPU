@@ -7,13 +7,17 @@ uint8_t mem[MEM_SIZE] = {0};
 uint8_t* cpu2mem(ll addr) { return mem + (addr - MEM_BASE); }
 
 extern "C" void pmem_read(ll raddr, ll *rdata) {
+    time_t t;
+    if (RTC_ADDR  <= raddr && raddr <= RTC_ADDR + 8) { 
+        time(&t); // 获取Unix时间戳。
+        rdata = (ll *)t;
+        return ; 
+    } // 时钟
+    
     if (raddr < MEM_BASE) {
         printf("[pmem_read] raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
-        return;
+        return ;
     }
-
-    time_t t;
-    if (raddr == 0xa0000048) time(&t);//获取Unix时间戳。
 
     uint8_t *pt = cpu2mem(raddr) + 7;
     ll ret = 0;
@@ -22,7 +26,7 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
     }
     *rdata = ret;
     // printf("[pmem_read] addr is:%llx, data is:%llx\n", raddr, *rdata);
-#ifdef CONFIG_MTRACE
+#ifdef CONFIG_NPC_MTRACE
     sprintf(mtrace_buf[mtrace_count], "read:  addr:%016llx data:%016llx", raddr, (*rdata));
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
 #endif
@@ -30,15 +34,21 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 
 // Memory Write
 extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
-    //printf("mask = %x\n", mask);
-    if (waddr < MEM_BASE) return;
-    if (waddr == 0xa00003f8) printf("%llx", wdata); // 写串口
+    if ( SERIAL_PORT <= waddr && waddr <= SERIAL_PORT + 8) { 
+        printf("%llx", wdata); // 写串口
+        return ;
+    }
+    if (waddr < MEM_BASE) {
+        printf("[pmem_read] waddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", waddr, MEM_BASE);
+        return;
+    }
+    
     uint8_t *pt = cpu2mem(waddr);
     for (int i = 0; i < 8; ++i) {
         if (mask & 1) *pt = (wdata & 0xff);
         wdata >>= 8, mask >>= 1, pt++;
     }
-#ifdef CONFIG_MTRACE
+#ifdef CONFIG_NPC_MTRACE
     sprintf(mtrace_buf[mtrace_count],"write: addr:%016llx data:%016llx\n            wmask:%08x", waddr,  wdata, mask);
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
 #endif
@@ -46,7 +56,9 @@ extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
 
 extern "C" void inst_fetch(ll raddr, ll *rdata) {
     if (raddr < MEM_BASE) {
+#ifdef CONFIG_NPC_IFTRACE
         printf("[inst_fetch] raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
+#endif
         return;
     }
     uint8_t *pt = cpu2mem(raddr) + 7;
@@ -55,7 +67,9 @@ extern "C" void inst_fetch(ll raddr, ll *rdata) {
         ret = (ret << 8) | (*pt--);
     }
     *rdata = ret;
+#ifdef CONFIG_NPC_IFTRACE
     printf("[inst_fetch] addr is:%llx, data is:%llx\n", raddr, *rdata);
+#endif
 } // 和pmem_read一样，引用方便临时改个名字
 
 // Load image from am-kernels (Makefile -> ./image.bin)

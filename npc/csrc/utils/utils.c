@@ -41,7 +41,7 @@ void npc_exit(int status) {
 #ifdef CONFIG_NPC_ITRACE
     itrace_output();
 #endif
-#ifdef CONFIG_MTRACE
+#ifdef CONFIG_NPC_MTRACE
     print_mtrace();
 #endif
 // #ifdef CONFIG_NPC_GPRTRACE

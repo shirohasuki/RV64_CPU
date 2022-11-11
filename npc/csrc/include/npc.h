@@ -15,8 +15,9 @@
 
 #define CONFIG_NPC_ITRACE 1
 // #define CONFIG_NPC_GPRTRACE 1
+// #define CONFIG_NPC_IFTRACE 1
 #define CONFIG_NPC_DIFFTEST 1
-#define CONFIG_MTRACE 1
+#define CONFIG_NPC_MTRACE 1
 
 // ================ Typedef ===============
 typedef long long ll;
@@ -97,3 +98,11 @@ extern void (*ref_difftest_exec)(uint64_t n);
 extern void (*ref_difftest_raise_intr)(uint64_t NO);
 extern void (*ref_difftest_init)();
 #endif
+
+// ============== MAP ===============
+#define DEVICE_BASE 0xa0000000
+// #define MMIO_BASE 0xa0000000
+
+#define SERIAL_PORT     (DEVICE_BASE + 0x00003f8)
+//#define KBD_ADDR        (DEVICE_BASE + 0x0000060)
+#define RTC_ADDR        (DEVICE_BASE + 0x0000048) // 映射的地址

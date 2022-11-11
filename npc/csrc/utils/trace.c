@@ -42,12 +42,12 @@ void itrace_output() {
 
 
 //=====================MTRACE=========================
-#ifdef CONFIG_MTRACE
+#ifdef CONFIG_NPC_MTRACE
 char mtrace_buf[SIZE_MTRACEBUF][100] = {0};
 int mtrace_count = 0;
 #endif
 
-#ifdef CONFIG_MTRACE
+#ifdef CONFIG_NPC_MTRACE
 void print_mtrace() {
     puts("========== MTRACE Result ==========");
     // for (int i = 0; i < SIZE_MTRACEBUF; i++) {

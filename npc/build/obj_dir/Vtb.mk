@@ -47,6 +47,7 @@ VM_USER_LDLIBS = \
 
 # User .cpp files (from .cpp's on Verilator command line)
 VM_USER_CLASSES = \
+	serial \
 	main \
 	difftest \
 	disasm \
@@ -57,6 +58,7 @@ VM_USER_CLASSES = \
 # User .cpp directories (from .cpp's on Verilator command line)
 VM_USER_DIR = \
 	/home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc \
+	/home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/ioe \
 	/home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils \
 
 
@@ -69,6 +71,8 @@ include $(VERILATOR_ROOT)/include/verilated.mk
 ### Executable rules... (from --exe)
 VPATH += $(VM_USER_DIR)
 
+serial.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/ioe/serial.c
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 main.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/main.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 difftest.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils/difftest.c

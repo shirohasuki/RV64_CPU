@@ -7,6 +7,7 @@ uint8_t mem[MEM_SIZE] = {0};
 uint8_t* cpu2mem(ll addr) { return mem + (addr - MEM_BASE); }
 
 extern "C" void pmem_read(ll raddr, ll *rdata) {
+    //printf("[pmem_read]  raddr is:%llx\n", raddr);
     time_t t;
     if (RTC_ADDR  <= raddr && raddr <= RTC_ADDR + 8) { 
         time(&t); // 获取Unix时间戳。
@@ -15,7 +16,7 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
     } // 时钟
     
     if (raddr < MEM_BASE) {
-        printf("[pmem_read] raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
+        printf("[pmem_read]  raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
         return ;
     }
 
@@ -34,12 +35,14 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 
 // Memory Write
 extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
+    //printf("[pmem_write] waddr is:%llx\n", waddr);
     if ( SERIAL_PORT <= waddr && waddr <= SERIAL_PORT + 8) { 
         printf("%llx", wdata); // 写串口
+        printf("hello\n"); // 写串口
         return ;
     }
     if (waddr < MEM_BASE) {
-        printf("[pmem_read] waddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", waddr, MEM_BASE);
+        printf("[pmem_write] waddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", waddr, MEM_BASE);
         return;
     }
     

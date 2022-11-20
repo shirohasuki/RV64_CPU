@@ -40,7 +40,7 @@ void npc_exit(int status);
 #define MEM_BASE 0x80000000
 // #define MEM_SIZE 65536
 
-#define MEM_SIZE 0x8000000
+#define MEM_SIZE 0x7ff00000
 
 extern uint8_t mem[MEM_SIZE];
 
@@ -99,10 +99,15 @@ extern void (*ref_difftest_raise_intr)(uint64_t NO);
 extern void (*ref_difftest_init)();
 #endif
 
-// ============== MAP ===============
+// ============== DEVICE MAP ===============
 #define DEVICE_BASE 0xa0000000
 // #define MMIO_BASE 0xa0000000
 
-#define SERIAL_PORT     (DEVICE_BASE + 0x00003f8)
+#define SERIAL_PORT     (DEVICE_BASE + 0x000003f8)
+// #define SERIAL_PORT     (DEVICE_BASE + 0x0009cfd0)
+                                       //0x8009cfd0
+                                       //0x80000000
+
+
 //#define KBD_ADDR        (DEVICE_BASE + 0x0000060)
-#define RTC_ADDR        (DEVICE_BASE + 0x0000048) // 映射的地址
+#define RTC_ADDR        (DEVICE_BASE + 0x00000048) // 映射的地址

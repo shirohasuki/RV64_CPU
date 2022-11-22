@@ -37,7 +37,7 @@ static void check_bound(IOMap *map, paddr_t addr) {
         //Assert(addr <= map->high && addr >= map->low,
         //   "address (" FMT_PADDR ") is out of bound {%s} [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,
         //    addr, map->name, map->low, map->high, cpu_npc.pc);
-        if (addr >= map->high && addr <= map->low) {
+        if (addr >= map->high || addr <= map->low) {
             printf("address %x is out of bound %s [%x, %x], pc = %lx", addr, map->name, map->low, map->high, cpu_npc.pc);
             assert(0);
         }

@@ -1,5 +1,5 @@
 #include "npc.h"
-#include <time.h>
+//#include "../include/macro.h"
 
 uint8_t mem[MEM_SIZE] = {0};
 // Memory Read
@@ -8,15 +8,15 @@ uint8_t* cpu2mem(ll addr) { return mem + (addr - MEM_BASE); }
 
 extern "C" void pmem_read(ll raddr, ll *rdata) {
     //printf("[pmem_read]  raddr is:%llx\n", raddr);
-    time_t t;
-    if (RTC_ADDR  <= raddr && raddr <= RTC_ADDR + 8) { 
-        time(&t); // 获取Unix时间戳。
-        rdata = (ll *)t;
+    if (RTC_MMIO  <= raddr && raddr <= RTC_MMIO + 8) { 
+    #ifdef NPC_HAS_RTC
+        //get_time();
+    #endif
         return ; 
     } // 时钟
     
     if (raddr < MEM_BASE) {
-        printf("[pmem_read]  raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
+        //printf("[pmem_read]  raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
         return ;
     }
 
@@ -35,15 +35,15 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 
 // Memory Write
 extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
-    printf("[pmem_write] waddr is:%llx\n", waddr);
+    //printf("[pmem_write] waddr is:%llx\n", waddr);
     //MUXDEF(NPC_HAS_SERIAL, putch(wdata), putc(wdata, stderr));
-    if (SERIAL_PORT <= waddr && waddr <= SERIAL_PORT + 8) { 
+    if (SERIAL_MMIO <= waddr && waddr <= SERIAL_MMIO + 8) { 
         MUXDEF(NPC_HAS_SERIAL, putch(wdata), putc(wdata, stderr));// 写串口
         //printf("hello\n"); // 写串口
-        //return ;
+        return ;
     }
     if (waddr < MEM_BASE) {
-        printf("[pmem_write] waddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", waddr, MEM_BASE);
+        //printf("[pmem_write] waddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", waddr, MEM_BASE);
         return;
     }
     

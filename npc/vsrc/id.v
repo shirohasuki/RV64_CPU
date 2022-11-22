@@ -138,7 +138,7 @@ module id(
                 mem_ren    = 1'b0;// 访存使能
                 mem_raddr_o = 64'b0;//访存地址
                 case (func3)
-                    `INST_ADD_SUB_MUL,`INST_SLT,`INST_SLTU,`INST_XOR,`INST_OR_REM,`INST_AND:begin 
+                    `INST_ADD_SUB_MUL,`INST_SLT,`INST_SLTU,`INST_XOR_DIV,`INST_OR_REM,`INST_AND_REMU:begin 
                         rs1_addr_o = rs1;
                         rs2_addr_o = rs2;
                         op1_o = rs1_data_i;
@@ -146,13 +146,31 @@ module id(
                         rd_addr_o = rd;
                         reg_wen = 1'b1; // 要回写 
                     end 
-                    `INST_SLL,`INST_SR:begin 
+                    `INST_SLL:begin 
                         rs1_addr_o = rs1;
                         rs2_addr_o = rs2;
                         op1_o = rs1_data_i;
                         op2_o = {58'b0, rs2_data_i[5:0]}; // 移位不能超过六位(64位为6，32位为5)
                         rd_addr_o = rd;
                         reg_wen = 1'b1; // 要回写 
+                    end 
+                    `INST_SR_DIVU: begin
+                        if (func7 == `INST_TYPE_R_FUN7) begin // SR
+                            rs1_addr_o = rs1;
+                            rs2_addr_o = rs2;
+                            op1_o = rs1_data_i;
+                            op2_o = {58'b0, rs2_data_i[5:0]}; // 移位不能超过六位(64位为6，32位为5)
+                            rd_addr_o = rd;
+                            reg_wen = 1'b1; // 要回写 
+                        end
+                        if (func7 == `INST_TYPE_M_FUN7) begin //DIVU
+                            rs1_addr_o = rs1;
+                            rs2_addr_o = rs2;
+                            op1_o = rs1_data_i;
+                            op2_o = rs2_data_i;
+                            rd_addr_o = rd;
+                            reg_wen = 1'b1; // 要回写 
+                        end
                     end 
                     default:begin
                         rs1_addr_o = 5'b0;

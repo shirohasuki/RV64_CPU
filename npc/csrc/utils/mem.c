@@ -35,11 +35,12 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 
 // Memory Write
 extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
-    //printf("[pmem_write] waddr is:%llx\n", waddr);
-    if ( SERIAL_PORT <= waddr && waddr <= SERIAL_PORT + 8) { 
-        printf("%llx", wdata); // 写串口
-        printf("hello\n"); // 写串口
-        return ;
+    printf("[pmem_write] waddr is:%llx\n", waddr);
+    //MUXDEF(NPC_HAS_SERIAL, putch(wdata), putc(wdata, stderr));
+    if (SERIAL_PORT <= waddr && waddr <= SERIAL_PORT + 8) { 
+        MUXDEF(NPC_HAS_SERIAL, putch(wdata), putc(wdata, stderr));// 写串口
+        //printf("hello\n"); // 写串口
+        //return ;
     }
     if (waddr < MEM_BASE) {
         printf("[pmem_write] waddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", waddr, MEM_BASE);

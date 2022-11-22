@@ -47,6 +47,11 @@ VM_USER_LDLIBS = \
 
 # User .cpp files (from .cpp's on Verilator command line)
 VM_USER_CLASSES = \
+	device \
+	map \
+	mmio \
+	port-io \
+	rtc \
 	serial \
 	main \
 	difftest \
@@ -58,7 +63,8 @@ VM_USER_CLASSES = \
 # User .cpp directories (from .cpp's on Verilator command line)
 VM_USER_DIR = \
 	/home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc \
-	/home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/ioe \
+	/home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/device \
+	/home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/device/io \
 	/home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils \
 
 
@@ -71,7 +77,17 @@ include $(VERILATOR_ROOT)/include/verilated.mk
 ### Executable rules... (from --exe)
 VPATH += $(VM_USER_DIR)
 
-serial.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/ioe/serial.c
+device.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/device/device.c
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+map.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/device/io/map.c
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+mmio.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/device/io/mmio.c
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+port-io.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/device/io/port-io.c
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+rtc.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/device/rtc.c
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+serial.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/device/serial.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 main.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/main.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<

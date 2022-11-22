@@ -35,7 +35,7 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 
 // Memory Write
 extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
-    // printf("[pmem_write] waddr is:%llx\n", waddr);
+    printf("[pmem_write] waddr is:%llx\n", waddr);
     //MUXDEF(NPC_HAS_SERIAL, putch(wdata), putc(wdata, stderr));
     if (SERIAL_PORT <= waddr && waddr <= SERIAL_PORT + 8) { 
         MUXDEF(NPC_HAS_SERIAL, putch(wdata), putc(wdata, stderr));// 写串口

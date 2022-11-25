@@ -18,6 +18,8 @@ VL_MODULE(Vtb___024root) {
     // DESIGN SPECIFIC STATE
     VL_IN8(clk,0,0);
     VL_IN8(rst,0,0);
+    CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_ram_wen;
+    CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_ram_ren;
     CData/*4:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_rs1_addr_o;
     CData/*4:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_rs2_addr_o;
     CData/*4:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_rd_addr_o;
@@ -35,6 +37,9 @@ VL_MODULE(Vtb___024root) {
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_inst_o;
     IData/*31:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__unnamedblk1__DOT__i;
+    QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_ram_waddr_o;
+    QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_ram_wdata_o;
+    QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_ram_raddr_o;
     QData/*63:0*/ tb__DOT__soc_inst__DOT__ram_riscv_rdata_o;
     QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o;
     QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_addr_o;

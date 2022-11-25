@@ -22,9 +22,19 @@ module mem(clk, rst, hold_flag_i, ren, wen, raddr, rdata, waddr, wdata, mask);
         // if (ren || rst == 1'b1 || hold_flag_i == 1'b0) pmem_read(raddr, rdata);
         if (ren) pmem_read(raddr, rdata); 
         else rdata = 64'b0;
+
+        if (wen) pmem_write(waddr, wdata, mask);
+
+        if ((ren && wen) && (raddr == waddr)) begin
+            //$display("nb");
+            rdata = wdata;  // 处理读写冲突
+        end
+
         // $display("[mem] ren = %x", ren);
         // $display("[mem] rdata = %x", rdata);
-        if (wen) pmem_write(waddr, wdata, mask);
+        
+        
+        //if (ren && wen) $display("nb");
     end
 endmodule
     

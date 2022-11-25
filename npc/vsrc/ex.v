@@ -63,7 +63,9 @@ module ex (
     wire[63:0] op1_i_xor_op2_i;
     wire[63:0] op1_i_or_op2_i;
     wire[63:0] op1_i_rem_op2_i;
+    wire[63:0] op1_i_rem_op2_i_unsigned;
     wire[63:0] op1_i_div_op2_i;
+    wire[63:0] op1_i_div_op2_i_unsigned; 
     wire[63:0] op1_i_shift_left_op2_i_unsigned;
     wire[63:0] op1_i_shift_right_op2_i_unsigned;
     wire[63:0] op1_i_shift_right_op2_i_signed;
@@ -78,8 +80,10 @@ module ex (
     assign op1_i_and_op2_i                  = op1_i & op2_i;               // 与
     assign op1_i_xor_op2_i                  = op1_i ^ op2_i;               // 异或
     assign op1_i_or_op2_i                   = op1_i | op2_i;               // 或
-    assign op1_i_rem_op2_i                  = op1_i % op2_i;               // 取余
-    assign op1_i_div_op2_i                  = op1_i / op2_i;               // 除
+    assign op1_i_rem_op2_i                  = $signed(op1_i) % $signed(op2_i);               // 取余
+    assign op1_i_rem_op2_i_unsigned         = op1_i % op2_i;
+    assign op1_i_div_op2_i                  = $signed(op1_i) / $signed(op2_i);               // 除
+    assign op1_i_div_op2_i_unsigned         = op1_i / op2_i;               // 除
     assign op1_i_shift_left_op2_i_unsigned  = op1_i << op2_i;              // 逻辑左移 sll
     assign op1_i_shift_right_op2_i_unsigned = op1_i >> op2_i;              // 逻辑右移 srl
     assign op1_i_shift_right_op2_i_signed   = $signed(op1_i) >>> op2_i;    // 算术右移 sra                            
@@ -287,15 +291,20 @@ module ex (
                             rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
                     end 
-                    `INST_SR: begin 
-                        if (func7[5] == 1'b1) begin // SRA 算术右移
+                    `INST_SR_DIVU: begin 
+                        if (func7 == 7'b010000) begin // SRA 算术右移
                             // rd_wdata_o = ((op1_i_shift_right_op2_i) & SRA_mask) | ({32{op1_i[31]}} & (~SRA_mask));
                             rd_wdata_o = op1_i_shift_right_op2_i_signed;
                             rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
                         end 
-                        else begin // SRL 逻辑右移
+                        else if (func7 == 7'b000000) begin // SRL 逻辑右移
                             rd_wdata_o = op1_i_shift_right_op2_i_unsigned; 
+                            rd_waddr_o = rd_addr_i;
+                            reg_wen_o  = 1'b1;
+                        end
+                        else begin // divu
+                            rd_wdata_o = op1_i_div_op2_i_unsigned; 
                             rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
                         end
@@ -312,10 +321,17 @@ module ex (
                             reg_wen_o  = 1'b1;
                         end
                     end 
-                    `INST_AND: begin 
+                    `INST_AND_REMU: begin 
+                        if (func7 == 7'b0000000) begin // AND
                             rd_wdata_o = op1_i_and_op2_i; 
                             rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
+                        end 
+                        else begin // remu
+                            rd_wdata_o = op1_i_rem_op2_i_unsigned;
+                            rd_waddr_o = rd_addr_i;
+                            reg_wen_o  = 1'b1;
+                        end
                     end 
                     default: begin
                         rd_wdata_o = 64'b0; 
@@ -477,6 +493,11 @@ module ex (
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
                     end
+                    `INST_LWU: begin
+                        rd_wdata_o = {32'b0,mem_rdata_i[31:0]};
+                        rd_waddr_o = rd_addr_i;
+                        reg_wen_o  = 1'b1;
+                    end
                     default begin
                         rd_wdata_o  = 64'b0; 
                         rd_waddr_o  = 5'b0;
@@ -517,7 +538,7 @@ module ex (
                         mem_wdata_o = {32'b0, op2_i[31:0]};
                         // mem_wdata_o = {op2_i[31:0], 32'b0};
                         mem_wmask   = 8'b00001111;
-                        // $display("SW: mem_wdata_o = %l", op2_i);
+                        //$display("SW: mem_wdata_o = %l", op2_i);
                     end
                     `INST_SD: begin
                         mem_wen_o   = 1'b1;

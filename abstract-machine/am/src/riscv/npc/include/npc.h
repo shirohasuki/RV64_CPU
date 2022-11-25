@@ -1,28 +1,13 @@
-#ifndef NEMU_H__
-#define NEMU_H__
+#ifndef NPC_H__
+#define NPC_H__
 
 #include <klib-macros.h>
+#include <riscv/riscv.h>
+#include <sys/time.h>
+#include <time.h>
 
-#include ISA_H // the macro `ISA_H` is defined in CFLAGS
-               // it will be expanded as "x86/x86.h", "mips/mips32.h", ...
-
-#if defined(__ISA_X86__)
-# define nemu_trap(code) asm volatile ("int3" : :"a"(code))
-#elif defined(__ISA_MIPS32__)
-# define nemu_trap(code) asm volatile ("move $v0, %0; sdbbp" : :"r"(code))
-#elif defined(__ISA_RISCV32__) || defined(__ISA_RISCV64__)
-# define nemu_trap(code) asm volatile("mv a0, %0; ebreak" : :"r"(code))
-#elif
-# error unsupported ISA __ISA__
-#endif
-
-#if defined(__ARCH_X86_NEMU)
-# define DEVICE_BASE 0x0
-#else
-# define DEVICE_BASE 0xa0000000
-#endif
-
-#define MMIO_BASE 0xa0000000
+#define DEVICE_BASE 0xa0000000
+#define MMIO_BASE   0xa0000000
 
 #define SERIAL_PORT     (DEVICE_BASE + 0x00003f8)
 #define KBD_ADDR        (DEVICE_BASE + 0x0000060)

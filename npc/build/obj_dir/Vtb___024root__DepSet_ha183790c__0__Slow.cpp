@@ -41,6 +41,11 @@ VL_ATTR_COLD void Vtb___024root___ctor_var_reset(Vtb___024root* vlSelf) {
     // Body
     vlSelf->clk = 0;
     vlSelf->rst = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_wen = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_waddr_o = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_wdata_o = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_ren = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__ram_riscv_rdata_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_addr_o = 0;

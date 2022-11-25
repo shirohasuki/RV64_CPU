@@ -12,17 +12,12 @@
 // difftest
 #include <dlfcn.h>
 
+#include "macro.h"
+#include "common.h"
+#include "typedef.h"
+#include "ioe.h"
 
-#define CONFIG_NPC_ITRACE 1
-// #define CONFIG_NPC_GPRTRACE 1
-#define CONFIG_NPC_DIFFTEST 1
-#define CONFIG_MTRACE 1
 
-// ================ Typedef ===============
-typedef long long ll;
-typedef uint32_t paddr_t;
-typedef uint64_t word_t;
-typedef word_t vaddr_t;
 // ================ CPU ===================
 static int status = 0;
 typedef struct {
@@ -39,7 +34,7 @@ void npc_exit(int status);
 #define MEM_BASE 0x80000000
 // #define MEM_SIZE 65536
 
-#define MEM_SIZE 0x8000000
+#define MEM_SIZE 0x7ff00000
 
 extern uint8_t mem[MEM_SIZE];
 
@@ -97,3 +92,7 @@ extern void (*ref_difftest_exec)(uint64_t n);
 extern void (*ref_difftest_raise_intr)(uint64_t NO);
 extern void (*ref_difftest_init)();
 #endif
+
+
+// ============ Device ================
+void init_device();

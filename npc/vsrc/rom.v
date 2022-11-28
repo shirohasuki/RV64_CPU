@@ -35,3 +35,16 @@
 //     end
 // endmodule
 
+// module rom(
+//     input wire[63:0] addr_i,    // addr
+//     output reg[31:0] data_o         // read data
+// );
+
+//     reg[63:0] rom_mem[0:4095];
+
+
+//     always @ (*) begin
+//         data_o = rom_mem[addr_i[31:2]][31:0];
+//     end
+
+// endmodule

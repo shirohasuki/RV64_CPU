@@ -47,6 +47,7 @@ VM_USER_LDLIBS = \
 
 # User .cpp files (from .cpp's on Verilator command line)
 VM_USER_CLASSES = \
+	alarm \
 	device \
 	map \
 	mmio \
@@ -77,6 +78,8 @@ include $(VERILATOR_ROOT)/include/verilated.mk
 ### Executable rules... (from --exe)
 VPATH += $(VM_USER_DIR)
 
+alarm.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/device/alarm.c
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 device.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/device/device.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 map.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/device/io/map.c

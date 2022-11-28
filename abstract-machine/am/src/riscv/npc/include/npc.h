@@ -3,6 +3,8 @@
 
 #include <klib-macros.h>
 #include <riscv/riscv.h>
+#include <sys/time.h>
+#include <time.h>
 
 #define DEVICE_BASE 0xa0000000
 #define MMIO_BASE   0xa0000000

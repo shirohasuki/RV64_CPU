@@ -2,13 +2,17 @@
 #include <cassert>
 #include <time.h>
 #include <ioe.h>
+#include "npc.h"
+#include <device/alarm.h>
+#include <macro.h>
 
 static uint32_t *rtc_port_base = NULL;
 
 uint64_t get_time() {
-    time_t t;
-    time(&t); // 获取Unix时间戳。
-    return t;
+    ll *t_us;
+    pmem_read(RTC_MMIO, t_us);
+    printf("%lln\n", t_us);
+    return (uint64_t) *t_us;
 }
 
 static void rtc_io_handler(uint32_t offset, int len, bool is_write) {
@@ -21,12 +25,12 @@ static void rtc_io_handler(uint32_t offset, int len, bool is_write) {
     }
 }
 
-//#ifndef CONFIG_TARGET_AM
-//static void timer_intr() {
-//    extern void dev_raise_intr();
-//    dev_raise_intr();
-//}
-//#endif
+#ifndef CONFIG_TARGET_AM
+static void timer_intr() {
+   extern void dev_raise_intr();
+   dev_raise_intr();
+}
+#endif
 
 void init_timer() {
     rtc_port_base = (uint32_t *)new_space(8);
@@ -35,5 +39,5 @@ void init_timer() {
 #else
     add_mmio_map("rtc", RTC_MMIO, rtc_port_base, 8, rtc_io_handler);
 #endif
-  //IFNDEF(CONFIG_TARGET_AM, add_alarm_handle(timer_intr));
+    //IFNDEF(CONFIG_TARGET_AM, add_alarm_handle(timer_intr));
 }

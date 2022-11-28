@@ -306,22 +306,21 @@ module id(
                     end 
                 endcase
             end
-
+        
             // J型指令此处统一立即数为op2_i 
-            `INST_JAL: begin
-                rs1_addr_o    = 5'b0;
-                rs2_addr_o    = 5'b0;
-                op1_o         = inst_addr_i;
-                op2_o         = 64'h4;
-                rd_addr_o     = rd;
-                reg_wen       = 1'b1; 
-                base_addr_o   = inst_addr_i; // 基地址
-                offset_addr_o = immJ; // 偏移地址 
-                mem_ren    = 1'b0;// 访存使能
-                mem_raddr_o = 64'b0;//访存地址
-                
-            end
-            `INST_JALR: begin
+            // `INST_JAL:begin
+			// 	rs1_addr_o 	  = rs1;
+			// 	rs2_addr_o 	  = 5'b0;
+            //     op1_o         = inst_addr_i;
+            //     op2_o         = 64'h4;
+			// 	rd_addr_o  	  = rd;
+			// 	reg_wen    	  = 1'b1;
+			// 	base_addr_o   = rs1_data_i; // 基地址
+            //     offset_addr_o = immI; // 偏移地址 
+            //     mem_ren    = 1'b0;// 访存使能
+            //     mem_raddr_o = 64'b0;//访存地址
+            // end
+            `INST_JAL,`INST_JALR: begin
                 rs1_addr_o    = rs1;
                 rs2_addr_o    = 5'b0;
                 op1_o         = inst_addr_i;

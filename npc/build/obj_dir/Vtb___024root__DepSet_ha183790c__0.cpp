@@ -37,6 +37,7 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
         if ((0x20U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
             if ((0x10U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
             } else if ((8U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
@@ -44,22 +45,26 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
                     if ((2U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                         if ((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 4ULL;
+                            vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
                                 = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_addr_o;
                             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o 
-                                = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_addr_o;
+                                = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                         } else {
                             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                            vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
                         }
                     } else {
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
                     }
                 } else {
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
                 }
@@ -67,17 +72,20 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
                 if ((2U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                     if ((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 4ULL;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
                             = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_addr_o;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o 
                             = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                     } else {
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
                     }
                 } else {
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
                 }
@@ -86,17 +94,20 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
                     if ((0x4000U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
                             = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
                             = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o 
                             = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_addr_o;
                     } else if ((0x2000U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
                     } else {
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
                             = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
                             = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o 
@@ -104,25 +115,28 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
                     }
                 } else {
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
                 }
             } else {
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
             }
         } else {
             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
         }
-        vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
     } else if ((0x20U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
         if ((0x10U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
             if ((8U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                 if ((4U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                 } else if ((2U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                     if ((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
@@ -130,34 +144,41 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
                             if ((0x2000U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                                 if ((0x1000U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                                    vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                                 } else {
                                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
                                         = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o;
+                                    vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
                                         = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                                 }
                             } else {
                                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
                                     = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o;
+                                vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
                                     = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                             }
                         } else if ((0x2000U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                            vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                         } else {
                             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
                                 = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o;
+                            vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
                                 = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                         }
                     } else {
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                     }
                 } else {
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                 }
             } else if ((4U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
@@ -166,6 +187,7 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
                         ? ((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)
                             ? vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immU
                             : 0ULL) : 0ULL);
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
             } else if ((2U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                 if ((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
@@ -173,6 +195,7 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
                         if ((0x2000U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
                                 = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o;
+                            vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
                                 = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                         } else if ((0x1000U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
@@ -188,6 +211,7 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
                                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
                                     = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o;
                             }
+                            vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                             if ((0U == (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
                                         >> 0x19U))) {
                                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
@@ -201,6 +225,7 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
                         } else {
                             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
                                 = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o;
+                            vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
                                 = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                         }
@@ -213,54 +238,63 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
                                                       (0x3fU 
                                                        & (IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o))))
                                     : vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o));
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
                             = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                     }
                 } else {
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                 }
             } else {
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
             }
             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
         } else if ((8U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
         } else if ((4U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
         } else if ((2U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
             if ((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                 if ((0x4000U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
                 } else {
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
                         = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs2_rdata_o;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o 
                         = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                 }
             } else {
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
             }
         } else {
             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
         }
-        vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
     } else if ((0x10U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
         if ((8U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
             if ((4U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
             } else if ((2U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                 if ((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
@@ -268,6 +302,7 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
                                       >> 0xcU)))) {
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
                             = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immI;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
                             = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                     } else if (((1U == (7U & (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
@@ -278,18 +313,22 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
                             = (QData)((IData)((0x3fU 
                                                & (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
                                                   >> 0x14U))));
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
                             = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                     } else {
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                     }
                 } else {
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                 }
             } else {
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
             }
         } else if ((4U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
@@ -297,14 +336,17 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
                 if ((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o 
                         = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immU;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
                         = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_addr_o;
                 } else {
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
                 }
             } else {
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
             }
         } else if ((2U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
@@ -317,62 +359,71 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
                                                & (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o 
                                                   >> 0x14U))))
                             : vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immI));
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o 
                     = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
             } else {
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
             }
         } else {
             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
             vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
         }
         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
-        vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
     } else {
         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op2_o = 0ULL;
-        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
         if ((8U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
-            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
             vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
         } else if ((4U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
-            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
             vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
         } else if ((2U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
             if ((1U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                 if ((0x4000U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                     if ((0x2000U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
                         if ((0x1000U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) {
-                            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
                             vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
+                            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+                            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
                         } else {
-                            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o 
-                                = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                             vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o 
                                 = (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o 
                                    + vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immL);
+                            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+                            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o 
+                                = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                         }
                     } else {
-                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o 
-                            = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                         vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o 
                             = (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o 
                                + vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immL);
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+                        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o 
+                            = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                     }
                 } else {
-                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o 
-                        = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                     vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o 
                         = (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o 
                            + vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immL);
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+                    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o 
+                        = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_rs1_rdata_o;
                 }
             } else {
-                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
                 vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+                vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
             }
         } else {
-            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
             vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_raddr_o = 0ULL;
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_op1_o = 0ULL;
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_base_addr_o = 0ULL;
         }
     }
 }

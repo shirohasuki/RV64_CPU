@@ -33,6 +33,6 @@ void init_serial() {
 #ifdef NPC_HAS_PORT_IO
     add_pio_map ("serial", SERIAL_PORT, serial_base, 8, serial_io_handler);
 #else
-    add_mmio_map("serial", SERIAL_MMIO , serial_base, 8, serial_io_handler);
+    add_mmio_map("serial", SERIAL_MMIO, serial_base, 8, serial_io_handler);
 #endif
 }

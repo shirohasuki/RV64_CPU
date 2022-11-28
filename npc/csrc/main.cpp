@@ -58,7 +58,7 @@ int main() {
     
     sim_init();
 
-    IFDEF(CONFIG_NPC_DEVICE, init_device());  // 初始化外设
+    // IFDEF(CONFIG_NPC_DEVICE, init_device());  // 初始化外设
 
 #ifdef CONFIG_NPC_ITRACE
     init_disasm("riscv64-pc-linux-gnu");

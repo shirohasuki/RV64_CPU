@@ -12,11 +12,41 @@
 // difftest
 #include <dlfcn.h>
 
-#include "macro.h"
-#include "common.h"
-#include "typedef.h"
-#include "ioe.h"
+// #include "macro.h"
+// #include "common.h"
+// #include "typedef.h"
+// #include "ioe.h"
 
+// ================ Typedef ===============
+typedef long long ll;
+typedef uint32_t paddr_t;
+typedef uint64_t word_t;
+typedef word_t vaddr_t;
+
+typedef uint16_t ioaddr_t;
+
+// ============== 调试选项 ============= //
+#define CONFIG_NPC_ITRACE 1
+// #define CONFIG_NPC_GPRTRACE 1
+#define CONFIG_NPC_IFTRACE 1
+#define CONFIG_NPC_DIFFTEST 1
+#define CONFIG_NPC_MTRACE 1
+
+
+// #define CONFIG_NPC_DEVICE
+// #define CONFIG_TARGET_AM 1
+
+
+// ============== DEVICE =============== //
+// #ifdef CONFIG_NPC_DEVICE
+
+// #define NPC_HAS_SERIAL 1
+// #define NPC_HAS_TIMER 1
+// //#define NPC_HAS_PORT_IO 1
+
+// // #define CONFIG_RT_CHECK 1
+
+// #endif
 
 // ================ CPU ===================
 static int status = 0;
@@ -95,4 +125,20 @@ extern void (*ref_difftest_init)();
 
 
 // ============ Device ================
-void init_device();
+// void init_device();
+
+// ============== DEVICE MAP ===============
+#define DEVICE_BASE 0xa0000000
+
+// #define MMIO_BASE 0xa0000000
+
+
+
+#define SERIAL_MMIO      (DEVICE_BASE + 0x000003f8)
+// #define SERIAL_PORT     (DEVICE_BASE + 0x0009cfd0)
+                                       //0x8009cfd0
+                                       //0x80000000
+
+
+//#define KBD_ADDR        (DEVICE_BASE + 0x0000060)
+#define RTC_MMIO        (DEVICE_BASE + 0x00000048) // 映射的地址

@@ -316,9 +316,10 @@ module id(
                 rd_addr_o     = rd;
                 reg_wen       = 1'b1; 
                 base_addr_o   = inst_addr_i; // 基地址
-                offset_addr_o = immJ;       // 偏移地址 
-                mem_ren       = 1'b0;       // 访存使能
-                mem_raddr_o   = 64'b0;      //访存地址
+                offset_addr_o = immJ;        // 偏移地址 
+                mem_ren       = 1'b0;        // 访存使能
+                mem_raddr_o   = 64'b0;       // 访存地址
+                //$display("here");
             end 
             `INST_JALR: begin
                 rs1_addr_o    = rs1;
@@ -328,9 +329,9 @@ module id(
                 rd_addr_o     = rd;
                 reg_wen       = 1'b1; 
                 base_addr_o   = rs1_data_i; // 基地址
-                offset_addr_o = immI; // 偏移地址 
-                mem_ren       = 1'b0;// 访存使能
-                mem_raddr_o   = 64'b0;//访存地址
+                offset_addr_o = immI;       // 偏移地址 
+                mem_ren       = 1'b0;       // 访存使能
+                mem_raddr_o   = 64'b0;      // 访存地址
             end 
             // `INST_JAL: begin
             //     rs1_addr_o = 5'b0;

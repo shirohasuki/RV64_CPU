@@ -260,7 +260,6 @@ module id(
                         mem_raddr_o   = rs1_data_i + immL; // 访存地址 需要符号位拓展
                         // $display("mem_raddr_o = %x", mem_raddr_o);
                     end
-
                     default: begin
                         rs1_addr_o    = 5'b0;
                         rs2_addr_o    = 5'b0;
@@ -306,7 +305,7 @@ module id(
                     end 
                 endcase
             end
-
+        
             // J型指令此处统一立即数为op2_i 
             `INST_JAL: begin
                 rs1_addr_o    = 5'b0;
@@ -316,11 +315,11 @@ module id(
                 rd_addr_o     = rd;
                 reg_wen       = 1'b1; 
                 base_addr_o   = inst_addr_i; // 基地址
-                offset_addr_o = immJ; // 偏移地址 
-                mem_ren    = 1'b0;// 访存使能
-                mem_raddr_o = 64'b0;//访存地址
-                
-            end
+                offset_addr_o = immJ;        // 偏移地址 
+                mem_ren       = 1'b0;        // 访存使能
+                mem_raddr_o   = 64'b0;       // 访存地址
+                //$display("here");
+            end 
             `INST_JALR: begin
                 rs1_addr_o    = rs1;
                 rs2_addr_o    = 5'b0;
@@ -329,9 +328,9 @@ module id(
                 rd_addr_o     = rd;
                 reg_wen       = 1'b1; 
                 base_addr_o   = rs1_data_i; // 基地址
-                offset_addr_o = immI; // 偏移地址 
-                mem_ren    = 1'b0;// 访存使能
-                mem_raddr_o = 64'b0;//访存地址
+                offset_addr_o = immI;       // 偏移地址 
+                mem_ren       = 1'b0;       // 访存使能
+                mem_raddr_o   = 64'b0;      // 访存地址
             end 
             `INST_LUI: begin
                 rs1_addr_o    = 5'b0;
@@ -342,8 +341,8 @@ module id(
                 reg_wen       = 1'b1; 
                 base_addr_o   = 64'b0;
                 offset_addr_o = 64'b0;
-                mem_ren    = 1'b0;// 访存使能
-                mem_raddr_o = 64'b0;//访存地址
+                mem_ren       = 1'b0;// 访存使能
+                mem_raddr_o   = 64'b0;//访存地址
             end // 不跳转
             `INST_AUIPC: begin
                 rs1_addr_o    = 5'b0;
@@ -354,8 +353,8 @@ module id(
                 reg_wen       = 1'b1;
                 base_addr_o   = 64'b0; // 基地址
                 offset_addr_o = immU ; // 偏移地址  
-                mem_ren    = 1'b0;// 访存使能
-                mem_raddr_o = 64'b0;//访存地址
+                mem_ren       = 1'b0;// 访存使能
+                mem_raddr_o   = 64'b0;//访存地址
             end// 不跳转
             default: begin
                 rs1_addr_o    = 5'b0;
@@ -366,8 +365,8 @@ module id(
                 reg_wen       = 1'b0; 
                 base_addr_o   = 64'b0; // 基地址
                 offset_addr_o = 64'b0; // 偏移地址 
-                mem_ren    = 1'b0;// 访存使能
-                mem_raddr_o = 64'b0;//访存地址
+                mem_ren       = 1'b0;// 访存使能
+                mem_raddr_o   = 64'b0;//访存地址
             end 
         endcase
     end

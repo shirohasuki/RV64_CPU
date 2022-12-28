@@ -9,7 +9,6 @@
 #include "Vtb___024root.h"
 
 void Vtb___024unit____Vdpiimwrap_ebreak_TOP____024unit();
-void Vtb___024unit____Vdpiimwrap_inst_fetch_TOP____024unit(QData/*63:0*/ raddr, QData/*63:0*/ &rdata);
 
 VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
@@ -275,9 +274,6 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
                                           : 0U) : 0U)));
         }
     }
-    Vtb___024unit____Vdpiimwrap_inst_fetch_TOP____024unit(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o, vlSelf->__Vtask_inst_fetch__0__rdata);
-    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__inst_fetch_inst__DOT__inst_get 
-        = vlSelf->__Vtask_inst_fetch__0__rdata;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_ren = 
         (1U & (IData)(((3U == (0x7fU & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)) 
                        & (0x7000U != (0x7000U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__if_id_inst_o)))));

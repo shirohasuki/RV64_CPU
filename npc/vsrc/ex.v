@@ -567,6 +567,8 @@ module ex (
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
                 mem_wmask   = 8'b0;
+                //$display("here2");
+                //$display("%llx", jump_addr_o );
             end // Jump And Link (PC += imm, rd = PC + 4)
             `INST_JALR: begin
                 rd_wdata_o  = op1_i_add_op2_i; // rd = PC + 4
@@ -579,7 +581,7 @@ module ex (
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
                 mem_wmask   = 8'b0;
-            end // Jump And Link Reg (PC = rs1 + imm, rd = PC + 4)
+            end // Jump And Link Reg (PC = rs1 + imm, rd = PC + 4)		
             `INST_LUI: begin
                 rd_wdata_o  = op2_i; 
                 rd_waddr_o  = rd_addr_i;

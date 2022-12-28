@@ -1,7 +1,7 @@
 #include "npc.h"
 
 
-#define MAX_SIM_TIME 150000000000// 最大仿真周期，中途读取到ebreak自动退出
+#define MAX_SIM_TIME 15000000// 最大仿真周期，中途读取到ebreak自动退出
 vluint64_t sim_time = 0;
 
 
@@ -58,7 +58,7 @@ int main() {
     
     sim_init();
 
-    IFDEF(CONFIG_NPC_DEVICE, init_device());  // 初始化外设
+    // IFDEF(CONFIG_NPC_DEVICE, init_device());  // 初始化外设
 
 #ifdef CONFIG_NPC_ITRACE
     init_disasm("riscv64-pc-linux-gnu");

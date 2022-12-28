@@ -4,14 +4,9 @@ module riscv (
     input  wire clk, 
     input  wire rst,
 
-    // // form rom
-    // input  wire [31:0] inst_i, 
-    // // to rom    
-    // output wire [63:0] inst_addr_o ,
-
-    // from rom
+    // from mem
     input	wire[63:0]	  mem_rdata_i,	
-	// to rom
+	// to mem
     output  wire 	   	  mem_ren_o,
 	output  wire[63:0]    mem_raddr_o,
 	
@@ -21,8 +16,10 @@ module riscv (
 	output  wire[63:0]    mem_wdata_o,
     output  wire[7:0]     mem_wmask_o,
 
-    // to rom (flush sign) 
+    // to axi (flush sign) 
     output wire           hold_flag_o
+    // output wire[3:0]      sid_o,
+    // output wire           rwvalid_o
 );
     // pc 2 if and reg(for trace)
     wire[63:0] pc_reg_pc_o;
@@ -38,16 +35,26 @@ module riscv (
         // .pc_reg_o       (pc_reg_reg_o) 
     );
 
-    // if 2 if_id
-    wire[63:0] if_inst_addr_o;
-    wire[31:0] if_inst_o;
-
+    // if from rom
+    wire[63:0]    rom_if_inst_o;
+    // if to if_id and rom
+    wire[31:0]    if_inst_o;
+    wire[63:0]    if_inst_addr_o; 
+    
     inst_fetch inst_fetch_inst (
-        .pc_addr_i     ( pc_reg_pc_o   ),
+        .pc_addr_i     (   pc_reg_pc_o      ),
         // .rom2if_inst_i ( inst_i        ),
         // .if2rom_addr_o ( inst_addr_o   ),
-        .inst_addr_o   ( if_inst_addr_o),
-        .inst_o        ( if_inst_o     )
+        .rom_inst_i    ( rom_if_inst_o      ),
+        .inst_addr_o   ( if_inst_addr_o     ),
+        .inst_o        ( if_inst_o          )
+        // .sid_o         ( if_rom_sid_o  ),
+        // .rwvalid_o     ( if_axi_rwvalid_o)
+    );
+
+    rom rom_inst (
+        .inst_addr_i   (   if_inst_addr_o   ),
+        .inst_o        (   rom_if_inst_o    )
     );
 
     // if_id 2 id

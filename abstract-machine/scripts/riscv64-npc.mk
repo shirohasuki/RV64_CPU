@@ -26,5 +26,7 @@ image: $(IMAGE).elf
 
 run: image
 	cp $(IMAGE).bin $(NPC_HOME)/image.bin
+	hexdump -v -e'/4 "%08x\n"'  $(NPC_HOME)/image.bin  > $(NPC_HOME)/image.hex
+#先把bin文件粘贴到npc目录下，后将bin文件转化为HEX文件
 # $(MAKE) -C $(NPC_HOME)
 	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) run ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin

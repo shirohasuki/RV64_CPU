@@ -69,6 +69,7 @@ module mem (
     assign rd_wdata_o = rd_wdata_i;
     assign rd_waddr_o = rd_waddr_i;
     assign reg_wen_o  = reg_wen_i;
+    assign inst_addr_o = inst_addr_i;
 
     always @(posedge clk) begin
         // if (ren || rst == 1'b1 || hold_flag_i == 1'b0) pmem_read(raddr, rdata);

@@ -120,7 +120,6 @@ VL_ATTR_COLD void Vtb___024root___ctor_var_reset(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_wb_inst_addr_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_wb_wb_rd_waddr_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_wb_wb_reg_wen_o = 0;
-    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__wb_inst_addr_o = 0;
     for (int __Vi0=0; __Vi0<4096; ++__Vi0) {
         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__rom_inst__DOT__rom_mem[__Vi0] = 0;
     }

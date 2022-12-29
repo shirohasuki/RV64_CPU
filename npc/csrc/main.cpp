@@ -73,6 +73,10 @@ int main() {
     init_difftest("/home/shiroha/Code/ysyx/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size);
 #endif
     // dump_gpr();
+    // exec_once();
+    // exec_once();
+    // exec_once();
+    
     while (sim_time < MAX_SIM_TIME) {
         // dump_gpr();
         exec_once();
@@ -82,10 +86,12 @@ int main() {
             exec_once();
             exec_once();
             // exec_once();
+            // exec_once();
+            // exec_once();
         } // 遇到流水线冲刷，pc再走两拍到EXU
         difftest_exec_once();
 #endif
-        dump_gpr();
+        // dump_gpr();
     }
     sim_exit();
 } 

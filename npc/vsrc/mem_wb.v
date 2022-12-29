@@ -23,9 +23,9 @@ module mem_wb(
 
  //   dff_set #(64) dff6(clk, rst, 1'b0, 64'b0, rd_wdata_i, rd_wdata_o);
 
-    dff_set #(5)  dff7(clk, rst, 1'b0, 5'b0, rd_waddr_i, rd_waddr_o);
+    dff_set #(5)  dff2(clk, rst, 1'b0, 5'b0, rd_waddr_i, rd_waddr_o);
 
-    dff_set #(1)  dff8(clk, rst, 1'b0, 1'b0, reg_wen_i, reg_wen_o);
+    dff_set #(1)  dff3(clk, rst, 1'b0, 1'b0, reg_wen_i, reg_wen_o);
 
 
 endmodule 

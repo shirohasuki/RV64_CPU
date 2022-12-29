@@ -4,7 +4,7 @@ module wb (
 
     // from mem_wb 
     input reg[63:0]  inst_addr_i,
-    input reg[63:0]  inst_addr_o,
+    output reg[63:0]  inst_addr_o,
 
     input wire[4:0]  reg_waddr_i,
 	input wire[63:0] reg_wdata_i,
@@ -18,5 +18,6 @@ module wb (
     assign reg_waddr_o = reg_waddr_i;
 	assign reg_wdata_o = reg_wdata_i;
 	assign reg_wen_o   = reg_wen_i;
+    assign inst_addr_o = inst_addr_i;
 
 endmodule

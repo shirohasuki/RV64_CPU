@@ -22,11 +22,9 @@ extern "C" {
     extern void get_pc(long long pc);
     // DPI import at /home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/regs.v:1:30
     extern void get_regs(const svOpenArrayHandle regs);
-    // DPI import at /home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/inst_fetch.v:5:30
-    extern void inst_fetch(long long raddr, long long* rdata);
-    // DPI import at /home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/mem.v:2:30
+    // DPI import at /home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/mem.v:38:30
     extern void pmem_read(long long raddr, long long* rdata);
-    // DPI import at /home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/mem.v:3:30
+    // DPI import at /home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/mem.v:39:30
     extern void pmem_write(long long waddr, long long wdata, char mask);
 
 #ifdef __cplusplus

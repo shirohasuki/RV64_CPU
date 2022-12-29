@@ -6,6 +6,7 @@
 #include "Vtb___024unit__DepSet_h748589bb__0.cpp"
 #include "Vtb__Dpi.cpp"
 #include "Vtb__Trace__0.cpp"
+#include "Vtb__ConstPool_0.cpp"
 #include "Vtb___024root__Slow.cpp"
 #include "Vtb___024root__DepSet_hfe20aad3__0__Slow.cpp"
 #include "Vtb___024root__DepSet_ha183790c__0__Slow.cpp"

@@ -14,7 +14,7 @@ module ex (
     input wire[63:0]  base_addr_i, // 基地址
     input wire[63:0]  offset_addr_i, // 偏移地址
      
-    // to regs  
+    // to wb  
     output reg[63:0]  rd_wdata_o,
     output reg[4:0]   rd_waddr_o,
     output reg        reg_wen_o,
@@ -26,7 +26,8 @@ module ex (
     output reg        hold_flag_o,
 
     // from mem
-    input reg[63:0]  mem_rdata_i,
+    input reg[63:0]  mem_rdata_i, 
+    // TODO：设想改为读取到的数据给wb模块，不给ex，但是目前没理清 
 
     // to mem
     output wire      mem_wen_o,

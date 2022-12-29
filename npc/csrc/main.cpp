@@ -54,6 +54,7 @@ void sim_exit() {
 
 
 int main() {
+    
     img_size = load_image("/home/shiroha/Code/ysyx/ysyx-workbench/npc/image.bin");
     
     sim_init();
@@ -71,10 +72,11 @@ int main() {
     } // pc先走三拍到EXU
     init_difftest("/home/shiroha/Code/ysyx/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size);
 #endif
-    
+    // dump_gpr();
     while (sim_time < MAX_SIM_TIME) {
+        // dump_gpr();
         exec_once();
-
+        
 #ifdef CONFIG_NPC_DIFFTEST
         if (cpu_npc.pc == 0x0) {
             exec_once();
@@ -83,7 +85,7 @@ int main() {
         } // 遇到流水线冲刷，pc再走两拍到EXU
         difftest_exec_once();
 #endif
-    // dump_gpr();
+        dump_gpr();
     }
     sim_exit();
 } 

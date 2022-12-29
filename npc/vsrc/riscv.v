@@ -4,14 +4,9 @@ module riscv (
     input  wire clk, 
     input  wire rst,
 
-    // // form rom
-    // input  wire [31:0] inst_i, 
-    // // to rom    
-    // output wire [63:0] inst_addr_o ,
-
-    // from rom
+    // from mem
     input	wire[63:0]	  mem_rdata_i,	
-	// to rom
+	// to mem
     output  wire 	   	  mem_ren_o,
 	output  wire[63:0]    mem_raddr_o,
 	
@@ -21,8 +16,10 @@ module riscv (
 	output  wire[63:0]    mem_wdata_o,
     output  wire[7:0]     mem_wmask_o,
 
-    // to rom (flush sign) 
-    output wire           hold_flag_o
+    // to axi (flush sign) 
+    output wire           hold_flag_o,
+    // output wire[3:0]      sid_o,
+    output wire           rwvalid_o
 );
     // pc 2 if and reg(for trace)
     wire[63:0] pc_reg_pc_o;
@@ -38,16 +35,22 @@ module riscv (
         // .pc_reg_o       (pc_reg_reg_o) 
     );
 
-    // if 2 if_id
-    wire[63:0] if_inst_addr_o;
-    wire[31:0] if_inst_o;
-
+    // if from rom
+    wire[63:0]    rom_if_inst_o;
+    // if to if_id and rom
+    wire[31:0]    if_inst_o;
+    wire[63:0]    if_inst_addr_o; 
+    
     inst_fetch inst_fetch_inst (
-        .pc_addr_i     ( pc_reg_pc_o   ),
-        // .rom2if_inst_i ( inst_i        ),
-        // .if2rom_addr_o ( inst_addr_o   ),
-        .inst_addr_o   ( if_inst_addr_o),
-        .inst_o        ( if_inst_o     )
+        .pc_addr_i     (   pc_reg_pc_o      ),
+        .rom_inst_i    ( rom_if_inst_o      ),
+        .inst_addr_o   ( if_inst_addr_o     ),
+        .inst_o        ( if_inst_o          )
+    );
+
+    rom rom_inst (
+        .inst_addr_i   (   if_inst_addr_o   ),
+        .inst_o        (   rom_if_inst_o    )
     );
 
     // if_id 2 id
@@ -112,10 +115,10 @@ module riscv (
         .rs2_raddr_i ( id_rs2_addr_o   ),
         .rs1_rdata_o ( regs_rs1_rdata_o ),
         .rs2_rdata_o ( regs_rs2_rdata_o ),
-        .reg_waddr_i ( ex_rd_addr_o    ),
-        .reg_wdata_i ( ex_rd_data_o    ),
-        .reg_wen     ( ex_reg_wen_o    ),
-        .inst_addr_i ( ex_reg_inst_addr_o  ) 
+        .reg_waddr_i ( wb_reg_rd_waddr_o),   // from wb
+        .reg_wdata_i ( wb_reg_rd_wdata_o ),   // from wb
+        .reg_wen     ( wb_reg_reg_wen_o ),   // from wb
+        .inst_addr_i ( wb_inst_addr_o  ) 
     );
 
     // id_ex 2 ex
@@ -150,20 +153,24 @@ module riscv (
         .offset_addr_o  ( id_ex_offset_addr_o ) 
     );
 
-    // ex 2 
-	wire[63:0]  ex_rd_data_o;
-	wire[4:0]   ex_rd_addr_o;
-	wire        ex_reg_wen_o;
-    wire[63:0]  ex_reg_inst_addr_o; // pc 传递
+    // ex 2 ex_mem
+	wire[63:0]  ex_ex_mem_rd_wdata_o;
+	wire[4:0]   ex_ex_mem_rd_waddr_o;
+	wire        ex_ex_mem_reg_wen_o;
+    wire[63:0]  ex_inst_addr_o; // pc 传递
 
-    // // ex 2 ex_wb
-    // wire[63:0]  ex_ex_wb_o;
+    wire[63:0]  ex_ex_mem_waddr_o;
+    wire[63:0]  ex_ex_mem_wdata_o;
+    wire        ex_ex_mem_wen_o;
+    wire[7:0]   ex_ex_mem_wmask_o;
 
     // ex 2 ctrl
     wire[63:0]  ex_jump_addr_o;    
     wire        ex_jump_en_o;      
     wire        ex_hold_flag_o; 
 
+    // ex 2 wb 日后优化
+    wire[63:0]  ex_wb_rd_wdata_o;  
 
     ex ex_inst(
         .inst_i      ( id_ex_inst_o     ),
@@ -174,18 +181,18 @@ module riscv (
         .reg_wen_i   ( id_ex_reg_wen    ),
         .base_addr_i    ( id_ex_base_addr_o   ),
         .offset_addr_i  ( id_ex_offset_addr_o ),
-        .rd_wdata_o  ( ex_rd_data_o     ),
-        .rd_waddr_o  ( ex_rd_addr_o     ),
-        .reg_wen_o   ( ex_reg_wen_o     ),
-        .inst_addr_o ( ex_reg_inst_addr_o     ),
+        .rd_wdata_o  ( ex_wb_rd_wdata_o    ),
+        .rd_waddr_o  ( ex_ex_mem_rd_waddr_o     ),
+        .reg_wen_o   ( ex_ex_mem_reg_wen_o     ),
+        .inst_addr_o ( ex_inst_addr_o     ),
         .jump_addr_o ( ex_jump_addr_o      ),
         .jump_en_o   ( ex_jump_en_o        ),
         .hold_flag_o ( ex_hold_flag_o   ),
-        .mem_rdata_i   ( mem_rdata_i ),
-        .mem_wen_o     ( mem_wen_o     ), // to ram
-        .mem_waddr_o   ( mem_waddr_o   ), // to ram
-        .mem_wdata_o   ( mem_wdata_o   ), // to ram
-        .mem_wmask     ( mem_wmask_o     )  // to ram
+        .mem_rdata_i   ( mem_ex_rdata_o ),
+        .mem_wen_o     ( ex_ex_mem_wen_o     ), // to ram
+        .mem_waddr_o   ( ex_ex_mem_waddr_o   ), // to ram
+        .mem_wdata_o   ( ex_ex_mem_wdata_o   ), // to ram
+        .mem_wmask     ( ex_ex_mem_wmask_o     )  // to ram
     );
 
     // ctrl 2 regs
@@ -205,23 +212,109 @@ module riscv (
         .hold_flag_o    ( ctrl_hold_flag_o   )
     );  
 
+    // ex_mem to mem
+    wire[63:0]  ex_mem_inst_addr_o;
+    wire        ex_mem_mem_ren_o;
+    wire[63:0]  ex_mem_mem_raddr_o;
+    wire        ex_mem_mem_wen_o;
+    wire[63:0]  ex_mem_mem_waddr_o;
+    wire[63:0]  ex_mem_mem_wdata_o;
+    wire[7:0]   ex_mem_mem_wmask_o;
+    wire[63:0]  ex_mem_mem_rd_wdata_o;
+    wire[4:0]   ex_mem_mem_rd_waddr_o;
+    wire        ex_mem_mem_reg_wen_o;
 
-    // reg 2 traceregs
-    // wire[63:0]  reg_2_trace;    
+    ex_mem ex_mem_inst (
+        .clk         ( clk         ),
+        .rst         ( rst         ),
+        .inst_addr_i ( ex_inst_addr_o ),
+        .ex_wen_i    ( ex_ex_mem_wen_o    ),
+        .ex_waddr_i  ( ex_ex_mem_waddr_o  ),
+        .ex_wdata_i  ( ex_ex_mem_wdata_o  ),
+        .ex_wmask_i  ( ex_ex_mem_wmask_o  ),
+        .rd_wdata_i  ( ex_ex_mem_rd_wdata_o   ),
+        .rd_waddr_i  ( ex_ex_mem_rd_waddr_o  ),
+        .reg_wen_i   ( ex_ex_mem_reg_wen_o   ),
+        .inst_addr_o ( ex_mem_inst_addr_o ),
+        .ren_o       ( ex_mem_mem_ren_o       ),
+        .raddr_o     ( ex_mem_mem_raddr_o     ),
+        .wen_o       ( ex_mem_mem_wen_o       ),
+        .waddr_o     ( ex_mem_mem_waddr_o     ),
+        .wdata_o     ( ex_mem_mem_wdata_o     ),
+        .wmask_o     ( ex_mem_mem_wmask_o     ),
+        .rd_wdata_o  ( ex_mem_mem_rd_wdata_o  ),
+        .rd_waddr_o  ( ex_mem_mem_rd_waddr_o  ),
+        .reg_wen_o   ( ex_mem_mem_reg_wen_o   )
+    );
 
-    // traceregs traceregs_inst(
-    //     .regs    ( reg_2_trace )
-    // );
+    // mem to mem_wb
+    wire[63:0]  mem_inst_addr_o;
+    
+    wire[63:0]  mem_mem_wb_rd_wdata_o;
+    wire[4:0]   mem_mem_wb_rd_waddr_o;
+    wire        mem_mem_wb_reg_wen_o;
 
-    // wire[63:0]  ex_wb_wb_addr_o;
+    // mem to ex
+    wire[63:0]  mem_ex_rdata_o;
 
-    // ex_wb ex_wb_inst(
-    // .clk            ( clk         ),
-    // .rst            ( rst         ),
-    // .inst_addr_i    ( ex_ex_wb_o  ),
-    // .inst_addr_o    ( ex_wb_wb_addr_o  )
-    // );
+    mem mem_inst(
+        .clk         ( clk         ),
+        .rst         ( rst         ),
+        .inst_addr_i ( ex_mem_inst_addr_o ),
+        .inst_addr_o ( mem_inst_addr_o),
+        .ren_i       ( ex_mem_mem_ren_o       ),
+        .wen_i       ( ex_mem_mem_wen_o       ),
+        .raddr_i     ( ex_mem_mem_raddr_o     ),
+        .rdata_o     ( mem_ex_rdata_o         ),   // 从内存读出，要写入reg的数据
+        .waddr_i     ( ex_mem_mem_waddr_o     ),
+        .wdata_i     ( ex_mem_mem_wdata_o     ),
+        .wmask_i     ( ex_mem_mem_wmask_o     ),
+        .rd_wdata_i  ( ex_mem_mem_rd_wdata_o  ),
+        .rd_waddr_i  ( ex_mem_mem_rd_waddr_o  ),
+        .reg_wen_i   ( ex_mem_mem_reg_wen_o   ),
+        .rd_wdata_o  ( mem_mem_wb_rd_wdata_o  ),
+        .rd_waddr_o  ( mem_mem_wb_rd_waddr_o  ),
+        .reg_wen_o   ( mem_mem_wb_reg_wen_o   )
+    );
 
+    // mem_wb to wb
+    wire[63:0]  mem_wb_inst_addr_o;
+    //wire[63:0]  mem_wb_wb_rd_wdata_o; 
+    wire[4:0]   mem_wb_wb_rd_waddr_o; 
+    wire        mem_wb_wb_reg_wen_o;  
+
+    mem_wb mem_wb_inst(
+        .clk         ( clk         ),
+        .rst         ( rst         ),
+        .inst_addr_i ( mem_inst_addr_o),
+        .inst_addr_o ( mem_wb_inst_addr_o ),
+        //.rd_wdata_i  ( mem_mem_wb_rd_wdata_o  ),
+        .rd_waddr_i  ( mem_mem_wb_rd_waddr_o  ),
+        .reg_wen_i   ( mem_mem_wb_reg_wen_o   ),
+        //.rd_wdata_o  ( mem_wb_wb_rd_wdata_o  ),
+        .rd_waddr_o  ( mem_wb_wb_rd_waddr_o  ),
+        .reg_wen_o   ( mem_wb_wb_reg_wen_o   )
+    );
+     
+    // wb to reg 
+    wire[63:0]  wb_inst_addr_o;
+    wire[63:0]  wb_reg_rd_wdata_o; 
+    wire[4:0]   wb_reg_rd_waddr_o; 
+    wire        wb_reg_reg_wen_o;  
+
+    wb wb_inst(
+        .clk         ( clk         ),
+        .rst         ( rst         ),
+        .inst_addr_i ( mem_wb_inst_addr_o),
+        .inst_addr_o ( wb_inst_addr_o),
+        .reg_waddr_i ( mem_wb_wb_rd_waddr_o ),
+        //.reg_wdata_i ( mem_wb_wb_rd_wdata_o ),
+        .reg_wdata_i ( ex_wb_rd_wdata_o ),
+        .reg_wen_i   ( mem_wb_wb_reg_wen_o ),
+        .reg_waddr_o ( wb_reg_rd_waddr_o ),
+        .reg_wdata_o ( wb_reg_rd_wdata_o ),
+        .reg_wen_o   ( wb_reg_reg_wen_o   )
+    );
 
 
 

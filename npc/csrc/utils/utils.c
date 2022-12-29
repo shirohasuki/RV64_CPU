@@ -44,9 +44,9 @@ void npc_exit(int status) {
 #ifdef CONFIG_NPC_MTRACE
     print_mtrace();
 #endif
-// #ifdef CONFIG_NPC_GPRTRACE
+#ifdef CONFIG_NPC_GPRTRACE
     dump_gpr(); 
-// #endif
+#endif
         puts("\33[1;31m[Sim Result]: HIT BAD TRAP\33[0m");
     }
     exit(status);

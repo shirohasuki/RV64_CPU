@@ -81,12 +81,12 @@ module axi #(
     input rst,
 
     // from IF&MEM 
-    input  [AXI_MID_WIDTH-1:0]          mid_i,            //IF&MEM输入信号  规定IF为0，mem为1
+    // input  [AXI_MID_WIDTH-1:0]          mid_i,            //IF&MEM输入信号  规定IF为0，mem为1
     input  [AXI_SID_WIDTH-1:0]          sid_i,            //IF&MEM输入信号  规定IF为0，mem为1
     input                               rwvalid_i,         //IF&MEM输入信号 规定1为读0为写
     input  [RW_DATA_WIDTH-1:0]          rwdata_i,          //IF&MEM&外设输入信号
     input  [RW_ADDR_WIDTH-1:0]          rwaddr_i,          //IF&MEM输入信号 
-    input  [AXI_STRB_WIDTH-1:0]         wmask_i,          //IF&MEM输入信号
+    input  [AXI_STRB_WIDTH-1:0]         wmask_i,           //IF&MEM输入信号
     // input  [7:0]                        rsize_i,          //IF&MEM输入信号
     // input  [7:0]                        wsize_i,          //IF&MEM输入信号
     //此处可优化，rvalid_i和wvalid_i合并，将raddr_i和waddr_i合并，将rsize_i和wsize_i合并
@@ -117,11 +117,11 @@ module axi #(
              4.多主机，调用两次和同时写在一个模型里的区别（解决）
              5.取指连上AXI取指就得打拍了，时序违例怎么办，需要停流水线吗*/
     
-    //  B ：写反馈通道
-    // s->m
-    input                            maxi_bvalid, // 写响应握手信号，表明完成一次写
-    // m->s
-    output                           maxi_bready, // 写反馈握手通路，表明m可以接受写反馈信号
+    // //  B ：写反馈通道
+    // // s->m
+    // input                            maxi_bvalid, // 写响应握手信号，表明完成一次写
+    // // m->s
+    // output                           maxi_bready, // 写反馈握手通路，表明m可以接受写反馈信号
     
     // Read Address Channel AR：读地址通道 (读请求信号)
     // s->m
@@ -156,11 +156,11 @@ module axi #(
     
     // reg       req; // 主机请求信号
 
-    // 主机仲裁
-    assign mid = mid_i;
-// /* TODO: 主机仲裁还没写*/
+//     // 主机仲裁
+//     assign mid = mid_i;
+// // /* TODO: 主机仲裁还没写*/
     
-    // 从机选择
+//     // 从机选择
     assign sid = sid_i;
 // always @(*) begin
 //     // 初始化片选信号
@@ -196,6 +196,14 @@ module axi #(
 
 // ============ READ =============================== //
 // ========== AR channel (读请求信号) 
+    // Read Address Channel AR：读地址通道 (读请求信号)
+    // s->m
+    // input                            maxi_raready, 
+    // // m->s
+    // output                           maxi_ravalid,   // ren， 是想要写的信号
+    // output [AXI_ADDR_WIDTH - 1:0]    maxi_raddr, 
+
+
 always @(posedge clk or negedge rst) begin
     if (!rst) begin 
         maxi_ravalid <= 1'b0;
@@ -223,9 +231,16 @@ always @(posedge clk or negedge rst) begin
 end // 握手成功发送读地址
 
 // ========== R channel (读响应信号) 
+    // Read Channel R ：读数据通道 (读响应信号)
+    // s->m
+    // input [AXI_ADDR_WIDTH - 1:0]     maxi_rdata,
+    // input                            maxi_rdvalid, // 不是ren，是可以写的信号
+    // input                            maxi_rlast,   // 读结束的信号
+    // // m->s                          
+    // output                           maxi_rdready
 always @(posedge clk or negedge rst) begin
     if (!rst) begin 
-        maxi_rdready <= 1'b1;
+        maxi_rdready <= 1'b1; // 正常一直拉高
     end
     else begin
         if (maxi_rlast) begin
@@ -243,7 +258,7 @@ always @(posedge clk or negedge rst) begin
             maxi_rdata_buff <= rwdata_i;
         end
     end
-end // 握手成功发送读地址
+end // 握手成功发送接收读数据
 
 
 // ============ WRITE =============================== //

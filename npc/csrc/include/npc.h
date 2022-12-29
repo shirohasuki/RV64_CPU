@@ -27,9 +27,9 @@ typedef uint16_t ioaddr_t;
 
 // ============== 调试选项 ============= //
 #define CONFIG_NPC_ITRACE 1
-// #define CONFIG_NPC_GPRTRACE 1
+#define CONFIG_NPC_GPRTRACE 1
 #define CONFIG_NPC_IFTRACE 1
-#define CONFIG_NPC_DIFFTEST 1
+// #define CONFIG_NPC_DIFFTEST 1
 #define CONFIG_NPC_MTRACE 1
 
 

@@ -10,10 +10,9 @@ module tb(
 	// wire[31:0] x27 = tb.soc_inst.riscv_inst.regs_inst.regs[27];    // x27:表示是否成功
 	
 	// rom 初始值
-	// initial begin
-    //     $readmemh("./vsrc/tb/inst_txt/rv32ui-p-auipc.txt",tb.soc_inst.rom_inst.rom_mem);
-    //     $readmemb("./image.bin",tb.soc_inst.rom_inst.rom_mem);
-    // end
+	initial begin
+        $readmemh("/home/shiroha/Code/ysyx/ysyx-workbench/npc/image.hex",tb.soc_inst.riscv_inst.rom_inst.rom_mem);
+    end
 
     // integer r;
 	// //initial begin

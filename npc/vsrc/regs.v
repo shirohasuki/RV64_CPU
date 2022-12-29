@@ -1,5 +1,6 @@
 import "DPI-C" function void get_regs(input logic [63:0] regs[]);
 import "DPI-C" function void get_pc(input longint pc);
+
 module regs (
     input  wire clk,    
     input  wire rst,    
@@ -11,7 +12,7 @@ module regs (
     output  reg[63:0] rs1_rdata_o,    
     output  reg[63:0] rs2_rdata_o, 
 
-    // from ex
+    // from wb
     input wire[4:0]  reg_waddr_i,
 	input wire[63:0] reg_wdata_i,
 	input wire       reg_wen,

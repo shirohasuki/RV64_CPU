@@ -52,14 +52,13 @@ extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
     //MUXDEF(NPC_HAS_SERIAL, putch(wdata), putc(wdata, stderr));
     // if (SERIAL_MMIO <= waddr && waddr <= SERIAL_MMIO + 8) { 
     //     MUXDEF(NPC_HAS_SERIAL, putch(wdata), putc(wdata, stderr));// 写串口
-    //     //printf("hello\n"); // 写串口
+    //     printf("hello\n"); // 写串口
     //     return ;
     // }
     if (waddr < MEM_BASE) {
-        //printf("[pmem_write] waddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", waddr, MEM_BASE);
+        // printf("[pmem_write] waddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", waddr, MEM_BASE);
         return;
     }
-    
     uint8_t *pt = cpu2mem(waddr);
     for (int i = 0; i < 8; ++i) {
         if (mask & 1) *pt = (wdata & 0xff);

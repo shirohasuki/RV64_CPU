@@ -44,7 +44,7 @@ module regs (
         else
             rs2_rdata_o = regs[rs2_raddr_i];
     end // 读取rs2
-
+/* 打拍版回写
     always @(posedge clk) begin
         if (rst == 1'b0) begin
             for (integer i = 0; i < 32; i = i + 1) begin
@@ -59,8 +59,24 @@ module regs (
         get_pc(pc_reg);
         // 组合逻辑要补全else，时序不需要
     end // 回写rd
+*/
 
-    // initial get_regs(regs);
+    always @(*) begin
+        if (rst == 1'b0) begin
+            for (integer i = 0; i < 32; i = i + 1) begin
+                regs[i] = 64'b0;
+            end // 初始化寄存器
+        end
+        else if (reg_wen && reg_waddr_i != 5'b0) begin // x0不准写
+            regs[reg_waddr_i] = reg_wdata_i;
+        end 
+        else
+            regs[reg_waddr_i] = 64'b0;
+        // $display("REGS: %x", pc_reg);   
+        get_regs(regs);
+        get_pc(pc_reg);
+        // 组合逻辑要补全else，时序不需要
+    end // 回写rd
 
 endmodule 
 

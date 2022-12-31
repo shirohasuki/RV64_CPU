@@ -23,17 +23,21 @@ module ex (
     // to ctrl
     output reg[63:0]  jump_addr_o,
     output reg        jump_en_o,
-    output reg        hold_flag_o,
+    output reg[2:0]   flush_flag_o,
+    output reg[2:0]   stall_flag_o,
 
     // from mem
-    input reg[63:0]  mem_rdata_i, 
+    input reg[63:0]   mem_rdata_i, 
     // TODO：设想改为读取到的数据给wb模块，不给ex，但是目前没理清 
 
     // to mem
-    output wire      mem_wen_o,
-    output reg[63:0] mem_waddr_o,
-    output reg[63:0] mem_wdata_o,
-    output reg[7:0]  mem_wmask
+    output wire       mem_ren_o,
+    output reg[63:0]  mem_raddr_o,
+
+    output wire       mem_wen_o,
+    output reg[63:0]  mem_waddr_o,
+    output reg[63:0]  mem_wdata_o,
+    output reg[7:0]   mem_wmask
 );
 
     wire[6:0] opcode; // 7byte (6~0)
@@ -143,7 +147,8 @@ module ex (
             `INST_TYPE_I:begin
                 jump_addr_o = 64'b0;
                 jump_en_o   = 1'b0;
-                hold_flag_o = 1'b0; // 设置初值，防止出现锁存器
+                flush_flag_o = 3'b0; // 设置初值，防止出现锁存器
+                stall_flag_o = 3'b0;
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
@@ -209,7 +214,8 @@ module ex (
             `INST_TYPE_I_W: begin
                 jump_addr_o = 64'b0;
                 jump_en_o   = 1'b0;
-                hold_flag_o = 1'b0; // 设置初值，防止出现锁存器
+                flush_flag_o = 3'b0; // 设置初值，防止出现锁存器
+                stall_flag_o = 3'b0;
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
@@ -249,7 +255,8 @@ module ex (
             `INST_TYPE_R_M:begin
                 jump_addr_o = 64'b0;
                 jump_en_o = 1'b0;
-                hold_flag_o = 1'b0;// 设置初值，防止出现锁存器
+                flush_flag_o = 3'b0;// 设置初值，防止出现锁存器
+                stall_flag_o = 3'b0;
                 mem_wen_o = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
@@ -345,7 +352,8 @@ module ex (
             `INST_TYPE_R_M_W:begin
                 jump_addr_o = 64'b0;
                 jump_en_o = 1'b0;
-                hold_flag_o = 1'b0;// 设置初值，防止出现锁存器
+                flush_flag_o = 3'b0;// 设置初值，防止出现锁存器
+                stall_flag_o = 3'b0;
                 mem_wen_o = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
@@ -412,41 +420,43 @@ module ex (
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
                 mem_wmask = 8'b0;
+                stall_flag_o = 3'b000;
+                flush_flag_o = 3'b111;
                 case (func3)
                     `INST_BNE: begin
                         jump_addr_o = base_addr_add_addr_offset;
                         jump_en_o   = ~op1_i_equal_op2_i;
-                        hold_flag_o = 1'b0;
+                        // flush_flag_o = 1'b0;
                     end // 不等跳转
                     `INST_BEQ: begin
                         jump_addr_o = base_addr_add_addr_offset;
                         jump_en_o   = op1_i_equal_op2_i;
-                        hold_flag_o = 1'b0;
+                        // flush_flag_o = 1'b0;
                     end // 相等跳转
                     `INST_BLT: begin
                         jump_addr_o = base_addr_add_addr_offset;
                         jump_en_o   = op1_i_less_op2_i_signed;
-                        hold_flag_o = 1'b0;
+                        // flush_flag_o = 1'b0;
                     end // 小于跳转(有符号)
                     `INST_BLTU: begin
                         jump_addr_o = base_addr_add_addr_offset;
                         jump_en_o   = op1_i_less_op2_i_unsigned;
-                        hold_flag_o = 1'b0;
+                        // flush_flag_o = 1'b0;
                     end //小于跳转(无符号)
                     `INST_BGE: begin
                         jump_addr_o = base_addr_add_addr_offset;
                         jump_en_o   = ~op1_i_less_op2_i_signed;
-                        hold_flag_o = 1'b0;
+                        // flush_flag_o = 1'b0;
                     end // 大于等于跳转(有符号)
                     `INST_BGEU: begin
                         jump_addr_o = base_addr_add_addr_offset;
                         jump_en_o   = ~op1_i_less_op2_i_unsigned;
-                        hold_flag_o = 1'b0;
+                        // flush_flag_o = 1'b0;
                     end // 大于等于跳转(无符号)
                     default: begin
                         jump_addr_o = 64'b0;
                         jump_en_o   = 1'b0;
-                        hold_flag_o = 1'b0;
+                        // flush_flag_o = 1'b0;
                     end 
                 endcase
             end
@@ -454,7 +464,8 @@ module ex (
             `INST_TYPE_L: begin
                 jump_addr_o = 64'b0;
                 jump_en_o   = 1'b0;
-                hold_flag_o = 1'b0;// 设置初值，防止出现锁存器
+                flush_flag_o = 3'b001;// 设置初值，防止出现锁存器 // 给id_exNOP此处当作冲刷该级流水线
+                stall_flag_o = 3'b110; // 流水线延迟用于访存
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
@@ -510,11 +521,11 @@ module ex (
             `INST_TYPE_S: begin
                 jump_addr_o = 64'b0;
                 jump_en_o   = 1'b0;
-                hold_flag_o = 1'b0; // 设置初值，防止出现锁存器
+                flush_flag_o = 3'b001; // 设置初值，防止出现锁存器
+                stall_flag_o = 3'b110; // 流水线延迟用于访存
                 rd_wdata_o  = 64'b0; 
                 rd_waddr_o  = 5'b0;
                 reg_wen_o   = 1'b0;
-                
                 case (func3)
                     `INST_SB: begin
                         mem_wen_o   = 1'b1;
@@ -563,7 +574,8 @@ module ex (
                 reg_wen_o   = 1'b1; 
                 jump_addr_o = base_addr_add_addr_offset; // PC = PC + imm
                 jump_en_o   = 1'b1;
-                hold_flag_o = 1'b0;
+                flush_flag_o = 3'b111;
+                stall_flag_o = 3'b0;
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
@@ -577,7 +589,8 @@ module ex (
                 reg_wen_o   = 1'b1; 
                 jump_addr_o = base_addr_add_addr_offset; // PC = rs1 + imm
                 jump_en_o   = 1'b1;
-                hold_flag_o = 1'b0;
+                flush_flag_o = 3'b111;
+                stall_flag_o = 3'b0;
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
@@ -589,7 +602,8 @@ module ex (
                 reg_wen_o   = 1'b1; 
                 jump_addr_o = 64'b0; //不跳转 
                 jump_en_o   = 1'b0;
-                hold_flag_o = 1'b0;
+                flush_flag_o = 3'b0;
+                stall_flag_o = 3'b0;
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
@@ -601,7 +615,8 @@ module ex (
                 reg_wen_o   = 1'b1; 
                 jump_addr_o = 64'b0; //不跳转 
                 jump_en_o   = 1'b0;
-                hold_flag_o = 1'b0;
+                flush_flag_o = 3'b001;
+                stall_flag_o = 3'b110;
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
@@ -610,7 +625,8 @@ module ex (
             default: begin
                 jump_addr_o = 64'b0;
                 jump_en_o   = 1'b0;
-                hold_flag_o = 1'b0;// 设置初值，防止出现锁存器
+                flush_flag_o = 3'b0;// 设置初值，防止出现锁存器
+                stall_flag_o = 3'b0;
                 rd_wdata_o  = 64'b0; 
                 rd_waddr_o  = 5'b0;
                 reg_wen_o   = 1'b0;

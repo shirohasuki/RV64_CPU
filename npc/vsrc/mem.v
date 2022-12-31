@@ -47,6 +47,9 @@ module mem (
     input reg[63:0]     inst_addr_i, // 用于验证每级传递的pc
     output reg[63:0]    inst_addr_o, // 用于验证每级传递的pc
 
+    //from ex_mem
+    input reg[2:0]      stall_flag_i,
+
     input               ren_i,
     input               wen_i,
     input  reg[63:0]    raddr_i,
@@ -63,13 +66,17 @@ module mem (
     // to mem_wb
     output reg[63:0]    rd_wdata_o,
     output reg[4:0]     rd_waddr_o,
-    output reg          reg_wen_o  // to wb
+    output reg          reg_wen_o,  // to wb
+
+    // to ctrl 
+    output reg[2:0]     stall_flag_o
 );
 
-    assign rd_wdata_o = rd_wdata_i;
-    assign rd_waddr_o = rd_waddr_i;
-    assign reg_wen_o  = reg_wen_i;
+
+
     assign inst_addr_o = inst_addr_i;
+
+    assign stall_flag_o = stall_flag_i; // 再给ctrl一个周期的stall信号
 
     always @(posedge clk) begin
         // if (ren || rst == 1'b1 || hold_flag_i == 1'b0) pmem_read(raddr, rdata);
@@ -79,10 +86,13 @@ module mem (
         if (wen_i) pmem_write(waddr_i, wdata_i, wmask_i);
 
         if ((ren_i && wen_i) && (raddr_i == waddr_i)) begin
-            //$display("nb");
             rdata_o = wdata_i;  // 处理读写冲突
         end
         
+        assign reg_wen_o  = reg_wen_i;
+        assign rd_wdata_o = rd_wdata_i;
+        assign rd_waddr_o = rd_waddr_i;
         //if (ren && wen) $display("nb");
     end
+
 endmodule

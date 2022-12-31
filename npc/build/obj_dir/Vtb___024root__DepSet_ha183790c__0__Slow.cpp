@@ -74,6 +74,7 @@ VL_ATTR_COLD void Vtb___024root___ctor_var_reset(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_waddr_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_wdata_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_wmask = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_ram_flush_flag_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__ram_riscv_rdata_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_rom_raddr_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__rom_riscv_rdata_o = 0;
@@ -103,9 +104,14 @@ VL_ATTR_COLD void Vtb___024root___ctor_var_reset(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_ex_mem_rd_wdata_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_ex_mem_rd_waddr_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_ex_mem_reg_wen_o = 0;
-    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_jump_en_o = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_ex_mem_ren_o = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_ex_mem_raddr_o = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_stall_flag_o = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_flush_flag_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_wb_rd_wdata_o = 0;
-    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ctrl_hold_flag_o = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ctrl_pc_stall_en_o = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ctrl_if_id_stall_en_o = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ctrl_id_ex_stall_en_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_inst_addr_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_ren_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_raddr_o = 0;
@@ -116,6 +122,9 @@ VL_ATTR_COLD void Vtb___024root___ctor_var_reset(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_rd_wdata_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_rd_waddr_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_reg_wen_o = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_stall_flag_o = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_mem_wb_rd_wdata_o = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_mem_wb_rd_waddr_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ex_rdata_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_wb_inst_addr_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_wb_wb_rd_waddr_o = 0;

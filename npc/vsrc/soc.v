@@ -15,7 +15,7 @@ module soc (
     wire                riscv_ram_ren;
     wire[63:0]          riscv_ram_raddr_o; 
     // flush 
-    wire                riscv_ram_hold_flag_o;
+    wire                riscv_ram_flush_flag_o;
 
     // ram to riscv
     wire[63:0]          ram_riscv_rdata_o;
@@ -41,7 +41,7 @@ module soc (
         .clk          ( clk         ),
         .rst          ( rst         ),
         
-        .hold_flag_o  ( riscv_ram_hold_flag_o ),
+        .flush_flag_o  ( riscv_ram_flush_flag_o ),
         // .sid_o        ( riscv_axi_sid_o     ),
         .rwvalid_o    ( riscv_axi_rwvalid_o ),
         
@@ -93,7 +93,7 @@ module soc (
     // mem mem_inst(
     //     .clk         ( clk               ),
     //     .rst         ( rst               ),
-    //   //  .hold_flag_i ( riscv_ram_hold_flag_o ),
+    //   //  .flush_flag_i ( riscv_ram_flush_flag_o ),
     //     .wen_i       ( riscv_ram_wen     ),
     //     .waddr_i     ( riscv_ram_waddr_o ),
     //     .wdata_i     ( riscv_ram_wdata_o ),

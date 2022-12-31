@@ -3,7 +3,7 @@
 //     input wire              clk,
 //     input wire              rst,
 
-//     input wire              hold_flag_i,
+//     input wire              flush_flag_i,
 
 //     // from ex
 //     input wire              mem_wen,
@@ -19,7 +19,7 @@
 //     output reg[63:0]        mem_rdata_o 
 // );
   
-//     mem mem1(clk, rst, hold_flag_i, mem_ren, mem_wen, mem_raddr_i, mem_rdata_o, mem_waddr_i, mem_wdata_i, mem_wmask);
+//     mem mem1(clk, rst, flush_flag_i, mem_ren, mem_wen, mem_raddr_i, mem_rdata_o, mem_waddr_i, mem_wdata_i, mem_wmask);
 
 // endmodule
 
@@ -28,7 +28,7 @@ module ram (
     input wire              clk,
     input wire              rst,
 
-    input wire              hold_flag_i,
+    input wire              flush_flag_i,
 
     // from ex
     input wire              ram_wen_i,

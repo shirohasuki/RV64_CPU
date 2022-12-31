@@ -17,7 +17,7 @@ module riscv (
     output  wire[7:0]     mem_wmask_o,
 
     // to axi (flush sign) 
-    output wire           hold_flag_o,
+    output wire           flush_flag_o,
     // output wire[3:0]      sid_o,
     output wire           rwvalid_o
 );
@@ -31,6 +31,8 @@ module riscv (
         .clk            ( clk               ),
         .jump_addr_i    ( ctrl_jump_addr_o  ), 
         .jump_en_i      ( ctrl_jump_en_o    ), 
+        .flush_en_i     ( ctrl_pc_flush_en_o ),
+        .stall_en_i     ( ctrl_pc_stall_en_o ),
         .pc_o           ( pc_reg_pc_o       )
         // .pc_reg_o       (pc_reg_reg_o) 
     );
@@ -60,7 +62,8 @@ module riscv (
     if_id if_id_inst (
         .clk         ( clk               ),
         .rst         ( rst               ),
-        .hold_flag_i ( ctrl_hold_flag_o  ),
+        .flush_flag_i ( ctrl_if_id_flush_en_o  ),
+        .stall_flag_i ( ctrl_if_id_stall_en_o  ),
         .inst_i      ( if_inst_o         ),
         .inst_addr_i ( if_inst_addr_o    ),
         .inst_addr_o ( if_id_inst_addr_o ),
@@ -134,7 +137,8 @@ module riscv (
     id_ex id_ex_inst (
         .clk         ( clk               ),
         .rst         ( rst               ),
-        .hold_flag_i ( ctrl_hold_flag_o   ),
+        .flush_flag_i ( ctrl_id_ex_flush_en_o ),
+        .stall_flag_i ( ctrl_id_ex_stall_en_o  ),
         .inst_i      ( id_inst_o         ),
         .inst_addr_i ( id_inst_addr_o ),
         .op1_i       ( id_op1_o       ),
@@ -157,7 +161,11 @@ module riscv (
 	wire[63:0]  ex_ex_mem_rd_wdata_o;
 	wire[4:0]   ex_ex_mem_rd_waddr_o;
 	wire        ex_ex_mem_reg_wen_o;
+
     wire[63:0]  ex_inst_addr_o; // pc 传递
+
+    wire        ex_ex_mem_ren_o;
+    wire[63:0]  ex_ex_mem_raddr_o;
 
     wire[63:0]  ex_ex_mem_waddr_o;
     wire[63:0]  ex_ex_mem_wdata_o;
@@ -167,7 +175,8 @@ module riscv (
     // ex 2 ctrl
     wire[63:0]  ex_jump_addr_o;    
     wire        ex_jump_en_o;      
-    wire        ex_hold_flag_o; 
+    wire[2:0]   ex_stall_flag_o; 
+    wire[2:0]   ex_flush_flag_o; 
 
     // ex 2 wb 日后优化
     wire[63:0]  ex_wb_rd_wdata_o;  
@@ -187,29 +196,44 @@ module riscv (
         .inst_addr_o ( ex_inst_addr_o     ),
         .jump_addr_o ( ex_jump_addr_o      ),
         .jump_en_o   ( ex_jump_en_o        ),
-        .hold_flag_o ( ex_hold_flag_o   ),
+        .flush_flag_o ( ex_flush_flag_o   ),
+        .stall_flag_o ( ex_stall_flag_o   ),
         .mem_rdata_i   ( mem_ex_rdata_o ),
+        .mem_ren_o     ( ex_ex_mem_ren_o ),
+        .mem_raddr_o   ( ex_ex_mem_raddr_o ),
         .mem_wen_o     ( ex_ex_mem_wen_o     ), // to ram
         .mem_waddr_o   ( ex_ex_mem_waddr_o   ), // to ram
         .mem_wdata_o   ( ex_ex_mem_wdata_o   ), // to ram
         .mem_wmask     ( ex_ex_mem_wmask_o     )  // to ram
     );
 
-    // ctrl 2 regs
+    // ctrl 2 pc_reg
     wire[63:0]  ctrl_jump_addr_o;
     wire        ctrl_jump_en_o;
-    // ctrl 2 if_id/id_ex
-    wire        ctrl_hold_flag_o;
-    // ctrl 2 top(to ram)
-    assign hold_flag_o = ctrl_hold_flag_o;
     
+    wire        ctrl_pc_flush_en_o;
+    wire        ctrl_pc_stall_en_o;
+    // ctrl 2 if_id
+    wire        ctrl_if_id_flush_en_o;
+    wire        ctrl_if_id_stall_en_o;
+    // ctrl 2 id_ex
+    wire        ctrl_id_ex_flush_en_o;
+    wire        ctrl_id_ex_stall_en_o;
+
     ctrl ctrl_inst(
-        .jump_addr_i    ( ex_jump_addr_o    ),
-        .jump_en_i      ( ex_jump_en_o      ),
-        .hold_flag_ex_i ( ex_hold_flag_o ),
-        .jump_addr_o    ( ctrl_jump_addr_o   ),
-        .jump_en_o      ( ctrl_jump_en_o     ),
-        .hold_flag_o    ( ctrl_hold_flag_o   )
+        .jump_addr_i      ( ex_jump_addr_o    ),
+        .jump_en_i        ( ex_jump_en_o      ),
+        .jump_addr_o      ( ctrl_jump_addr_o   ),
+        .jump_en_o        ( ctrl_jump_en_o     ),
+        .flush_flag_ex_i  ( ex_flush_flag_o ),
+        .stall_flag_ex_i  ( ex_stall_flag_o  ),
+        .stall_flag_mem_i ( mem_stall_flag_o  ), 
+        .pc_stall_en_o    ( ctrl_pc_stall_en_o),
+        .pc_flush_en_o    ( ctrl_pc_flush_en_o),
+        .if_id_stall_en_o ( ctrl_if_id_stall_en_o ),
+        .if_id_flush_en_o ( ctrl_if_id_flush_en_o ),
+        .id_ex_stall_en_o ( ctrl_id_ex_stall_en_o ),
+        .id_ex_flush_en_o ( ctrl_id_ex_flush_en_o  )
     );  
 
     // ex_mem to mem
@@ -223,11 +247,15 @@ module riscv (
     wire[63:0]  ex_mem_mem_rd_wdata_o;
     wire[4:0]   ex_mem_mem_rd_waddr_o;
     wire        ex_mem_mem_reg_wen_o;
+    wire[2:0]   ex_mem_mem_stall_flag_o;
 
     ex_mem ex_mem_inst (
         .clk         ( clk         ),
         .rst         ( rst         ),
         .inst_addr_i ( ex_inst_addr_o ),
+        .stall_flag_i( ex_stall_flag_o    ),
+        .ex_ren_i    ( ex_ex_mem_ren_o    ),
+        .ex_raddr_i  ( ex_ex_mem_raddr_o  ),
         .ex_wen_i    ( ex_ex_mem_wen_o    ),
         .ex_waddr_i  ( ex_ex_mem_waddr_o  ),
         .ex_wdata_i  ( ex_ex_mem_wdata_o  ),
@@ -236,6 +264,7 @@ module riscv (
         .rd_waddr_i  ( ex_ex_mem_rd_waddr_o  ),
         .reg_wen_i   ( ex_ex_mem_reg_wen_o   ),
         .inst_addr_o ( ex_mem_inst_addr_o ),
+        .stall_flag_o( ex_mem_mem_stall_flag_o ),
         .ren_o       ( ex_mem_mem_ren_o       ),
         .raddr_o     ( ex_mem_mem_raddr_o     ),
         .wen_o       ( ex_mem_mem_wen_o       ),
@@ -257,11 +286,16 @@ module riscv (
     // mem to ex
     wire[63:0]  mem_ex_rdata_o;
 
+    // mem to ctrl
+    wire[2:0] mem_stall_flag_o;
+
     mem mem_inst(
         .clk         ( clk         ),
         .rst         ( rst         ),
         .inst_addr_i ( ex_mem_inst_addr_o ),
         .inst_addr_o ( mem_inst_addr_o),
+        .stall_flag_i( ex_mem_mem_stall_flag_o),
+        .stall_flag_o( mem_stall_flag_o     ),
         .ren_i       ( ex_mem_mem_ren_o       ),
         .wen_i       ( ex_mem_mem_wen_o       ),
         .raddr_i     ( ex_mem_mem_raddr_o     ),

@@ -22,6 +22,7 @@ VL_MODULE(Vtb___024root) {
         VL_IN8(rst,0,0);
         CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_ram_wen;
         CData/*7:0*/ tb__DOT__soc_inst__DOT__riscv_ram_wmask;
+        CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_ram_flush_flag_o;
         CData/*3:0*/ tb__DOT__soc_inst__DOT__riscv_axi_sid_o;
         CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_axi_rwvalid_o;
         CData/*4:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_rs1_addr_o;
@@ -32,13 +33,19 @@ VL_MODULE(Vtb___024root) {
         CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_reg_wen;
         CData/*4:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_ex_mem_rd_waddr_o;
         CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_ex_mem_reg_wen_o;
-        CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_jump_en_o;
-        CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ctrl_hold_flag_o;
+        CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_ex_mem_ren_o;
+        CData/*2:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_stall_flag_o;
+        CData/*2:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_flush_flag_o;
+        CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ctrl_pc_stall_en_o;
+        CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ctrl_if_id_stall_en_o;
+        CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ctrl_id_ex_stall_en_o;
         CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_ren_o;
         CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_wen_o;
         CData/*7:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_wmask_o;
         CData/*4:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_rd_waddr_o;
         CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_reg_wen_o;
+        CData/*2:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_stall_flag_o;
+        CData/*4:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_mem_wb_rd_waddr_o;
         CData/*4:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_wb_wb_rd_waddr_o;
         CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_wb_wb_reg_wen_o;
         CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_equal_op2_i;
@@ -67,12 +74,16 @@ VL_MODULE(Vtb___024root) {
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_base_addr_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_ex_offset_addr_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_ex_mem_rd_wdata_o;
+        QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_ex_mem_raddr_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_wb_rd_wdata_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_inst_addr_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_raddr_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_waddr_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_wdata_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_rd_wdata_o;
+        QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_mem_wb_rd_wdata_o;
+    };
+    struct {
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ex_rdata_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_wb_inst_addr_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immI;
@@ -82,8 +93,6 @@ VL_MODULE(Vtb___024root) {
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_add_op2_i;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_sub_op2_i;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_mul_op2_i;
-    };
-    struct {
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_and_op2_i;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_xor_op2_i;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_or_op2_i;

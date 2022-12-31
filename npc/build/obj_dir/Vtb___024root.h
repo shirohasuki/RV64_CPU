@@ -45,7 +45,6 @@ VL_MODULE(Vtb___024root) {
         CData/*4:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_rd_waddr_o;
         CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_reg_wen_o;
         CData/*2:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_stall_flag_o;
-        CData/*4:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_mem_wb_rd_waddr_o;
         CData/*4:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_wb_wb_rd_waddr_o;
         CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_wb_wb_reg_wen_o;
         CData/*0:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__op1_i_equal_op2_i;
@@ -81,11 +80,10 @@ VL_MODULE(Vtb___024root) {
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_waddr_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_wdata_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_rd_wdata_o;
-        QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_mem_wb_rd_wdata_o;
-    };
-    struct {
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ex_rdata_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_wb_inst_addr_o;
+    };
+    struct {
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immI;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immU;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immB;

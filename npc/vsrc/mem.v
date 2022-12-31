@@ -72,9 +72,10 @@ module mem (
     output reg[2:0]     stall_flag_o
 );
 
-
-
     assign inst_addr_o = inst_addr_i;
+    assign reg_wen_o  = reg_wen_i;
+    assign rd_wdata_o = rd_wdata_i;
+    assign rd_waddr_o = rd_waddr_i;
 
     assign stall_flag_o = stall_flag_i; // 再给ctrl一个周期的stall信号
 
@@ -89,9 +90,7 @@ module mem (
             rdata_o = wdata_i;  // 处理读写冲突
         end
         
-        assign reg_wen_o  = reg_wen_i;
-        assign rd_wdata_o = rd_wdata_i;
-        assign rd_waddr_o = rd_waddr_i;
+
         //if (ren && wen) $display("nb");
     end
 

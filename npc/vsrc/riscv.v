@@ -102,9 +102,9 @@ module riscv (
         .rd_addr_o      ( id_rd_addr_o     ),
         .reg_wen        ( id_reg_wen       ),
         .base_addr_o    ( id_base_addr_o   ),
-        .offset_addr_o  ( id_offset_addr_o ),
-        .mem_ren        ( mem_ren_o        ), // to mem
-        .mem_raddr_o    ( mem_raddr_o       )  // to mem
+        .offset_addr_o  ( id_offset_addr_o )
+        // .mem_ren        ( mem_ren_o        ), // to mem
+        // .mem_raddr_o    ( mem_raddr_o       )  // to mem
     );
 
     //reges 2 id
@@ -163,6 +163,7 @@ module riscv (
 	wire        ex_ex_mem_reg_wen_o;
 
     wire[63:0]  ex_inst_addr_o; // pc 传递
+    wire[31:0]  ex_ex_mem_inst_o;
 
     wire        ex_ex_mem_ren_o;
     wire[63:0]  ex_ex_mem_raddr_o;
@@ -172,14 +173,15 @@ module riscv (
     wire        ex_ex_mem_wen_o;
     wire[7:0]   ex_ex_mem_wmask_o;
 
+    wire[63:0]  ex_ex_mem_raddr_o;
+    wire        ex_ex_mem_ren_o;
+
     // ex 2 ctrl
     wire[63:0]  ex_jump_addr_o;    
     wire        ex_jump_en_o;      
     wire[2:0]   ex_stall_flag_o; 
     wire[2:0]   ex_flush_flag_o; 
 
-    // ex 2 wb 日后优化
-    wire[63:0]  ex_wb_rd_wdata_o;  
 
     ex ex_inst(
         .inst_i      ( id_ex_inst_o     ),
@@ -190,21 +192,24 @@ module riscv (
         .reg_wen_i   ( id_ex_reg_wen    ),
         .base_addr_i    ( id_ex_base_addr_o   ),
         .offset_addr_i  ( id_ex_offset_addr_o ),
-        .rd_wdata_o  ( ex_wb_rd_wdata_o    ),
+        .rd_wdata_o  ( ex_ex_mem_rd_wdata_o    ),
         .rd_waddr_o  ( ex_ex_mem_rd_waddr_o     ),
         .reg_wen_o   ( ex_ex_mem_reg_wen_o     ),
+        .inst_o      (  ex_ex_mem_inst_o  ),
         .inst_addr_o ( ex_inst_addr_o     ),
         .jump_addr_o ( ex_jump_addr_o      ),
         .jump_en_o   ( ex_jump_en_o        ),
         .flush_flag_o ( ex_flush_flag_o   ),
         .stall_flag_o ( ex_stall_flag_o   ),
-        .mem_rdata_i   ( mem_ex_rdata_o ),
-        .mem_ren_o     ( ex_ex_mem_ren_o ),
-        .mem_raddr_o   ( ex_ex_mem_raddr_o ),
+        // .mem_rdata_i   ( mem_ex_rdata_o ),
+        .mem_ren_o     ( ex_ex_mem_ren_o ),     // to ram
+        .mem_raddr_o   ( ex_ex_mem_raddr_o ),   // to ram
         .mem_wen_o     ( ex_ex_mem_wen_o     ), // to ram
         .mem_waddr_o   ( ex_ex_mem_waddr_o   ), // to ram
         .mem_wdata_o   ( ex_ex_mem_wdata_o   ), // to ram
         .mem_wmask     ( ex_ex_mem_wmask_o     )  // to ram
+        // .mem_ren_o      ( ex_ex_mem_ren_o        ), // to mem
+        // .mem_raddr_o    ( ex_ex_mem_raddr_o       )  // to mem
     );
 
     // ctrl 2 pc_reg
@@ -238,6 +243,7 @@ module riscv (
 
     // ex_mem to mem
     wire[63:0]  ex_mem_inst_addr_o;
+    wire[31:0]  ex_mem_mem_inst_o;
     wire        ex_mem_mem_ren_o;
     wire[63:0]  ex_mem_mem_raddr_o;
     wire        ex_mem_mem_wen_o;
@@ -252,6 +258,7 @@ module riscv (
     ex_mem ex_mem_inst (
         .clk         ( clk         ),
         .rst         ( rst         ),
+        .inst_i      ( ex_ex_mem_inst_o ),
         .inst_addr_i ( ex_inst_addr_o ),
         .stall_flag_i( ex_stall_flag_o    ),
         .ex_ren_i    ( ex_ex_mem_ren_o    ),
@@ -263,6 +270,7 @@ module riscv (
         .rd_wdata_i  ( ex_ex_mem_rd_wdata_o   ),
         .rd_waddr_i  ( ex_ex_mem_rd_waddr_o  ),
         .reg_wen_i   ( ex_ex_mem_reg_wen_o   ),
+        .inst_o      ( ex_mem_mem_inst_o ),
         .inst_addr_o ( ex_mem_inst_addr_o ),
         .stall_flag_o( ex_mem_mem_stall_flag_o ),
         .ren_o       ( ex_mem_mem_ren_o       ),
@@ -292,6 +300,7 @@ module riscv (
     mem mem_inst(
         .clk         ( clk         ),
         .rst         ( rst         ),
+        .inst_i      ( ex_mem_mem_inst_o  ),
         .inst_addr_i ( ex_mem_inst_addr_o ),
         .inst_addr_o ( mem_inst_addr_o),
         .stall_flag_i( ex_mem_mem_stall_flag_o),
@@ -313,7 +322,7 @@ module riscv (
 
     // mem_wb to wb
     wire[63:0]  mem_wb_inst_addr_o;
-    //wire[63:0]  mem_wb_wb_rd_wdata_o; 
+    wire[63:0]  mem_wb_wb_rd_wdata_o; 
     wire[4:0]   mem_wb_wb_rd_waddr_o; 
     wire        mem_wb_wb_reg_wen_o;  
 
@@ -322,10 +331,10 @@ module riscv (
         .rst         ( rst         ),
         .inst_addr_i ( mem_inst_addr_o),
         .inst_addr_o ( mem_wb_inst_addr_o ),
-        //.rd_wdata_i  ( mem_mem_wb_rd_wdata_o  ),
+        .rd_wdata_i  ( mem_mem_wb_rd_wdata_o  ),
         .rd_waddr_i  ( mem_mem_wb_rd_waddr_o  ),
         .reg_wen_i   ( mem_mem_wb_reg_wen_o   ),
-        //.rd_wdata_o  ( mem_wb_wb_rd_wdata_o  ),
+        .rd_wdata_o  ( mem_wb_wb_rd_wdata_o  ),
         .rd_waddr_o  ( mem_wb_wb_rd_waddr_o  ),
         .reg_wen_o   ( mem_wb_wb_reg_wen_o   )
     );
@@ -342,8 +351,7 @@ module riscv (
         .inst_addr_i ( mem_wb_inst_addr_o),
         .inst_addr_o ( wb_inst_addr_o),
         .reg_waddr_i ( mem_wb_wb_rd_waddr_o ),
-        //.reg_wdata_i ( mem_wb_wb_rd_wdata_o ),
-        .reg_wdata_i ( ex_wb_rd_wdata_o ),
+        .reg_wdata_i ( mem_wb_wb_rd_wdata_o ),
         .reg_wen_i   ( mem_wb_wb_reg_wen_o ),
         .reg_waddr_o ( wb_reg_rd_waddr_o ),
         .reg_wdata_o ( wb_reg_rd_wdata_o ),

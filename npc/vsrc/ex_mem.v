@@ -5,11 +5,12 @@ module ex_mem (
     input               rst,
     
     // from ex
-    input reg[2:0]          stall_flag_i,
+    input reg[2:0]      stall_flag_i,
 
+    input reg[31:0]     inst_i,
     input reg[63:0]     inst_addr_i, // 用于验证每级传递的pc
 
-    input reg          ex_ren_i,
+    input reg           ex_ren_i,
     input reg[63:0]     ex_raddr_i,
 
     input reg           ex_wen_i,
@@ -24,6 +25,7 @@ module ex_mem (
     // to mem
     output reg[2:0]         stall_flag_o, // stall 信号
 
+    output reg[31:0]    inst_o,
     output reg[63:0]    inst_addr_o, // 用于验证每级传递的pc
     
     output  reg         ren_o,
@@ -39,6 +41,8 @@ module ex_mem (
 );
 
     // mem use
+    dff_set #(32) dff0(clk, rst, 1'b0, 1'b0, `INST_NOP, inst_i, inst_o);
+
     dff_set #(64) dff1(clk, rst, 1'b0, 1'b0, 64'b0, inst_addr_i, inst_addr_o);
 
     dff_set #(1)  dff2(clk, rst, 1'b0, 1'b0, 1'b0, ex_ren_i, ren_o);

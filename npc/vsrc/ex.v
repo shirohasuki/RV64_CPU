@@ -13,12 +13,6 @@ module ex (
  
     input wire[63:0]  base_addr_i, // 基地址
     input wire[63:0]  offset_addr_i, // 偏移地址
-     
-    // to wb  
-    output reg[63:0]  rd_wdata_o,
-    output reg[4:0]   rd_waddr_o,
-    output reg        reg_wen_o,
-    output reg[63:0]  inst_addr_o, // 用于验证每级传递的pc
 
     // to ctrl
     output reg[63:0]  jump_addr_o,
@@ -26,18 +20,25 @@ module ex (
     output reg[2:0]   flush_flag_o,
     output reg[2:0]   stall_flag_o,
 
-    // from mem
-    input reg[63:0]   mem_rdata_i, 
-    // TODO：设想改为读取到的数据给wb模块，不给ex，但是目前没理清 
+    // // from mem
+    // input reg[63:0]   mem_rdata_i, 
+    // // TODO：设想改为读取到的数据给wb模块，不给ex，但是目前没理清 
 
-    // to mem
+    // to ex_mem
+    output wire[31:0]  inst_o,
+    output reg[63:0]   inst_addr_o, // 用于验证每级传递的pc
+
     output wire       mem_ren_o,
     output reg[63:0]  mem_raddr_o,
 
     output wire       mem_wen_o,
     output reg[63:0]  mem_waddr_o,
     output reg[63:0]  mem_wdata_o,
-    output reg[7:0]   mem_wmask
+    output reg[7:0]   mem_wmask,
+
+    output reg[63:0]  rd_wdata_o,
+    output reg[4:0]   rd_waddr_o,
+    output reg        reg_wen_o
 );
 
     wire[6:0] opcode; // 7byte (6~0)
@@ -58,6 +59,7 @@ module ex (
     //assign shamt= inst_i[24:20];
     assign func7  = inst_i[31:25];
     //assign imm  = inst_i[31:20];
+    assign inst_o = inst_i;
 
 
     // ALU
@@ -153,6 +155,8 @@ module ex (
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
                 mem_wmask   = 8'b0;
+                mem_ren_o   = 1'b0;
+                mem_raddr_o = 64'b0;
                 case (func3)
                     `INST_ADDI:begin
                         rd_wdata_o = op1_i_add_op2_i; 
@@ -220,6 +224,8 @@ module ex (
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
                 mem_wmask   = 8'b0;
+                mem_ren_o   = 1'b0;
+                mem_raddr_o = 64'b0;
                 case (func3)
                     `INST_ADDIW: begin
                         rd_wdata_o = compress_add; // compress to 32
@@ -261,6 +267,8 @@ module ex (
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
                 mem_wmask = 8'b0;
+                mem_ren_o   = 1'b0;
+                mem_raddr_o = 64'b0;
                 case (func3)
                     `INST_ADD_SUB_MUL: begin //ADD和SUB的func3相同，func7不同
                         if (func7 == 7'b0000000) begin // add
@@ -358,6 +366,8 @@ module ex (
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
                 mem_wmask = 8'b0;
+                mem_ren_o   = 1'b0;
+                mem_raddr_o = 64'b0;
                 case (func3)
                     `INST_ADDW_SUBW_MULW: begin //ADD和SUB的func3相同，func7不同
                         if (func7 == 7'b0000000) begin // add
@@ -420,6 +430,8 @@ module ex (
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
                 mem_wmask = 8'b0;
+                mem_ren_o   = 1'b0;
+                mem_raddr_o = 64'b0;
                 stall_flag_o = 3'b000;
                 flush_flag_o = 3'b111;
                 case (func3)
@@ -472,45 +484,61 @@ module ex (
                 mem_wmask   = 8'b0;
                 case (func3)
                     `INST_LB: begin 
-                        rd_wdata_o = {{56{mem_rdata_i[7]}}, mem_rdata_i[7:0]};
+                        mem_ren_o   = 1'b1;
+                        mem_raddr_o = base_addr_add_addr_offset;
+                        // rd_wdata_o = {{56{mem_rdata_i[7]}}, mem_rdata_i[7:0]};
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
                     end
                     `INST_LH: begin 
-                        rd_wdata_o = {{48{mem_rdata_i[15]}}, mem_rdata_i[15:0]};
+                        mem_ren_o   = 1'b1;
+                        mem_raddr_o = base_addr_add_addr_offset;
+                        // rd_wdata_o = {{48{mem_rdata_i[15]}}, mem_rdata_i[15:0]};
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1; 
                     end
                     `INST_LW: begin
-                        rd_wdata_o = {{32{mem_rdata_i[31]}}, mem_rdata_i[31:0]};
+                        mem_ren_o   = 1'b1;
+                        mem_raddr_o = base_addr_add_addr_offset;
+                        // rd_wdata_o = {{32{mem_rdata_i[31]}}, mem_rdata_i[31:0]};
                         // rd_wdata_o = {32'b0, mem_rdata_i[31:0]};  
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
                         // $display("EX: lw_data = %l", rd_wdata_o);
                     end
                     `INST_LD: begin
-                        rd_wdata_o = {mem_rdata_i[63:0]};
+                        mem_ren_o   = 1'b1;
+                        mem_raddr_o = base_addr_add_addr_offset;
+                        // rd_wdata_o = {mem_rdata_i[63:0]};
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
                         // $display("mem_rdata_i = %x", mem_rdata_i);
                     end
                     `INST_LBU: begin 
-                        rd_wdata_o = {56'b0,mem_rdata_i[7:0]};
+                        mem_ren_o   = 1'b1;
+                        mem_raddr_o = base_addr_add_addr_offset;
+                        // rd_wdata_o = {56'b0,mem_rdata_i[7:0]};
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
                         // $display("here");
                     end
                     `INST_LHU: begin
-                        rd_wdata_o = {48'b0,mem_rdata_i[15:0]};
+                        mem_ren_o   = 1'b1;
+                        mem_raddr_o = base_addr_add_addr_offset;
+                        // rd_wdata_o = {48'b0,mem_rdata_i[15:0]};
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
                     end
                     `INST_LWU: begin
-                        rd_wdata_o = {32'b0,mem_rdata_i[31:0]};
+                        mem_ren_o   = 1'b1;
+                        mem_raddr_o = base_addr_add_addr_offset;
+                        // rd_wdata_o = {32'b0,mem_rdata_i[31:0]};
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
                     end
                     default begin
+                        mem_ren_o   = 1'b0;
+                        mem_raddr_o = 64'b0;
                         rd_wdata_o  = 64'b0; 
                         rd_waddr_o  = 5'b0;
                         reg_wen_o   = 1'b0;
@@ -526,6 +554,8 @@ module ex (
                 rd_wdata_o  = 64'b0; 
                 rd_waddr_o  = 5'b0;
                 reg_wen_o   = 1'b0;
+                mem_ren_o   = 1'b0;
+                mem_raddr_o = 64'b0;
                 case (func3)
                     `INST_SB: begin
                         mem_wen_o   = 1'b1;
@@ -580,6 +610,8 @@ module ex (
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
                 mem_wmask   = 8'b0;
+                mem_ren_o   = 1'b0;
+                mem_raddr_o = 64'b0;
                 //$display("here2");
                 //$display("%llx", jump_addr_o );
             end // Jump And Link (PC += imm, rd = PC + 4)
@@ -595,6 +627,8 @@ module ex (
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
                 mem_wmask   = 8'b0;
+                mem_ren_o   = 1'b0;
+                mem_raddr_o = 64'b0;
             end // Jump And Link Reg (PC = rs1 + imm, rd = PC + 4)		
             `INST_LUI: begin
                 rd_wdata_o  = op2_i; 
@@ -607,7 +641,9 @@ module ex (
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
-                mem_wmask   = 8'b0;      
+                mem_wmask   = 8'b0;
+                mem_ren_o   = 1'b0;
+                mem_raddr_o = 64'b0;      
             end // Load Upper Imm (rd = imm << 12)
             `INST_AUIPC: begin
                 rd_wdata_o  = op1_i_add_op2_i; 
@@ -620,7 +656,9 @@ module ex (
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
-                mem_wmask   = 8'b0;      
+                mem_wmask   = 8'b0;
+                mem_ren_o   = 1'b0;
+                mem_raddr_o = 64'b0;      
             end // Add Upper Imm to PC
             default: begin
                 jump_addr_o = 64'b0;
@@ -634,6 +672,8 @@ module ex (
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
                 mem_wmask   = 8'b0;
+                mem_ren_o   = 1'b0;
+                mem_raddr_o = 64'b0;
             end 
         endcase
     end

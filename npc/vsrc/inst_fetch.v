@@ -27,9 +27,7 @@ module inst_fetch(
     assign inst_o = inst_get[31:0];
     
     always @(*) begin
-        // $display("IFU: 1. pc_addr: %x\nIFU: 2. inst: %x", pc_addr_i, inst_o);
-        // $display("===========================");
-        $display("[inst_fetch] pc_addr: %x inst: %x", pc_addr_i, inst_o);
+        $display("[inst_fetch] pc_addr: %x inst: %x", pc_addr_i[31:0], inst_o);
     end
 
     

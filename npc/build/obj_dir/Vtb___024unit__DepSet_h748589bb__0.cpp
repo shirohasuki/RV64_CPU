@@ -34,6 +34,16 @@ VL_INLINE_OPT void Vtb___024unit____Vdpiimwrap_pmem_write_TOP____024unit(QData/*
     pmem_write(waddr__Vcvt, wdata__Vcvt, mask__Vcvt);
 }
 
+extern "C" void get_pc(long long pc);
+
+VL_INLINE_OPT void Vtb___024unit____Vdpiimwrap_get_pc_TOP____024unit(QData/*63:0*/ pc) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+        Vtb___024unit____Vdpiimwrap_get_pc_TOP____024unit\n"); );
+    // Body
+    long long pc__Vcvt;
+    for (size_t pc__Vidx = 0; pc__Vidx < 1; ++pc__Vidx) pc__Vcvt = pc;
+    get_pc(pc__Vcvt);
+}
+
 extern "C" void ebreak();
 
 VL_INLINE_OPT void Vtb___024unit____Vdpiimwrap_ebreak_TOP____024unit() {
@@ -51,14 +61,4 @@ VL_INLINE_OPT void Vtb___024unit____Vdpiimwrap_get_regs__Vdpioc2_TOP____024unit(
     static const VerilatedVarProps regs__Vopenprops(VLVT_UINT64, VLVD_IN, VerilatedVarProps::Packed(), 63, 0, VerilatedVarProps::Unpacked(), 1, regs__Vopenprops__ulims);
     VerilatedDpiOpenVar regs__Vopenarray (&regs__Vopenprops, &regs);
     get_regs(&regs__Vopenarray);
-}
-
-extern "C" void get_pc(long long pc);
-
-VL_INLINE_OPT void Vtb___024unit____Vdpiimwrap_get_pc_TOP____024unit(QData/*63:0*/ pc) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+        Vtb___024unit____Vdpiimwrap_get_pc_TOP____024unit\n"); );
-    // Body
-    long long pc__Vcvt;
-    for (size_t pc__Vidx = 0; pc__Vidx < 1; ++pc__Vidx) pc__Vcvt = pc;
-    get_pc(pc__Vcvt);
 }

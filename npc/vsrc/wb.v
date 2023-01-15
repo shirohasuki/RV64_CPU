@@ -1,30 +1,23 @@
-// module wb (
-//     input  wire clk,    
-//     input  wire rst,  
+module wb (
+    input  wire clk,    
+    input  wire rst,  
 
-//     input wire[4:0]  reg_waddr_i,
-// 	input wire[63:0] reg_wdata_i,
-// 	input wire       reg_wen
+    // from mem_wb 
+    input reg[63:0]  inst_addr_i,
+    output reg[63:0]  inst_addr_o,
 
-// );
+    input wire[4:0]  reg_waddr_i,
+	input wire[63:0] reg_wdata_i,
+	input wire       reg_wen_i,
 
+    output wire[4:0]  reg_waddr_o,
+	output wire[63:0] reg_wdata_o,
+	output wire       reg_wen_o
+);
 
+    assign reg_waddr_o = reg_waddr_i;
+	assign reg_wdata_o = reg_wdata_i;
+	assign reg_wen_o   = reg_wen_i;
+    assign inst_addr_o = inst_addr_i;
 
-
-
-
-//     always @(posedge clk) begin
-//         if (rst == 1'b0) begin
-//             for (integer i = 0; i < 32; i = i + 1) begin
-//                 regs[i] <= 64'b0;
-//             end // 初始化寄存器
-//         end
-//         else if (reg_wen && reg_waddr_i != 5'b0) begin // x0不准写
-//             regs[reg_waddr_i] <= reg_wdata_i;
-//         end 
-//         // 组合逻辑要补全else，时序不需要
-//     end // 回写rd
-
-
-
-// endmodule
+endmodule

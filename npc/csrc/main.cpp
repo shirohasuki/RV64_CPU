@@ -69,6 +69,8 @@ int main() {
 #ifdef CONFIG_NPC_DIFFTEST
     while (cpu_npc.pc != MEM_BASE) {
         exec_once();
+        // exec_once();
+        // exec_once();
     } // pc先走三拍到EXU
     init_difftest("/home/shiroha/Code/ysyx/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size);
 #endif
@@ -78,20 +80,17 @@ int main() {
     // exec_once();
     
     while (sim_time < MAX_SIM_TIME) {
-        // dump_gpr();
+        dump_gpr();
         exec_once();
         
 #ifdef CONFIG_NPC_DIFFTEST
         if (cpu_npc.pc == 0x0) {
             exec_once();
             exec_once();
-            // exec_once();
-            // exec_once();
-            // exec_once();
         } // 遇到流水线冲刷，pc再走两拍到EXU
         difftest_exec_once();
 #endif
-        dump_gpr();
+        //dump_gpr();
     }
     sim_exit();
 } 

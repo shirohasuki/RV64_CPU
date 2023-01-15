@@ -18,6 +18,7 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
 }
 
 void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf);
+void Vtb___024root___sequent__TOP__1(Vtb___024root* vlSelf);
 void Vtb___024root___combo__TOP__1(Vtb___024root* vlSelf);
 
 void Vtb___024root___eval(Vtb___024root* vlSelf) {
@@ -30,6 +31,9 @@ void Vtb___024root___eval(Vtb___024root* vlSelf) {
     if (((IData)(vlSelf->clk) & (~ (IData)(vlSelf->__Vclklast__TOP__clk)))) {
         Vtb___024root___sequent__TOP__0(vlSelf);
         vlSelf->__Vm_traceActivity[2U] = 1U;
+    }
+    if (((~ (IData)(vlSelf->clk)) & (IData)(vlSelf->__Vclklast__TOP__clk))) {
+        Vtb___024root___sequent__TOP__1(vlSelf);
     }
     Vtb___024root___combo__TOP__1(vlSelf);
     // Final

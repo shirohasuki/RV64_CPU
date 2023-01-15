@@ -6,6 +6,7 @@ module ex_mem (
     
     // from ex
     input reg[2:0]      stall_flag_i,
+    input reg[2:0]      flush_flag_i,
 
     input reg[31:0]     inst_i,
     input reg[63:0]     inst_addr_i, // 用于验证每级传递的pc
@@ -23,7 +24,8 @@ module ex_mem (
     input reg           reg_wen_i,  // wb use
     
     // to mem
-    output reg[2:0]         stall_flag_o, // stall 信号
+    output reg[2:0]     stall_flag_o, // stall 信号
+    output reg[2:0]     flush_flag_o,
 
     output reg[31:0]    inst_o,
     output reg[63:0]    inst_addr_o, // 用于验证每级传递的pc
@@ -66,6 +68,8 @@ module ex_mem (
 
     // others
     dff_set #(3)  dff11(clk, rst, 1'b0, 1'b0, 3'b0, stall_flag_i, stall_flag_o);
+
+    dff_set #(3)  dff12(clk, rst, 1'b0, 1'b0, 3'b0, flush_flag_i, flush_flag_o);
 
 endmodule
 // mem和wb模块中flush_flag_i固定为0，不进行冲刷

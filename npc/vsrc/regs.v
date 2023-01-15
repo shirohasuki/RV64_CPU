@@ -1,5 +1,4 @@
 import "DPI-C" function void get_regs(input logic [63:0] regs[]);
-import "DPI-C" function void get_pc(input longint pc);
 
 module regs (
     input  wire clk,    
@@ -61,6 +60,10 @@ module regs (
     end // 回写rd
 */
 
+    // always @(*) begin
+        
+    // end // 回写rd
+
     always @(*) begin
         if (rst == 1'b0) begin
             for (integer i = 0; i < 32; i = i + 1) begin
@@ -74,9 +77,10 @@ module regs (
             regs[reg_waddr_i] = 64'b0;
         // $display("REGS: %x", pc_reg);   
         get_regs(regs);
-        get_pc(pc_reg);
+        //get_pc(pc_reg);
         // 组合逻辑要补全else，时序不需要
     end // 回写rd
+
 
 endmodule 
 

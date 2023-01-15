@@ -51,6 +51,7 @@ int check_regs_npc(CPU_state ref_cpu) {
             return 0;
         }
     }
+    printf(GREEN("[difftest] nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
     return 1;
 }
 

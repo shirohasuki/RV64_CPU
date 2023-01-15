@@ -37,6 +37,7 @@
     
 import "DPI-C" function void pmem_read( input longint raddr, output longint rdata);
 import "DPI-C" function void pmem_write( input longint waddr, input longint wdata, input byte mask);
+import "DPI-C" function void get_pc(input longint pc);
 
 
 module mem (
@@ -50,6 +51,7 @@ module mem (
 
     //from ex_mem
     input reg[2:0]      stall_flag_i,
+    input reg[2:0]      flush_flag_i,
 
     input               ren_i,
     input               wen_i,
@@ -70,7 +72,8 @@ module mem (
     output reg          reg_wen_o,  // to wb
 
     // to ctrl 
-    output reg[2:0]     stall_flag_o
+    output reg[2:0]     stall_flag_o,
+    output reg[2:0]     flush_flag_o
 );
 
     wire[6:0] opcode; // 7byte (6~0)
@@ -90,8 +93,14 @@ module mem (
     assign inst_addr_o = inst_addr_i;
     assign reg_wen_o  = reg_wen_i;
     assign rd_waddr_o = rd_waddr_i;
+    assign rd_wdata_o = rd_wdata_i;
 
     assign stall_flag_o = stall_flag_i; // 再给ctrl一个周期的stall信号
+    assign flush_flag_o = flush_flag_i; // 再给ctrl一个周期的stall信号
+
+    always @(negedge clk ) begin
+        get_pc(inst_addr_i);
+    end
 
     always @(*) begin
         // if (ren || rst == 1'b1 || hold_flag_i == 1'b0) pmem_read(raddr, rdata);

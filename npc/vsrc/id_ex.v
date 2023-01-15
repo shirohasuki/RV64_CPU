@@ -31,7 +31,8 @@ module id_ex(
 
     dff_set #(32) dff1(clk, rst, flush_flag_i, stall_flag_i, `INST_NOP, inst_i, inst_o);
 	
-	dff_set #(64) dff2(clk, rst, flush_flag_i, stall_flag_i, 64'b0, inst_addr_i, inst_addr_o);
+	// dff_set #(64) dff2(clk, rst, 1'b0, stall_flag_i, 64'b0, inst_addr_i, inst_addr_o);
+    dff_set #(64) dff2(clk, rst, flush_flag_i, stall_flag_i, 64'b0, inst_addr_i, inst_addr_o);
 	
 	dff_set #(64) dff3(clk, rst, flush_flag_i, stall_flag_i,  64'b0, op1_i, op1_o);
 	

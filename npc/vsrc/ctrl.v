@@ -3,6 +3,7 @@ module ctrl (
     input wire[63:0] jump_addr_i,
     input wire       jump_en_i,
     input wire[2:0]  flush_flag_ex_i,
+    input wire[2:0]  flush_flag_mem_i,
     input wire[2:0]  stall_flag_ex_i,
     input wire[2:0]  stall_flag_mem_i,
 
@@ -23,6 +24,32 @@ module ctrl (
     assign if_id_flush_en_o = flush_flag_ex_i[1];
     assign id_ex_flush_en_o = flush_flag_ex_i[0];
 
+    assign jump_addr_o = jump_addr_i;
+    assign jump_en_o   = jump_en_i; 
+
+    always @(*) begin
+        if (jump_en_i == 1'b1) begin
+            assign pc_flush_en_o    = 1'b0;
+            assign if_id_flush_en_o = 1'b1;
+            assign id_ex_flush_en_o = 1'b1;
+        end // 为跳转指令(flush_flag = 011)且跳转时
+        else if (flush_flag_ex_i == 3'b001) begin
+            assign pc_flush_en_o    = flush_flag_ex_i[2];
+            assign if_id_flush_en_o = flush_flag_ex_i[1];
+            assign id_ex_flush_en_o = flush_flag_ex_i[0];
+        end // 为ex插入气泡(flush_flag = 001)时
+        else if (flush_flag_mem_i == 3'b001) begin
+            assign pc_flush_en_o    = flush_flag_mem_i[2];
+            assign if_id_flush_en_o = flush_flag_mem_i[1];
+            assign id_ex_flush_en_o = flush_flag_mem_i[0];
+        end // 为ex插入气泡(flush_flag = 001)时
+        else begin
+            assign pc_flush_en_o    = 1'b0;
+            assign if_id_flush_en_o = 1'b0;
+            assign id_ex_flush_en_o = 1'b0;
+        end
+    end
+
     always @(*) begin
         if (stall_flag_ex_i != 3'b0) begin
             assign pc_stall_en_o    = stall_flag_ex_i[2];
@@ -36,8 +63,7 @@ module ctrl (
         end
     end
     
-    assign jump_addr_o = jump_addr_i;
-    assign jump_en_o   = jump_en_i; 
+    
 
 /*
 解决数据冲突使用的方式为最粗暴的暂停流水线

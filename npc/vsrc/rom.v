@@ -7,7 +7,7 @@ module rom (
 
     always @(*) begin
         inst_o = rom_mem[inst_addr_i[13:2]]; // inst_addr_i除以8
-        //$display("%b, %d", inst_o, inst_addr_i >> 2);
+        // $display("%b, %d", inst_o, inst_addr_i >> 2);
         // $display("%b, %d", inst_o, inst_addr_i[13:2]);
     end
     

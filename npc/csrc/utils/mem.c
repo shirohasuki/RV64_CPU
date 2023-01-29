@@ -59,15 +59,16 @@ extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
         // printf("[pmem_write] waddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", waddr, MEM_BASE);
         return;
     }
+#ifdef CONFIG_NPC_MTRACE
+    sprintf(mtrace_buf[mtrace_count],"write: addr:%016llx data:%016llx\n            wmask:%08x", waddr,  wdata, mask);
+    mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
+#endif
     uint8_t *pt = cpu2mem(waddr);
     for (int i = 0; i < 8; ++i) {
         if (mask & 1) *pt = (wdata & 0xff);
         wdata >>= 8, mask >>= 1, pt++;
     }
-#ifdef CONFIG_NPC_MTRACE
-    sprintf(mtrace_buf[mtrace_count],"write: addr:%016llx data:%016llx\n            wmask:%08x", waddr,  wdata, mask);
-    mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
-#endif
+
 }
 
 extern "C" void inst_fetch(ll raddr, ll *rdata) {

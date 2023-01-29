@@ -66,6 +66,20 @@ module mem (
     input reg[4:0]      rd_waddr_i,
     input reg           reg_wen_i,  // to wb
 
+    // to ram(测试)
+    output reg[63:0]    ram_wdata_o,
+    output reg[63:0]    ram_waddr_o,
+
+    output reg[63:0]    ram_raddr_o,
+    input  reg[63:0]    ram_rdata_i, 
+
+    // to rom
+    output reg[63:0]    rom_wdata_o,
+    output reg[63:0]    rom_waddr_o,
+
+    input  reg[63:0]    rom_rdata_i,
+    output reg[63:0]    rom_raddr_o,
+
     // to mem_wb
     output reg[63:0]    rd_wdata_o,
     output reg[4:0]     rd_waddr_o,
@@ -102,19 +116,67 @@ module mem (
         get_pc(inst_addr_i);
     end
 
-    always @(*) begin
-        // if (ren || rst == 1'b1 || hold_flag_i == 1'b0) pmem_read(raddr, rdata);
-        if (ren_i) pmem_read(raddr_i, rdata_o); 
-        else rdata_o = 64'b0;
+    // always @(*) begin
+    //     // if (ren || rst == 1'b1 || hold_flag_i == 1'b0) pmem_read(raddr, rdata);
+    //     if (ren_i) pmem_read(raddr_i, rdata_o); 
+    //     else rdata_o = 64'b0;
 
-        if (wen_i) pmem_write(waddr_i, wdata_i, wmask_i);
+    //     if (wen_i) pmem_write(waddr_i, wdata_i, wmask_i);
+
+    //     if ((ren_i && wen_i) && (raddr_i == waddr_i)) begin
+    //         rdata_o = wdata_i;  // 处理读写冲突
+    //     end
+    //     // if (ren_i && wen_i) $display("nb");
+    // end
+
+    always @(*) begin
+        if (ren_i) begin 
+            if (raddr_i <= 64'h8000_0304) begin
+                rom_raddr_o = raddr_i;
+                ram_raddr_o = 64'b0;
+                rdata_o     = rom_rdata_i; // 从rom读
+            end
+            else begin
+                rom_raddr_o = 64'b0;
+                ram_raddr_o = raddr_i;
+                rdata_o     = ram_rdata_i; // 从ram读             
+            end
+            // $display("here");
+        end
+        else begin 
+            rom_raddr_o = 64'b0;
+            ram_raddr_o = 64'b0;
+            rdata_o     = 64'b0;
+        end
+        // if (ren_i) pmem_read(raddr_i, rdata_o); 
+        // else rdata_o = 64'b0;
+        
+        if (wen_i) begin
+            if (waddr_i <= 64'h8000_0304) begin
+                rom_wdata_o = wdata_i;
+                rom_waddr_o = waddr_i;  // 向rom写
+                ram_wdata_o = ram_wdata_o;
+                ram_waddr_o = ram_waddr_o;
+            end
+            else begin
+                ram_wdata_o = wdata_i;
+                ram_waddr_o = waddr_i; // 向ram写   
+                rom_wdata_o = rom_wdata_o;
+                rom_waddr_o = rom_waddr_o;          
+            end
+        end
+        else begin
+            ram_wdata_o = 64'b0;
+            ram_waddr_o = 64'b0;
+            rom_wdata_o = 64'b0;
+            rom_waddr_o = 64'b0;
+        end
 
         if ((ren_i && wen_i) && (raddr_i == waddr_i)) begin
             rdata_o = wdata_i;  // 处理读写冲突
         end
         // if (ren_i && wen_i) $display("nb");
     end
-
 
     always @(*) begin
         if (ren_i == 1'b0) begin

@@ -82,6 +82,7 @@ int main() {
     while (sim_time < MAX_SIM_TIME) {
         // dump_gpr(); // 打印寄存器
         exec_once();
+        // print_mtrace();
         
 #ifdef CONFIG_NPC_DIFFTEST
         if (cpu_npc.pc == 0x0) {
@@ -92,5 +93,7 @@ int main() {
 #endif
         //dump_gpr();
     }
+    
+    
     sim_exit();
 } 

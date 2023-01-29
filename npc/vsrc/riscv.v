@@ -50,9 +50,14 @@ module riscv (
         .inst_o        ( if_inst_o          )
     );
 
+    // rom to mem
+    wire[63:0]    rom_mem_rdata_o;
+
     rom rom_inst (
         .inst_addr_i   (   if_inst_addr_o   ),
-        .inst_o        (   rom_if_inst_o    )
+        .inst_o        (   rom_if_inst_o    ),
+        .mem_rdata_o   (   rom_mem_rdata_o  ),
+        .mem_raddr_i   (   mem_rom_raddr_o  )
     );
 
     // if_id 2 id
@@ -302,6 +307,16 @@ module riscv (
     wire[2:0] mem_stall_flag_o;
     wire[2:0] mem_flush_flag_o;
 
+    // mem to ram
+    wire[63:0]    mem_ram_wdata_o;
+    wire[63:0]    mem_ram_waddr_o;
+    wire[63:0]    mem_ram_raddr_o;
+    
+    // mem to rom
+    wire[63:0]    mem_rom_raddr_o;
+    wire[63:0]    mem_rom_waddr_o;
+    wire[63:0]    mem_rom_wdata_o;
+
     mem mem_inst(
         .clk         ( clk         ),
         .rst         ( rst         ),
@@ -319,6 +334,14 @@ module riscv (
         .waddr_i     ( ex_mem_mem_waddr_o     ),
         .wdata_i     ( ex_mem_mem_wdata_o     ),
         .wmask_i     ( ex_mem_mem_wmask_o     ),
+        .ram_wdata_o ( mem_ram_wdata_o ),
+        .ram_waddr_o ( mem_ram_waddr_o ),
+        .ram_raddr_o ( mem_ram_raddr_o ),
+        .ram_rdata_i ( ram_mem_rdata_o ),
+        .rom_wdata_o ( mem_rom_wdata_o ),
+        .rom_waddr_o ( mem_rom_waddr_o ),
+        .rom_rdata_i ( rom_mem_rdata_o),
+        .rom_raddr_o ( mem_rom_raddr_o ),
         .rd_wdata_i  ( ex_mem_mem_rd_wdata_o  ),
         .rd_waddr_i  ( ex_mem_mem_rd_waddr_o  ),
         .reg_wen_i   ( ex_mem_mem_reg_wen_o   ),
@@ -356,7 +379,7 @@ module riscv (
         .clk         ( clk         ),
         .rst         ( rst         ),
         .inst_addr_i ( mem_wb_inst_addr_o),
-        .inst_addr_o ( wb_inst_addr_o),
+        .inst_addr_o ( wb_inst_addr_o    ),
         .reg_waddr_i ( mem_wb_wb_rd_waddr_o ),
         .reg_wdata_i ( mem_wb_wb_rd_wdata_o ),
         .reg_wen_i   ( mem_wb_wb_reg_wen_o ),
@@ -365,6 +388,18 @@ module riscv (
         .reg_wen_o   ( wb_reg_reg_wen_o   )
     );
 
+
+    //ram to mem
+    wire[63:0]    ram_mem_rdata_o;
+    ram ram_inst(
+        .clk         ( clk         ),
+        .rst         ( rst         ),
+        .ram_raddr_i ( mem_ram_raddr_o ),
+        .ram_rdata_o ( ram_mem_rdata_o ),
+        .ram_waddr_i ( mem_ram_waddr_o ),
+        .ram_wdata_i ( mem_ram_wdata_o )
+        
+    );
 
 
 endmodule 

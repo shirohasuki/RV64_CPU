@@ -90,6 +90,10 @@ VL_MODULE(Vtb___024root) {
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_rd_wdata_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_mem_wb_rd_wdata_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ex_rdata_o;
+        QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_wdata_o;
+        QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_waddr_o;
+        QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o;
+        QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_rom_raddr_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_wb_inst_addr_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_wb_wb_rd_wdata_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immI;
@@ -111,9 +115,9 @@ VL_MODULE(Vtb___024root) {
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__compress_shift_left_unsigned;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__compress_shift_right_unsigned;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_inst__DOT__compress_shift_right_signed;
-        QData/*63:0*/ __Vtask_pmem_read__3__rdata;
         VlUnpacked<QData/*63:0*/, 4096> tb__DOT__soc_inst__DOT__riscv_inst__DOT__rom_inst__DOT__rom_mem;
         VlUnpacked<QData/*63:0*/, 32> tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__regs;
+        VlUnpacked<QData/*63:0*/, 4096> tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_inst__DOT__ram_mem;
         VlUnpacked<CData/*0:0*/, 3> __Vm_traceActivity;
     };
 

@@ -49,7 +49,7 @@ module mem (
     input reg[63:0]     inst_addr_i, // 用于验证每级传递的pc
     output reg[63:0]    inst_addr_o, // 用于验证每级传递的pc
 
-    //from ex_mem
+    // from ex_mem
     input reg[2:0]      stall_flag_i,
     input reg[2:0]      flush_flag_i,
 
@@ -69,16 +69,14 @@ module mem (
     // to ram(测试)
     output reg[63:0]    ram_wdata_o,
     output reg[63:0]    ram_waddr_o,
+    output reg[63:0]    ram_wmask_o,
 
     output reg[63:0]    ram_raddr_o,
     input  reg[63:0]    ram_rdata_i, 
 
-    // to rom
-    output reg[63:0]    rom_wdata_o,
-    output reg[63:0]    rom_waddr_o,
-
-    input  reg[63:0]    rom_rdata_i,
-    output reg[63:0]    rom_raddr_o,
+    output              ram_ren_o,
+    output              ram_wen_o,
+    // output [63:0]       ram_wmask_o,
 
     // to mem_wb
     output reg[63:0]    rd_wdata_o,
@@ -105,16 +103,20 @@ module mem (
 
 
     assign inst_addr_o = inst_addr_i;
-    assign reg_wen_o  = reg_wen_i;
     assign rd_waddr_o = rd_waddr_i;
     assign rd_wdata_o = rd_wdata_i;
+    assign reg_wen_o  = reg_wen_i;
 
     assign stall_flag_o = stall_flag_i; // 再给ctrl一个周期的stall信号
     assign flush_flag_o = flush_flag_i; // 再给ctrl一个周期的flush信号
 
-    always @(negedge clk ) begin
+    always @(negedge clk) begin
         get_pc(inst_addr_i);
     end
+
+
+    assign ram_ren_o = ren_i;
+    assign ram_wen_o = wen_i;
 
     // always @(*) begin
     //     // if (ren || rst == 1'b1 || hold_flag_i == 1'b0) pmem_read(raddr, rdata);
@@ -131,51 +133,22 @@ module mem (
 
     always @(*) begin
         if (ren_i) begin 
-            if (raddr_i <= 64'h8000_0304) begin
-                rom_raddr_o = raddr_i;
-                ram_raddr_o = 64'b0;
-                rdata_o     = rom_rdata_i; // 从rom读
-            end
-            else begin
-                rom_raddr_o = 64'b0;
-                ram_raddr_o = raddr_i;
-                rdata_o     = ram_rdata_i; // 从ram读             
-            end
-            // $display("here");
+            ram_raddr_o = raddr_i;
+            rdata_o     = ram_rdata_i; // 从ram读             
         end
         else begin 
-            rom_raddr_o = 64'b0;
             ram_raddr_o = 64'b0;
             rdata_o     = 64'b0;
         end
-        // if (ren_i) pmem_read(raddr_i, rdata_o); 
-        // else rdata_o = 64'b0;
         
         if (wen_i) begin
-            if (waddr_i <= 64'h8000_0304) begin
-                rom_wdata_o = wdata_i;
-                rom_waddr_o = waddr_i;  // 向rom写
-                ram_wdata_o = ram_wdata_o;
-                ram_waddr_o = ram_waddr_o;
-            end
-            else begin
-                ram_wdata_o = wdata_i;
-                ram_waddr_o = waddr_i; // 向ram写   
-                rom_wdata_o = rom_wdata_o;
-                rom_waddr_o = rom_waddr_o;          
-            end
+            ram_wdata_o = wdata_i;
+            ram_waddr_o = waddr_i; // 向ram写       
         end
         else begin
             ram_wdata_o = 64'b0;
             ram_waddr_o = 64'b0;
-            rom_wdata_o = 64'b0;
-            rom_waddr_o = 64'b0;
         end
-
-        if ((ren_i && wen_i) && (raddr_i == waddr_i)) begin
-            rdata_o = wdata_i;  // 处理读写冲突
-        end
-        // if (ren_i && wen_i) $display("nb");
     end
 
     always @(*) begin
@@ -218,5 +191,17 @@ module mem (
            endcase
         end
     end
+
+
+    always @(posedge clk) begin
+        case (wmask_i) 
+            8'b00000001: ram_wmask_o = 64'h0000_0000_0000_00ff;
+            8'b00000011: ram_wmask_o = 64'h0000_0000_0000_ffff;
+            8'b00001111: ram_wmask_o = 64'h0000_0000_ffff_ffff;
+            8'b11111111: ram_wmask_o = 64'hffff_ffff_ffff_ffff;
+            default begin ram_wmask_o = 64'h0; end
+        endcase
+    end
+
 
 endmodule

@@ -639,27 +639,20 @@ module ex (
                     `INST_SB: begin
                         mem_wen_o   = 1'b1;
                         mem_waddr_o = base_addr_add_addr_offset;
-                        // mem_wdata_o = op2_i; 
                         mem_wdata_o = {56'b0, op2_i[7:0]}; 
                         mem_wmask   = 8'b00000001;
-                        // mem_wmask   = 8'b11111111;
-                        // $display("SB: mem_wdata_o = %l", op2_i);
                     end
                     `INST_SH: begin
                         mem_wen_o   = 1'b1;
                         mem_waddr_o = base_addr_add_addr_offset;
-                        // mem_wdata_o = op2_i;
                         mem_wdata_o = {48'b0, op2_i[15:0]};
                         mem_wmask   = 8'b00000011;
                     end
                     `INST_SW: begin
                         mem_wen_o   = 1'b1;
                         mem_waddr_o = base_addr_add_addr_offset;
-                        // mem_wdata_o = op2_i;
                         mem_wdata_o = {32'b0, op2_i[31:0]};
-                        // mem_wdata_o = {op2_i[31:0], 32'b0};
                         mem_wmask   = 8'b00001111;
-                        //$display("SW: mem_wdata_o = %l", op2_i);
                     end
                     `INST_SD: begin
                         mem_wen_o   = 1'b1;

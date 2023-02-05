@@ -105,7 +105,7 @@ AXI-Lite
 // AXI4协议分为以下几个通道：
 // AR：读地址通道 
 // R ：读数据通道
-// AW：写地址通道 与AXI4-Lite不同此处adress和data我们不分两路
+// AW：写地址通道 
 // W ：写数据通道
 // B ：写反馈通道
 module axi #(
@@ -146,11 +146,13 @@ module axi #(
     input  [RW_DATA_WIDTH-1:0]               ram_rdata_i,          //RAM输出信号 
     input                                    ram_raready_i,        //RAM输出信号
     input                                    ram_rdvalid_i,        //RAM输出信号
+
     input                                    ram_waready_i,        //RAM输出信号
     input                                    ram_wdready_i,        //RAM输出信号
     // to RAM
     output                                   ram_rdready_o,        //RAM输出信号
     output                                   ram_ravalid_o,        //RAM输出信号
+    
     output                                   ram_wavalid_o,        //RAM输出信号
     output                                   ram_wdvalid_o,        //RAM输出信号
     output   [RW_DATA_WIDTH-1:0]             ram_wdata_o,          //RAM输出信号 

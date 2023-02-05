@@ -15,7 +15,7 @@ VL_ATTR_COLD void Vtb___024root___initial__TOP__0(Vtb___024root* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtb___024root___initial__TOP__0\n"); );
     // Body
     VL_READMEM_N(true, 64, 4096, 0, VL_CVT_PACK_STR_NW(13, Vtb__ConstPool__CONST_h6b745f0d_0)
-                 ,  &(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__rom_inst__DOT__rom_mem)
+                 ,  &(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_inst__DOT__ram_mem)
                  , 0, ~0ULL);
 }
 
@@ -24,29 +24,170 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__1(Vtb___024root* vlSelf) {
     Vtb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtb___024root___settle__TOP__1\n"); );
     // Body
+    if ((1U & (IData)((vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o 
+                       >> 2U)))) {
+        if ((1U & (IData)((vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o 
+                           >> 2U)))) {
+            vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_if_inst_o 
+                = (QData)((IData)((vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_inst__DOT__ram_mem
+                                   [(0xfffU & (IData)(
+                                                      (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o 
+                                                       >> 3U)))] 
+                                   >> 0x20U)));
+        }
+    } else {
+        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_if_inst_o 
+            = (QData)((IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_inst__DOT__ram_mem
+                              [(0xfffU & (IData)((vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o 
+                                                  >> 3U)))]));
+    }
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_mem_rdata_o 
+        = ((IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_ren_o)
+            ? ((1U & (IData)((vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o 
+                              >> 2U))) ? ((1U & (IData)(
+                                                        (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o 
+                                                         >> 1U)))
+                                           ? ((1U & (IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o))
+                                               ? ((
+                                                   vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_inst__DOT__ram_mem
+                                                   [
+                                                   (0xfffU 
+                                                    & ((IData)(1U) 
+                                                       + (IData)(
+                                                                 (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o 
+                                                                  >> 3U))))] 
+                                                   << 8U) 
+                                                  | (QData)((IData)(
+                                                                    (0xffU 
+                                                                     & (IData)(
+                                                                               (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_inst__DOT__ram_mem
+                                                                                [
+                                                                                (0xfffU 
+                                                                                & (IData)(
+                                                                                (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o 
+                                                                                >> 3U)))] 
+                                                                                >> 0x38U))))))
+                                               : ((
+                                                   vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_inst__DOT__ram_mem
+                                                   [
+                                                   (0xfffU 
+                                                    & ((IData)(1U) 
+                                                       + (IData)(
+                                                                 (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o 
+                                                                  >> 3U))))] 
+                                                   << 0x10U) 
+                                                  | (QData)((IData)(
+                                                                    (0xffffU 
+                                                                     & (IData)(
+                                                                               (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_inst__DOT__ram_mem
+                                                                                [
+                                                                                (0xfffU 
+                                                                                & (IData)(
+                                                                                (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o 
+                                                                                >> 3U)))] 
+                                                                                >> 0x30U)))))))
+                                           : ((1U & (IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o))
+                                               ? ((
+                                                   vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_inst__DOT__ram_mem
+                                                   [
+                                                   (0xfffU 
+                                                    & ((IData)(1U) 
+                                                       + (IData)(
+                                                                 (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o 
+                                                                  >> 3U))))] 
+                                                   << 0x18U) 
+                                                  | (QData)((IData)(
+                                                                    (0xffffffU 
+                                                                     & (IData)(
+                                                                               (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_inst__DOT__ram_mem
+                                                                                [
+                                                                                (0xfffU 
+                                                                                & (IData)(
+                                                                                (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o 
+                                                                                >> 3U)))] 
+                                                                                >> 0x28U))))))
+                                               : (((QData)((IData)(
+                                                                   vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_inst__DOT__ram_mem
+                                                                   [
+                                                                   (0xfffU 
+                                                                    & ((IData)(1U) 
+                                                                       + (IData)(
+                                                                                (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o 
+                                                                                >> 3U))))])) 
+                                                   << 0x20U) 
+                                                  | (QData)((IData)(
+                                                                    (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_inst__DOT__ram_mem
+                                                                     [
+                                                                     (0xfffU 
+                                                                      & (IData)(
+                                                                                (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o 
+                                                                                >> 3U)))] 
+                                                                     >> 0x20U))))))
+                : ((1U & (IData)((vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o 
+                                  >> 1U))) ? ((1U & (IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o))
+                                               ? (((QData)((IData)(
+                                                                   (0xffffffU 
+                                                                    & (IData)(
+                                                                              vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_inst__DOT__ram_mem
+                                                                              [
+                                                                              (0xfffU 
+                                                                               & ((IData)(1U) 
+                                                                                + (IData)(
+                                                                                (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o 
+                                                                                >> 3U))))])))) 
+                                                   << 0x28U) 
+                                                  | (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_inst__DOT__ram_mem
+                                                     [
+                                                     (0xfffU 
+                                                      & (IData)(
+                                                                (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o 
+                                                                 >> 3U)))] 
+                                                     >> 0x18U))
+                                               : (((QData)((IData)(
+                                                                   (0xffffU 
+                                                                    & (IData)(
+                                                                              vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_inst__DOT__ram_mem
+                                                                              [
+                                                                              (0xfffU 
+                                                                               & ((IData)(1U) 
+                                                                                + (IData)(
+                                                                                (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o 
+                                                                                >> 3U))))])))) 
+                                                   << 0x30U) 
+                                                  | (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_inst__DOT__ram_mem
+                                                     [
+                                                     (0xfffU 
+                                                      & (IData)(
+                                                                (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o 
+                                                                 >> 3U)))] 
+                                                     >> 0x10U)))
+                    : ((1U & (IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o))
+                        ? (((QData)((IData)((0xffU 
+                                             & (IData)(
+                                                       vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_inst__DOT__ram_mem
+                                                       [
+                                                       (0xfffU 
+                                                        & ((IData)(1U) 
+                                                           + (IData)(
+                                                                     (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o 
+                                                                      >> 3U))))])))) 
+                            << 0x38U) | (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_inst__DOT__ram_mem
+                                         [(0xfffU & (IData)(
+                                                            (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o 
+                                                             >> 3U)))] 
+                                         >> 8U)) : 
+                       vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_inst__DOT__ram_mem
+                       [(0xfffU & (IData)((vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o 
+                                           >> 3U)))])))
+            : 0ULL);
     VL_WRITEF("[inst_fetch] pc_addr: %x inst: %x\n",
               32,(IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o),
-              32,(IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__rom_inst__DOT__rom_mem
-                         [(0xfffU & (IData)((vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__pc_reg_pc_o 
-                                             >> 2U)))]));
-    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ex_rdata_o 
-        = ((IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_ren_o)
-            ? ((0x80000304ULL >= vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_raddr_o)
-                ? vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__rom_inst__DOT__rom_mem
-               [(0xfffU & (IData)((vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_rom_raddr_o 
-                                   >> 2U)))] : vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_inst__DOT__ram_mem
-               [(0xfffU & (IData)((vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o 
-                                   >> 2U)))]) : 0ULL);
-    if ((((IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_ren_o) 
-          & (IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_wen_o)) 
-         & (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_raddr_o 
-            == vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_waddr_o))) {
+              32,(IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_if_inst_o));
+    if (vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_ren_o) {
         vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ex_rdata_o 
-            = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_wdata_o;
-    }
-    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_mem_wb_rd_wdata_o 
-        = ((IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_ren_o)
-            ? ((3U == (0x7fU & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_inst_o))
+            = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_mem_rdata_o;
+        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_mem_wb_rd_wdata_o 
+            = ((3U == (0x7fU & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_inst_o))
                 ? ((0x4000U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_inst_o)
                     ? ((0x2000U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_inst_o)
                         ? ((0x1000U & vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_inst_o)
@@ -82,7 +223,12 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__1(Vtb___024root* vlSelf) {
                                 << 8U) | (QData)((IData)(
                                                          (0xffU 
                                                           & (IData)(vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ex_rdata_o))))))))
-                : 0ULL) : vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_rd_wdata_o);
+                : 0ULL);
+    } else {
+        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ex_rdata_o = 0ULL;
+        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_mem_wb_rd_wdata_o 
+            = vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ex_mem_mem_rd_wdata_o;
+    }
 }
 
 VL_ATTR_COLD void Vtb___024root___eval_initial(Vtb___024root* vlSelf) {
@@ -92,9 +238,6 @@ VL_ATTR_COLD void Vtb___024root___eval_initial(Vtb___024root* vlSelf) {
     // Body
     vlSelf->__Vclklast__TOP__clk = vlSelf->clk;
     Vtb___024root___initial__TOP__0(vlSelf);
-    vlSelf->__Vm_traceActivity[2U] = 1U;
-    vlSelf->__Vm_traceActivity[1U] = 1U;
-    vlSelf->__Vm_traceActivity[0U] = 1U;
 }
 
 VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf);
@@ -186,15 +329,14 @@ VL_ATTR_COLD void Vtb___024root___ctor_var_reset(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ex_rdata_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_wdata_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_waddr_o = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_wmask_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_ram_raddr_o = 0;
-    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_rom_raddr_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_wb_inst_addr_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_wb_wb_rd_wdata_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_wb_wb_rd_waddr_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__mem_wb_wb_reg_wen_o = 0;
-    for (int __Vi0=0; __Vi0<4096; ++__Vi0) {
-        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__rom_inst__DOT__rom_mem[__Vi0] = 0;
-    }
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_if_inst_o = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__ram_mem_rdata_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immI = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immU = 0;
     vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__id_inst__DOT__immB = 0;

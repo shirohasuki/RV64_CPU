@@ -37,28 +37,27 @@ module riscv (
         // .pc_reg_o       (pc_reg_reg_o) 
     );
 
-    // if from rom
-    wire[63:0]    rom_if_inst_o;
-    // if to if_id and rom
+
+    // if to if_id and ram
     wire[31:0]    if_inst_o;
     wire[63:0]    if_inst_addr_o; 
     
     inst_fetch inst_fetch_inst (
         .pc_addr_i     (   pc_reg_pc_o      ),
-        .rom_inst_i    ( rom_if_inst_o      ),
+        .ram_inst_i    ( ram_if_inst_o      ),
         .inst_addr_o   ( if_inst_addr_o     ),
         .inst_o        ( if_inst_o          )
     );
 
-    // rom to mem
-    wire[63:0]    rom_mem_rdata_o;
+    // // rom to mem
+    // wire[63:0]    rom_mem_rdata_o;
 
-    rom rom_inst (
-        .inst_addr_i   (   if_inst_addr_o   ),
-        .inst_o        (   rom_if_inst_o    ),
-        .mem_rdata_o   (   rom_mem_rdata_o  ),
-        .mem_raddr_i   (   mem_rom_raddr_o  )
-    );
+    // rom rom_inst (
+    //     .inst_addr_i   (   if_inst_addr_o   ),
+    //     .inst_o        (   rom_if_inst_o    ),
+    //     .mem_rdata_o   (   rom_mem_rdata_o  ),
+    //     .mem_raddr_i   (   mem_rom_raddr_o  )
+    // );
 
     // if_id 2 id
     wire[63:0] if_id_inst_addr_o;
@@ -310,12 +309,11 @@ module riscv (
     // mem to ram
     wire[63:0]    mem_ram_wdata_o;
     wire[63:0]    mem_ram_waddr_o;
+    wire[63:0]    mem_ram_wmask_o;  
     wire[63:0]    mem_ram_raddr_o;
-    
-    // mem to rom
-    wire[63:0]    mem_rom_raddr_o;
-    wire[63:0]    mem_rom_waddr_o;
-    wire[63:0]    mem_rom_wdata_o;
+
+    wire        mem_ram_ren_o; 
+    wire        mem_ram_wen_o; 
 
     mem mem_inst(
         .clk         ( clk         ),
@@ -336,12 +334,15 @@ module riscv (
         .wmask_i     ( ex_mem_mem_wmask_o     ),
         .ram_wdata_o ( mem_ram_wdata_o ),
         .ram_waddr_o ( mem_ram_waddr_o ),
+        .ram_wmask_o ( mem_ram_wmask_o ),
         .ram_raddr_o ( mem_ram_raddr_o ),
         .ram_rdata_i ( ram_mem_rdata_o ),
-        .rom_wdata_o ( mem_rom_wdata_o ),
-        .rom_waddr_o ( mem_rom_waddr_o ),
-        .rom_rdata_i ( rom_mem_rdata_o),
-        .rom_raddr_o ( mem_rom_raddr_o ),
+        .ram_ren_o   ( mem_ram_ren_o ),
+        .ram_wen_o   ( mem_ram_wen_o ),
+        // .rom_wdata_o ( mem_rom_wdata_o ),
+        // .rom_waddr_o ( mem_rom_waddr_o ),
+        // .rom_rdata_i ( rom_mem_rdata_o),
+        // .rom_raddr_o ( mem_rom_raddr_o ),
         .rd_wdata_i  ( ex_mem_mem_rd_wdata_o  ),
         .rd_waddr_i  ( ex_mem_mem_rd_waddr_o  ),
         .reg_wen_i   ( ex_mem_mem_reg_wen_o   ),
@@ -389,17 +390,43 @@ module riscv (
     );
 
 
-    //ram to mem
+        // ram to if
+    wire[63:0]    ram_if_inst_o;
+    // ram to mem
     wire[63:0]    ram_mem_rdata_o;
+
+
+    // ram#(
+    //     .Bits        ( 64 ),
+    //     .Word_Depth  ( 4096 ),
+    //     .Add_Width   ( 64 ),
+    //     .Wen_Width   ( 64 )
+    // )ram_inst(
+    //     .CLK         ( clk         ),
+    //     .CEN         ( rst         ),
+    //     .WEN         ( WEN         ),
+    //     .BWEN        ( BWEN        ),
+    //     .A           ( mem_ram_waddr_o ),
+    //     .D           ( mem_ram_wdata_o ),
+    //     .Q           ( ram_mem_rdata_o ),
+    //     .inst_addr_i ( if_inst_addr_o ),
+    //     .inst_o      ( ram_if_inst_o )
+    // );
+
     ram ram_inst(
         .clk         ( clk         ),
         .rst         ( rst         ),
-        .ram_raddr_i ( mem_ram_raddr_o ),
-        .ram_rdata_o ( ram_mem_rdata_o ),
         .ram_waddr_i ( mem_ram_waddr_o ),
-        .ram_wdata_i ( mem_ram_wdata_o )
-        
+        .ram_wdata_i ( mem_ram_wdata_o  ),
+        .ram_wmask_i ( mem_ram_wmask_o  ),
+        .ram_raddr_i ( mem_ram_raddr_o  ),
+        .ram_rdata_o ( ram_mem_rdata_o  ),
+        .ram_ren_i  (mem_ram_ren_o ),
+        .ram_wen_i  (mem_ram_wen_o ),
+        .inst_addr_i ( if_inst_addr_o  ),
+        .inst_o      ( ram_if_inst_o     )
     );
+
 
 
 endmodule 

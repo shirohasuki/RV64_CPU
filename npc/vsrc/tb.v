@@ -11,7 +11,7 @@ module tb(
 	
 	// rom 初始值
 	initial begin
-        $readmemh("/home/shiroha/Code/ysyx/ysyx-workbench/npc/image.hex",tb.soc_inst.riscv_inst.rom_inst.rom_mem);
+        $readmemh("/home/shiroha/Code/ysyx/ysyx-workbench/npc/image.hex",tb.soc_inst.riscv_inst.ram_inst.ram_mem);
     end
 
     // integer r;

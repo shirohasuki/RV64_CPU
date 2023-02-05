@@ -29,8 +29,8 @@ typedef word_t vaddr_t;
 #define CONFIG_NPC_ITRACE 1
 #define CONFIG_NPC_GPRTRACE 1
 #define CONFIG_NPC_IFTRACE 1
-// #define CONFIG_NPC_DIFFTEST 1
-// #define CONFIG_NPC_MTRACE 1
+#define CONFIG_NPC_DIFFTEST 1
+#define CONFIG_NPC_MTRACE 1
 
 
 // #define CONFIG_NPC_DEVICE

@@ -85,10 +85,31 @@ int main() {
         // print_mtrace();
         
 #ifdef CONFIG_NPC_DIFFTEST
-        if (cpu_npc.pc == 0x0) {
-            exec_once();
-            exec_once();
-        } // 遇到流水线冲刷，pc再走两拍到EXU
+        // if (cpu_npc.pc == 0x0) {
+        //     exec_once();
+        //     exec_once();
+        //     // exec_once();
+        //     // if (cpu_npc.pc == ref_cpu.pc) break;
+        //     // exec_once();
+        // } // 遇到流水线冲刷，pc再走两拍到EXU
+        // if (cpu_npc.pc == 0x0) {
+        //     exec_once();
+        //     // exec_once();
+        //     // exec_once();
+        //     // if (cpu_npc.pc == ref_cpu.pc) break;
+        //     // exec_once();
+        // } // 遇到流水线冲刷，pc再走两拍到EXU
+        while (cpu_npc.pc == 0x0) {
+            exec_once();    
+            // exec_once();
+        }
+        // printf("%lx %lx\n", cpu_npc.pc, ref_cpu.pc);
+        // while (cpu_npc.pc == ref_cpu.pc) {
+        //      exec_once();  
+        // }
+        // // if () {
+
+        // // }
         difftest_exec_once();
 #endif
         //dump_gpr();

@@ -5,104 +5,125 @@ module soc (
     input  wire rst 
 );
 
-    //riscv to ram 
-    //  write
-    wire               riscv_ram_wen;
-    wire[63:0]         riscv_ram_waddr_o;
-    wire[63:0]         riscv_ram_wdata_o;
-    wire[7:0]          riscv_ram_wmask;
-    // read
-    wire                riscv_ram_ren;
-    wire[63:0]          riscv_ram_raddr_o; 
+
+
     // flush 
-    wire                riscv_ram_flush_flag_o;
+    wire[2:0]                axi_core_stall_flag_o;
+    wire[2:0]                axi_core_flush_flag_o;
 
-    // ram to riscv
-    wire[63:0]          ram_riscv_rdata_o;
-
-    // riscv to rom
-    wire[63:0]          riscv_rom_raddr_o;
-    // rom to riscv
-    wire[63:0]          rom_riscv_rdata_o;
-
-    // riscv to axi
-    wire[3:0]           riscv_axi_sid_o; 
-    wire                riscv_axi_rwvalid_o; 
-
-    /*
-    riscv riscv_inst (
-        .clk          ( clk             ),
-        .rst          ( rst             ),
-        .inst_i       ( rom_inst_o      ),
-        .inst_addr_o  ( riscv_inst_addr_o)
-    );*/
     
-    riscv riscv_inst(
-        .clk          ( clk         ),
-        .rst          ( rst         ),
-        
-        .flush_flag_o  ( riscv_ram_flush_flag_o ),
-        // .sid_o        ( riscv_axi_sid_o     ),
-        .rwvalid_o    ( riscv_axi_rwvalid_o ),
-        
-        .mem_ren_o    ( riscv_ram_ren  ),
-        .mem_rdata_i  ( ram_riscv_rdata_o ),
-        .mem_raddr_o  ( riscv_ram_raddr_o ),
+    // core to axi to ram
+    wire                core_axi_ren_o;
+    wire[63:0]          core_axi_raddr_o; 
 
-        .mem_wen_o    ( riscv_ram_wen   ),
-        .mem_waddr_o  ( riscv_ram_waddr_o ),
-        .mem_wdata_o  ( riscv_ram_wdata_o ),
-        .mem_wmask_o  ( riscv_ram_wmask  )
+    wire                core_axi_wen_o;
+    wire[63:0]          core_axi_waddr_o;
+    wire[63:0]          core_axi_wdata_o;
+    wire[63:0]          core_axi_wmask_o;
+
+    // core to ram
+    wire[63:0]          core_ram_inst_addr_o;
+
+    wire                core_ram_if_ren_o;
+
+
+    core core_inst(
+        .clk            ( clk                   ),
+        .rst            ( rst                   ),
+          
+        .axi_stall_flag_i ( axi_core_stall_flag_o ),
+        .axi_flush_flag_i ( axi_core_flush_flag_o ),
+          
+        .mem_ren_o      ( core_axi_ren_o        ),
+        .mem_rdata_i    ( axi_core_rdata_o      ),
+        .mem_raddr_o    ( core_axi_raddr_o      ),
+  
+        .mem_wen_o      ( core_axi_wen_o        ),
+        .mem_waddr_o    ( core_axi_waddr_o      ),
+        .mem_wdata_o    ( core_axi_wdata_o      ),
+        .mem_wmask_o    ( core_axi_wmask_o      ),
+  
+        .if_inst_i      ( ram_core_inst_o       ),
+        .if_inst_addr_o ( core_ram_inst_addr_o  ),
+        .if_ren_o       ( core_ram_if_ren_o     ),
+
+        .axi_busy_i     (  axi_core_busy_o      ),
+        .axi_busy_end_i (  axi_core_busy_end_o  )
+    );
+
+    // axi to ram
+    wire[31:0]          axi_ram_raddr_o;
+    wire                axi_ram_ren_o;
+
+    wire[31:0]          axi_ram_waddr_o;
+    wire[63:0]          axi_ram_wdata_o;
+    wire[63:0]          axi_ram_wmask_o;
+    wire                axi_ram_wen_o;
+
+    //axi to core
+    wire[63:0]          axi_core_rdata_o;
+    wire                axi_core_busy_o;
+    wire                axi_core_busy_end_o;
+    
+    
+
+    axi axi_inst(
+        .clk             ( clk                 ),
+        .rst             ( rst                 ),
+        .axi_busy_o      ( axi_core_busy_o     ),
+        .axi_busy_end_o  ( axi_core_busy_end_o ),
+        .core_ren_i      ( core_axi_ren_o      ),
+        .core_raddr_i    ( core_axi_raddr_o    ),
+        .core_rdata_o    ( axi_core_rdata_o    ),
+        .ram_rready_i    ( ram_axi_rready_o    ),
+        .ram_rdata_i     ( ram_axi_rdata_o     ),
+        .ram_raddr_o     ( axi_ram_raddr_o     ),
+        .ram_ren_o       ( axi_ram_ren_o       ),
+
+        .core_wen_i          ( core_axi_wen_o ),  
+        .core_waddr_i        ( core_axi_waddr_o ),
+        .core_wdata_i        ( core_axi_wdata_o ),
+        .core_wmask_i        ( core_axi_wmask_o ),
+        .ram_wready_i        ( ram_axi_wready_o ), 
+        .ram_wen_o           ( axi_ram_wen_o   ),
+        .ram_waddr_o         ( axi_ram_waddr_o ), 
+        .ram_wdata_o         ( axi_ram_wdata_o ),
+        .ram_wmask_o         ( axi_ram_wmask_o ),
+        .ram_bvalid_i        ( ram_axi_bvalid_o )
     );
 
 
-    // axi axi_inst(
-    //     .clk            ( clk            ),
-    //     .rst            ( rst            ),
-        
-    //     .sid_i          ( riscv_axi_sid_o),
-    //     .rwvalid_i      ( riscv_axi_rwvalid_o),
-    //     .rwdata_i       ( rwdata_i       ),
-    //     .rwaddr_i       ( rwaddr_i       ),
-    //     .wmask_i        ( wmask_i        ),
-    //     .rready_o       ( rready_o       ),
-    //     .wready_o       ( wready_o       ),
-    //     .rdata_o        ( rdata_o        ),
-        
-    //     .maxi_waready   ( maxi_waready   ),
-    //     .maxi_wavalid   ( maxi_wavalid   ),
-    //     .maxi_waddr     ( maxi_waddr     ),
-        
-    //     .maxi_wdata     ( maxi_wdata     ),
-    //     .maxi_wstrb     ( maxi_wstrb     ),
-    //     .maxi_wdready   ( maxi_wdready   ),
-    //     .maxi_wdvalid   ( maxi_wdvalid   ),
-        
-    //     .maxi_raready   ( maxi_raready   ),
-    //     .maxi_ravalid   ( maxi_ravalid   ),
-    //     .maxi_raddr     ( maxi_raddr     ),
-        
-    //     .maxi_rdata     ( maxi_rdata     ),
-    //     .maxi_rdvalid   ( maxi_rdvalid   ),
-    //     .maxi_rlast     ( maxi_rlast     ),
-    //     .maxi_rdready   ( maxi_rdready   )
-    // );
+    // ram to axi to core
+    wire[63:0]          ram_axi_rdata_o;
+    wire                ram_axi_rready_o;
+    wire                ram_axi_wready_o;
+    wire                ram_axi_bvalid_o;
+    // ram to core
+    wire[63:0]          ram_core_inst_o;
 
+    ram ram_inst(
+        .clk         ( clk                  ),
+        .rst         ( rst                  ),
+        .ram_waddr_i ( axi_ram_waddr_o     ),
+        .ram_wdata_i ( axi_ram_wdata_o     ),
+        .ram_wmask_i ( axi_ram_wmask_o     ),
 
+        .ram_raddr_i ( axi_ram_raddr_o     ),
+        .ram_rdata_o ( ram_axi_rdata_o     ),
 
-    // mem mem_inst(
-    //     .clk         ( clk               ),
-    //     .rst         ( rst               ),
-    //   //  .flush_flag_i ( riscv_ram_flush_flag_o ),
-    //     .wen_i       ( riscv_ram_wen     ),
-    //     .waddr_i     ( riscv_ram_waddr_o ),
-    //     .wdata_i     ( riscv_ram_wdata_o ),
-    //     .wmask_i     ( riscv_ram_wmask   ),
-    //     .ren_i       ( riscv_ram_ren     ),
-    //     .raddr_i     ( riscv_ram_raddr_o ),
-    //     .rdata_o     ( ram_riscv_rdata_o )
-    // );
+        .ram_ren_i   ( axi_ram_ren_o       ),
+        .ram_wen_i   ( axi_ram_wen_o      ),
 
-endmodule //soc
+        .ram_rready_o ( ram_axi_rready_o   ),
+        .ram_wready_o ( ram_axi_wready_o   ),
+        .ram_bvalid_o ( ram_axi_bvalid_o   ),
+
+        .inst_addr_i ( core_ram_inst_addr_o ),
+        .inst_o      ( ram_core_inst_o      )
+
+    );
+
+    
+endmodule // soc
 
     

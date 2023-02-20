@@ -34,6 +34,14 @@ VL_INLINE_OPT void Vtb___024unit____Vdpiimwrap_pmem_write_TOP____024unit(QData/*
     pmem_write(waddr__Vcvt, wdata__Vcvt, mask__Vcvt);
 }
 
+extern "C" void ebreak();
+
+VL_INLINE_OPT void Vtb___024unit____Vdpiimwrap_ebreak_TOP____024unit() {
+    VL_DEBUG_IF(VL_DBG_MSGF("+        Vtb___024unit____Vdpiimwrap_ebreak_TOP____024unit\n"); );
+    // Body
+    ebreak();
+}
+
 extern "C" void get_pc(long long pc);
 
 VL_INLINE_OPT void Vtb___024unit____Vdpiimwrap_get_pc_TOP____024unit(QData/*63:0*/ pc) {
@@ -42,14 +50,6 @@ VL_INLINE_OPT void Vtb___024unit____Vdpiimwrap_get_pc_TOP____024unit(QData/*63:0
     long long pc__Vcvt;
     for (size_t pc__Vidx = 0; pc__Vidx < 1; ++pc__Vidx) pc__Vcvt = pc;
     get_pc(pc__Vcvt);
-}
-
-extern "C" void ebreak();
-
-VL_INLINE_OPT void Vtb___024unit____Vdpiimwrap_ebreak_TOP____024unit() {
-    VL_DEBUG_IF(VL_DBG_MSGF("+        Vtb___024unit____Vdpiimwrap_ebreak_TOP____024unit\n"); );
-    // Body
-    ebreak();
 }
 
 extern "C" void get_regs(const svOpenArrayHandle regs);

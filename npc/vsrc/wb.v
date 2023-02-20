@@ -1,3 +1,5 @@
+// import "DPI-C" function void get_pc(input longint pc);
+
 module wb (
     input  wire clk,    
     input  wire rst,  
@@ -19,5 +21,9 @@ module wb (
 	assign reg_wdata_o = reg_wdata_i;
 	assign reg_wen_o   = reg_wen_i;
     assign inst_addr_o = inst_addr_i;
+
+    // always @(posedge clk ) begin
+    //     get_pc(inst_addr_i);
+    // end
 
 endmodule

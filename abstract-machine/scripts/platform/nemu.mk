@@ -29,6 +29,7 @@ run: image
 
 runb: image
 	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) run ARGS="$(NEMUFLAGS_BATCH_MODE)" IMG=$(IMAGE).bin
+#在批处理下运行
 
 gdb: image
 	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) gdb ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin

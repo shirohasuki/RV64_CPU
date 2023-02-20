@@ -1,8 +1,10 @@
 `include "./defines.v"
 
 import "DPI-C" function void ebreak();
+import "DPI-C" function void get_pc(input longint pc);
 
 module ex (
+    input wire        clk, 
     // from id_ex // 
     input wire[31:0]  inst_i,
 	input wire[63:0]  inst_addr_i, // pc
@@ -17,12 +19,11 @@ module ex (
     // to ctrl
     output reg[63:0]  jump_addr_o,
     output reg        jump_en_o,
-    output reg[2:0]   flush_flag_o,
-    output reg[2:0]   stall_flag_o,
+    // output reg[2:0]   flush_flag_o,
+    // output reg[2:0]   stall_flag_o,
 
     // // from mem
     // input reg[63:0]   mem_rdata_i, 
-    // // TODO：设想改为读取到的数据给wb模块，不给ex，但是目前没理清 
 
     // to ex_mem
     output wire[31:0]  inst_o,
@@ -34,11 +35,15 @@ module ex (
     output wire       mem_wen_o,
     output reg[63:0]  mem_waddr_o,
     output reg[63:0]  mem_wdata_o,
-    output reg[7:0]   mem_wmask,
+    output reg[7:0]   mem_wmask_o,
 
     output reg[63:0]  rd_wdata_o,
     output reg[4:0]   rd_waddr_o,
-    output reg        reg_wen_o
+    output reg        reg_wen_o,
+
+    // to ctrl and ex_mem
+    output wire       isload_o,
+    output wire       issave_o
 );
 
     wire[6:0] opcode; // 7byte (6~0)
@@ -139,6 +144,10 @@ module ex (
     //     $display("[ex] mem_rdata_i= %x", mem_rdata_i); 
     // end
 
+    always @(posedge clk) begin
+        get_pc(inst_addr_i);
+    end
+
     always @(*) begin
         inst_addr_o = inst_addr_i; // pc传递
         if (inst_i == `INST_EBREAK) begin 
@@ -151,64 +160,52 @@ module ex (
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
-                mem_wmask   = 8'b0;
+                mem_wmask_o = 8'b0;
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
+                isload_o   = 1'b0;
+                issave_o    = 1'b0;  
                 case (func3)
                     `INST_ADDI:begin
                         rd_wdata_o = op1_i_add_op2_i; 
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
-                        if (rs1 == 5'b0 && rs2 == 5'b0) begin
-                            flush_flag_o = 3'b0; 
-                            stall_flag_o = 3'b0;
-                        end // NOP会转换为addi，不能暂停流水线
-                        else begin
-                            flush_flag_o = 3'b001; 
-                            stall_flag_o = 3'b110;
-                        end 
+                        // if (inst_i == `INST_NOP) begin
+                        //     isload_o    = 1'b0;
+                        // end // NOP会转换为addi，不能暂停流水线
+                        // else begin
+                        //     isload_o    = 1'b1;
+                        // end 
                     end
                     `INST_SLTI:begin
                         rd_wdata_o = {63'b0, op1_i_less_op2_i_signed};
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
-                        flush_flag_o = 3'b001; 
-                        stall_flag_o = 3'b110;
                     end 
                     `INST_SLTIU:begin
                         rd_wdata_o = {63'b0, op1_i_less_op2_i_unsigned}; 
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
-                        flush_flag_o = 3'b001; 
-                        stall_flag_o = 3'b110;
                     end 
                     `INST_XORI:begin
                         rd_wdata_o = op1_i_xor_op2_i; 
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
-                        flush_flag_o = 3'b001; 
-                        stall_flag_o = 3'b110;
                     end 
                     `INST_ORI:begin
                         rd_wdata_o = op1_i_or_op2_i; 
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
-                        flush_flag_o = 3'b001; 
-                        stall_flag_o = 3'b110;
                     end 
                     `INST_ANDI:begin
                         rd_wdata_o = op1_i_and_op2_i; 
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
-                        flush_flag_o = 3'b001; 
-                        stall_flag_o = 3'b110;
                     end 
                     `INST_SLLI:begin
                         rd_wdata_o = op1_i_shift_left_op2_i_unsigned; 
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
-                        flush_flag_o = 3'b001; 
-                        stall_flag_o = 3'b110;
                     end // 逻辑左移
                     `INST_SRI:begin // SRI包含srli和srai
                         if (func7[5] == 1'b1) begin // SRAI
@@ -217,23 +214,17 @@ module ex (
                             rd_wdata_o = op1_i_shift_right_op2_i_signed; 
                             rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
-                            flush_flag_o = 3'b001; 
-                        stall_flag_o = 3'b110;
                         end 
                         else begin // SRLI 逻辑右移
                             rd_wdata_o = op1_i_shift_right_op2_i_unsigned; 
                             rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
-                            flush_flag_o = 3'b001; 
-                            stall_flag_o = 3'b110;
                         end                         
                     end 
                     default:begin
                         rd_wdata_o = 64'b0; 
                         rd_waddr_o = 5'b0;
                         reg_wen_o  = 1'b0;
-                        flush_flag_o = 3'b0; 
-                        stall_flag_o = 3'b0;
                     end 
                 endcase
             end
@@ -241,28 +232,24 @@ module ex (
             `INST_TYPE_I_W: begin
                 jump_addr_o = 64'b0;
                 jump_en_o   = 1'b0;
-                flush_flag_o = 3'b0; // 设置初值，防止出现锁存器
-                stall_flag_o = 3'b0;
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
-                mem_wmask   = 8'b0;
+                mem_wmask_o = 8'b0;
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
+                isload_o   = 1'b0; 
+                issave_o    = 1'b0;                 
                 case (func3)
                     `INST_ADDIW: begin
                         rd_wdata_o = compress_add; // compress to 32
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
-                        flush_flag_o = 3'b001; 
-                        stall_flag_o = 3'b110;
                     end
                     `INST_SLLIW:begin
                         rd_wdata_o = compress_shift_left_unsigned; 
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
-                        flush_flag_o = 3'b001; 
-                        stall_flag_o = 3'b110;
                     end // 逻辑左移
                     `INST_SRIW:begin // SRI包含srli和srai
                         if (func7[5] == 1'b1) begin // SRAIW
@@ -270,23 +257,17 @@ module ex (
                             rd_wdata_o = compress_shift_right_signed; 
                             rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
-                            flush_flag_o = 3'b001; 
-                            stall_flag_o = 3'b110;
                         end 
                         else begin // SRLIW 逻辑右移
                             rd_wdata_o = compress_shift_right_unsigned; 
                             rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
-                            flush_flag_o = 3'b001; 
-                            stall_flag_o = 3'b110;
                         end                         
                     end 
                     default:begin
                         rd_wdata_o = 64'b0; 
                         rd_waddr_o = 5'b0;
                         reg_wen_o  = 1'b0;
-                        flush_flag_o = 3'b0; 
-                        stall_flag_o = 3'b0;
                     end 
                 endcase
             end
@@ -294,17 +275,14 @@ module ex (
             `INST_TYPE_R_M:begin
                 jump_addr_o = 64'b0;
                 jump_en_o = 1'b0;
-                // flush_flag_o = 3'b0;// 设置初值，防止出现锁存器
-                // stall_flag_o = 3'b0;
                 mem_wen_o = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
-                mem_wmask = 8'b0;
+                mem_wmask_o = 8'b0;
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
-                
-                flush_flag_o = 3'b001; 
-                stall_flag_o = 3'b110;
+                isload_o    = 1'b0;
+                issave_o    = 1'b0;  
                 case (func3)
                     `INST_ADD_SUB_MUL: begin //ADD和SUB的func3相同，func7不同
                         if (func7 == 7'b0000000) begin // add
@@ -401,12 +379,11 @@ module ex (
                 mem_wen_o = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
-                mem_wmask = 8'b0;
+                mem_wmask_o = 8'b0;
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
-                
-                flush_flag_o = 3'b001; 
-                stall_flag_o = 3'b110;
+                isload_o    = 1'b0;
+                issave_o    = 1'b0;  
                 case (func3)
                     `INST_ADDW_SUBW_MULW: begin //ADD和SUB的func3相同，func7不同
                         if (func7 == 7'b0000000) begin // add
@@ -468,11 +445,11 @@ module ex (
                 mem_wen_o = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
-                mem_wmask = 8'b0;
+                mem_wmask_o = 8'b0;
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
-                flush_flag_o = 3'b111;
-                stall_flag_o = 3'b000;
+                isload_o    = 1'b0;
+                issave_o    = 1'b0;  
                 case (func3)
                     `INST_BNE: begin
                         jump_addr_o = base_addr_add_addr_offset;
@@ -515,13 +492,11 @@ module ex (
             `INST_TYPE_L: begin
                 jump_addr_o = 64'b0;
                 jump_en_o   = 1'b0;
-                flush_flag_o = 3'b001;// 设置初值，防止出现锁存器 // 给id_ex NOP此处当作冲刷该级流水线
-                //stall_flag_o = 3'b110; // 流水线延迟用于访存
-                stall_flag_o = 3'b111;
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
-                mem_wmask   = 8'b0;
+                mem_wmask_o   = 8'b0;
+                issave_o    = 1'b0;  
                 case (func3)
                     `INST_LB: begin 
                         mem_ren_o   = 1'b1;
@@ -529,6 +504,7 @@ module ex (
                         // rd_wdata_o = {{56{mem_rdata_i[7]}}, mem_rdata_i[7:0]};
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
+                        isload_o    = 1'b1;
                     end
                     `INST_LH: begin 
                         mem_ren_o   = 1'b1;
@@ -536,6 +512,7 @@ module ex (
                         // rd_wdata_o = {{48{mem_rdata_i[15]}}, mem_rdata_i[15:0]};
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1; 
+                        isload_o    = 1'b1;
                     end
                     `INST_LW: begin
                         mem_ren_o   = 1'b1;
@@ -544,6 +521,7 @@ module ex (
                         // rd_wdata_o = {32'b0, mem_rdata_i[31:0]};  
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
+                        isload_o    = 1'b1;
                         // $display("EX: lw_data = %l", rd_wdata_o);
                     end
                     `INST_LD: begin
@@ -552,6 +530,9 @@ module ex (
                         // rd_wdata_o = {mem_rdata_i[63:0]};
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
+                        // flush_flag_o = 3'b001; // 给id_ex NOP此处当作冲刷该级流水线
+                        // stall_flag_o = 3'b110; // 流水线延迟用于访存
+                        isload_o    = 1'b1;
                         // $display("mem_rdata_i = %x", mem_rdata_i);
                     end
                     `INST_LBU: begin 
@@ -560,6 +541,7 @@ module ex (
                         // rd_wdata_o = {56'b0,mem_rdata_i[7:0]};
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
+                        isload_o    = 1'b1;
                         // $display("here");
                     end
                     `INST_LHU: begin
@@ -568,6 +550,7 @@ module ex (
                         // rd_wdata_o = {48'b0,mem_rdata_i[15:0]};
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
+                        isload_o    = 1'b1;
                     end
                     `INST_LWU: begin
                         mem_ren_o   = 1'b1;
@@ -575,6 +558,7 @@ module ex (
                         // rd_wdata_o = {32'b0,mem_rdata_i[31:0]};
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
+                        isload_o    = 1'b1;
                     end
                     default begin
                         mem_ren_o   = 1'b0;
@@ -582,6 +566,7 @@ module ex (
                         rd_wdata_o  = 64'b0; 
                         rd_waddr_o  = 5'b0;
                         reg_wen_o   = 1'b0;
+                        isload_o    = 1'b0;
                     end
                 endcase
             end
@@ -589,52 +574,44 @@ module ex (
             `INST_TYPE_S: begin
                 jump_addr_o = 64'b0;
                 jump_en_o   = 1'b0;
-                flush_flag_o = 3'b001; // 设置初值，防止出现锁存器
-                //stall_flag_o = 3'b0; // 流水线延迟用于访存
-                stall_flag_o = 3'b110;
                 rd_wdata_o  = 64'b0; 
                 rd_waddr_o  = 5'b0;
                 reg_wen_o   = 1'b0;
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
+                isload_o    = 1'b0;
+                issave_o    = 1'b1;
                 case (func3)
                     `INST_SB: begin
                         mem_wen_o   = 1'b1;
                         mem_waddr_o = base_addr_add_addr_offset;
-                        // mem_wdata_o = op2_i; 
                         mem_wdata_o = {56'b0, op2_i[7:0]}; 
-                        mem_wmask   = 8'b00000001;
-                        // mem_wmask   = 8'b11111111;
-                        // $display("SB: mem_wdata_o = %l", op2_i);
+                        mem_wmask_o   = 8'b00000001;
                     end
                     `INST_SH: begin
                         mem_wen_o   = 1'b1;
                         mem_waddr_o = base_addr_add_addr_offset;
-                        // mem_wdata_o = op2_i;
                         mem_wdata_o = {48'b0, op2_i[15:0]};
-                        mem_wmask   = 8'b00000011;
+                        mem_wmask_o   = 8'b00000011;
                     end
                     `INST_SW: begin
                         mem_wen_o   = 1'b1;
                         mem_waddr_o = base_addr_add_addr_offset;
-                        // mem_wdata_o = op2_i;
                         mem_wdata_o = {32'b0, op2_i[31:0]};
-                        // mem_wdata_o = {op2_i[31:0], 32'b0};
-                        mem_wmask   = 8'b00001111;
-                        //$display("SW: mem_wdata_o = %l", op2_i);
+                        mem_wmask_o   = 8'b00001111;
                     end
                     `INST_SD: begin
                         mem_wen_o   = 1'b1;
                         mem_waddr_o = base_addr_add_addr_offset;
                         mem_wdata_o = op2_i;
-                        mem_wmask   = 8'b11111111;
+                        mem_wmask_o  = 8'b11111111;
                         // 11111111 11111111 11111111 11111111
                     end
                     default begin
                         mem_wen_o   = 1'b0;
                         mem_waddr_o = 64'b0;
                         mem_wdata_o = 64'b0;
-                        mem_wmask   = 8'b00000000;
+                        mem_wmask_o  = 8'b00000000;
                     end
                 endcase
             end
@@ -645,14 +622,16 @@ module ex (
                 reg_wen_o   = 1'b1; 
                 jump_addr_o = base_addr_add_addr_offset; // PC = PC + imm
                 jump_en_o   = 1'b1;
-                flush_flag_o = 3'b011;
-                stall_flag_o = 3'b0;
+                // flush_flag_o = 3'b011;
+                // stall_flag_o = 3'b0;
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
-                mem_wmask   = 8'b0;
+                mem_wmask_o = 8'b0;
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
+                isload_o    = 1'b0;
+                issave_o    = 1'b0;  
                 //$display("here2");
                 //$display("%llx", jump_addr_o );
             end // Jump And Link (PC += imm, rd = PC + 4)
@@ -662,14 +641,16 @@ module ex (
                 reg_wen_o   = 1'b1; 
                 jump_addr_o = base_addr_add_addr_offset; // PC = rs1 + imm
                 jump_en_o   = 1'b1;
-                flush_flag_o = 3'b111;
-                stall_flag_o = 3'b0;
+                // flush_flag_o = 3'b111;
+                // stall_flag_o = 3'b0;
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
-                mem_wmask   = 8'b0;
+                mem_wmask_o  = 8'b0;
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
+                isload_o    = 1'b0;
+                issave_o    = 1'b0;  
             end // Jump And Link Reg (PC = rs1 + imm, rd = PC + 4)		
             `INST_LUI: begin
                 rd_wdata_o  = op2_i; 
@@ -677,14 +658,16 @@ module ex (
                 reg_wen_o   = 1'b1; 
                 jump_addr_o = 64'b0; //不跳转 
                 jump_en_o   = 1'b0;
-                flush_flag_o = 3'b0;
-                stall_flag_o = 3'b0;
+                // flush_flag_o = 3'b001;
+                // stall_flag_o = 3'b110;
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
-                mem_wmask   = 8'b0;
+                mem_wmask_o = 8'b0;
                 mem_ren_o   = 1'b0;
-                mem_raddr_o = 64'b0;      
+                mem_raddr_o = 64'b0;
+                isload_o    = 1'b0;
+                issave_o    = 1'b0;        
             end // Load Upper Imm (rd = imm << 12)
             `INST_AUIPC: begin
                 rd_wdata_o  = op1_i_add_op2_i; 
@@ -692,29 +675,33 @@ module ex (
                 reg_wen_o   = 1'b1; 
                 jump_addr_o = 64'b0; //不跳转 
                 jump_en_o   = 1'b0;
-                flush_flag_o = 3'b001;
-                stall_flag_o = 3'b110;
+                // flush_flag_o = 3'b001;
+                // stall_flag_o = 3'b110;
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
-                mem_wmask   = 8'b0;
+                mem_wmask_o = 8'b0;
                 mem_ren_o   = 1'b0;
-                mem_raddr_o = 64'b0;      
+                mem_raddr_o = 64'b0;
+                isload_o    = 1'b0; 
+                issave_o    = 1'b0;     
             end // Add Upper Imm to PC
             default: begin
                 jump_addr_o = 64'b0;
                 jump_en_o   = 1'b0;
-                flush_flag_o = 3'b0;// 设置初值，防止出现锁存器
-                stall_flag_o = 3'b0;
+                // flush_flag_o = 3'b0;// 设置初值，防止出现锁存器
+                // stall_flag_o = 3'b0;
                 rd_wdata_o  = 64'b0; 
                 rd_waddr_o  = 5'b0;
                 reg_wen_o   = 1'b0;
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
-                mem_wmask   = 8'b0;
+                mem_wmask_o = 8'b0;
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
+                isload_o    = 1'b0; 
+                issave_o    = 1'b0;     
             end 
         endcase
     end

@@ -7,7 +7,7 @@ module regs (
     // from id 
     input  wire[4:0] rs1_raddr_i,    
     input  wire[4:0] rs2_raddr_i,    
-    // to id
+    // to redirect
     output  reg[63:0] rs1_rdata_o,    
     output  reg[63:0] rs2_rdata_o, 
 
@@ -43,6 +43,7 @@ module regs (
         else
             rs2_rdata_o = regs[rs2_raddr_i];
     end // 读取rs2
+
 /* 打拍版回写
     always @(posedge clk) begin
         if (rst == 1'b0) begin

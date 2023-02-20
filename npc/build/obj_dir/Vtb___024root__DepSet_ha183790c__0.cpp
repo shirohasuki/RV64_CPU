@@ -13,12 +13,11 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__0(Vtb___024root* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtb___024root___combo__TOP__0\n"); );
     // Body
     if ((1U & (~ (IData)(vlSelf->rst)))) {
-        vlSelf->tb__DOT__soc_inst__DOT__riscv_inst__DOT__regs_inst__DOT__unnamedblk1__DOT__i = 0x20U;
+        vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__regs_inst__DOT__unnamedblk1__DOT__i = 0x20U;
     }
 }
 
 void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf);
-void Vtb___024root___sequent__TOP__1(Vtb___024root* vlSelf);
 void Vtb___024root___combo__TOP__1(Vtb___024root* vlSelf);
 
 void Vtb___024root___eval(Vtb___024root* vlSelf) {
@@ -31,9 +30,6 @@ void Vtb___024root___eval(Vtb___024root* vlSelf) {
     if (((IData)(vlSelf->clk) & (~ (IData)(vlSelf->__Vclklast__TOP__clk)))) {
         Vtb___024root___sequent__TOP__0(vlSelf);
         vlSelf->__Vm_traceActivity[2U] = 1U;
-    }
-    if (((~ (IData)(vlSelf->clk)) & (IData)(vlSelf->__Vclklast__TOP__clk))) {
-        Vtb___024root___sequent__TOP__1(vlSelf);
     }
     Vtb___024root___combo__TOP__1(vlSelf);
     // Final

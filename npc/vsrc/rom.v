@@ -1,17 +1,50 @@
-module rom (
-    input  wire[63:0] inst_addr_i,
-    output reg[63:0]  inst_o
-);
-    
-    reg[63:0] rom_mem[0:4095]; // 4096个64b的空间,深度为4096
+// module rom (
+//     input clk,
+//     input rst,
 
-    always @(*) begin
-        inst_o = rom_mem[inst_addr_i[13:2]]; // inst_addr_i除以8
-        // $display("%b, %d", inst_o, inst_addr_i >> 2);
-        // $display("%b, %d", inst_o, inst_addr_i[13:2]);
-    end
+//     input  wire[63:0] inst_addr_i,
+//     output reg[63:0]  inst_o,
     
-endmodule
+//     output  wire[63:0] mem_rdata_o,
+//     input   reg[63:0]  mem_raddr_i,
+
+//     input wire          mem_w_cs, 
+//     input wire[63:0]    mem_waddr_i,
+//     input wire[63:0]    mem_wdata_i
+// );
+    
+//     reg[63:0] rom_mem[0:4095]; // 4096个64b的空间,深度为4096
+
+//     always @(*) begin
+//         inst_o = rom_mem[inst_addr_i[13:2]]; // inst_addr_i除以8
+//         // $display("%b, %d", inst_o, inst_addr_i >> 2);
+//         // $display("%b, %d", inst_o, inst_addr_i[13:2]);
+//         mem_rdata_o = rom_mem[mem_raddr_i[13:2]];
+
+//     end
+
+//     always @(posedge clk) begin
+//         if (mem_w_cs == 1'b0) begin
+//             rom_mem[mem_waddr_i[13:2]] <= mem_wdata_i;
+//         end // mem写rom片选有效
+//         else begin
+//             rom_mem[mem_waddr_i[13:2]] <= rom_mem[mem_waddr_i[13:2]];
+//         end
+//     end
+
+//     always @(*) begin
+//             // $display("======= rom list ==========");
+//         // for (integer i = 0; i < 4095; i++) begin
+//         //     if (rom_mem[i] != 'b0) begin
+//         //         $display("rom[%4d] | %8x", i, rom_mem[i]);
+//         //     end
+//         // end
+//         // $display("===========================");
+//     end
+        
+
+    
+// endmodule
 
 // module rom(
 //     input wire[31:0] inst_addr_i,

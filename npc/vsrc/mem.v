@@ -37,8 +37,9 @@
     
 import "DPI-C" function void pmem_read( input longint raddr, output longint rdata);
 import "DPI-C" function void pmem_write( input longint waddr, input longint wdata, input byte mask);
-import "DPI-C" function void get_pc(input longint pc);
+// import "DPI-C" function void get_pc(input longint pc);
 
+// `define pmem_rw
 
 module mem (
     input               clk,
@@ -49,9 +50,10 @@ module mem (
     input reg[63:0]     inst_addr_i, // 用于验证每级传递的pc
     output reg[63:0]    inst_addr_o, // 用于验证每级传递的pc
 
-    //from ex_mem
-    input reg[2:0]      stall_flag_i,
-    input reg[2:0]      flush_flag_i,
+    // from ex_mem
+    // input reg[2:0]      stall_flag_i,
+    // input reg[2:0]      flush_flag_i,
+    input reg           axi_busy_i,
 
     input               ren_i,
     input               wen_i,
@@ -66,14 +68,29 @@ module mem (
     input reg[4:0]      rd_waddr_i,
     input reg           reg_wen_i,  // to wb
 
+    // to ram(测试)
+    output reg[63:0]    ram_wdata_o,
+    output reg[63:0]    ram_waddr_o,
+    output reg[63:0]    ram_wmask_o,
+
+    output reg[63:0]    ram_raddr_o,
+    input  reg[63:0]    ram_rdata_i, 
+
+    output              ram_ren_o,
+    output              ram_wen_o,
+
     // to mem_wb
     output reg[63:0]    rd_wdata_o,
     output reg[4:0]     rd_waddr_o,
     output reg          reg_wen_o,  // to wb
 
     // to ctrl 
-    output reg[2:0]     stall_flag_o,
-    output reg[2:0]     flush_flag_o
+    input reg              isload_i,
+    output reg             isload_o,
+    input reg              issave_i,
+    output reg             issave_o
+    // output reg[2:0]     stall_flag_o,
+    // output reg[2:0]     flush_flag_o
 );
 
     wire[6:0] opcode; // 7byte (6~0)
@@ -91,19 +108,23 @@ module mem (
 
 
     assign inst_addr_o = inst_addr_i;
-    assign reg_wen_o  = reg_wen_i;
     assign rd_waddr_o = rd_waddr_i;
     assign rd_wdata_o = rd_wdata_i;
+    assign reg_wen_o  = reg_wen_i;
 
-    assign stall_flag_o = stall_flag_i; // 再给ctrl一个周期的stall信号
-    assign flush_flag_o = flush_flag_i; // 再给ctrl一个周期的stall信号
+    assign isload_o = isload_i;
+    assign issave_o = issave_i;
 
-    always @(negedge clk ) begin
-        get_pc(inst_addr_i);
-    end
+    // always @(negedge clk ) begin
+    //     get_pc(inst_addr_i);
+    // end
 
-    always @(*) begin
-        // if (ren || rst == 1'b1 || hold_flag_i == 1'b0) pmem_read(raddr, rdata);
+    assign ram_ren_o = ren_i & ~axi_busy_i; // 防止再次读取
+    assign ram_wen_o = wen_i & ~axi_busy_i;
+// TODO：再次读取问题处理的可能有隐患
+
+`ifdef pmem_rw
+    always @(posedge clk) begin
         if (ren_i) pmem_read(raddr_i, rdata_o); 
         else rdata_o = 64'b0;
 
@@ -112,9 +133,13 @@ module mem (
         if ((ren_i && wen_i) && (raddr_i == waddr_i)) begin
             rdata_o = wdata_i;  // 处理读写冲突
         end
-        //if (ren && wen) $display("nb");
     end
+`endif
 
+    assign ram_raddr_o = ren_i ? raddr_i : 64'b0;
+    assign rdata_o     = ren_i ? ram_rdata_i : 64'b0;
+    assign ram_wdata_o = wen_i ? wdata_i : 64'b0;
+    assign ram_waddr_o = wen_i ? waddr_i : 64'b0;
 
     always @(*) begin
         if (ren_i == 1'b0) begin
@@ -158,16 +183,15 @@ module mem (
     end
 
 
-    // always @(posedge clk) begin
-    //     // if (ren || rst == 1'b1 || hold_flag_i == 1'b0) pmem_read(raddr, rdata);
-    //     if (ren_i) pmem_read(raddr_i, rdata_o); 
-    //     else rdata_o = 64'b0;
+    always @(*) begin
+        case (wmask_i) 
+            8'b00000001: ram_wmask_o  = 64'h0000_0000_0000_00ff;
+            8'b00000011: ram_wmask_o  = 64'h0000_0000_0000_ffff;
+            8'b00001111: ram_wmask_o  = 64'h0000_0000_ffff_ffff;
+            8'b11111111: ram_wmask_o  = 64'hffff_ffff_ffff_ffff;
+            default begin ram_wmask_o = 64'h0; end
+        endcase
+    end
 
-    //     if (wen_i) pmem_write(waddr_i, wdata_i, wmask_i);
 
-    //     if ((ren_i && wen_i) && (raddr_i == waddr_i)) begin
-    //         rdata_o = wdata_i;  // 处理读写冲突
-    //     end
-    //     //if (ren && wen) $display("nb");
-    // end
 endmodule

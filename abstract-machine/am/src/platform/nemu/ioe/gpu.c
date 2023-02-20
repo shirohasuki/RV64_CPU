@@ -22,16 +22,17 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
         .width = width, .height = height,
         .vmemsz = width * height * sizeof(uint32_t)
     };
-    uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
-    for (int i = 0; i < width * height; i ++) fb[i] = i;
-    outl(SYNC_ADDR, 1);
 }
 // AM显示控制器信息, 可读出屏幕大小信息width和height
 
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
-  if (ctl->sync) {
-    outl(SYNC_ADDR, 1);
-  }
+    int height = inw(VGACTL_ADDR);
+    int width = inw(VGACTL_ADDR + 2);
+    if (ctl->sync) {
+        uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
+        for (int i = 0; i < width * height; i ++) fb[i] = i;
+        outl(SYNC_ADDR, 1);
+    }
 }
 // AM帧缓冲控制器, 可写入绘图信息, 向屏幕(x, y)坐标处绘制w*h的矩形图像. 
 // 图像像素按行优先方式存储在pixels中, 每个像素用32位整数以00RRGGBB的方式描述颜色. 

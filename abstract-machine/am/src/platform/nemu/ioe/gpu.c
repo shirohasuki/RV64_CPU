@@ -15,12 +15,12 @@ void __am_gpu_init() {
 }
 
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
-    int height = inw(VGACTL_ADDR);
-    int width = inw(VGACTL_ADDR + 2);
+    // int height = inw(VGACTL_ADDR);
+    // int width = inw(VGACTL_ADDR + 2);
     *cfg = (AM_GPU_CONFIG_T) {
         .present = true, .has_accel = false,
-        .width = width, .height = height,
-        .vmemsz = width * height * sizeof(uint32_t)
+        .width = 0, .height = 0,
+        .vmemsz = 0//width * height * sizeof(uint32_t)
     };
 }
 // AM显示控制器信息, 可读出屏幕大小信息width和height

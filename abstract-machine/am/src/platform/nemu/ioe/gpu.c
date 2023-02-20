@@ -26,15 +26,16 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 // AM显示控制器信息, 可读出屏幕大小信息width和height
 
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
-    int height = inw(VGACTL_ADDR);
+    // int height = inw(VGACTL_ADDR);
     int width = inw(VGACTL_ADDR + 2);
-    if (ctl->sync) {
-        uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
-        for (int i = 0; i < width; i ++) {
-            for (int j = 0; j < height; j++) {
-                fb[i] = i;
-            }
+    // uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
+    for (int i = 0; i < ctl->w; i ++) {
+        for (int j = 0; j < ctl->h; j++) {
+            // outl(FB_ADDR, 1);
+            outl(FB_ADDR + (width * (ctl->y + i) + (ctl->x + j)) * sizeof(uint32_t), ((uint32_t*)ctl->pixels)[i * ctl->w + j]);
         }
+    }
+    if (ctl->sync) {
         outl(SYNC_ADDR, 1);
     }
 }

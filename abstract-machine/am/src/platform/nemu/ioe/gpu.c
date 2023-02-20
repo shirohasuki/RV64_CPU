@@ -30,7 +30,11 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
     int width = inw(VGACTL_ADDR + 2);
     if (ctl->sync) {
         uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
-        for (int i = 0; i < width * height; i ++) fb[i] = i;
+        for (int i = 0; i < width; i ++) {
+            for (int j = 0; j < height; j++) {
+                fb[i] = i;
+            }
+        }
         outl(SYNC_ADDR, 1);
     }
 }

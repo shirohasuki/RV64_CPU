@@ -96,36 +96,6 @@ static int cmd_help(char *args) {
   return 0;
 }
 
-// static int cmd_x(char *args) {
-//   if (args == NULL) {
-//     printf("No parameters\n");
-//     return 0;
-//   }
-//   int count = atoi(strtok(NULL, " "));
-//   if (count==0) {
-//     printf("Wrong parameter1\n");
-//     return 0;
-//   }
-//   char* EXPR_BUFFER = strtok(NULL, " ");
-//   if (EXPR_BUFFER==NULL) {
-//     printf("Wrong parameter2\n");
-//     return 0;
-//   }
-//   int EXPR = strtol(EXPR_BUFFER,NULL,16);
-//   if (EXPR==0) {
-//     printf("Wrong parameter2\n");
-//     return 0;
-//   }
-//   if(strtok(NULL, " ")!=NULL) {
-//     printf("Too many parameters\n");
-//     return 0;
-//   }
-
-//   for(int i = 0; i < count; i++) {
-//     printf("0x%x:    0x%lx\n", EXPR+i*5, paddr_read(EXPR+i*4, 4));
-//   }
-//   return 0;
-// }
 static int cmd_x(char *args) {
   /* extract the first argument */
   char *arg = strtok(NULL, " ");
@@ -147,8 +117,6 @@ static int cmd_x(char *args) {
   return 0;
 }
 
-
-
 static int cmd_si(char *args) {
     if(args == NULL) {
         cpu_exec(1);
@@ -167,27 +135,6 @@ static int cmd_si(char *args) {
     return 0;
 }
 
-// static int cmd_info(char *args) {
-//     if (args == NULL) {
-//         printf("Please input the info r/w\n");
-//         return 0;
-//     }
-//     char *arg = strtok(NULL, " ");
-//     if (strtok(NULL, " ")!=NULL) {
-//         printf("Too many parameters\n");
-//         return 0;
-//     }
-//     if (strcmp(arg, "r") == 0) {
-//         isa_reg_display();
-//     }
-//     else if (strcmp(arg, "w") == 0) {
-//         print_w_list();
-//     }
-//     else {
-//         printf("Info is imperfect\n");
-//     }
-//     return 0;
-// }
 
 static int cmd_info(char *args) {
   /* extract the first argument */
@@ -211,22 +158,6 @@ static int cmd_confession(char *args) {
     return 0;
 }
 
-// static int cmd_p(char *args) {
-//     if (args == NULL) {
-//         printf("No parameters\n");
-//         return 0;
-//     }
-//     bool success = true;
-//     int num = expr(args, &success);
-//     if (success == false) {
-//         printf("Wrong expression\n");
-//         return 0;
-//     } else {
-//         printf("0x%x or %dD\n", num, num);
-//         return 0;
-//     }
-// }
-
 static int cmd_p(char *args) {
   bool success = true;
   /* calculate expression */
@@ -239,15 +170,6 @@ static int cmd_p(char *args) {
   return 0;
 }
 
-// static int cmd_w(char *args) {
-//     make_a_new_w(args); 
-//     return 0;
-// }
-
-// static int cmd_d(char *args) {
-//     delete_a_w(atoi(args));
-//     return 0;
-// }
 
 static int cmd_w(char *args) {
 	watchpoints_add(args);

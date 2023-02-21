@@ -12,11 +12,6 @@
 // difftest
 #include <dlfcn.h>
 
-// #include "macro.h"
-// #include "common.h"
-// #include "typedef.h"
-// #include "ioe.h"
-
 // ================ Typedef ===============
 typedef long long ll;
 typedef uint32_t paddr_t;

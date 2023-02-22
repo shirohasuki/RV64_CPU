@@ -50,6 +50,6 @@ void do_syscall(Context *c) {
 
 
 void sys_yield(Context *c){
-  yield();    // yield by am.
-  c->GPRx = 0;
+    yield();    // yield by am.
+    c->GPRx = 0;
 }

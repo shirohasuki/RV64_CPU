@@ -139,6 +139,7 @@ static int decode_exec(Decode *s) {
     INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw , I, word_t t = csr(src2); csr(src2) = src1; R(dest) = t);
     INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall , I, s->dnpc = isa_raise_intr(R(17), s->pc)); // R(17) is $a7
     INSTPAT("0011000 00010 00000 000 00000 11100 11", mret  , R, s->dnpc = csrval(mepc) + 4);
+    
 
     // J-Type       
     INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, R(dest) = s->pc + 4, s->dnpc = s->pc + src1);                         // jal:跳转并链接，把 pc 设置成当前值+偏移值，然后将 pc+4 当做下一条指令的地址存入 rd 中

@@ -2,6 +2,7 @@
 #include "syscall.h"
 
 void sys_yield(Context *c);
+void sys_exit(Context *c);
 
 void do_syscall(Context *c) {
     uintptr_t type = c->GPR1; // mcause
@@ -11,7 +12,7 @@ void do_syscall(Context *c) {
 #endif 
 
     switch (type) {
-        // case SYS_exit         : sys_exit(c);          break;
+        case SYS_exit         : sys_exit(c);          break;
         case SYS_yield        : sys_yield(c);         break;
         // case SYS_open         : sys_open(c);          break;
         // case SYS_read         : sys_read(c);          break;
@@ -52,4 +53,9 @@ void do_syscall(Context *c) {
 void sys_yield(Context *c){
     yield();    // yield by am.
     c->GPRx = 0;
+}
+
+void sys_exit(Context *c){
+    halt(0);
+//   naive_uload(NULL,"/bin/nterm");
 }

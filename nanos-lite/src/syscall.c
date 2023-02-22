@@ -4,7 +4,7 @@
 void sys_yield(Context *c);
 
 void do_syscall(Context *c) {
-    uintptr_t type = c->GPR1;
+    uintptr_t type = c->GPR1; // mcause
 
 #ifdef STRACE
     uintptr_t a[3]={c->GPR2,c->GPR3,c->GPR4};

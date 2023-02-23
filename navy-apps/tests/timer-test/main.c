@@ -3,6 +3,7 @@
 
 int main() {
     int i=0;
+    printf("RTC begin\n");
     while(NDL_GetTicks()/500){
         printf("%d time has gone 0.5s\n",i);
         i++;

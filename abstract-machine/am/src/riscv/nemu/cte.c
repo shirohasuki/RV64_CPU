@@ -11,7 +11,7 @@ Context* __am_irq_handle(Context *c) {
         case -1: ev.event = EVENT_YIELD; break;   // yield
         case  0: ev.event = EVENT_SYSCALL; break; // exit
         case  1: ev.event = EVENT_SYSCALL; break; // yield
-        case  4: printf("here1"); ev.event = EVENT_SYSCALL; break; // write
+        case  4: ev.event = EVENT_SYSCALL; break; // write
         default: ev.event = EVENT_ERROR; break;
     }
     // printf("mcause=%d\n", c->mcause);

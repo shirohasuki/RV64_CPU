@@ -15,9 +15,7 @@ void sys_lseek(Context *c);
 void sys_brk(Context *c);
 
 void do_syscall(Context *c) {
-    printf("here");
     uintptr_t type = c->GPR1; // mcause
-    printf("strace detect syscall: %d, ", type);
 // #ifdef STRACE
     // uintptr_t a[3];
     // a[0] = c->GPR2;
@@ -49,9 +47,9 @@ void do_syscall(Context *c) {
         default: panic("Unhandled syscall ID = %d", type);
     }
 
-// #ifdef CONFIG_STRACE
-    // printf("strace detect syscall: %s, ", type);
-// #endif
+#ifdef STRACE
+    printf("strace detect syscall: %d, ", type);
+#endif
 // #ifdef STRACE
 //     char* getFinfoName(int i);
 //     if(type == SYS_open|| type == SYS_read || type == SYS_write || type == SYS_close || type == SYS_lseek){

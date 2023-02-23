@@ -1,8 +1,6 @@
 #include <proc.h>
 #include <elf.h>
-#include <stdio.h>
 #include "fs.h"
-
 
 #ifdef __LP64__
 # define Elf_Ehdr Elf64_Ehdr
@@ -30,8 +28,8 @@ size_t get_ramdisk_size();
 
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
-    // ramdisk version
-    // // ELF Header
+    // Ramdisk version 
+    // ELF Header
     // Elf_Ehdr *elf = (Elf_Ehdr*)malloc(sizeof(Elf_Ehdr));
     // ramdisk_read(elf, 0, sizeof(Elf_Ehdr));
     // // Check ELF magic number
@@ -50,8 +48,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     //     memset((char*)phdr[i].p_vaddr + phdr[i].p_filesz, 0, phdr[i].p_memsz - phdr[i].p_filesz);
     // }
     // return elf->e_entry;
-
-  // 1. open elf files, get file id:
+      // 1. open elf files, get file id:
   int fd = fs_open(filename,0,0);
 
   // 2. read elf head:
@@ -86,7 +83,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 
 void naive_uload(PCB *pcb, const char *filename) {
   uintptr_t entry = loader(pcb, filename);
-  Log("Jump to entry = %lx", entry);
+  Log("Jump to entry = %p", entry);
   ((void(*)())entry) ();
 }
 

@@ -26,7 +26,7 @@ void do_syscall(Context *c) {
 
     switch (type) {
         case SYS_exit         : sys_exit(c);          break;
-        case SYS_yield        : sys_yield(c);printf("here");         break;
+        case SYS_yield        : {sys_yield(c);printf("here");}         break;
         case SYS_open         : sys_open(c);          break;
         case SYS_read         : sys_read(c);          break;
         case SYS_write        : sys_write(c);         break;

@@ -7,7 +7,7 @@ int main() {
     printf("%d\n", NDL_GetTicks());
     printf("%d\n", NDL_GetTicks());
     while(1){
-    if(NDL_GetTicks()/50000){
+    if(NDL_GetTicks()%500){
         printf("%d time has gone 0.5s\n",i);
         i++;
     }

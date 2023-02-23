@@ -72,8 +72,8 @@ void sys_yield(Context *c) {
 }
 
 void sys_exit(Context *c) {
-    halt(0);
-//   naive_uload(NULL,"/bin/nterm");
+    halt(c->GPR2);
+    // naive_uload(NULL,"/bin/hello");
 }
 
 // void sys_write(Context *c) {

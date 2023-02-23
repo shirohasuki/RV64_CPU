@@ -51,7 +51,7 @@ void init_fs() {
 }
 
 char* getFinfoName(int i){
-  return file_table[i].name;
+    return file_table[i].name;
 }
 
 #define TABLE_LEN (int)(sizeof(file_table) / sizeof(Finfo))
@@ -59,31 +59,31 @@ char* getFinfoName(int i){
 size_t open_offset = 0;
 
 int fs_open(const char *pathname, int flags, int mode){
-  for(int i=0; i<TABLE_LEN; i++) {
-    if(strcmp(file_table[i].name,pathname)==0){
-      open_offset = 0;
-      return i;
+    for(int i=0; i<TABLE_LEN; i++) {
+        if(strcmp(file_table[i].name,pathname)==0){
+            open_offset = 0;
+        return i;
+        }
     }
-  }
-  return -1;
+    return -1;
 }
 
 size_t fs_read(int fd, void *buf, size_t len){
-  if(file_table[fd].read != NULL){
-    return (file_table[fd].read)(buf,0,len);
-  }
-  else{
-    size_t f_size = file_table[fd].size;
-    if(open_offset >= f_size){
-      return -1;
+    if(file_table[fd].read != NULL){
+        return (file_table[fd].read)(buf,0,len);
     }
-    if(open_offset + len > f_size){
-      len = f_size - open_offset;
+    else{
+        size_t f_size = file_table[fd].size;
+        if(open_offset >= f_size){
+            return -1;
+        }
+        if(open_offset + len > f_size){
+            len = f_size - open_offset;
+        }
+        ramdisk_read(buf, file_table[fd].disk_offset + open_offset, len);
+        open_offset = open_offset + len;
+        return len;
     }
-    ramdisk_read(buf, file_table[fd].disk_offset + open_offset, len);
-    open_offset = open_offset + len;
-    return len;
-  }
 }
 
 size_t fs_write(int fd, const void *buf, size_t len){

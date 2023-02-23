@@ -15,11 +15,11 @@ static const char *keyname[256] __attribute__((used)) = {
 };
 
 size_t serial_write(const void *buf, size_t offset, size_t len) {
-  int i = 0;
-  for(i=0; i<len; i++){
-    putch(*((uint8_t*)buf+i));
-  }
-  return i;
+    int i = 0;
+    for(i=0; i<len; i++){
+        putch(*((uint8_t*)buf+i));
+    }
+    return i;
 }
 
 size_t events_read(void *buf, size_t offset, size_t len) {
@@ -31,8 +31,6 @@ size_t events_read(void *buf, size_t offset, size_t len) {
     switch(key.keydown){
       case 0:  snprintf((char *)buf,len,"ku %2d %s\n",key.keycode,keyname[key.keycode]); break;
       case 1:  snprintf((char *)buf,len,"kd %2d %s\n",key.keycode,keyname[key.keycode]); break;
-      // case 0:  snprintf((char *)buf,len,"ku %s\n",keyname[key.keycode]); break; // last version, no kecode, only keyname.
-      // case 1:  snprintf((char *)buf,len,"kd %s\n",keyname[key.keycode]); break; // last version, no kecode, only keyname.
     }
     return len;
   }
@@ -53,15 +51,7 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
   ctl.pixels = (void *)buf;
   ctl.sync = true;
 
-  // there 2 method to support gpu, check fs.c init_fs() and navy-apps/libs/libndl/NDL.c: NDL_DrawRect() to match.
-
-  // method 1: only write w for one time, and use loop to finish all, slow but support native.
-  // ctl.x = (offset/4) % dispinfo.width;
-  // ctl.y = (offset/4) / dispinfo.width;
-  // ctl.w = len/4;
-  // ctl.h = 1;
-
-  // method 2: use high 32bit to store w, low 32bit to store h. fast but not support native!
+  //  use high 32bit to store w, low 32bit to store h. fast but not support native!
   ctl.x = offset % dispinfo.width;
   ctl.y = offset / dispinfo.width;
   ctl.w = len >> 32;                // high 32bit.

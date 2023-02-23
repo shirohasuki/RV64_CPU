@@ -8,7 +8,7 @@ int main() {
     printf("RTC begin\n");
     while(1){
         t2 = NDL_GetTicks();
-        if (t2 - t1  >= 0) {
+        if (t2 - t1  >= 500) {
             printf("%d time has gone 0.5s\n",i);
             i++;
             t1 = t2;

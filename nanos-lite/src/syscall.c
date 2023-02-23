@@ -66,6 +66,7 @@ void do_syscall(Context *c) {
 }
 
 void sys_yield(Context *c) {
+    printf("here\n");
     yield();    // yield by am.
     c->GPRx = 0;
 }

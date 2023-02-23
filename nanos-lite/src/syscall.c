@@ -17,7 +17,7 @@ void sys_brk(Context *c);
 void do_syscall(Context *c) {
     printf("here");
     uintptr_t type = c->GPR1; // mcause
-
+    printf("strace detect syscall: %s, ", type);
 // #ifdef STRACE
     // uintptr_t a[3];
     // a[0] = c->GPR2;

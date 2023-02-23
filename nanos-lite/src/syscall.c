@@ -28,12 +28,12 @@ void do_syscall(Context *c) {
         case SYS_yield        : sys_yield(c);         break;
         case SYS_open         : sys_open(c);          break;
         case SYS_read         : sys_read(c);          break;
-        case SYS_write        : sys_write(c);      printf("here\n");       break;
+        case SYS_write        : sys_write(c);         break;
         // case SYS_kill         :                       break;
         // case SYS_getpid       :                       break;
         case SYS_close        : sys_close(c);         break;
         case SYS_lseek        : sys_lseek(c);         break;
-        case SYS_brk          : sys_brk(c);       printf("here\n");        break;
+        case SYS_brk          : sys_brk(c);           break;
         // case SYS_fstat        :                       break;
         // case SYS_time         :                       break;
         // case SYS_signal       :                       break;
@@ -48,7 +48,7 @@ void do_syscall(Context *c) {
     }
 
 #ifdef STRACE
-    printf("strace detect syscall: %d\n", type);
+    printf("strace detect syscall: %d %d\n", type, SYS_brk);
 #endif
 // #ifdef STRACE
 //     char* getFinfoName(int i);

@@ -4,10 +4,12 @@
 int main() {
     int i=0;
     printf("RTC begin\n");
-    printf("%d", NDL_GetTicks());
+    printf("%d\n", NDL_GetTicks());
+    printf("%d\n", NDL_GetTicks());
     while(NDL_GetTicks()/500){
         printf("%d time has gone 0.5s\n",i);
         i++;
     }
+    printf("%d\n", NDL_GetTicks());
     return 0;
 }

@@ -10,7 +10,6 @@ static Context* do_event(Event e, Context* c) {
        case EVENT_ERROR: panic("irq event error.\n"); break;
        default: panic("Unhandled event ID = %d", e.event); break;
      }
-
     return c;
 }
 

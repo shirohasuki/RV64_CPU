@@ -11,6 +11,7 @@ Context* __am_irq_handle(Context *c) {
         case -1: ev.event = EVENT_YIELD; break;   // yield
         case  0: ev.event = EVENT_SYSCALL; break; // exit
         case  1: ev.event = EVENT_SYSCALL; break; // yield
+        case  2: ev.event = EVENT_SYSCALL; break; // open
         case  4: ev.event = EVENT_SYSCALL; break; // write
         case  9: ev.event = EVENT_SYSCALL; break; // brk
         default: ev.event = EVENT_ERROR; break;

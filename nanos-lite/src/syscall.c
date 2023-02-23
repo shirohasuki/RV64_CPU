@@ -97,17 +97,7 @@ void sys_read(Context *c){
 }
 
 void sys_write(Context *c){
-      printf("[Strace - do_syscall] SYS_write\n");
-      if (c->GPR2 == 1 || c->GPR2 == 2) {
-        for (int i = 0; i < c->GPR4; ++i) {
-          putch(*(char*)(c->GPR3 + i));
-        }
-        c->GPRx = c->GPR4;
-      } else if (c->GPR2 != 0) {
-        c->GPRx = fs_write(c->GPR2, (void *)c->GPR3, c->GPR4);
-      } else c->GPRx = -1;
-    //   break;
-    // c->GPRx = fs_write(c->GPR2,(void *)c->GPR3,c->GPR4);
+    c->GPRx = fs_write(c->GPR2,(void *)c->GPR3,c->GPR4);
 }
 
 void sys_close(Context *c){

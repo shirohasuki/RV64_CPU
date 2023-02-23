@@ -15,6 +15,7 @@ void sys_lseek(Context *c);
 void sys_brk(Context *c);
 
 void do_syscall(Context *c) {
+    printf("here");
     uintptr_t type = c->GPR1; // mcause
 
 // #ifdef STRACE
@@ -67,9 +68,7 @@ void do_syscall(Context *c) {
 }
 
 void sys_yield(Context *c) {
-    printf("here");
     yield();    // yield by am.
-    printf("here");
     c->GPRx = 0;
 }
 

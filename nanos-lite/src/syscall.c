@@ -3,7 +3,7 @@
 #include <fs.h>
 
 
-#define STRACE 1
+// #define STRACE 1
 
 void sys_exit(Context *c);
 void sys_yield(Context *c);

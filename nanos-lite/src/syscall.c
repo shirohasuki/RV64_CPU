@@ -41,7 +41,7 @@ void do_syscall(Context *c) {
     }
 
 // #ifdef STRACE
-    printf("strace detect syscall: %s, ", type);
+    // printf("strace detect syscall: %s, ", type);
 // // printf("here");
 //     char* getFinfoName(int i);
 //     if(type == SYS_open|| type == SYS_read || type == SYS_write || type == SYS_close || type == SYS_lseek){

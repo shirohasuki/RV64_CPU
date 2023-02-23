@@ -13,6 +13,7 @@ void sys_write(Context *c);
 void sys_close(Context *c);
 void sys_lseek(Context *c);
 void sys_brk(Context *c);
+void sys_gettimeofday(Context *c);
 
 void do_syscall(Context *c) {
     uintptr_t type = c->GPR1; // mcause
@@ -41,7 +42,7 @@ void do_syscall(Context *c) {
         // case SYS_unlink       :                       break;
         // case SYS_wait         :                       break;
         // case SYS_times        :                       break;
-        // case SYS_gettimeofday : sys_gettimeofday(c);  break;
+        case SYS_gettimeofday : sys_gettimeofday(c);  break;
         default: panic("Unhandled syscall ID = %d", type);
     }
 
@@ -108,6 +109,10 @@ void sys_lseek(Context *c){
     c->GPRx = fs_lseek(c->GPR2,c->GPR3,c->GPR4);
 }
 
+void sys_gettimeofday(Context *c){
+  AM_TIMER_UPTIME_T uptime = io_read(AM_TIMER_UPTIME);
+  c->GPRx = uptime.us;
+}
 
 // #ifdef STRACE
 // char* get_syscall_name(uintptr_t type){

@@ -87,22 +87,23 @@ size_t fs_read(int fd, void *buf, size_t len){
 }
 
 size_t fs_write(int fd, const void *buf, size_t len){
-printf("here");
-  if(file_table[fd].write != NULL){
-    return (file_table[fd].write)(buf,open_offset,len);
-  }
-  else{
-    size_t f_size = file_table[fd].size;
-    if(open_offset >= f_size){
-      return -1;
+    printf("here\n");
+    if(file_table[fd].write != NULL){
+        return (file_table[fd].write)(buf,open_offset,len);
     }
-    if(open_offset + len > f_size){
-      len = f_size - open_offset;
+    else{
+        size_t f_size = file_table[fd].size;
+        if(open_offset >= f_size){
+            return -1;
+        }
+        if(open_offset + len > f_size){
+            len = f_size - open_offset;
+        }
+        ramdisk_write(buf, file_table[fd].disk_offset + open_offset, len);
+        open_offset = open_offset + len;
+        printf("here\n");
+        return len;
     }
-    ramdisk_write(buf, file_table[fd].disk_offset + open_offset, len);
-    open_offset = open_offset + len;
-    return len;
-  }
 }
 
 size_t fs_lseek(int fd, size_t offset, int whence){

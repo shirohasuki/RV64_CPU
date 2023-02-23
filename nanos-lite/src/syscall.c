@@ -66,7 +66,7 @@ void do_syscall(Context *c) {
 }
 
 void sys_yield(Context *c) {
-    printf("here\n");
+    // printf("here\n");
     yield();    // yield by am.
     c->GPRx = 0;
 }
@@ -86,7 +86,7 @@ void sys_exit(Context *c) {
 // } 
 
 void sys_brk(Context *c){
-    printf("here\n");
+    // printf("here\n");
     c->GPRx = 0;
 }
 

@@ -151,20 +151,29 @@ config IRINGBUF
 	default y
 
 config MTRACE
-    depends on TRACE && ENGINE_INTERPRETER
+    # depends on TRACE && ENGINE_INTERPRETER
     bool "Enable memory tracer(MTRACE)"
     default n
   
 config FTRACE
-    depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
-    bool "Enable function tracer(FTRACE)"
+    # depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
+    bool "Enable Function tracer(FTRACE)"
     default n
     
 config DTRACE
-    depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
-    bool "Enable function tracer(DTRACE)"
+    # depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
+    bool "Enable Device tracer(DTRACE)"
     default n
 
+config ETRACE
+    # depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
+    bool "Enabl exception tracer(ETRACE)"
+    default n
+
+config STRACE
+    # depends on TRACE && TARGET_NATIVE_ELF && ENGINE_INTERPRETER
+    bool "Enable System tracer(STRACE)"
+    default n
 
 config DIFFTEST
   depends on TARGET_NATIVE_ELF

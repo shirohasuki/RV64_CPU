@@ -80,6 +80,7 @@ void sys_brk(Context *c){
 
 #ifdef STRACE
 char* get_syscall_name(uintptr_t type){
+    printf("here");
     static char SyscallInfo[20];
     switch (type) {
         case SYS_exit         : strcpy(SyscallInfo,"sys_exit");         break;

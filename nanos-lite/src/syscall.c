@@ -3,20 +3,24 @@
 
 void sys_yield(Context *c);
 void sys_exit(Context *c);
+void sys_write(Context *c);
 
 void do_syscall(Context *c) {
     uintptr_t type = c->GPR1; // mcause
 
-#ifdef STRACE
-    uintptr_t a[3]={c->GPR2,c->GPR3,c->GPR4};
-#endif 
+// #ifdef STRACE
+    // uintptr_t a[3];
+    // a[0] = c->GPR2;
+    // a[1] = c->GPR3;
+    // a[2] = c->GPR4;
+// #endif 
 
     switch (type) {
         case SYS_exit         : sys_exit(c);          break;
         case SYS_yield        : sys_yield(c);         break;
         // case SYS_open         : sys_open(c);          break;
         // case SYS_read         : sys_read(c);          break;
-        // case SYS_write        : sys_write(c);         break;
+        case SYS_write        : sys_write(c);         break;
         // case SYS_kill         :                       break;
         // case SYS_getpid       :                       break;
         // case SYS_close        : sys_close(c);         break;
@@ -49,13 +53,21 @@ void do_syscall(Context *c) {
 
 }
 
-
-void sys_yield(Context *c){
+void sys_yield(Context *c) {
     yield();    // yield by am.
     c->GPRx = 0;
 }
 
-void sys_exit(Context *c){
+void sys_exit(Context *c) {
     halt(0);
 //   naive_uload(NULL,"/bin/nterm");
 }
+
+void sys_write(Context *c) {
+    if (c->GPR2 == 1 || c->GPR2 == 2) {
+        for (int i = 0; i < c->GPR4; ++i) {
+          putch(*(char*)(c->GPR3 + i));
+        }
+        c->GPRx = c->GPR4;
+    } else c->GPRx = -1;
+}  

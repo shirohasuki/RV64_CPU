@@ -28,7 +28,7 @@ void do_syscall(Context *c) {
         case SYS_yield        : sys_yield(c);         break;
         case SYS_open         : sys_open(c);          break;
         case SYS_read         : sys_read(c);          break;
-        case SYS_write        : sys_write(c);         break;
+        case SYS_write        : sys_write(c);      printf("here\n");       break;
         // case SYS_kill         :                       break;
         // case SYS_getpid       :                       break;
         case SYS_close        : sys_close(c);         break;

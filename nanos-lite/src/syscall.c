@@ -40,9 +40,9 @@ void do_syscall(Context *c) {
         default: panic("Unhandled syscall ID = %d", type);
     }
 
-#ifdef CONFIG_STRACE
+// #ifdef CONFIG_STRACE
     printf("strace detect syscall: %s, ", type);
-#endif
+// #endif
 
 }
 

@@ -1,6 +1,9 @@
 #include <common.h>
 #include "syscall.h"
 
+
+#define STRACE 1
+
 void sys_yield(Context *c);
 void sys_exit(Context *c);
 void sys_write(Context *c);
@@ -41,8 +44,20 @@ void do_syscall(Context *c) {
     }
 
 // #ifdef CONFIG_STRACE
-    printf("strace detect syscall: %s, ", type);
+    // printf("strace detect syscall: %s, ", type);
 // #endif
+// #ifdef STRACE
+//     char* getFinfoName(int i);
+//     if(type == SYS_open|| type == SYS_read || type == SYS_write || type == SYS_close || type == SYS_lseek){
+//         if(type == SYS_open) printf("strace detect file %s is doing %s :",c->GPR2, get_syscall_name(type));
+//         else printf("strace detect file %s is doing %s :",getFinfoName(c->GPR2), get_syscall_name(type));
+//     }
+//     else{
+//         printf("strace detect syscall: %s, ",get_syscall_name(type));
+//     }
+//     printf("input regs a0=0x%lx, a1=0x%lx, a2=0x%lx, return value a0=0x%lx.\n",c->GPR2,c->GPR3,c->GPR4,c->GPRx);
+// #endif
+
 
 }
 
@@ -70,16 +85,16 @@ void sys_brk(Context *c){
 }
 
 
-#ifdef CONFIG_STRACE
-char* get_syscall_name(uintptr_t type){
-    static char SyscallInfo[20];
-    switch (type) {
-        case SYS_exit         : strcpy(SyscallInfo,"sys_exit");         break;
-        case SYS_yield        : strcpy(SyscallInfo,"sys_yield");        break;
-        case SYS_write        : strcpy(SyscallInfo,"sys_write");        break;
-        case SYS_brk          : strcpy(SyscallInfo,"sys_brk");          break;
-        default: panic("Unhandled syscall ID = %d", type);
-    }
-    return SyscallInfo;
-}
-#endif
+// #ifdef STRACE
+// char* get_syscall_name(uintptr_t type){
+//     static char SyscallInfo[20];
+//     switch (type) {
+//         case SYS_exit         : strcpy(SyscallInfo,"sys_exit");         break;
+//         case SYS_yield        : strcpy(SyscallInfo,"sys_yield");        break;
+//         case SYS_write        : strcpy(SyscallInfo,"sys_write");        break;
+//         case SYS_brk          : strcpy(SyscallInfo,"sys_brk");          break;
+//         default: panic("Unhandled syscall ID = %d", type);
+//     }
+//     return SyscallInfo;
+// }
+// #endif

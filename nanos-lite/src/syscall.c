@@ -40,19 +40,9 @@ void do_syscall(Context *c) {
         default: panic("Unhandled syscall ID = %d", type);
     }
 
-// #ifdef STRACE
-    // printf("strace detect syscall: %s, ", type);
-// // printf("here");
-//     char* getFinfoName(int i);
-//     if(type == SYS_open|| type == SYS_read || type == SYS_write || type == SYS_close || type == SYS_lseek){
-//         if(type == SYS_open) printf("strace detect file %s is doing %s :",a[0], get_syscall_name(type));
-//         else printf("strace detect file %s is doing %s :",getFinfoName(a[0]), get_syscall_name(type));
-//     }
-//     else{
-//         printf("strace detect syscall: %s, ",get_syscall_name(type));
-//     }
-//     printf("input regs a0=0x%lx, a1=0x%lx, a2=0x%lx, return value a0=0x%lx.\n",a[0],a[1],a[2],c->GPRx);
-// #endif
+#ifdef STRACE
+    printf("strace detect syscall: %s, ", type);
+#endif
 
 }
 
@@ -80,16 +70,16 @@ void sys_brk(Context *c){
 }
 
 
-// #ifdef STRACE
-// char* get_syscall_name(uintptr_t type){
-//     static char SyscallInfo[20];
-//     switch (type) {
-//         case SYS_exit         : strcpy(SyscallInfo,"sys_exit");         break;
-//         case SYS_yield        : strcpy(SyscallInfo,"sys_yield");        break;
-//         case SYS_write        : strcpy(SyscallInfo,"sys_write");        break;
-//         case SYS_brk          : strcpy(SyscallInfo,"sys_brk");          break;
-//         default: panic("Unhandled syscall ID = %d", type);
-//     }
-//     return SyscallInfo;
-// }
-// #endif
+#ifdef STRACE
+char* get_syscall_name(uintptr_t type){
+    static char SyscallInfo[20];
+    switch (type) {
+        case SYS_exit         : strcpy(SyscallInfo,"sys_exit");         break;
+        case SYS_yield        : strcpy(SyscallInfo,"sys_yield");        break;
+        case SYS_write        : strcpy(SyscallInfo,"sys_write");        break;
+        case SYS_brk          : strcpy(SyscallInfo,"sys_brk");          break;
+        default: panic("Unhandled syscall ID = %d", type);
+    }
+    return SyscallInfo;
+}
+#endif

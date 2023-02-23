@@ -18,7 +18,7 @@ typedef struct {
   WriteFn write;
 } Finfo; // 文件记录表
 
-enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_EVENT, FD_DISINFO, FD_FB};
+enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_FB}; //FD_EVENT, FD_DISINFO, FD_FB};
 
 size_t invalid_read(void *buf, size_t offset, size_t len) {
   panic("should not reach here");

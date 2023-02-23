@@ -85,6 +85,7 @@ void sys_exit(Context *c) {
 // } 
 
 void sys_brk(Context *c){
+    printf("here\n");
     c->GPRx = 0;
 }
 

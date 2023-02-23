@@ -89,7 +89,6 @@ size_t fs_read(int fd, void *buf, size_t len){
 size_t fs_write(int fd, const void *buf, size_t len){
     printf("here\n");
     if(file_table[fd].write != NULL){
-    printf("here\n");
         return (file_table[fd].write)(buf,open_offset,len);
     }
     else{

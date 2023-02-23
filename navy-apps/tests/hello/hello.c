@@ -2,10 +2,10 @@
 #include <stdio.h>
 
 int main() {
-printf("here");
+// printf("here");
     write(1, "Hello World!\n", 13);
-    write(1, "Hello World!\n", 13);
-    printf("here");
+    // write(1, "Hello World!\n", 13);
+    // printf("here");
     int i = 2;
     volatile int j = 0;
     while (1) {

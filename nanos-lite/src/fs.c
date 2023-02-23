@@ -44,10 +44,7 @@ void init_fs() {
   // initialize the size of /dev/fb
   AM_GPU_CONFIG_T dispinfo = io_read(AM_GPU_CONFIG);
   
-  // method 1: only write w for one time, and use loop to finish all, slow but support native.
-  // file_table[FD_FB].size = dispinfo.width * dispinfo.height * 4;  // 4 for 32bit!
-
-  // method 2: use high 32bit to store w, low 32bit to store h. fast but not support native!
+  // use high 32bit to store w, low 32bit to store h. fast but not support native!
   file_table[FD_FB].size = dispinfo.width * dispinfo.height;  // 4 for 32bit!
 }
 

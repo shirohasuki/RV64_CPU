@@ -4,6 +4,7 @@
 void sys_yield(Context *c);
 void sys_exit(Context *c);
 void sys_write(Context *c);
+void sys_brk(Context *c);
 
 void do_syscall(Context *c) {
     uintptr_t type = c->GPR1; // mcause
@@ -25,7 +26,7 @@ void do_syscall(Context *c) {
         // case SYS_getpid       :                       break;
         // case SYS_close        : sys_close(c);         break;
         // case SYS_lseek        : sys_lseek(c);         break;
-        // case SYS_brk          : sys_brk(c);           break;
+        case SYS_brk          : sys_brk(c);           break;
         // case SYS_fstat        :                       break;
         // case SYS_time         :                       break;
         // case SYS_signal       :                       break;
@@ -70,4 +71,8 @@ void sys_write(Context *c) {
         }
         c->GPRx = c->GPR4;
     } else c->GPRx = -1;
-}  
+} 
+
+void sys_brk(Context *c){
+  c->GPRx = 0;
+}

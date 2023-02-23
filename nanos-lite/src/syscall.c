@@ -76,3 +76,18 @@ void sys_write(Context *c) {
 void sys_brk(Context *c){
   c->GPRx = 0;
 }
+
+
+#ifdef STRACE
+char* get_syscall_name(uintptr_t type){
+    static char SyscallInfo[20];
+    switch (type) {
+        case SYS_exit         : strcpy(SyscallInfo,"sys_exit");         break;
+        case SYS_yield        : strcpy(SyscallInfo,"sys_yield");        break;
+        case SYS_write        : strcpy(SyscallInfo,"sys_write");        break;
+        case SYS_brk          : strcpy(SyscallInfo,"sys_brk");          break;
+        default: panic("Unhandled syscall ID = %d", type);
+    }
+    return SyscallInfo;
+}
+#endif

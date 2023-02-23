@@ -41,6 +41,7 @@ void do_syscall(Context *c) {
     }
 
 #ifdef STRACE
+printf("here");
     char* getFinfoName(int i);
     if(type == SYS_open|| type == SYS_read || type == SYS_write || type == SYS_close || type == SYS_lseek){
         if(type == SYS_open) printf("strace detect file %s is doing %s :",a[0], get_syscall_name(type));

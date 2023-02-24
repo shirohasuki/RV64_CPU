@@ -6,26 +6,45 @@
 #include <stdlib.h>
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
-  assert(dst && src); // dst and src are not NULL
+  assert(dst && src);
   assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
-  int sx, sy, w, h, dx, dy;
-  if (srcrect == NULL) sx = 0, sy = 0, w = src->w, h = src->h;
-  else sx = srcrect->x, sy = srcrect->y, w = srcrect->w, h = srcrect->h;
-  if (dstrect == NULL) dx = 0, dy = 0;
-  else dx = dstrect->x, dy = dstrect->y;
-  // printf("sx: %d, sy: %d, w: %d, h: %d, dx: %d, dy: %d\n", sx, sy, w, h, dx, dy);
-  // printf("src-w: %d, src-h: %d, dst-w: %d, dst-h: %d\n", src->w, src->h, dst->w, dst->h);
-  // should be in the rect of dst
-  w = min(w, dst->w - dx);
-  h = min(h, dst->h - dy);
-  // copy
-  for (int i = 0; i < h; ++i) {
-    for (int j = 0; j < w; ++j) {
-      // printf("%d %d\n", i, j);
-      for (int k = 0; k < 4; ++k) {
-        *(dst->pixels + ((dy + i) * dst->w + dx + j) * 4 + k) = *(src->pixels + ((sy + i) * src->w + sx + j) * 4 + k);
+  int w,h,dst_x,dst_y,src_x,src_y;
+
+  if(srcrect == NULL){     // entire surface.
+    w = src->w; h = src->h;
+    src_x = 0; src_y = 0;
+  }
+  else{
+    w = srcrect->w; h = srcrect->h;
+    src_x = srcrect->x; src_y = srcrect->y;
+  }
+
+  if(dstrect == NULL){
+    dst_x = 0; dst_y = 0;
+  }
+  else{
+    dst_x = dstrect->x; dst_y = dstrect->y;
+  }
+
+  if (dst->format->BitsPerPixel == 32){
+    uint32_t *dst_pixels = (uint32_t *)dst->pixels;
+    uint32_t *src_pixels = (uint32_t *)src->pixels;
+    for(int j = 0; j< h; j++){
+      for(int i = 0; i< w; i++){
+        dst_pixels[(dst_y+j)*(dst->w)+(dst_x+i)] = src_pixels[(src_y+j)*(src->w)+(src_x+i)];
       }
     }
+  }
+  else if (dst->format->BitsPerPixel == 8){
+    for(int j = 0; j< h; j++){
+      for(int i = 0; i< w; i++){
+        dst->pixels[(dst_y+j)*(dst->w)+(dst_x+i)] = src->pixels[(src_y+j)*(src->w)+(src_x+i)];
+      }
+    }
+  }
+  else{
+    printf("SDL_BlitSurface: miniSDL do not support BitsPerPixel == %d.",dst->format->BitsPerPixel);
+    assert(0);
   }
 }
 

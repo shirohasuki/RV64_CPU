@@ -27,7 +27,8 @@ typedef word_t vaddr_t;
 #define CONFIG_NPC_DIFFTEST 1
 #define CONFIG_NPC_MTRACE 1
 
-// #define CONFIG_NPC_DEVICE
+// ============== IOE ================ //
+#define CONFIG_NPC_DEVICE
 // #define CONFIG_TARGET_AM 1
 
 // ============== DEVICE =============== //
@@ -55,7 +56,6 @@ void npc_exit(int status);
 
 // =============== Memory ===============
 #define MEM_BASE 0x80000000
-// #define MEM_SIZE 65536
 
 #define MEM_SIZE 0x7ff00000
 
@@ -82,7 +82,7 @@ extern int mtrace_count;
 void print_mtrace();
 
 
-// ============= GPR ===================
+// ============= REG ===================
 void dump_gpr(); // 打印寄存器
 // const char *riscv64_regs[] = {
 //   "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",

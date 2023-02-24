@@ -10,16 +10,12 @@
 
 void Vtb___024unit____Vdpiimwrap_get_pc_TOP____024unit(QData/*63:0*/ pc);
 void Vtb___024unit____Vdpiimwrap_ebreak_TOP____024unit();
-extern const VlUnpacked<CData/*0:0*/, 32> Vtb__ConstPool__TABLE_h85fab64f_0;
-extern const VlUnpacked<CData/*0:0*/, 32> Vtb__ConstPool__TABLE_h38d16e7a_0;
-extern const VlUnpacked<CData/*0:0*/, 32> Vtb__ConstPool__TABLE_h2f30b3b6_0;
 
 VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
     Vtb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtb___024root___sequent__TOP__0\n"); );
     // Init
-    CData/*4:0*/ __Vtableidx1;
     IData/*31:0*/ __Vdly__tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o;
     CData/*7:0*/ __Vdly__tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_wmask_o;
     IData/*31:0*/ __Vdly__tb__DOT__soc_inst__DOT__axi_inst__DOT__rwaddr;
@@ -157,14 +153,14 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
             ? 0ULL : ((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_if_id_stall_en_o)
                        ? vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_addr_o
                        : vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__pc_reg_pc_o));
-    vlSelf->tb__DOT__soc_inst__DOT__ram_axi_bvalid_o 
-        = vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__wen_o;
     if (vlSelf->rst) {
         vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__axi_busy 
             = (((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_ram_ren_o) 
                 | (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_ram_wen_o)) 
                | ((~ (IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__busy_end)) 
                   & (IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__axi_busy)));
+        vlSelf->tb__DOT__soc_inst__DOT__ram_axi_bvalid_o 
+            = vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__wen_o;
         __Vdly__tb__DOT__soc_inst__DOT__axi_inst__DOT__rwaddr 
             = ((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_ram_ren_o)
                 ? (IData)(((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_ren_o)
@@ -177,6 +173,8 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
                                          : vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__rwaddr));
     } else {
         vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__axi_busy = 0U;
+        vlSelf->tb__DOT__soc_inst__DOT__ram_axi_bvalid_o 
+            = vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__wen_o;
         __Vdly__tb__DOT__soc_inst__DOT__axi_inst__DOT__rwaddr = 0U;
     }
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_issave_o 
@@ -209,10 +207,6 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
             ? 0ULL : ((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_ex_mem_stall_en_o)
                        ? vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_rd_wdata_o
                        : vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_rd_wdata_o));
-    vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_rdready 
-        = ((IData)(vlSelf->rst) & ((IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_ravalid) 
-                                   & ((IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raready) 
-                                      | (IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_rdready))));
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_reg_wen_o 
         = ((~ ((~ (IData)(vlSelf->rst)) | (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_ex_mem_flush_en_o))) 
            & ((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_ex_mem_stall_en_o)
@@ -223,6 +217,10 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
             ? 0U : ((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_ex_mem_stall_en_o)
                      ? (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_rd_waddr_o)
                      : (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_rd_waddr_o)));
+    vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_rdready 
+        = ((IData)(vlSelf->rst) & ((IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_ravalid) 
+                                   & ((IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raready) 
+                                      | (IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_rdready))));
     vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__ren_o 
         = ((IData)(vlSelf->rst) & ((IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raready) 
                                    & (IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_ravalid)));
@@ -2176,23 +2174,6 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
                        vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
                        [(0xfffU & (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
                                    >> 3U))]))) : 0ULL);
-    __Vtableidx1 = (((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_inst__DOT__load_data_hit) 
-                     << 4U) | (((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_inst__DOT__save_inst) 
-                                << 3U) | (((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_inst__DOT__load_inst) 
-                                           << 2U) | 
-                                          (((IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__axi_busy) 
-                                            << 1U) 
-                                           | (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_jump_en_o)))));
-    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_pc_flush_en_o 
-        = Vtb__ConstPool__TABLE_h85fab64f_0[__Vtableidx1];
-    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_if_id_flush_en_o 
-        = Vtb__ConstPool__TABLE_h38d16e7a_0[__Vtableidx1];
-    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_id_ex_flush_en_o 
-        = Vtb__ConstPool__TABLE_h2f30b3b6_0[__Vtableidx1];
-    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_ex_mem_flush_en_o 
-        = Vtb__ConstPool__TABLE_h85fab64f_0[__Vtableidx1];
-    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_mem_wb_flush_en_o 
-        = Vtb__ConstPool__TABLE_h85fab64f_0[__Vtableidx1];
     vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wavalid 
         = __Vdly__tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wavalid;
     vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waready 
@@ -2200,6 +2181,9 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
 }
 
 void Vtb___024unit____Vdpiimwrap_get_regs__Vdpioc2_TOP____024unit(const VlUnpacked<QData/*63:0*/, 32> &regs);
+extern const VlUnpacked<CData/*0:0*/, 64> Vtb__ConstPool__TABLE_ha41e00fd_0;
+extern const VlUnpacked<CData/*0:0*/, 64> Vtb__ConstPool__TABLE_h257ad544_0;
+extern const VlUnpacked<CData/*0:0*/, 64> Vtb__ConstPool__TABLE_hb68ce13d_0;
 extern const VlUnpacked<CData/*0:0*/, 128> Vtb__ConstPool__TABLE_hd883f979_0;
 extern const VlUnpacked<CData/*0:0*/, 128> Vtb__ConstPool__TABLE_hc9e07f1f_0;
 extern const VlUnpacked<CData/*0:0*/, 128> Vtb__ConstPool__TABLE_h011d071a_0;
@@ -2209,6 +2193,7 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__1(Vtb___024root* vlSelf) {
     Vtb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtb___024root___combo__TOP__1\n"); );
     // Init
+    CData/*5:0*/ __Vtableidx1;
     CData/*6:0*/ __Vtableidx2;
     // Body
     if (vlSelf->rst) {
@@ -2261,6 +2246,25 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__1(Vtb___024root* vlSelf) {
                                         ? vlSelf->tb__DOT__soc_inst__DOT__ram_axi_rdata_o
                                         : 0ULL) : 0ULL)
             : 0ULL);
+    __Vtableidx1 = (((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_inst__DOT__load_data_hit) 
+                     << 5U) | (((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_inst__DOT__save_inst) 
+                                << 4U) | (((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_inst__DOT__load_inst) 
+                                           << 3U) | 
+                                          (((IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__busy_end) 
+                                            << 2U) 
+                                           | (((IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__axi_busy) 
+                                               << 1U) 
+                                              | (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_jump_en_o))))));
+    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_pc_flush_en_o 
+        = Vtb__ConstPool__TABLE_ha41e00fd_0[__Vtableidx1];
+    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_if_id_flush_en_o 
+        = Vtb__ConstPool__TABLE_h257ad544_0[__Vtableidx1];
+    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_id_ex_flush_en_o 
+        = Vtb__ConstPool__TABLE_hb68ce13d_0[__Vtableidx1];
+    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_ex_mem_flush_en_o 
+        = Vtb__ConstPool__TABLE_ha41e00fd_0[__Vtableidx1];
+    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_mem_wb_flush_en_o 
+        = Vtb__ConstPool__TABLE_ha41e00fd_0[__Vtableidx1];
     __Vtableidx2 = (((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_inst__DOT__load_data_hit) 
                      << 6U) | (((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_issave_o) 
                                 << 5U) | (((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_inst__DOT__save_inst) 

@@ -8,6 +8,7 @@
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
   assert(dst && src);
   assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
+
   int w,h,dst_x,dst_y,src_x,src_y;
 
   if(srcrect == NULL){     // entire surface.
@@ -49,7 +50,8 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
-      int x,y,w,h;
+  
+  int x,y,w,h;
   if(dstrect == NULL){
     x = 0; y = 0; 
     w= dst->w; h = dst->h;
@@ -68,11 +70,28 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 }
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
-    SDL_LockSurface(s);
-    if (!(x | y | w | h)) w = s->w, h = s->h;
-    printf("%d %d %d %d\n", x, y, w, h);
-    NDL_DrawRect((uint32_t *)s->pixels, x, y, w, h);
-    SDL_UnlockSurface(s);
+    if(x == 0 && y == 0 && w == 0 && h == 0){
+    x = 0; y = 0; w= s->w; h = s->h;
+  }
+  
+  if (s->format->BitsPerPixel == 32){
+    NDL_DrawRect((uint32_t*)s->pixels,x,y,w,h);
+  }
+  else if (s->format->BitsPerPixel == 8)
+  {
+    int len = w * h;
+    uint32_t * pixels = (uint32_t *)malloc(4*len);
+    for(int i=0; i<len; i++){
+      SDL_Color pixel = s->format->palette->colors[s->pixels[i]];
+      pixels[i] = (uint32_t)pixel.a<<24 | (uint32_t)pixel.r<<16 | (uint32_t)pixel.g<<8 | (uint32_t)pixel.b;
+    }
+    NDL_DrawRect(pixels,x,y,w,h);
+    free(pixels);
+  }
+  else{
+    printf("SDL_UpdateRect: miniSDL do not support BitsPerPixel == %d.",s->format->BitsPerPixel);
+    assert(0);
+  }
 }
 
 // APIs below are already implemented.

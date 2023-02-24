@@ -1,6 +1,6 @@
 #include "npc.h"
 
-uint64_t *cpu_gpr = NULL;
+uint64_t *cpu_reg = NULL;
 uint64_t cpu_pc = 0x80000000;
 
 const char *riscv64_regs[] = {
@@ -18,17 +18,17 @@ extern "C" void get_pc(long long int pc) {
 
 
 extern "C" void get_regs(const svOpenArrayHandle r) {
-    cpu_gpr = (uint64_t *)(((VerilatedDpiOpenVar*)r) -> datap());
+    cpu_reg = (uint64_t *)(((VerilatedDpiOpenVar*)r) -> datap());
     // give regs to CPU status
-    for (int i = 0; i < 32; i++) { cpu_npc.gpr[i] = cpu_gpr[i];}
+    for (int i = 0; i < 32; i++) { cpu_npc.reg[i] = cpu_reg[i];}
 }
 
 
 // 一个输出RTL中通用寄存器的值的示例
-void dump_gpr() {
+void dump_reg() {
     printf("============= Regs =================\n");
     for (int i = 0; i < 32; i++) {
-        printf("gpr[%2d] = 0x%-14lx\t%s\n", i, cpu_gpr[i], riscv64_regs[i]);
+        printf("reg[%2d] = 0x%-14lx\t%s\n", i, cpu_reg[i], riscv64_regs[i]);
     } // -:左对齐
     printf("pc      = 0x%lx\n", cpu_pc);
     printf("====================================\n");
@@ -45,7 +45,7 @@ void npc_exit(int status) {
     print_mtrace();
 #endif
 #ifdef CONFIG_NPC_GPRTRACE
-    dump_gpr(); 
+    dump_reg(); 
 #endif
         puts("\33[1;31m[Sim Result]: HIT BAD TRAP\33[0m");
     }
@@ -54,5 +54,5 @@ void npc_exit(int status) {
 
 void ebreak() {
     printf(BLUE("HIT EBREAK\n"));
-    npc_exit(cpu_gpr[10]); // a[0]
+    npc_exit(cpu_reg[10]); // a[0]
 }

@@ -1,7 +1,7 @@
 #include "npc.h"
 
 extern CPU_state ref_cpu;
-// CPU_state ref_cpu;
+
 //=====================Difftest=========================
 #ifdef CONFIG_NPC_DIFFTEST
 
@@ -45,9 +45,9 @@ int check_regs_npc(CPU_state ref_cpu) {
         return 0;
     }
     for (int i = 0; i < 32; i++) {
-        // printf(GREEN("[difftest] nemu_reg[%2d]=%16lx, npc_reg[%2d]=%16lx\n"), i, ref_cpu.gpr[i], i, cpu_npc.gpr[i]);
-        if (cpu_npc.gpr[i] != ref_cpu.gpr[i]) {
-            printf(RED("Missing match reg[%d], nemu_val=%lx, npc_val=%lx\n"), i, ref_cpu.gpr[i], cpu_npc.gpr[i]);
+        // printf(GREEN("[difftest] nemu_reg[%2d]=%16lx, npc_reg[%2d]=%16lx\n"), i, ref_cpu.reg[i], i, cpu_npc.reg[i]);
+        if (cpu_npc.reg[i] != ref_cpu.reg[i]) {
+            printf(RED("Missing match reg[%d], nemu_val=%lx, npc_val=%lx\n"), i, ref_cpu.reg[i], cpu_npc.reg[i]);
             return 0;
         }
     }

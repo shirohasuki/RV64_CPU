@@ -18,8 +18,6 @@ typedef uint32_t paddr_t;
 typedef uint64_t word_t;
 typedef word_t vaddr_t;
 
-// typedef uint16_t ioaddr_t;
-
 // ============== 调试选项 ============= //
 #define CONFIG_NPC_ITRACE 1
 #define CONFIG_NPC_GPRTRACE 1
@@ -45,7 +43,7 @@ typedef word_t vaddr_t;
 // ================ CPU ===================
 static int status = 0;
 typedef struct {
-    word_t gpr[32];
+    word_t reg[32];
     vaddr_t pc;
 } CPU_state;
 
@@ -65,10 +63,6 @@ extern uint8_t mem[MEM_SIZE];
 uint8_t* cpu2mem(ll addr);
 long load_image(char const *img_file); 
 
-// ============== Reg ===================
-// extern uint64_t *cpu_gpr; //  改为CPU_state.gpr
-// extern uint64_t cpu_pc; //  改为CPU_state.pc
-
 // ============= ITRACE ================
 void init_disasm(const char *triple);
 void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
@@ -83,13 +77,7 @@ void print_mtrace();
 
 
 // ============= REG ===================
-void dump_gpr(); // 打印寄存器
-// const char *riscv64_regs[] = {
-//   "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
-//   "s0", "s1", "a0", "a1", "a2", "a3", "a4", "a5",
-//   "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
-//   "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
-// };
+void dump_reg(); // 打印寄存器
 
 // ============= Format ================
 #define COLOR(a, b) "\033[" #b "m" a "\033[0m"
@@ -118,20 +106,11 @@ extern void (*ref_difftest_init)();
 
 
 // ============ Device ================
-// void init_device();
+void init_device();
 
 // ============== DEVICE MAP ===============
 #define DEVICE_BASE 0xa0000000
 
-// #define MMIO_BASE 0xa0000000
-
-
-
-#define SERIAL_MMIO      (DEVICE_BASE + 0x000003f8)
-// #define SERIAL_PORT     (DEVICE_BASE + 0x0009cfd0)
-                                       //0x8009cfd0
-                                       //0x80000000
-
-
-//#define KBD_ADDR        (DEVICE_BASE + 0x0000060)
-#define RTC_MMIO        (DEVICE_BASE + 0x00000048) // 映射的地址
+#define SERIAL_MMIO         (DEVICE_BASE + 0x000003f8)
+#define KBD_ADDR            (DEVICE_BASE + 0x0000060)
+#define RTC_MMIO            (DEVICE_BASE + 0x00000048) // 映射的地址

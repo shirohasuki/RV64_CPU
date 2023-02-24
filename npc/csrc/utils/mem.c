@@ -1,5 +1,6 @@
 #include "npc.h"
 //#include "../include/macro.h"
+#include <string.h>
 #include <time.h>
 
 uint8_t mem[MEM_SIZE] = {0};
@@ -49,12 +50,11 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 // Memory Write
 extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
     //printf("[pmem_write] waddr is:%llx\n", waddr);
-    //MUXDEF(NPC_HAS_SERIAL, putch(wdata), putc(wdata, stderr));
-    // if (SERIAL_MMIO <= waddr && waddr <= SERIAL_MMIO + 8) { 
-    //     MUXDEF(NPC_HAS_SERIAL, putch(wdata), putc(wdata, stderr));// 写串口
-    //     printf("hello\n"); // 写串口
-    //     return ;
-    // }
+    if (SERIAL_MMIO <= waddr && waddr <= SERIAL_MMIO + 8) { 
+        putchar(wdata);// 写串口
+        // printf("hello\n"); // 写串口
+        return ;
+    }
     if (waddr < MEM_BASE) {
         // printf("[pmem_write] waddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", waddr, MEM_BASE);
         return;

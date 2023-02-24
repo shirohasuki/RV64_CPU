@@ -8,9 +8,63 @@
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
   assert(dst && src);
   assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
+  int w,h,dst_x,dst_y,src_x,src_y;
+
+  if(srcrect == NULL){     // entire surface.
+    w = src->w; h = src->h;
+    src_x = 0; src_y = 0;
+  }
+  else{
+    w = srcrect->w; h = srcrect->h;
+    src_x = srcrect->x; src_y = srcrect->y;
+  }
+
+  if(dstrect == NULL){
+    dst_x = 0; dst_y = 0;
+  }
+  else{
+    dst_x = dstrect->x; dst_y = dstrect->y;
+  }
+
+  if (dst->format->BitsPerPixel == 32){
+    uint32_t *dst_pixels = (uint32_t *)dst->pixels;
+    uint32_t *src_pixels = (uint32_t *)src->pixels;
+    for(int j = 0; j< h; j++){
+      for(int i = 0; i< w; i++){
+        dst_pixels[(dst_y+j)*(dst->w)+(dst_x+i)] = src_pixels[(src_y+j)*(src->w)+(src_x+i)];
+      }
+    }
+  }
+  else if (dst->format->BitsPerPixel == 8){
+    for(int j = 0; j< h; j++){
+      for(int i = 0; i< w; i++){
+        dst->pixels[(dst_y+j)*(dst->w)+(dst_x+i)] = src->pixels[(src_y+j)*(src->w)+(src_x+i)];
+      }
+    }
+  }
+  else{
+    printf("SDL_BlitSurface: miniSDL do not support BitsPerPixel == %d.",dst->format->BitsPerPixel);
+    assert(0);
+  }
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
+      int x,y,w,h;
+  if(dstrect == NULL){
+    x = 0; y = 0; 
+    w= dst->w; h = dst->h;
+  }
+  else{
+    w = dstrect->w; h = dstrect->h;
+    x = dstrect->x; y = dstrect->y;
+  }
+
+  uint32_t *pixels = (uint32_t *)dst->pixels;
+  for(int j = 0; j< h; j++){
+    for(int i = 0; i< w; i++){
+      pixels[(y+j)*(dst->w)+(x+i)] = color;
+    }
+  }
 }
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {

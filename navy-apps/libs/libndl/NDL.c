@@ -51,7 +51,7 @@ void NDL_OpenCanvas(int *w, int *h) {
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
     int fd = open("/dev/fb",0,0);
-    printf("here");
+    // printf("here");
     if(fd == -1){
         printf("open /dev/fb error");
         return ;

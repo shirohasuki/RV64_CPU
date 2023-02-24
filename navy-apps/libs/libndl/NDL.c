@@ -52,13 +52,19 @@ void NDL_OpenCanvas(int *w, int *h) {
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
     int fd = open("/dev/fb",0,0);
     // printf("here");
-    if(fd == -1){
-        printf("open /dev/fb error");
-        return ;
+    // if(fd == -1){
+    //     printf("open /dev/fb error");
+    //     return ;
+    // }
+    // lseek(fd,x*y,SEEK_SET);
+    // write(fd, pixels, ((size_t)w<<32) | ((size_t)h & 0x00000000FFFFFFFF)); 
+    // // w=high 32bit, h=low 32bit.
+    for (int i = 0; i < h; ++i) {
+    // printf("write %d\n", i);
+        lseek(fd, ((center_h + x + i) * screen_w + center_w + y) * 4, SEEK_SET);
+        lseek(fd, ((center_h + y + i) * screen_w + center_w + x) * 4, SEEK_SET);
+        write(fd, pixels + i * w, w * 4);
     }
-    lseek(fd,x*y,SEEK_SET);
-    write(fd, pixels, ((size_t)w<<32) | ((size_t)h & 0x00000000FFFFFFFF)); 
-    // w=high 32bit, h=low 32bit.
 }
 
 void NDL_OpenAudio(int freq, int channels, int samples) {

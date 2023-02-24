@@ -37,7 +37,7 @@ static Finfo file_table[] __attribute__((used)) = {
     [FD_STDERR] = {"stderr", 0, 0, invalid_read, serial_write},
     [FD_EVENT]  = {"/dev/events",0,0,events_read,invalid_write},// keyboard
     [FD_DISINFO]= {"/proc/dispinfo",0,0,dispinfo_read, invalid_write}, // VGA: 获取系统屏幕大小以及画布大小
-    [FD_FB]     = {"/dev/fb", 0, 0, invalid_read, invalid_write}, // VGA:frame buffer
+    [FD_FB]     = {"/dev/fb", 0, 0, invalid_read, fb_write}, // VGA:frame buffer
 #include "files.h"
 };
 

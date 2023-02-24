@@ -37,11 +37,11 @@ int SDL_WaitEvent(SDL_Event *event) {
     if (buf[1] == 'd') {
       event->type = SDL_KEYDOWN;
       event->key.keysym.sym = code;
-      // printf("Down %d\n", code);
+      printf("Down %d\n", code);
     } else if (buf[1] == 'u') {
       event->type = SDL_KEYUP;
       event->key.keysym.sym = code;
-      // printf("Up %d\n", code);
+      printf("Up %d\n", code);
     }
   }
   return 1;

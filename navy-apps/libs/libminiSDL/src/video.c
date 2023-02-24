@@ -36,39 +36,39 @@ static inline int maskToShift(uint32_t mask) {
 
 SDL_Surface* SDL_CreateRGBSurface(uint32_t flags, int width, int height, int depth,
     uint32_t Rmask, uint32_t Gmask, uint32_t Bmask, uint32_t Amask) {
-  assert(depth == 8 || depth == 32);
-  SDL_Surface *s = malloc(sizeof(SDL_Surface));
-  assert(s);
-  s->flags = flags;
-  s->format = malloc(sizeof(SDL_PixelFormat));
-  assert(s->format);
-  if (depth == 8) {
-    s->format->palette = malloc(sizeof(SDL_Palette));
-    assert(s->format->palette);
-    s->format->palette->colors = malloc(sizeof(SDL_Color) * 256);
-    assert(s->format->palette->colors);
-    memset(s->format->palette->colors, 0, sizeof(SDL_Color) * 256);
-    s->format->palette->ncolors = 256;
-  } else {
-    s->format->palette = NULL;
-    s->format->Rmask = Rmask; s->format->Rshift = maskToShift(Rmask); s->format->Rloss = 0;
-    s->format->Gmask = Gmask; s->format->Gshift = maskToShift(Gmask); s->format->Gloss = 0;
-    s->format->Bmask = Bmask; s->format->Bshift = maskToShift(Bmask); s->format->Bloss = 0;
-    s->format->Amask = Amask; s->format->Ashift = maskToShift(Amask); s->format->Aloss = 0;
-  }
+    assert(depth == 8 || depth == 32);
+    SDL_Surface *s = malloc(sizeof(SDL_Surface));
+    assert(s);
+    s->flags = flags;
+    s->format = malloc(sizeof(SDL_PixelFormat));
+    assert(s->format);
+    if (depth == 8) {
+        s->format->palette = malloc(sizeof(SDL_Palette));
+        assert(s->format->palette);
+        s->format->palette->colors = malloc(sizeof(SDL_Color) * 256);
+        assert(s->format->palette->colors);
+        memset(s->format->palette->colors, 0, sizeof(SDL_Color) * 256);
+        s->format->palette->ncolors = 256;
+    } else {
+        s->format->palette = NULL;
+        s->format->Rmask = Rmask; s->format->Rshift = maskToShift(Rmask); s->format->Rloss = 0;
+        s->format->Gmask = Gmask; s->format->Gshift = maskToShift(Gmask); s->format->Gloss = 0;
+        s->format->Bmask = Bmask; s->format->Bshift = maskToShift(Bmask); s->format->Bloss = 0;
+        s->format->Amask = Amask; s->format->Ashift = maskToShift(Amask); s->format->Aloss = 0;
+    }
 
-  s->format->BitsPerPixel = depth;
-  s->format->BytesPerPixel = depth / 8;
+    s->format->BitsPerPixel = depth;
+    s->format->BytesPerPixel = depth / 8;
 
-  s->w = width;
-  s->h = height;
-  s->pitch = width * depth / 8;
-  assert(s->pitch == width * s->format->BytesPerPixel);
+    s->w = width;
+    s->h = height;
+    s->pitch = width * depth / 8;
+    assert(s->pitch == width * s->format->BytesPerPixel);
 
-  if (!(flags & SDL_PREALLOC)) {
-    s->pixels = malloc(s->pitch * height);
-    assert(s->pixels);
-  }
+    if (!(flags & SDL_PREALLOC)) {
+        s->pixels = malloc(s->pitch * height);
+        assert(s->pixels);
+    }
 
   return s;
 }

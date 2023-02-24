@@ -18,7 +18,7 @@ typedef struct {
   WriteFn write;
 } Finfo; // 文件记录表
 
-enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_EVENT, FD_FB}; //FD_DISINFO, FD_FB};
+enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_EVENT, FD_DISINFO, FD_FB}; 
 
 size_t invalid_read(void *buf, size_t offset, size_t len) {
   panic("should not reach here");
@@ -35,9 +35,9 @@ static Finfo file_table[] __attribute__((used)) = {
     [FD_STDIN]  = {"stdin", 0, 0, invalid_read, invalid_write},
     [FD_STDOUT] = {"stdout", 0, 0, invalid_read, serial_write},
     [FD_STDERR] = {"stderr", 0, 0, invalid_read, serial_write},
-    [FD_EVENT]  = {"/dev/events",0,0,events_read,invalid_write},
-    // [FD_DISINFO]= {"/proc/dispinfo",0,0,dispinfo_read, invalid_write},
-    // [FD_FB]     = {"/dev/fb", 0, 0, invalid_read, invalid_write},
+    [FD_EVENT]  = {"/dev/events",0,0,events_read,invalid_write},// keyboard
+    [FD_DISINFO]= {"/proc/dispinfo",0,0,dispinfo_read, invalid_write}, // VGA: 获取系统屏幕大小以及画布大小
+    [FD_FB]     = {"/dev/fb", 0, 0, invalid_read, invalid_write}, // VGA:frame buffer
 #include "files.h"
 };
 

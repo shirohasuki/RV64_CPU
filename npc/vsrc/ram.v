@@ -176,13 +176,13 @@ module ram (
 
     always @(posedge clk) begin 
 `ifdef MTRACE
-        // $display("======= ram list ==========");
-        // for (integer i = 1000; i < 4095; i++) begin
-        //     if (ram_mem[i] != 'b0) begin
-        //         $display("rom[%4d] | %8x", i, ram_mem[i]);
-        //     end
-        // end
-        // $display("===========================");
+        $display("======= ram list ==========");
+        for (integer i = 1000; i < 4095; i++) begin
+            if (ram_mem[i] != 'b0) begin
+                $display("rom[%4d] | %8x", i, ram_mem[i]);
+            end
+        end
+        $display("===========================");
 `endif
     end
 endmodule

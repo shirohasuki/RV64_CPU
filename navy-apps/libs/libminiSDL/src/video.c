@@ -2,17 +2,96 @@
 #include <sdl-video.h>
 #include <assert.h>
 #include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
   assert(dst && src);
   assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
+
+  int w,h,dst_x,dst_y,src_x,src_y;
+
+  if(srcrect == NULL){     // entire surface.
+    w = src->w; h = src->h;
+    src_x = 0; src_y = 0;
+  }
+  else{
+    w = srcrect->w; h = srcrect->h;
+    src_x = srcrect->x; src_y = srcrect->y;
+  }
+
+  if(dstrect == NULL){
+    dst_x = 0; dst_y = 0;
+  }
+  else{
+    dst_x = dstrect->x; dst_y = dstrect->y;
+  }
+
+  if (dst->format->BitsPerPixel == 32){
+    uint32_t *dst_pixels = (uint32_t *)dst->pixels;
+    uint32_t *src_pixels = (uint32_t *)src->pixels;
+    for(int j = 0; j< h; j++){
+      for(int i = 0; i< w; i++){
+        dst_pixels[(dst_y+j)*(dst->w)+(dst_x+i)] = src_pixels[(src_y+j)*(src->w)+(src_x+i)];
+      }
+    }
+  }
+  else if (dst->format->BitsPerPixel == 8){
+    for(int j = 0; j< h; j++){
+      for(int i = 0; i< w; i++){
+        dst->pixels[(dst_y+j)*(dst->w)+(dst_x+i)] = src->pixels[(src_y+j)*(src->w)+(src_x+i)];
+      }
+    }
+  }
+  else{
+    printf("SDL_BlitSurface: miniSDL do not support BitsPerPixel == %d.",dst->format->BitsPerPixel);
+    assert(0);
+  }
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
+  
+  int x,y,w,h;
+  if(dstrect == NULL){
+    x = 0; y = 0; 
+    w= dst->w; h = dst->h;
+  }
+  else{
+    w = dstrect->w; h = dstrect->h;
+    x = dstrect->x; y = dstrect->y;
+  }
+
+  uint32_t *pixels = (uint32_t *)dst->pixels;
+  for(int j = 0; j< h; j++){
+    for(int i = 0; i< w; i++){
+      pixels[(y+j)*(dst->w)+(x+i)] = color;
+    }
+  }
 }
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
+    if(x == 0 && y == 0 && w == 0 && h == 0){
+    x = 0; y = 0; w= s->w; h = s->h;
+  }
+  
+  if (s->format->BitsPerPixel == 32){
+    NDL_DrawRect((uint32_t*)s->pixels,x,y,w,h);
+  }
+  else if (s->format->BitsPerPixel == 8)
+  {
+    int len = w * h;
+    uint32_t * pixels = (uint32_t *)malloc(4*len);
+    for(int i=0; i<len; i++){
+      SDL_Color pixel = s->format->palette->colors[s->pixels[i]];
+      pixels[i] = (uint32_t)pixel.a<<24 | (uint32_t)pixel.r<<16 | (uint32_t)pixel.g<<8 | (uint32_t)pixel.b;
+    }
+    NDL_DrawRect(pixels,x,y,w,h);
+    free(pixels);
+  }
+  else{
+    printf("SDL_UpdateRect: miniSDL do not support BitsPerPixel == %d.",s->format->BitsPerPixel);
+    assert(0);
+  }
 }
 
 // APIs below are already implemented.
@@ -30,39 +109,39 @@ static inline int maskToShift(uint32_t mask) {
 
 SDL_Surface* SDL_CreateRGBSurface(uint32_t flags, int width, int height, int depth,
     uint32_t Rmask, uint32_t Gmask, uint32_t Bmask, uint32_t Amask) {
-  assert(depth == 8 || depth == 32);
-  SDL_Surface *s = malloc(sizeof(SDL_Surface));
-  assert(s);
-  s->flags = flags;
-  s->format = malloc(sizeof(SDL_PixelFormat));
-  assert(s->format);
-  if (depth == 8) {
-    s->format->palette = malloc(sizeof(SDL_Palette));
-    assert(s->format->palette);
-    s->format->palette->colors = malloc(sizeof(SDL_Color) * 256);
-    assert(s->format->palette->colors);
-    memset(s->format->palette->colors, 0, sizeof(SDL_Color) * 256);
-    s->format->palette->ncolors = 256;
-  } else {
-    s->format->palette = NULL;
-    s->format->Rmask = Rmask; s->format->Rshift = maskToShift(Rmask); s->format->Rloss = 0;
-    s->format->Gmask = Gmask; s->format->Gshift = maskToShift(Gmask); s->format->Gloss = 0;
-    s->format->Bmask = Bmask; s->format->Bshift = maskToShift(Bmask); s->format->Bloss = 0;
-    s->format->Amask = Amask; s->format->Ashift = maskToShift(Amask); s->format->Aloss = 0;
-  }
+    assert(depth == 8 || depth == 32);
+    SDL_Surface *s = malloc(sizeof(SDL_Surface));
+    assert(s);
+    s->flags = flags;
+    s->format = malloc(sizeof(SDL_PixelFormat));
+    assert(s->format);
+    if (depth == 8) {
+        s->format->palette = malloc(sizeof(SDL_Palette));
+        assert(s->format->palette);
+        s->format->palette->colors = malloc(sizeof(SDL_Color) * 256);
+        assert(s->format->palette->colors);
+        memset(s->format->palette->colors, 0, sizeof(SDL_Color) * 256);
+        s->format->palette->ncolors = 256;
+    } else {
+        s->format->palette = NULL;
+        s->format->Rmask = Rmask; s->format->Rshift = maskToShift(Rmask); s->format->Rloss = 0;
+        s->format->Gmask = Gmask; s->format->Gshift = maskToShift(Gmask); s->format->Gloss = 0;
+        s->format->Bmask = Bmask; s->format->Bshift = maskToShift(Bmask); s->format->Bloss = 0;
+        s->format->Amask = Amask; s->format->Ashift = maskToShift(Amask); s->format->Aloss = 0;
+    }
 
-  s->format->BitsPerPixel = depth;
-  s->format->BytesPerPixel = depth / 8;
+    s->format->BitsPerPixel = depth;
+    s->format->BytesPerPixel = depth / 8;
 
-  s->w = width;
-  s->h = height;
-  s->pitch = width * depth / 8;
-  assert(s->pitch == width * s->format->BytesPerPixel);
+    s->w = width;
+    s->h = height;
+    s->pitch = width * depth / 8;
+    assert(s->pitch == width * s->format->BytesPerPixel);
 
-  if (!(flags & SDL_PREALLOC)) {
-    s->pixels = malloc(s->pitch * height);
-    assert(s->pixels);
-  }
+    if (!(flags & SDL_PREALLOC)) {
+        s->pixels = malloc(s->pitch * height);
+        assert(s->pixels);
+    }
 
   return s;
 }

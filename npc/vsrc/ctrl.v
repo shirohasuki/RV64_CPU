@@ -105,14 +105,14 @@ module ctrl (
             assign pc_stall_en_o     = 1'b1;
             assign if_id_stall_en_o  = 1'b1;
             assign id_ex_stall_en_o  = 1'b0;
-            assign ex_mem_stall_en_o = 1'b0 | mem_inst_isload_i;
+            assign ex_mem_stall_en_o = mem_inst_isload_i;
             assign mem_wb_stall_en_o = 1'b0;
         end
         else if (save_inst) begin
             assign pc_stall_en_o     = 1'b1;
             assign if_id_stall_en_o  = 1'b1;
             assign id_ex_stall_en_o  = 1'b0;
-            assign ex_mem_stall_en_o = 1'b0 | mem_inst_issave_i ;//&& ~ex_inst_issave_i);
+            assign ex_mem_stall_en_o = mem_inst_issave_i ;//&& ~ex_inst_issave_i);
             assign mem_wb_stall_en_o = 1'b0;
         end
         else if (load_data_hit) begin

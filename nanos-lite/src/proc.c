@@ -6,6 +6,8 @@ static PCB pcb[MAX_NR_PROC] __attribute__((used)) = {};
 static PCB pcb_boot = {};
 PCB *current = NULL;
 
+void naive_uload(PCB *pcb, const char *filename); 
+
 void switch_boot_pcb() {
   current = &pcb_boot;
 }
@@ -20,11 +22,24 @@ void hello_fun(void *arg) {
 }
 
 void init_proc() {
-  switch_boot_pcb();
+    switch_boot_pcb();
 
-  Log("Initializing processes...");
+    Log("Initializing processes...");
+        
+    // load program here
+    // naive_uload(NULL, NULL);
+    // naive_uload(NULL, "/bin/dummy");
+    // naive_uload(NULL, "/bin/hello");
+    // naive_uload(NULL, "/bin/file-test");
+    // naive_uload(NULL, "/bin/timer-test");
+    // naive_uload(NULL, "/bin/event-test");
+    // naive_uload(NULL, "/bin/bmp-test");
+    // naive_uload(NULL, "/bin/nslider");
+    // naive_uload(NULL, "/bin/menu");
+    // naive_uload(NULL, "/bin/nterm");
+    // naive_uload(NULL, "/bin/bird");
+    naive_uload(NULL, "/bin/pal");
 
-  // load program here
 
 }
 

@@ -44,10 +44,10 @@ static Finfo file_table[] __attribute__((used)) = {
 
 void init_fs() {
   // initialize the size of /dev/fb
-//   AM_GPU_CONFIG_T dispinfo = io_read(AM_GPU_CONFIG);
+  AM_GPU_CONFIG_T dispinfo = io_read(AM_GPU_CONFIG);
   
   // use high 32bit to store w, low 32bit to store h. fast but not support native!
-//   file_table[FD_FB].size = dispinfo.width * dispinfo.height;  // 4 for 32bit!
+  file_table[FD_FB].size = dispinfo.width * dispinfo.height;  // 4 for 32bit!
 }
 
 char* getFinfoName(int i){

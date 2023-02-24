@@ -29,26 +29,37 @@ int NDL_PollEvent(char *buf, int len) {
 }
 
 void NDL_OpenCanvas(int *w, int *h) {
-  if (getenv("NWM_APP")) {
-    int fbctl = 4;
-    fbdev = 5;
-    screen_w = *w; screen_h = *h;
-    char buf[64];
-    int len = sprintf(buf, "%d %d", screen_w, screen_h);
-    // let NWM resize the window and create the frame buffer
-    write(fbctl, buf, len);
-    while (1) {
-      // 3 = evtdev
-      int nread = read(3, buf, sizeof(buf) - 1);
-      if (nread <= 0) continue;
-      buf[nread] = '\0';
-      if (strcmp(buf, "mmap ok") == 0) break;
+    if (getenv("NWM_APP")) {
+        int fbctl = 4;
+        fbdev = 5;
+        screen_w = *w; screen_h = *h;
+        char buf[64];
+        int len = sprintf(buf, "%d %d", screen_w, screen_h);
+        // let NWM resize the window and create the frame buffer
+        write(fbctl, buf, len);
+        while (1) {
+        // 3 = evtdev
+            int nread = read(3, buf, sizeof(buf) - 1);
+            if (nread <= 0) continue;
+            buf[nread] = '\0';
+            if (strcmp(buf, "mmap ok") == 0) break;
+        }
+        close(fbctl);
     }
-    close(fbctl);
-  }
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
+}
+
+void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
+    int fd = open("/dev/fb",0,0);
+    if(fd == -1){
+        printf("open /dev/fb error");
+        return ;
+    }
+    lseek(fd,x*y,SEEK_SET);
+    write(fd, pixels, ((size_t)w<<32) | ((size_t)h & 0x00000000FFFFFFFF)); 
+    // w=high 32bit, h=low 32bit.
 }
 
 void NDL_OpenAudio(int freq, int channels, int samples) {

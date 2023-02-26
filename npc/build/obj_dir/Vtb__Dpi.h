@@ -18,6 +18,8 @@ extern "C" {
     // DPI IMPORTS
     // DPI import at /home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/ex.v:3:30
     extern void ebreak();
+    // DPI import at /home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/csr_regs.v:2:30
+    extern void get_csrs(const svOpenArrayHandle csrs);
     // DPI import at /home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/ex.v:4:30
     extern void get_pc(long long pc);
     // DPI import at /home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/regs.v:1:30

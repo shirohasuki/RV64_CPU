@@ -45,6 +45,7 @@ static int status = 0;
 typedef struct {
     word_t reg[32];
     vaddr_t pc;
+    word_t csr[4];    
 } CPU_state;
 
 extern CPU_state cpu_npc;
@@ -78,6 +79,7 @@ void print_mtrace();
 
 // ============= REG ===================
 void dump_reg(); // 打印寄存器
+void dump_csr(); // 打印异常寄存器
 
 // ============= Format ================
 #define COLOR(a, b) "\033[" #b "m" a "\033[0m"

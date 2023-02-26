@@ -59,9 +59,9 @@ int main() {
     
     sim_init();
 
-#ifdef CONFIG_NPC_DEVICE
+// #ifdef CONFIG_NPC_DEVICE
     // init_device();  // 初始化外设
-#endif
+// #endif
 
 #ifdef CONFIG_NPC_ITRACE
     init_disasm("riscv64-pc-linux-gnu");
@@ -76,6 +76,7 @@ int main() {
 
     while (sim_time < MAX_SIM_TIME) {
         // dump_gpr(); // 打印寄存器
+        dump_csr();
         exec_once();
 #ifdef CONFIG_NPC_DIFFTEST
         while (cpu_npc.pc == 0x0) {

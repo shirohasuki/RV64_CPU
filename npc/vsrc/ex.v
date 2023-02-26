@@ -16,6 +16,10 @@ module ex (
     input wire[63:0]  base_addr_i, // 基地址
     input wire[63:0]  offset_addr_i, // 偏移地址
 
+    input wire[63:0]  csr_data_i,
+    input wire[11:0]  csr_waddr_i,
+    input wire        csr_wen_i,
+
     // to ctrl
     output reg[63:0]  jump_addr_o,
     output reg        jump_en_o,
@@ -26,8 +30,8 @@ module ex (
     // input reg[63:0]   mem_rdata_i, 
 
     // to ex_mem
-    output wire[31:0]  inst_o,
-    output reg[63:0]   inst_addr_o, // 用于验证每级传递的pc
+    output wire[31:0] inst_o,
+    output reg[63:0]  inst_addr_o, // 用于验证每级传递的pc
 
     output wire       mem_ren_o,
     output reg[63:0]  mem_raddr_o,
@@ -40,6 +44,10 @@ module ex (
     output reg[63:0]  rd_wdata_o,
     output reg[4:0]   rd_waddr_o,
     output reg        reg_wen_o,
+    // to csr_regs
+    output wire[11:0] csr_waddr_o,
+    output wire[63:0] csr_data_o,
+    output wire       csr_wen_o,
 
     // to ctrl and ex_mem
     output wire       isload_o,
@@ -118,17 +126,23 @@ module ex (
     wire[63:0] compress_shift_right_signed;
     wire[63:0] compress_addr_offset; // 偏移地址计算
 
+    // 中间转换变量
+    wire[31:0] compress_rem_tmp;            assign compress_rem_tmp           = op1_i[31:0] % op2_i[31:0];
+    wire[31:0] compress_shift_left_u_tmp;   assign compress_shift_left_u_tmp  = op1_i[31:0] << op2_i[31:0];
+    wire[31:0] compress_shift_right_u_tmp;  assign compress_shift_right_u_tmp = op1_i[31:0] >> op2_i[31:0];
+    wire[31:0] compress_shift_right_s_tmp;  assign compress_shift_right_s_tmp = $signed(op1_i[31:0]) >>> op2_i[4:0];
+
     assign compress_add                  = {{32{op1_i_add_op2_i[31]}}, op1_i_add_op2_i[31:0]};                  // 加法器       
     assign compress_sub                  = {{32{op1_i_sub_op2_i[31]}}, op1_i_sub_op2_i[31:0]};                  // 减(待改进)
     assign compress_mul                  = {{32{op1_i_mul_op2_i[31]}}, op1_i_mul_op2_i[31:0]};                  // 乘
     assign compress_and                  = {{32{op1_i_and_op2_i[31]}}, op1_i_and_op2_i[31:0]};                  // 与
     assign compress_xor                  = {{32{op1_i_xor_op2_i[31]}}, op1_i_xor_op2_i[31:0]};                  // 异或
     assign compress_or                   = {{32{op1_i_or_op2_i[31]}}, op1_i_or_op2_i[31:0]};                    // 或
-    assign compress_rem                  = {{32{{op1_i[31:0] % op2_i[31:0]}[31]}}, {op1_i[31:0] % op2_i[31:0]}[31:0]};
+    assign compress_rem                  = {{32{compress_rem_tmp[31]}}, compress_rem_tmp[31:0]};
     assign compress_div                  = {{32{op1_i_div_op2_i[31]}}, op1_i_div_op2_i[31:0]};
-    assign compress_shift_left_unsigned  = {{32{{op1_i[31:0] << op2_i[31:0]}[31]}}, {op1_i[31:0] << op2_i[31:0]}[31:0]};  // 逻辑左移
-    assign compress_shift_right_unsigned = {{32{{op1_i[31:0] >> op2_i[31:0]}[31]}}, {op1_i[31:0] >> op2_i[31:0]}[31:0]};// 逻辑右移
-    assign compress_shift_right_signed   = {{32{{$signed(op1_i[31:0]) >>> op2_i[4:0]}[31]}}, {$signed(op1_i[31:0]) >>> op2_i[4:0]}[31:0]};    // 算术右移
+    assign compress_shift_left_unsigned  = {{32{compress_shift_left_u_tmp[31]}}, compress_shift_left_u_tmp[31:0]};  // 逻辑左移
+    assign compress_shift_right_unsigned = {{32{compress_shift_right_u_tmp[31]}}, compress_shift_right_u_tmp[31:0]};// 逻辑右移
+    assign compress_shift_right_signed   = {{32{compress_shift_right_s_tmp[31]}}, compress_shift_right_s_tmp[31:0]};    // 算术右移
     assign compress_addr_offset          = {{32{base_addr_add_addr_offset[31]}}, base_addr_add_addr_offset[31:0]};  // 计算地址单元
     // assign op1_i_equal_op2_i         = (op1_i == op2_i)? 1'b1 : 1'b0;
     // assign op1_i_less_op2_i_signed   = ($signed(op1_i) < $signed(op2_i))? 1'b1 : 1'b0;
@@ -146,6 +160,12 @@ module ex (
 
     always @(posedge clk) begin
         get_pc(inst_addr_i);
+        if (inst_i != `INST_NOP) begin
+            $display("[EXU] pc_addr: %x inst: %x", inst_addr_i[31:0], inst_i);
+        end
+        else begin
+            $display("[EXU] pc_addr: %x inst: NOP", inst_addr_i[31:0]);
+        end
     end
 
     always @(*) begin
@@ -164,7 +184,10 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o   = 1'b0;
-                issave_o    = 1'b0;  
+                issave_o    = 1'b0; 
+                csr_waddr_o = 12'b0;
+                csr_data_o  = 64'b0;
+                csr_wen_o   = 1'b0; 
                 case (func3)
                     `INST_ADDI:begin
                         rd_wdata_o = op1_i_add_op2_i; 
@@ -239,7 +262,10 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o   = 1'b0; 
-                issave_o    = 1'b0;                 
+                issave_o    = 1'b0;
+                csr_waddr_o = 12'b0;
+                csr_data_o  = 64'b0;
+                csr_wen_o   = 1'b0;                  
                 case (func3)
                     `INST_ADDIW: begin
                         rd_wdata_o = compress_add; // compress to 32
@@ -282,7 +308,10 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o    = 1'b0;
-                issave_o    = 1'b0;  
+                issave_o    = 1'b0;
+                csr_waddr_o = 12'b0;
+                csr_data_o  = 64'b0;
+                csr_wen_o   = 1'b0;   
                 case (func3)
                     `INST_ADD_SUB_MUL: begin //ADD和SUB的func3相同，func7不同
                         if (func7 == 7'b0000000) begin // add
@@ -383,7 +412,10 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o    = 1'b0;
-                issave_o    = 1'b0;  
+                issave_o    = 1'b0;
+                csr_waddr_o = 12'b0;
+                csr_data_o  = 64'b0;
+                csr_wen_o   = 1'b0;   
                 case (func3)
                     `INST_ADDW_SUBW_MULW: begin //ADD和SUB的func3相同，func7不同
                         if (func7 == 7'b0000000) begin // add
@@ -449,7 +481,10 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o    = 1'b0;
-                issave_o    = 1'b0;  
+                issave_o    = 1'b0;
+                csr_waddr_o = 12'b0;
+                csr_data_o  = 64'b0;
+                csr_wen_o   = 1'b0;   
                 case (func3)
                     `INST_BNE: begin
                         jump_addr_o = base_addr_add_addr_offset;
@@ -495,8 +530,11 @@ module ex (
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
-                mem_wmask_o   = 8'b0;
-                issave_o    = 1'b0;  
+                mem_wmask_o = 8'b0;
+                issave_o    = 1'b0;
+                csr_waddr_o = 12'b0;
+                csr_data_o  = 64'b0;
+                csr_wen_o   = 1'b0;   
                 case (func3)
                     `INST_LB: begin 
                         mem_ren_o   = 1'b1;
@@ -581,6 +619,9 @@ module ex (
                 mem_raddr_o = 64'b0;
                 isload_o    = 1'b0;
                 issave_o    = 1'b1;
+                csr_waddr_o = 12'b0;
+                csr_data_o  = 64'b0;
+                csr_wen_o   = 1'b0; 
                 case (func3)
                     `INST_SB: begin
                         mem_wen_o   = 1'b1;
@@ -616,14 +657,51 @@ module ex (
                 endcase
             end
 
+            `INST_TYPE_INTR: begin
+                jump_addr_o = 64'b0;
+                jump_en_o   = 1'b0;
+                mem_ren_o   = 1'b0;
+                mem_raddr_o = 64'b0;
+                mem_wen_o   = 1'b0;
+                mem_waddr_o = 64'b0;
+                mem_wdata_o = 64'b0;
+                mem_wmask_o = 8'b0;
+                isload_o    = 1'b0;
+                issave_o    = 1'b1;
+                case (func3)
+                    `INST_CSRRS: begin
+                        rd_wdata_o  = op1_i; 
+                        rd_waddr_o  = rd_addr_i;
+                        reg_wen_o   = 1'b1;
+                        csr_waddr_o = csr_waddr_i;
+                        csr_data_o  = op1_i_or_op2_i;
+                        csr_wen_o   = 1'b1;
+                    end
+                    `INST_CSRRW: begin
+                        rd_wdata_o  = op1_i; 
+                        rd_waddr_o  = rd_addr_i;
+                        reg_wen_o   = 1'b1;
+                        csr_waddr_o = csr_waddr_i;
+                        csr_data_o  = op2_i;
+                        csr_wen_o   = 1'b1;
+                    end
+                    default begin
+                        rd_wdata_o  = 64'b0; 
+                        rd_waddr_o  = 5'b0;
+                        reg_wen_o   = 1'b0;
+                        csr_waddr_o = 12'b0;
+                        csr_data_o  = 64'b0;
+                        csr_wen_o   = 1'b0;
+                    end
+                endcase
+            end
+
             `INST_JAL: begin
                 rd_wdata_o  = op1_i_add_op2_i; // rd = PC + 4
                 rd_waddr_o  = rd_addr_i;
                 reg_wen_o   = 1'b1; 
                 jump_addr_o = base_addr_add_addr_offset; // PC = PC + imm
                 jump_en_o   = 1'b1;
-                // flush_flag_o = 3'b011;
-                // stall_flag_o = 3'b0;
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
@@ -631,7 +709,10 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o    = 1'b0;
-                issave_o    = 1'b0;  
+                issave_o    = 1'b0;
+                csr_waddr_o = 12'b0;
+                csr_data_o  = 64'b0;
+                csr_wen_o   = 1'b0;   
                 //$display("here2");
                 //$display("%llx", jump_addr_o );
             end // Jump And Link (PC += imm, rd = PC + 4)
@@ -650,7 +731,10 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o    = 1'b0;
-                issave_o    = 1'b0;  
+                issave_o    = 1'b0;
+                csr_waddr_o = 12'b0;
+                csr_data_o  = 64'b0;
+                csr_wen_o   = 1'b0;   
             end // Jump And Link Reg (PC = rs1 + imm, rd = PC + 4)		
             `INST_LUI: begin
                 rd_wdata_o  = op2_i; 
@@ -667,7 +751,10 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o    = 1'b0;
-                issave_o    = 1'b0;        
+                issave_o    = 1'b0;
+                csr_waddr_o = 12'b0;
+                csr_data_o  = 64'b0;
+                csr_wen_o   = 1'b0;         
             end // Load Upper Imm (rd = imm << 12)
             `INST_AUIPC: begin
                 rd_wdata_o  = op1_i_add_op2_i; 
@@ -684,7 +771,10 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o    = 1'b0; 
-                issave_o    = 1'b0;     
+                issave_o    = 1'b0;
+                csr_waddr_o = 12'b0;
+                csr_data_o  = 64'b0;
+                csr_wen_o   = 1'b0;      
             end // Add Upper Imm to PC
             default: begin
                 jump_addr_o = 64'b0;
@@ -701,7 +791,10 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o    = 1'b0; 
-                issave_o    = 1'b0;     
+                issave_o    = 1'b0; 
+                csr_waddr_o = 12'b0;
+                csr_data_o  = 64'b0;
+                csr_wen_o   = 1'b0;     
             end 
         endcase
     end

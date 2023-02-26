@@ -1,6 +1,7 @@
 #include "npc.h"
 
 uint64_t *cpu_reg = NULL;
+uint64_t *cpu_csr = NULL;
 uint64_t cpu_pc = 0x80000000;
 
 const char *riscv64_regs[] = {
@@ -8,6 +9,10 @@ const char *riscv64_regs[] = {
   "s0", "s1", "a0", "a1", "a2", "a3", "a4", "a5",
   "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
   "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
+};
+
+const char *riscv64_csrs[] = {
+  "mstatus", "mtvec", "mepc", "mcause"
 };
 
 extern "C" void get_pc(long long int pc) {
@@ -23,12 +28,26 @@ extern "C" void get_regs(const svOpenArrayHandle r) {
     for (int i = 0; i < 32; i++) { cpu_npc.reg[i] = cpu_reg[i];}
 }
 
+extern "C" void get_csrs(const svOpenArrayHandle r) {
+    cpu_csr = (uint64_t *)(((VerilatedDpiOpenVar*)r) -> datap());
+    // give regs to CPU status
+    for (int i = 0; i < 4; i++) { cpu_npc.csr[i] = cpu_csr[i];}
+}
+
 
 // 一个输出RTL中通用寄存器的值的示例
 void dump_reg() {
-    printf("============= Regs =================\n");
+    printf("============= REGs =================\n");
     for (int i = 0; i < 32; i++) {
         printf("reg[%2d] = 0x%-14lx\t%s\n", i, cpu_reg[i], riscv64_regs[i]);
+    } // -:左对齐
+    printf("pc      = 0x%lx\n", cpu_pc);
+    printf("====================================\n");
+}
+void dump_csr() {
+    printf("============= CSRs =================\n");
+    for (int i = 0; i < 4; i++) {
+        printf("%-7s = 0x%-14lx\n", riscv64_csrs[i], cpu_csr[i]);
     } // -:左对齐
     printf("pc      = 0x%lx\n", cpu_pc);
     printf("====================================\n");

@@ -14,11 +14,34 @@ const char *regs[] = {
 //         printf("%s:0x8%07x\n", regs[i], *regs[i]);
 //     }
 // }
+const char *csrs[] = {
+  "mstatus", "mtvec", "mepc", "mcause"
+};
+
+
+void dump_reg() {
+    printf("============= REGs =================\n");
+    for (int i = 0; i < 32; i++) {
+        printf("reg[%2d] = 0x%-14lx\t%s\n", i, cpu.gpr[i], regs[i]);
+    } // -:左对齐
+    printf("pc      = 0x%lx\n", cpu.pc);
+    printf("====================================\n");
+}
+void dump_csr() {
+    printf("============= CSRs =================\n");
+    for (int i = 0; i < 4; i++) {
+        printf("csr[%2d] = 0x%-14lx\t%s\n", i, cpu.gpr[i], csrs[i]);
+    } // -:左对齐
+    printf("pc      = 0x%lx\n", cpu.pc);
+    printf("====================================\n");
+}
 
 void isa_reg_display() {
-    for (int i = 0; i < 32; i++) {
-        printf("%s = %lx\n", regs[i], gpr(i));
-    }
+    // for (int i = 0; i < 32; i++) {
+    //     printf("%s = %lx\n", regs[i], gpr(i));
+    // }
+    dump_reg();
+    dump_csr(); 
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {

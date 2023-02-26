@@ -326,7 +326,7 @@ module id(
                 base_addr_o   = 64'b0; // 基地址
                 offset_addr_o = 64'b0; // 偏移地址 
                 case (func3)
-                    `INST_CSRRS, `INST_CSRRW: begin
+                    `INST_CSRRS, `INST_CSRRW, `INST_CSRRC: begin
                         rs1_addr_o    = rs1;
                         rs2_addr_o    = 5'b0;
                         csr_addr_o    = csr;

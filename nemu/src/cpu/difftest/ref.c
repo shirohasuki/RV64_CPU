@@ -71,8 +71,8 @@ void difftest_exec(uint64_t n) {
 }// 让REF执行`n`条指令
 
 void difftest_raise_intr(word_t NO) {
-    // cpu.csr[mepc] = epc;
-    // cpu.csr[mcause] = NO;
+    cpu.csr[mepc] = cpu.pc;
+    cpu.csr[mcause] = NO;
     // return cpu.csr[mtvec];
 }
 

@@ -1039,12 +1039,17 @@ VL_ATTR_COLD void Vtb___024root__trace_full_sub_0(Vtb___024root* vlSelf, Verilat
                                                   ((1U 
                                                     & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o)
                                                     ? 
-                                                   (((2U 
-                                                      == 
-                                                      (7U 
-                                                       & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
-                                                          >> 0xcU))) 
-                                                     | (1U 
+                                                   ((((2U 
+                                                       == 
+                                                       (7U 
+                                                        & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
+                                                           >> 0xcU))) 
+                                                      | (1U 
+                                                         == 
+                                                         (7U 
+                                                          & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
+                                                             >> 0xcU)))) 
+                                                     | (3U 
                                                         == 
                                                         (7U 
                                                          & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
@@ -1059,10 +1064,14 @@ VL_ATTR_COLD void Vtb___024root__trace_full_sub_0(Vtb___024root* vlSelf, Verilat
                                   : 0U)),12);
     tracep->fullBit(oldp+137,((IData)(((0x73U == (0x7fU 
                                                   & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o)) 
-                                       & ((2U == (7U 
-                                                  & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
-                                                     >> 0xcU))) 
-                                          | (1U == 
+                                       & (((2U == (7U 
+                                                   & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
+                                                      >> 0xcU))) 
+                                           | (1U == 
+                                              (7U & 
+                                               (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
+                                                >> 0xcU)))) 
+                                          | (3U == 
                                              (7U & 
                                               (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
                                                >> 0xcU))))))));
@@ -1484,12 +1493,17 @@ VL_ATTR_COLD void Vtb___024root__trace_full_sub_0(Vtb___024root* vlSelf, Verilat
                                                   ((1U 
                                                     & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o)
                                                     ? 
-                                                   (((2U 
-                                                      == 
-                                                      (7U 
-                                                       & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
-                                                          >> 0xcU))) 
-                                                     | (1U 
+                                                   ((((2U 
+                                                       == 
+                                                       (7U 
+                                                        & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
+                                                           >> 0xcU))) 
+                                                      | (1U 
+                                                         == 
+                                                         (7U 
+                                                          & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
+                                                             >> 0xcU)))) 
+                                                     | (3U 
                                                         == 
                                                         (7U 
                                                          & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 

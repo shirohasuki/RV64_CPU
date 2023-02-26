@@ -258,9 +258,11 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__1(Vtb___024root* vlSelf) {
                     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_op2_o = 0ULL;
                 } else if ((2U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o)) {
                     if ((1U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o)) {
-                        if (((2U == (7U & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
-                                           >> 0xcU))) 
-                             | (1U == (7U & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
+                        if ((((2U == (7U & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
+                                            >> 0xcU))) 
+                              | (1U == (7U & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
+                                              >> 0xcU)))) 
+                             | (3U == (7U & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
                                              >> 0xcU))))) {
                             vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_op1_o 
                                 = vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_id_rdata_o;

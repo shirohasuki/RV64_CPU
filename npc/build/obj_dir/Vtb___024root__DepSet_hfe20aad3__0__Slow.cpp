@@ -40,10 +40,13 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
                     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_rd_addr_o = 0U;
                 } else if ((2U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o)) {
                     if ((1U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o)) {
-                        if ((1U & (~ ((2U == (7U & 
-                                              (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
-                                               >> 0xcU))) 
-                                      | (1U == (7U 
+                        if ((1U & (~ (((2U == (7U & 
+                                               (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
+                                                >> 0xcU))) 
+                                       | (1U == (7U 
+                                                 & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
+                                                    >> 0xcU)))) 
+                                      | (3U == (7U 
                                                 & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
                                                    >> 0xcU))))))) {
                             vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_rd_addr_o = 0U;
@@ -85,12 +88,17 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
                                  ? (IData)(((3U == 
                                              (0xfU 
                                               & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o)) 
-                                            & ((2U 
-                                                == 
-                                                (7U 
-                                                 & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
-                                                    >> 0xcU))) 
-                                               | (1U 
+                                            & (((2U 
+                                                 == 
+                                                 (7U 
+                                                  & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
+                                                     >> 0xcU))) 
+                                                | (1U 
+                                                   == 
+                                                   (7U 
+                                                    & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
+                                                       >> 0xcU)))) 
+                                               | (3U 
                                                   == 
                                                   (7U 
                                                    & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
@@ -376,9 +384,13 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
                                   >> 2U)))) {
                         if ((2U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o)) {
                             if ((1U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o)) {
-                                if (((2U == (7U & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
-                                                   >> 0xcU))) 
-                                     | (1U == (7U & 
+                                if ((((2U == (7U & 
+                                              (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
+                                               >> 0xcU))) 
+                                      | (1U == (7U 
+                                                & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
+                                                   >> 0xcU)))) 
+                                     | (3U == (7U & 
                                                (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
                                                 >> 0xcU))))) {
                                     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_csr_raddr_o 
@@ -611,12 +623,17 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
                                                   ((1U 
                                                     & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o)
                                                     ? 
-                                                   (((2U 
-                                                      == 
-                                                      (7U 
-                                                       & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
-                                                          >> 0xcU))) 
-                                                     | (1U 
+                                                   ((((2U 
+                                                       == 
+                                                       (7U 
+                                                        & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
+                                                           >> 0xcU))) 
+                                                      | (1U 
+                                                         == 
+                                                         (7U 
+                                                          & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
+                                                             >> 0xcU)))) 
+                                                     | (3U 
                                                         == 
                                                         (7U 
                                                          & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 

@@ -27,6 +27,10 @@ module ex_mem (
     output reg           load_inst_o,  // mem use
     input reg           save_inst_i,  // mem use
     output reg           save_inst_o,  // mem use
+
+    // input wire[63:0] csr_data_i,
+    // input wire[11:0] csr_waddr_i,
+    // input wire       csr_wen_i,
     
     // to mem
     // output reg[2:0]     stall_flag_o, // stall 信号
@@ -45,6 +49,10 @@ module ex_mem (
     output reg[63:0]    rd_wdata_o,
     output reg[4:0]     rd_waddr_o,
     output reg          reg_wen_o   // wb use
+
+    // output wire[63:0] csr_data_o,
+    // output wire[11:0] csr_waddr_o,
+    // output wire       csr_wen_o
 );
 
     // mem use
@@ -76,6 +84,12 @@ module ex_mem (
     dff_set #(1)  dff11(clk, rst, flush_flag_i, stall_flag_i, 1'b0, load_inst_i, load_inst_o);
     dff_set #(1)  dff12(clk, rst, flush_flag_i, stall_flag_i, 1'b0, save_inst_i, save_inst_o);
     // dff_set #(3)  dff12(clk, rst, 1'b0, 1'b0, 3'b0, flush_flag_i, flush_flag_o);
+
+    // dff_set #(64) dff13(clk, rst, flush_flag_i, stall_flag_i,  64'b0, csr_data_i, csr_data_o);
+
+    // dff_set #(12) dff14(clk, rst, flush_flag_i, stall_flag_i,  12'b0, csr_waddr_i, csr_waddr_o);
+
+    // dff_set #(1) dff15(clk, rst, flush_flag_i, stall_flag_i,  1'b0, csr_wen_i, csr_wen_o);
 
 endmodule
 // mem和wb模块中flush_flag_i固定为0，不进行冲刷

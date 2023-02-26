@@ -160,7 +160,7 @@ module core (
         .csr_rdata_o ( csr_id_rdata_o ),
         .csr_wdata_i ( ex_csr_wdata_o ),
         .csr_waddr_i ( ex_csr_waddr_o ),
-        .csr_wen_i   ( ex_csr_wen_o   )
+        .csr_wen_i   ( ex_csr_wen_o  )
     );
 
     // redirect to id

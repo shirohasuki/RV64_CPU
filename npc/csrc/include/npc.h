@@ -22,7 +22,7 @@ typedef word_t vaddr_t;
 #define CONFIG_NPC_ITRACE 1
 #define CONFIG_NPC_GPRTRACE 1
 #define CONFIG_NPC_IFTRACE 1
-#define CONFIG_NPC_DIFFTEST 1
+// #define CONFIG_NPC_DIFFTEST 1
 #define CONFIG_NPC_MTRACE 1
 
 // ============== IOE ================ //
@@ -36,7 +36,6 @@ typedef word_t vaddr_t;
 // #define NPC_HAS_TIMER 1
 // #define NPC_HAS_PORT_IO 1
 
-// #define CONFIG_RT_CHECK 1
 
 // #endif
 

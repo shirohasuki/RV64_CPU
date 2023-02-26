@@ -80,9 +80,9 @@ module mem (
     output              ram_wen_o,
 
     // to mem_wb
-    output reg[63:0]    rd_wdata_o,
-    output reg[4:0]     rd_waddr_o,
-    output reg          reg_wen_o,  // to wb
+    output reg[63:0]       rd_wdata_o,
+    output reg[4:0]        rd_waddr_o,
+    output reg             reg_wen_o,  // to wb
 
     // to ctrl 
     input reg              isload_i,
@@ -108,14 +108,14 @@ module mem (
 
 
     assign inst_addr_o = inst_addr_i;
-    assign rd_waddr_o = rd_waddr_i;
-    assign rd_wdata_o = rd_wdata_i;
-    assign reg_wen_o  = reg_wen_i;
+    assign rd_waddr_o  = rd_waddr_i;
+    assign rd_wdata_o  = rd_wdata_i;
+    assign reg_wen_o   = reg_wen_i;
 
     assign isload_o = isload_i;
     assign issave_o = issave_i;
 
-    // always @(negedge clk ) begin
+    // always @(negedge clk) begin
     //     get_pc(inst_addr_i);
     // end
 
@@ -136,10 +136,10 @@ module mem (
     end
 `endif
 
-    assign ram_raddr_o = ren_i ? raddr_i : 64'b0;
+    assign ram_raddr_o = ren_i ? raddr_i     : 64'b0;
     assign rdata_o     = ren_i ? ram_rdata_i : 64'b0;
-    assign ram_wdata_o = wen_i ? wdata_i : 64'b0;
-    assign ram_waddr_o = wen_i ? waddr_i : 64'b0;
+    assign ram_wdata_o = wen_i ? wdata_i     : 64'b0;
+    assign ram_waddr_o = wen_i ? waddr_i     : 64'b0;
 
     always @(*) begin
         if (ren_i == 1'b0) begin

@@ -35,7 +35,7 @@ module csr_regs (
     //         end
     //     end
     // end
-    always @(*) begin
+    always @(posedge clk) begin
         get_csrs(csrs);
     end
 // =================================

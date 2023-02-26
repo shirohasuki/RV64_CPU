@@ -8,9 +8,9 @@
 #include "Vtb__Syms.h"
 #include "Vtb___024root.h"
 
+void Vtb___024unit____Vdpiimwrap_get_csrs__Vdpioc2_TOP____024unit(const VlUnpacked<QData/*63:0*/, 4> &csrs);
 void Vtb___024unit____Vdpiimwrap_get_pc_TOP____024unit(QData/*63:0*/ pc);
 void Vtb___024unit____Vdpiimwrap_ebreak_TOP____024unit();
-void Vtb___024unit____Vdpiimwrap_get_csrs__Vdpioc2_TOP____024unit(const VlUnpacked<QData/*63:0*/, 4> &csrs);
 
 VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
@@ -90,6 +90,7 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
         = vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_wmask_o;
     __Vdly__tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
         = vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o;
+    Vtb___024unit____Vdpiimwrap_get_csrs__Vdpioc2_TOP____024unit(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__csrs);
     Vtb___024unit____Vdpiimwrap_get_pc_TOP____024unit(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_addr_o);
     if ((0x13U != vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o)) {
         VL_WRITEF("[EXU] pc_addr: %x inst: %x\n",32,
@@ -128,11 +129,6 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
                                            & (IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raready)))) 
            & ((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_ram_ren_o) 
               | (IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_ravalid)));
-    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_reg_wen 
-        = ((~ ((~ (IData)(vlSelf->rst)) | (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_id_ex_flush_en_o))) 
-           & ((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_id_ex_stall_en_o)
-               ? (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_reg_wen)
-               : (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_reg_wen)));
     if (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_csr_wen_o) {
         if ((0x300U != (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_csr_waddr_o))) {
             if ((0x305U != (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_csr_waddr_o))) {
@@ -159,6 +155,11 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
             }
         }
     }
+    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_reg_wen 
+        = ((~ ((~ (IData)(vlSelf->rst)) | (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_id_ex_flush_en_o))) 
+           & ((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_id_ex_stall_en_o)
+               ? (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_reg_wen)
+               : (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_reg_wen)));
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_inst_addr_o 
         = ((1U & ((~ (IData)(vlSelf->rst)) | (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_ex_mem_flush_en_o)))
             ? 0ULL : ((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_ex_mem_stall_en_o)
@@ -1568,9 +1569,9 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
                                                   (7U 
                                                    & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o 
                                                       >> 0xcU))))));
-    if ((0x40U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o)) {
-        vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_csr_waddr_o 
-            = ((0x20U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o)
+    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_csr_waddr_o 
+        = ((0x40U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o)
+            ? ((0x20U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o)
                 ? ((0x10U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o)
                     ? ((8U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o)
                         ? 0U : ((4U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o)
@@ -1592,14 +1593,9 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
                                                    : 0U))
                                               : 0U)
                                           : 0U))) : 0U)
-                : 0U);
-        vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_issave_o 
-            = (1U & (IData)((0x33U == (0x3fU & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o))));
-    } else {
-        vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_csr_waddr_o = 0U;
-        vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_issave_o 
-            = (1U & (IData)((0x23U == (0x3fU & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o))));
-    }
+                : 0U) : 0U);
+    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_issave_o 
+        = (IData)((0x23U == (0x7fU & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o)));
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_isload_o 
         = (1U & (IData)(((3U == (0x7fU & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o)) 
                          & (0x7000U != (0x7000U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o)))));
@@ -1886,7 +1882,6 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
                                     & (IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_ravalid))
                                     ? vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__rwaddr
                                     : 0U) : 0U);
-    Vtb___024unit____Vdpiimwrap_get_csrs__Vdpioc2_TOP____024unit(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__csrs);
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_offset_addr_o 
         = ((0x40U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o)
             ? ((0x20U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o)

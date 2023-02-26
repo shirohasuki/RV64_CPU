@@ -10,7 +10,6 @@
 
 void Vtb___024unit____Vdpiimwrap_ebreak_TOP____024unit();
 void Vtb___024unit____Vdpiimwrap_get_regs__Vdpioc2_TOP____024unit(const VlUnpacked<QData/*63:0*/, 32> &regs);
-void Vtb___024unit____Vdpiimwrap_get_csrs__Vdpioc2_TOP____024unit(const VlUnpacked<QData/*63:0*/, 4> &csrs);
 extern const VlUnpacked<CData/*0:0*/, 64> Vtb__ConstPool__TABLE_ha41e00fd_0;
 extern const VlUnpacked<CData/*0:0*/, 64> Vtb__ConstPool__TABLE_h257ad544_0;
 extern const VlUnpacked<CData/*0:0*/, 64> Vtb__ConstPool__TABLE_hb68ce13d_0;
@@ -441,9 +440,7 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
     }
     Vtb___024unit____Vdpiimwrap_get_regs__Vdpioc2_TOP____024unit(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__regs_inst__DOT__regs);
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_issave_o 
-        = (1U & ((0x40U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o)
-                  ? (IData)((0x33U == (0x3fU & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o)))
-                  : (IData)((0x23U == (0x3fU & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o)))));
+        = (IData)((0x23U == (0x7fU & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o)));
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_sub_op2_i 
         = (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_op1_o 
            - vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_op2_o);
@@ -989,7 +986,6 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
                                           : (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_rd_addr_o))
                                       : 0U) : 0U)));
     }
-    Vtb___024unit____Vdpiimwrap_get_csrs__Vdpioc2_TOP____024unit(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__csrs);
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_offset_addr_o 
         = ((0x40U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o)
             ? ((0x20U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o)

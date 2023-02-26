@@ -51,6 +51,13 @@ int check_regs_npc(CPU_state ref_cpu) {
             return 0;
         }
     }
+    for (int i = 0; i < 4; i++) {
+        // printf(GREEN("[difftest] nemu_reg[%2d]=%16lx, npc_reg[%2d]=%16lx\n"), i, ref_cpu.reg[i], i, cpu_npc.reg[i]);
+        if (cpu_npc.csr[i] != ref_cpu.csr[i]) {
+            printf(RED("Missing match csr[%d], nemu_val=%lx, npc_val=%lx\n"), i, ref_cpu.csr[i], cpu_npc.csr[i]);
+            return 0;
+        }
+    }
     // printf(GREEN("[difftest] nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
     return 1;
 }

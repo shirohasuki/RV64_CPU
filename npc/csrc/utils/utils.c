@@ -47,7 +47,7 @@ void dump_reg() {
 void dump_csr() {
     printf("============= CSRs =================\n");
     for (int i = 0; i < 4; i++) {
-        printf("%-7s = 0x%-14lx\n", riscv64_csrs[i], cpu_csr[i]);
+        printf("csr[%2d] = 0x%-14lx\t%s\n", i, cpu_csr[i], riscv64_csrs[i]);
     } // -:左对齐
     printf("pc      = 0x%lx\n", cpu_pc);
     printf("====================================\n");
@@ -65,6 +65,7 @@ void npc_exit(int status) {
 #endif
 #ifdef CONFIG_NPC_GPRTRACE
     dump_reg(); 
+    dump_csr();
 #endif
         puts("\33[1;31m[Sim Result]: HIT BAD TRAP\33[0m");
     }

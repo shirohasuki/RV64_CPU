@@ -667,7 +667,7 @@ module ex (
                 mem_wdata_o = 64'b0;
                 mem_wmask_o = 8'b0;
                 isload_o    = 1'b0;
-                issave_o    = 1'b1;
+                issave_o    = 1'b0;
                 case (func3)
                     `INST_CSRRS: begin
                         rd_wdata_o  = op1_i; 

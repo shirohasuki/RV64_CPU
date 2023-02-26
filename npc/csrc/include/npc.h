@@ -26,7 +26,7 @@ typedef word_t vaddr_t;
 #define CONFIG_NPC_MTRACE 1
 
 // ============== IOE ================ //
-#define CONFIG_NPC_DEVICE
+// #define CONFIG_NPC_DEVICE
 // #define CONFIG_TARGET_AM 1
 
 // ============== DEVICE =============== //

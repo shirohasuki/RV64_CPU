@@ -14,7 +14,12 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
     // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, rdata);
     if (RTC_MMIO <= raddr && raddr <= RTC_MMIO + 8) { 
         if (cpu_npc.pc != 0){
-            *rdata = get_time();
+            // uint64_t us = get_time();
+            // rtc_port_base[0] = (uint32_t)us;
+            // rtc_port_base[1] = us >> 32;
+            // *rdata = get_time();
+            *rdata = (uint32_t)get_time();
+            // *rdata = get_time() >> 32;
             printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
         } // 判断不要多次执行
         return ; 

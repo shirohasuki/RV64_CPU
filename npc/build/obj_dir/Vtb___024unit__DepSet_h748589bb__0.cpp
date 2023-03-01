@@ -63,13 +63,13 @@ VL_INLINE_OPT void Vtb___024unit____Vdpiimwrap_get_pc_TOP____024unit(QData/*63:0
     get_pc(pc__Vcvt);
 }
 
-extern "C" void get_regs(const svOpenArrayHandle regs);
+extern "C" void get_gprs(const svOpenArrayHandle regs);
 
-VL_INLINE_OPT void Vtb___024unit____Vdpiimwrap_get_regs__Vdpioc2_TOP____024unit(const VlUnpacked<QData/*63:0*/, 32> &regs) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+        Vtb___024unit____Vdpiimwrap_get_regs__Vdpioc2_TOP____024unit\n"); );
+VL_INLINE_OPT void Vtb___024unit____Vdpiimwrap_get_gprs__Vdpioc2_TOP____024unit(const VlUnpacked<QData/*63:0*/, 32> &regs) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+        Vtb___024unit____Vdpiimwrap_get_gprs__Vdpioc2_TOP____024unit\n"); );
     // Body
     static const int regs__Vopenprops__ulims[2] = {0, 31};
     static const VerilatedVarProps regs__Vopenprops(VLVT_UINT64, VLVD_IN, VerilatedVarProps::Packed(), 63, 0, VerilatedVarProps::Unpacked(), 1, regs__Vopenprops__ulims);
     VerilatedDpiOpenVar regs__Vopenarray (&regs__Vopenprops, &regs);
-    get_regs(&regs__Vopenarray);
+    get_gprs(&regs__Vopenarray);
 }

@@ -1,7 +1,9 @@
 #include "npc.h"
-//#include "../include/macro.h"
+#include <utils/debug.h>
 #include <string.h>
 #include <time.h>
+#include <device/serial.h>
+#include <device/rtc.h>
 
 uint8_t mem[MEM_SIZE] = {0};
 // Memory Read
@@ -10,7 +12,7 @@ uint8_t* cpu2mem(ll addr) { return mem + (addr - MEM_BASE); }
 
 extern "C" void pmem_read(ll raddr, ll *rdata) {
     //printf("[pmem_read]  raddr is:%llx\n", raddr);
-//     if (RTC_MMIO  <= raddr && raddr <= RTC_MMIO + 8) { 
+    if (RTC_MMIO <= raddr && raddr <= RTC_MMIO + 8) { 
 // #ifdef NPC_HAS_TIMER
 //     time_t t = time(NULL);
 //     struct tm *tm = localtime(&t);
@@ -18,7 +20,7 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 //     //printf("%s\n",1 time(NULL));
 //     //printf("%lx\n", time(NULL));
 //     *rdata = t;
-//     //printf("%lx\n", t);  d 
+//     //printf("%lx\n", t);  
 //     //   tm->tm_sec;
 //     //   tm->tm_min;
 //     //   tm->tm_hour;
@@ -26,8 +28,9 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 //     //   tm->tm_mon + 1;
 //     //   tm->tm_year;
 // #endif
-//         return ; 
-//     } // 时钟
+        *rdata = get_time();
+        return ; 
+    } // 时钟
     
     if (raddr < MEM_BASE) {
         //printf("[pmem_read]  raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
@@ -49,14 +52,16 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 
 // Memory Write
 extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
-    //printf("[pmem_write] waddr is:%llx\n", waddr);
+    // Log("[pmem_write] waddr is:%llx", waddr);
     if (SERIAL_MMIO <= waddr && waddr <= SERIAL_MMIO + 8) { 
-        putchar(wdata);// 写串口
-        // printf("hello\n"); // 写串口
+        // putc(wdata, stdio);// 写串口
+        if (cpu_npc.pc != 0){
+            serial_putc(wdata); // 写串口
+        } // 判断不要多次执行
         return ;
-    }
+    } 
     if (waddr < MEM_BASE) {
-        // printf("[pmem_write] waddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", waddr, MEM_BASE);
+        Printf("[pmem_write] waddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", RED, waddr, MEM_BASE);
         return;
     }
 #ifdef CONFIG_NPC_MTRACE

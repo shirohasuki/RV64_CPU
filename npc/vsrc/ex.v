@@ -160,12 +160,12 @@ module ex (
 
     always @(posedge clk) begin
         get_pc(inst_addr_i);
-        if (inst_i != `INST_NOP) begin
-            $display("[EXU] pc_addr: %x inst: %x", inst_addr_i[31:0], inst_i);
-        end
-        else begin
-            $display("[EXU] pc_addr: %x inst: NOP", inst_addr_i[31:0]);
-        end
+        // if (inst_i != `INST_NOP) begin
+        //     $display("[EXU] pc_addr: %x inst: %x", inst_addr_i[31:0], inst_i);
+        // end
+        // else begin
+        //     $display("[EXU] pc_addr: %x inst: NOP", inst_addr_i[31:0]);
+        // end
     end
 
     always @(*) begin

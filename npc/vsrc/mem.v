@@ -37,9 +37,8 @@
     
 import "DPI-C" function void pmem_read( input longint raddr, output longint rdata);
 import "DPI-C" function void pmem_write( input longint waddr, input longint wdata, input byte mask);
-// import "DPI-C" function void get_pc(input longint pc);
 
-// `define pmem_rw
+`define pmem_rw
 
 module mem (
     input               clk,
@@ -123,28 +122,32 @@ module mem (
     assign ram_wen_o = wen_i & ~axi_busy_i;
 // TODO：再次读取问题处理的可能有隐患
 
-`ifdef pmem_rw
-    always @(posedge clk) begin
-        if (ren_i) pmem_read(raddr_i, rdata_o); 
-        else rdata_o = 64'b0;
-
-        if (wen_i) pmem_write(waddr_i, wdata_i, wmask_i);
-
-        if ((ren_i && wen_i) && (raddr_i == waddr_i)) begin
-            rdata_o = wdata_i;  // 处理读写冲突
-        end
-    end
-`endif
-
     assign ram_raddr_o = ren_i ? raddr_i     : 64'b0;
     assign rdata_o     = ren_i ? ram_rdata_i : 64'b0;
     assign ram_wdata_o = wen_i ? wdata_i     : 64'b0;
     assign ram_waddr_o = wen_i ? waddr_i     : 64'b0;
 
+
+`ifdef pmem_rw
     always @(*) begin
-        if (ren_i == 1'b0) begin
-            rd_wdata_o = rd_wdata_i;
+        // $display("waddr = %x\n", waddr_i);
+        if ((waddr_i >= 64'ha000_0000) | (raddr_i >= 64'ha000_0000)) begin
+            if (ren_i) pmem_read(raddr_i, rdata_o); 
+            else rdata_o = 64'b0;
+
+            if (wen_i) pmem_write(waddr_i, wdata_i, wmask_i);
+
+            if ((ren_i && wen_i) && (raddr_i == waddr_i)) rdata_o = wdata_i; 
+            // 处理读写冲突
+        end 
+        else begin
+            rdata_o = 64'b0;
         end
+    end
+`endif
+
+    always @(*) begin
+        if (ren_i == 1'b0) begin rd_wdata_o = rd_wdata_i; end
         else begin
             case (opcode) 
                 `INST_TYPE_L: begin
@@ -178,10 +181,9 @@ module mem (
                 default begin
                     rd_wdata_o = 64'b0;
                 end
-           endcase
+            endcase
         end
-    end
-
+    end 
 
     always @(*) begin
         case (wmask_i) 
@@ -191,7 +193,66 @@ module mem (
             8'b11111111: ram_wmask_o  = 64'hffff_ffff_ffff_ffff;
             default begin ram_wmask_o = 64'h0; end
         endcase
-    end
+    end 
+
+
+
+
+// `ifndef pmem_rw
+
+//     always @(*) begin
+//         if (ren_i == 1'b0) begin
+//             rd_wdata_o = rd_wdata_i;
+//         end
+//         else begin
+//             case (opcode) 
+//                 `INST_TYPE_L: begin
+//                     case (func3)
+//                         `INST_LB: begin 
+//                             rd_wdata_o = {{56{rdata_o[7]}}, rdata_o[7:0]}; 
+//                         end
+//                         `INST_LH: begin 
+//                             rd_wdata_o = {{48{rdata_o[15]}}, rdata_o[15:0]};
+//                         end
+//                         `INST_LW: begin
+//                             rd_wdata_o = {{32{rdata_o[31]}}, rdata_o[31:0]};
+//                         end
+//                         `INST_LD: begin
+//                             rd_wdata_o = {rdata_o[63:0]};
+//                         end
+//                         `INST_LBU: begin 
+//                             rd_wdata_o = {56'b0,rdata_o[7:0]};
+//                         end
+//                         `INST_LHU: begin
+//                             rd_wdata_o = {48'b0,rdata_o[15:0]};
+//                         end
+//                         `INST_LWU: begin
+//                             rd_wdata_o = {32'b0,rdata_o[31:0]};
+//                         end
+//                         default begin
+//                             rd_wdata_o = 64'b0;
+//                         end
+//                     endcase
+//                 end
+//                 default begin
+//                     rd_wdata_o = 64'b0;
+//                 end
+//            endcase
+//         end
+//     end
+
+
+//     always @(*) begin
+//         case (wmask_i) 
+//             8'b00000001: ram_wmask_o  = 64'h0000_0000_0000_00ff;
+//             8'b00000011: ram_wmask_o  = 64'h0000_0000_0000_ffff;
+//             8'b00001111: ram_wmask_o  = 64'h0000_0000_ffff_ffff;
+//             8'b11111111: ram_wmask_o  = 64'hffff_ffff_ffff_ffff;
+//             default begin ram_wmask_o = 64'h0; end
+//         endcase
+//     end
+
+// `endif
 
 
 endmodule

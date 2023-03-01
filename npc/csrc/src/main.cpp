@@ -75,9 +75,10 @@ int main() {
 #endif
 
     while (sim_time < MAX_SIM_TIME) {
-        // dump_gpr(); // 打印寄存器
-        // dump_csr();
+        // dump_gpr(); // 打印通用寄存器
+        // dump_csr(); // 打印异常寄存器
         exec_once();
+        // IFDEF(CONFIG_DEVICE, device_update());
 #ifdef CONFIG_NPC_DIFFTEST
         while (cpu_npc.pc == 0x0) {
             exec_once();    

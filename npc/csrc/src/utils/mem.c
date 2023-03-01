@@ -11,24 +11,12 @@ uint8_t mem[MEM_SIZE] = {0};
 uint8_t* cpu2mem(ll addr) { return mem + (addr - MEM_BASE); }
 
 extern "C" void pmem_read(ll raddr, ll *rdata) {
-    //printf("[pmem_read]  raddr is:%llx\n", raddr);
+    // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, rdata);
     if (RTC_MMIO <= raddr && raddr <= RTC_MMIO + 8) { 
-// #ifdef NPC_HAS_TIMER
-//     time_t t = time(NULL);
-//     struct tm *tm = localtime(&t);
-//     //pmem_write(RTC_MMIO, time(NULL), 0xff);
-//     //printf("%s\n",1 time(NULL));
-//     //printf("%lx\n", time(NULL));
-//     *rdata = t;
-//     //printf("%lx\n", t);  
-//     //   tm->tm_sec;
-//     //   tm->tm_min;
-//     //   tm->tm_hour;
-//     //   tm->tm_mday;
-//     //   tm->tm_mon + 1;
-//     //   tm->tm_year;
-// #endif
-        *rdata = get_time();
+        if (cpu_npc.pc != 0){
+            *rdata = get_time();
+            printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
+        } // 判断不要多次执行
         return ; 
     } // 时钟
     

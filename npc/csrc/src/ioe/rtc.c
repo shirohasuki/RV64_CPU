@@ -12,7 +12,7 @@ static uint64_t get_time_internal() {
     uint64_t us = now.tv_sec * 1000000 + now.tv_usec;
     // printf("us = %llx\n", us);
 
-    printf("us = %llx\n", (uint32_t)us);
+    // printf("us = %llx\n", (uint32_t)us);
     return us;
 }
 

@@ -10,9 +10,7 @@ static uint64_t get_time_internal() {
     struct timeval now;
     gettimeofday(&now, NULL);
     uint64_t us = now.tv_sec * 1000000 + now.tv_usec;
-    
     // printf("us = %llx\n", us);
-
     // printf("us = %llx\n", (uint32_t)us);
     return us;
 }
@@ -28,7 +26,7 @@ static uint32_t *rtc_port_base = NULL;
 static void rtc_io_handler(uint32_t offset, int len, bool is_write) {
     // assert(offset == 0 || offset == 4);
     // if (!is_write && offset == 4) {
-    printf("here\n");
+    printf("HERE\n");
     if (!is_write) {
     // if (!is_write) {
         uint64_t us = get_time();

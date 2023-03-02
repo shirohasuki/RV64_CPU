@@ -38,6 +38,7 @@ void init_map() {
 }
 
 word_t map_read(paddr_t addr, int len, IOMap *map) {
+    printf("HHH");
     assert(len >= 1 && len <= 8);
 #ifdef CONFIG_DTRACE
     Log("[Dtrace - Read] %s", map -> name);

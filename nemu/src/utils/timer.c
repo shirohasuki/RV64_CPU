@@ -1,4 +1,5 @@
 #include <common.h>
+#include <stdio.h>
 #include MUXDEF(CONFIG_TIMER_GETTIMEOFDAY, <sys/time.h>, <time.h>)
 
 IFDEF(CONFIG_TIMER_CLOCK_GETTIME,
@@ -15,6 +16,7 @@ static uint64_t get_time_internal() {
   struct timeval now;
   gettimeofday(&now, NULL);
   uint64_t us = now.tv_sec * 1000000 + now.tv_usec;
+      printf("here\n");
 #else
   struct timespec now;
   clock_gettime(CLOCK_MONOTONIC_COARSE, &now);

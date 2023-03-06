@@ -4,6 +4,7 @@
 #include <time.h>
 #include <device/serial.h>
 #include <device/rtc.h>
+#include <device/mmio.h>
 
 uint8_t mem[MEM_SIZE] = {0};
 // Memory Read
@@ -14,7 +15,8 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
     // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, rdata);
     if (RTC_MMIO <= raddr && raddr <= RTC_MMIO + 8) { 
         if (cpu_npc.pc != 0){
-            *rdata = (uint32_t)get_time();
+            // *rdata = (uint32_t)get_time();
+            *rdata = mmio_read(raddr, 8);
             printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
         } // 判断不要多次执行
         return ; 

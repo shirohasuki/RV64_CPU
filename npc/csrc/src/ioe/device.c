@@ -62,5 +62,5 @@ void init_device() {
     IFDEF(NPC_HAS_TIMER, init_timer());
 //   IFDEF(NPC_HAS_VGA, init_vga());
 //   IFDEF(NPC_HAS_KEYBOARD, init_i8042());
-    init_alarm();
+    // init_alarm();
 }

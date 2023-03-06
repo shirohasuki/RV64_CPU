@@ -70,5 +70,5 @@ void init_device() {
   IFDEF(CONFIG_HAS_DISK, init_disk());
   IFDEF(CONFIG_HAS_SDCARD, init_sdcard());
 
-//   IFNDEF(CONFIG_TARGET_AM, init_alarm());
+  IFNDEF(CONFIG_TARGET_AM, init_alarm());
 }

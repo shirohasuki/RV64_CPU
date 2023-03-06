@@ -16,20 +16,20 @@ typedef struct {
     io_callback_t callback;
 } IOMap;
 
-// static inline bool map_inside(IOMap *map, paddr_t addr) {
-//   return (addr >= map->low && addr <= map->high);
-// }
+static inline bool map_inside(IOMap *map, paddr_t addr) {
+    return (addr >= map->low && addr <= map->high);
+}
 
-// static inline int find_mapid_by_addr(IOMap *maps, int size, paddr_t addr) {
-//     int i;
-//     for (i = 0; i < size; i ++) {
-//         if (map_inside(maps + i, addr)) {
-//         difftest_skip_ref();
-//         return i;
-//         }
-//     }
-//     return -1;
-// }
+static inline int find_mapid_by_addr(IOMap *maps, int size, paddr_t addr) {
+    int i;
+    for (i = 0; i < size; i ++) {
+        if (map_inside(maps + i, addr)) {
+        // difftest_skip_ref(); TODO:加上
+            return i;
+        }
+    }
+    return -1;
+}
 
 // void add_pio_map(const char *name, ioaddr_t addr,
 //         void *space, uint32_t len, io_callback_t callback);

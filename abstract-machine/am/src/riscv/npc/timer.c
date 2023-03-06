@@ -1,6 +1,6 @@
 #include <am.h>
 #include "include/npc.h"
-#include <stdio.h>
+// #include <stdio.h>
 
 void __am_timer_init() {
 }

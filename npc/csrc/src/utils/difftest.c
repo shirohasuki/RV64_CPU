@@ -1,4 +1,5 @@
 #include "npc.h"
+#include <utils/debug.h>
 
 extern CPU_state ref_cpu;
 
@@ -41,21 +42,21 @@ void init_difftest(const char *ref_so_file, ll img_size) {
 
 int check_regs_npc(CPU_state ref_cpu) {
     if (cpu_npc.pc != ref_cpu.pc) {
-        printf(RED("Missing match at pc, nemu_val=%lx, npc_val=%lx\n"), ref_cpu.pc, cpu_npc.pc);
+        Printf("Missing match at pc, nemu_val=%lx, npc_val=%lx\n", RED, ref_cpu.pc, cpu_npc.pc);
         return 0;
     }
     for (int i = 0; i < 32; i++) {
-        // printf(GREEN("[difftest] nemu_reg[%2d]=%16lx, npc_reg[%2d]=%16lx\n"), i, ref_cpu.reg[i], i, cpu_npc.reg[i]);
-        if (cpu_npc.reg[i] != ref_cpu.reg[i]) {
-            printf(RED("Missing match reg[%d], nemu_val=%lx, npc_val=%lx\n"), i, ref_cpu.reg[i], cpu_npc.reg[i]);
+        // printf(GREEN("[difftest] nemu_gpr[%2d]=%16lx, npc_gpr[%2d]=%16lx\n"), i, ref_cpu.gpr[i], i, cpu_npc.gpr[i]);
+        if (cpu_npc.gpr[i] != ref_cpu.gpr[i]) {
+            Printf("Missing match gpr[%d], nemu_val=%lx, npc_val=%lx\n", RED, i, ref_cpu.gpr[i], cpu_npc.gpr[i]);
             // printf(RED("npc_pc=%lx\n"), cpu_npc.pc);
             return 0;
         }
     }
     for (int i = 0; i < 4; i++) {
-        // printf(GREEN("[difftest] nemu_reg[%2d]=%16lx, npc_reg[%2d]=%16lx\n"), i, ref_cpu.reg[i], i, cpu_npc.reg[i]);
+        // printf(GREEN("[difftest] nemu_gpr[%2d]=%16lx, npc_gpr[%2d]=%16lx\n"), i, ref_cpu.gpr[i], i, cpu_npc.gpr[i]);
         if (cpu_npc.csr[i] != ref_cpu.csr[i]) {
-            printf(RED("Missing match csr[%d], nemu_val=%lx, npc_val=%lx\n"), i, ref_cpu.csr[i], cpu_npc.csr[i]);
+            Printf("Missing match csr[%d], nemu_val=%lx, npc_val=%lx\n", RED, i, ref_cpu.csr[i], cpu_npc.csr[i]);
             // printf(RED("npc_pc=%lx\n"), cpu_npc.pc);
             return 0;
         }
@@ -71,4 +72,23 @@ void difftest_exec_once() {
     // printf(GREEN("3. check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
     if (!check_regs_npc(ref_cpu)) npc_exit(-1);
 }
+
+
+static bool is_skip_ref = false;
+static int skip_dut_nr_inst = 0;
+
+// this is used to let ref skip instructions which
+// can not produce consistent behavior with NEMU
+void difftest_skip_ref() {
+    is_skip_ref = true;
+    // If such an instruction is one of the instruction packing in QEMU
+    // (see below), we end the process of catching up with QEMU's pc to
+    // keep the consistent behavior in our best.
+    // Note that this is still not perfect: if the packed instructions
+    // already write some memory, and the incoming instruction in NEMU
+    // will load that memory, we will encounter false negative. But such
+    // situation is infrequent.
+    skip_dut_nr_inst = 0;
+}
+
 #endif

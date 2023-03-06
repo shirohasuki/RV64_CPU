@@ -9,7 +9,7 @@ static int nr_map = 0;
 
 static IOMap* fetch_mmio_map(paddr_t addr) {
     int mapid = find_mapid_by_addr(maps, nr_map, addr);
-    printf("mapid = %d, maps[nr_map]_name = %s, addr = 0x%08x\n", mapid, maps[nr_map].name, addr);
+    // printf("mapid = %d, maps[nr_map]_name = %s, addr = 0x%08x\n", mapid, maps[nr_map].name, addr);
     return (mapid == -1 ? NULL : &maps[mapid]);
 }
 

@@ -54,6 +54,7 @@ static void timer_intr() {
 }
 
 void init_timer() {
+    // printf("rtc_init:HERE\n");
     rtc_port_base = (uint32_t *)new_space(8);
     add_mmio_map("rtc", RTC_MMIO, rtc_port_base, 8, rtc_io_handler);
     // add_alarm_handle(timer_intr);

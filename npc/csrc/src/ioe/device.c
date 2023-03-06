@@ -54,6 +54,7 @@ void vga_update_screen();
 // #endif
 // }
 
+
 void init_device() {
     init_map();
 

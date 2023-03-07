@@ -1,6 +1,9 @@
 // #include <stdio.h> 
 // #include <assert.h> 
 // #include <stdlib.h> 
+#ifndef _NPC_H_
+#define _NPC_H_
+
 #include <common.h>
 
 // DPI-C
@@ -37,6 +40,8 @@ typedef struct {
 
 extern CPU_state cpu_npc;
 extern CPU_state ref_cpu;
+
+extern bool diff_skip_flag;
 
 void npc_exit(int status);
 
@@ -104,3 +109,5 @@ void init_device();
 // #define SERIAL_MMIO         (DEVICE_BASE + 0x000003f8)
 // #define KBD_ADDR            (DEVICE_BASE + 0x0000060)
 // #define RTC_MMIO            (DEVICE_BASE + 0x00000048) // 映射的地址
+
+#endif

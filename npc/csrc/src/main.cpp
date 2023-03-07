@@ -83,9 +83,11 @@ int main() {
         while (cpu_npc.pc == 0x0) {
             exec_once();    
         } // EX被冲刷以后，pc再走几拍
-        if (!diff_skip_flag) {
+        // if (!diff_skip_flag) {
            difftest_exec_once();
-        }
+        // } else {
+            // diff_skip_flag = 0;
+        // }
 #endif
     }
 

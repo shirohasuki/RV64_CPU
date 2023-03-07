@@ -67,6 +67,14 @@ int check_regs_npc(CPU_state ref_cpu) {
 
 
 void difftest_exec_once() {
+
+    if (diff_skip_flag) {
+        // to skip the checking of an instruction, just copy the reg state to reference design
+        ref_difftest_regcpy(&cpu_npc, DIFFTEST_TO_REF); // `direction`为`DIFFTEST_TO_REF`时, 设置REF的寄存器状态为`dut`;
+        diff_skip_flag = false;
+        return;
+    }
+
     ref_difftest_exec(1);
     ref_difftest_regcpy(&ref_cpu, DIFFTEST_TO_DUT);
     // printf(GREEN("3. check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
@@ -74,21 +82,21 @@ void difftest_exec_once() {
 }
 
 
-static bool is_skip_ref = false;
-static int skip_dut_nr_inst = 0;
+// static bool is_skip_ref = false;
+// static int skip_dut_nr_inst = 0;
 
-// this is used to let ref skip instructions which
-// can not produce consistent behavior with NEMU
-void difftest_skip_ref() {
-    is_skip_ref = true;
-    // If such an instruction is one of the instruction packing in QEMU
-    // (see below), we end the process of catching up with QEMU's pc to
-    // keep the consistent behavior in our best.
-    // Note that this is still not perfect: if the packed instructions
-    // already write some memory, and the incoming instruction in NEMU
-    // will load that memory, we will encounter false negative. But such
-    // situation is infrequent.
-    skip_dut_nr_inst = 0;
-}
+// // this is used to let ref skip instructions which
+// // can not produce consistent behavior with NEMU
+// void difftest_skip_ref() {
+//     is_skip_ref = true;
+//     // If such an instruction is one of the instruction packing in QEMU
+//     // (see below), we end the process of catching up with QEMU's pc to
+//     // keep the consistent behavior in our best.
+//     // Note that this is still not perfect: if the packed instructions
+//     // already write some memory, and the incoming instruction in NEMU
+//     // will load that memory, we will encounter false negative. But such
+//     // situation is infrequent.
+//     skip_dut_nr_inst = 0;
+// }
 
 #endif

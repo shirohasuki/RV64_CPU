@@ -2,8 +2,9 @@
 #define __MEMORY_HOST_H__
 
 #include <common.h>
-
+#include <stdio.h>
 static inline word_t host_read(void *addr, int len) {
+    // printf("HREE");
   switch (len) {
     case 1: return *(uint8_t  *)addr;
     case 2: return *(uint16_t *)addr;

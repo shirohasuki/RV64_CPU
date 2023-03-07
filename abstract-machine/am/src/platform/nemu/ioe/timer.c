@@ -8,7 +8,7 @@ void __am_timer_init() {
 void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
     // uptime->us = 0;
     uptime->us = (((uint64_t)inl(RTC_ADDR + 4)) << 32) | inl(RTC_ADDR);
-    printf("us = %x\n", uptime->us);
+    // printf("us = %x\n", uptime->us);
 } // AM系统启动时间, 可读出系统启动后的微秒数
 
 void __am_timer_rtc(AM_TIMER_RTC_T *rtc) {

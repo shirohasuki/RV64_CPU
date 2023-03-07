@@ -15,6 +15,7 @@ ll img_size = 0;
 CPU_state cpu_npc;
 CPU_state ref_cpu;
 
+bool diff_skip_flag = false;
 
 //================ SIM FUNCTION =====================//
 void step_and_dump_wave() {
@@ -82,7 +83,9 @@ int main() {
         while (cpu_npc.pc == 0x0) {
             exec_once();    
         } // EX被冲刷以后，pc再走几拍
-        difftest_exec_once();
+        if (!diff_skip_flag) {
+           difftest_exec_once();
+        }
 #endif
     }
 

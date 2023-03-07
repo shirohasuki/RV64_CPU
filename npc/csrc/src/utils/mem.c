@@ -1,7 +1,7 @@
 #include "npc.h"
 #include <utils/debug.h>
 #include <string.h>
-// #include <time.h>
+#include <sys/time.h>
 #include <device/serial.h>
 #include <device/rtc.h>
 #include <device/mmio.h>
@@ -9,34 +9,51 @@
 uint8_t mem[MEM_SIZE] = {0};
 // Memory Read
 
+static uint64_t boot_time = 0;
+uint64_t s                = 0;
+uint64_t us               = 0;
+
 uint8_t* cpu2mem(ll addr) { return mem + (addr - MEM_BASE); }
 
 extern "C" void pmem_read(ll raddr, ll *rdata) {
     // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, rdata);
-    // if (RTC_MMIO <= raddr && raddr <= RTC_MMIO + 8) { 
-    //     if (cpu_npc.pc != 0){
-    //         // *rdata = (uint32_t)get_time();
-    //         *rdata = mmio_read(raddr, 8);
-    //         printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
-    //     } // 判断不要多次执行
-    //     return ; 
-    // } // 时钟
-    
     if (RTC_MMIO <= raddr && raddr <= RTC_MMIO + 8) { 
-        unsigned long rtc;
         if (cpu_npc.pc != 0){
-            rtc = (uint32_t)get_time();
+            diff_skip_flag = true;
+            unsigned long rtc = get_time();
+            // unsigned long rtc = mmio_read(raddr, 8);
+            // struct timeval now;
+            // gettimeofday(&now, NULL);
+            // if (boot_time == 0) boot_time = now.tv_sec;
+            // s  = now.tv_sec - boot_time;
+            // us = s * 1000000 + now.tv_usec;
+            // unsigned long rtc = us;
             if (raddr == RTC_MMIO) {
                 *rdata = rtc;
             } 
             else if (raddr == RTC_MMIO + 4) {
                 *rdata = rtc >> 32;
             }
-            // *rdata = mmio_read(raddr, 8);
-            // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
+            printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
         } // 判断不要多次执行
         return ; 
     } // 时钟
+    
+    // if (RTC_MMIO <= raddr && raddr <= RTC_MMIO + 8) { 
+    //     unsigned long rtc;
+    //     if (cpu_npc.pc != 0){
+    //         rtc = (uint32_t)get_time();
+    //         if (raddr == RTC_MMIO) {
+    //             *rdata = rtc;
+    //         } 
+    //         else if (raddr == RTC_MMIO + 4) {
+    //             *rdata = rtc >> 32;
+    //         }
+    //         // *rdata = mmio_read(raddr, 8);
+    //         // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
+    //     } // 判断不要多次执行
+    //     return ; 
+    // } // 时钟
 
     if (raddr < MEM_BASE) {
         //printf("[pmem_read]  raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);

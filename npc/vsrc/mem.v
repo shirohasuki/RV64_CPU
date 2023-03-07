@@ -132,6 +132,7 @@ module mem (
     always @(*) begin
         // $display("waddr = %x\n", waddr_i);
         if ((waddr_i >= 64'ha000_0000) | (raddr_i >= 64'ha000_0000)) begin
+            // $display("HERE");
             if (ren_i) pmem_read(raddr_i, rdata_o); 
             else rdata_o = 64'b0;
 

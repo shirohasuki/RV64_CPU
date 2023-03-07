@@ -99,8 +99,8 @@ static void execute(uint64_t n) {
         trace_and_difftest(&s, cpu.pc);
         if (nemu_state.state != NEMU_RUNNING) break;
         IFDEF(CONFIG_DEVICE, device_update());
+        isa_reg_display();
     }
-    isa_reg_display();
 }
 
 static void statistic() {

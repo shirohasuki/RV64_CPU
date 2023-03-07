@@ -1,7 +1,7 @@
 #include "npc.h"
 #include <utils/debug.h>
 #include <string.h>
-#include <time.h>
+// #include <time.h>
 #include <device/serial.h>
 #include <device/rtc.h>
 #include <device/mmio.h>
@@ -13,15 +13,31 @@ uint8_t* cpu2mem(ll addr) { return mem + (addr - MEM_BASE); }
 
 extern "C" void pmem_read(ll raddr, ll *rdata) {
     // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, rdata);
+    // if (RTC_MMIO <= raddr && raddr <= RTC_MMIO + 8) { 
+    //     if (cpu_npc.pc != 0){
+    //         // *rdata = (uint32_t)get_time();
+    //         *rdata = mmio_read(raddr, 8);
+    //         printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
+    //     } // 判断不要多次执行
+    //     return ; 
+    // } // 时钟
+    
     if (RTC_MMIO <= raddr && raddr <= RTC_MMIO + 8) { 
+        unsigned long rtc;
         if (cpu_npc.pc != 0){
-            // *rdata = (uint32_t)get_time();
-            *rdata = mmio_read(raddr, 8);
-            printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
+            rtc = (uint32_t)get_time();
+            if (raddr == RTC_MMIO) {
+                *rdata = rtc;
+            } 
+            else if (raddr == RTC_MMIO + 4) {
+                *rdata = rtc >> 32;
+            }
+            // *rdata = mmio_read(raddr, 8);
+            // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
         } // 判断不要多次执行
         return ; 
     } // 时钟
-    
+
     if (raddr < MEM_BASE) {
         //printf("[pmem_read]  raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
         return ;

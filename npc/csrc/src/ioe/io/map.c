@@ -2,7 +2,9 @@
 #include <memory/host.h>
 #include <memory/vaddr.h>
 #include <device/map.h>
+#include <utils/debug.h>
 #include <common.h>
+#include "npc.h"
 
 #define IO_SPACE_MAX (2 * 1024 * 1024)
 
@@ -18,15 +20,14 @@ uint8_t* new_space(int size) {
     return p;
 }
 
-// static void check_bound(IOMap *map, paddr_t addr) {
-//     if (map == NULL) {
-//         Assert(map != NULL, "address (" FMT_PADDR ") is out of bound at pc = " FMT_WORD, addr, cpu.pc);
-//     } else {
-//         Assert(addr <= map->high && addr >= map->low,
-//             "address (" FMT_PADDR ") is out of bound {%s} [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,
-//             addr, map->name, map->low, map->high, cpu.pc);
-//     }
-// }
+static void check_bound(IOMap *map, paddr_t addr) {
+    if (map == NULL) {
+        Printf("address ( 0x%08x ) is out of bound at pc = 0x%08lx\n", RED, addr, cpu_npc.pc);
+    } else {
+        if (addr > map->high || addr < map->low)
+            Printf("address ( 0x%08x ) is out of bound {%s} [0x%08x, 0x%08x] at pc = 0x%08lx\n", RED, addr, map->name, map->low, map->high, cpu_npc.pc);
+    }
+}
 
 static void invoke_callback(io_callback_t c, paddr_t offset, int len, bool is_write) {
     if (c != NULL) { c(offset, len, is_write); }
@@ -39,14 +40,15 @@ void init_map() {
 }
 
 word_t map_read(paddr_t addr, int len, IOMap *map) {
-    // assert(len >= 1 && len <= 8);
+    assert(len >= 1 && len <= 8);
 // #ifdef CONFIG_DTRACE
-//     Log("[Dtrace - Read] %s", map -> name);
+    Printf("[Dtrace - Read] %s\n", BLUE, map->name);
 // #endif
-    // check_bound(map, addr);
+    check_bound(map, addr);
     paddr_t offset = addr - map->low;
     invoke_callback(map->callback, offset, len, false); // prepare data to read
     word_t ret = host_read((uint64_t *)map->space + offset, len);
+    // printf("ret = %lx\n", ret);
     return ret;
 }
 

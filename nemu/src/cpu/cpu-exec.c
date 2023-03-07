@@ -100,6 +100,7 @@ static void execute(uint64_t n) {
         if (nemu_state.state != NEMU_RUNNING) break;
         IFDEF(CONFIG_DEVICE, device_update());
     }
+    isa_reg_display();
 }
 
 static void statistic() {
@@ -129,7 +130,7 @@ void cpu_exec(uint64_t n) {
     uint64_t timer_start = get_time();
 
     execute(n);
-    isa_reg_display();
+    // isa_reg_display();
 
     uint64_t timer_end = get_time();
     g_timer += timer_end - timer_start;

@@ -132,6 +132,7 @@ static int cmd_si(char *args) {
     return 0;
     }
     cpu_exec(step);
+    isa_reg_display();
     return 0;
 }
 

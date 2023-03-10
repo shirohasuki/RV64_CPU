@@ -17,6 +17,9 @@ module id_ex(
 	input wire 		 reg_wen_i,
     input wire[63:0] base_addr_i, 
     input wire[63:0] offset_addr_i, 
+    input wire[63:0] csr_data_i,
+    input wire[11:0] csr_waddr_i,
+    input wire       csr_wen_i,
 	
     //to ex
 	output wire[31:0] inst_o,
@@ -26,7 +29,10 @@ module id_ex(
 	output wire[4:0]  rd_addr_o,	
 	output wire 	  reg_wen_o,	
     output wire[63:0] base_addr_o, 
-    output wire[63:0] offset_addr_o 	
+    output wire[63:0] offset_addr_o,
+    output wire[63:0] csr_data_o,
+    output wire[11:0] csr_waddr_o,
+    output wire       csr_wen_o
 );
 
     dff_set #(32) dff1(clk, rst, flush_flag_i, stall_flag_i, `INST_NOP, inst_i, inst_o);
@@ -45,5 +51,11 @@ module id_ex(
     dff_set #(64) dff7(clk, rst, flush_flag_i, stall_flag_i,  64'b0, base_addr_i, base_addr_o);
 	
 	dff_set #(64) dff8(clk, rst, flush_flag_i, stall_flag_i,  64'b0, offset_addr_i, offset_addr_o);
+    
+    dff_set #(64) dff9(clk, rst, flush_flag_i, stall_flag_i,  64'b0, csr_data_i, csr_data_o);
+
+    dff_set #(12) dff10(clk, rst, flush_flag_i, stall_flag_i,  12'b0, csr_waddr_i, csr_waddr_o);
+
+    dff_set #(1) dff11(clk, rst, flush_flag_i, stall_flag_i,  1'b0, csr_wen_i, csr_wen_o);
 
 endmodule

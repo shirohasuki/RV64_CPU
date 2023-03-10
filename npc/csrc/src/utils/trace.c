@@ -12,7 +12,7 @@ void itrace_record(uint64_t pc) {
     if (pc < MEM_BASE) return;
     // ringptr
     ringptr = (ringptr + 1) % SIZE_RINGBUF;
-    // fetch_inst
+    // inst_fetch
     uint8_t *pt = cpu2mem(pc);
     uint8_t *inst = (uint8_t*)malloc(sizeof(uint8_t) * 4);
     for (int i = 0; i < 4; ++i) {

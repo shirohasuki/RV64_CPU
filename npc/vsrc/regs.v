@@ -1,4 +1,4 @@
-import "DPI-C" function void get_regs(input logic [63:0] regs[]);
+import "DPI-C" function void get_gprs(input logic [63:0] regs[]);
 
 module regs (
     input  wire clk,    
@@ -77,7 +77,7 @@ module regs (
         else
             regs[reg_waddr_i] = 64'b0;
         // $display("REGS: %x", pc_reg);   
-        get_regs(regs);
+        get_gprs(regs);
         //get_pc(pc_reg);
         // 组合逻辑要补全else，时序不需要
     end // 回写rd

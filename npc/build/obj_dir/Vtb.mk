@@ -47,6 +47,12 @@ VM_USER_LDLIBS = \
 
 # User .cpp files (from .cpp's on Verilator command line)
 VM_USER_CLASSES = \
+	alarm \
+	device \
+	map \
+	mmio \
+	rtc \
+	serial \
 	main \
 	difftest \
 	disasm \
@@ -56,8 +62,10 @@ VM_USER_CLASSES = \
 
 # User .cpp directories (from .cpp's on Verilator command line)
 VM_USER_DIR = \
-	/home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc \
-	/home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils \
+	/home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src \
+	/home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/ioe \
+	/home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/ioe/io \
+	/home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/utils \
 
 
 ### Default rules...
@@ -69,17 +77,29 @@ include $(VERILATOR_ROOT)/include/verilated.mk
 ### Executable rules... (from --exe)
 VPATH += $(VM_USER_DIR)
 
-main.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/main.cpp
+alarm.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/ioe/alarm.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-difftest.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils/difftest.c
+device.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/ioe/device.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-disasm.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils/disasm.c
+map.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/ioe/io/map.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-mem.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils/mem.c
+mmio.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/ioe/io/mmio.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-trace.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils/trace.c
+rtc.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/ioe/rtc.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
-utils.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/utils/utils.c
+serial.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/ioe/serial.c
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+main.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/main.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+difftest.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/utils/difftest.c
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+disasm.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/utils/disasm.c
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+mem.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/utils/mem.c
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+trace.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/utils/trace.c
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+utils.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/utils/utils.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 
 ### Link rules... (from --exe)

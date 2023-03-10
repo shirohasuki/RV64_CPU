@@ -1,4 +1,5 @@
 #include <common.h>
+#include <stdio.h>
 #include MUXDEF(CONFIG_TIMER_GETTIMEOFDAY, <sys/time.h>, <time.h>)
 
 IFDEF(CONFIG_TIMER_CLOCK_GETTIME,

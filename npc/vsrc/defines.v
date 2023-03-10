@@ -92,10 +92,6 @@
 `define INST_MRET   32'h30200073
 `define INST_RET    32'h00008067
 
-`define INST_FENCE  7'b0001111
-`define INST_ECALL  32'h73
-`define INST_EBREAK 32'h00100073
-
 // J type inst
 `define INST_TYPE_B 7'b1100011
 `define INST_BEQ    3'b000
@@ -104,3 +100,24 @@
 `define INST_BGE    3'b101
 `define INST_BLTU   3'b110
 `define INST_BGEU   3'b111
+
+
+// ============== intr  ===============
+`define INST_FENCE  7'b0001111
+`define INST_ECALL  32'h73
+`define INST_EBREAK 32'h00100073
+
+`define INST_TYPE_INTR 7'b1110011
+`define INST_CSRRW  3'b001
+`define INST_CSRRS  3'b010
+`define INST_CSRRC  3'b011
+
+`define CSR_MSTATUS   12'h300
+`define CSR_MTVEC     12'h305
+`define CSR_MEPC      12'h341
+`define CSR_MCAUSE    12'h342
+
+// `define CSR_MIP       12'h344
+// `define CSR_MTIME     12'h
+// `define CSR_MTIMECMP  12'h
+

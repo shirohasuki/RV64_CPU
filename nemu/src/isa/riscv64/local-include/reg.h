@@ -8,6 +8,8 @@ static inline int check_reg_idx(int idx) {
   return idx;
 }
 
+#define gpr(idx) (cpu.gpr[check_reg_idx(idx)])
+
 static inline int idx2csr(int idx) {
   switch (idx) {
     case 0x305: return 0; // mtvec
@@ -17,8 +19,6 @@ static inline int idx2csr(int idx) {
   }
   panic("idx2csr error, reading 0x%x", idx);
 }
-
-#define gpr(idx) cpu.gpr[check_reg_idx(idx)]
 
 #define csr(idx) (cpu.csr[idx2csr(idx)])
 #define csrval(idx) (cpu.csr[idx])

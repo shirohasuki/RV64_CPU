@@ -1,33 +1,48 @@
 #include "npc.h"
-//#include "../include/macro.h"
-#include <time.h>
+#include <utils/debug.h>
+#include <string.h>
+#include <sys/time.h>
+#include <device/serial.h>
+#include <device/rtc.h>
+#include <device/mmio.h>
 
 uint8_t mem[MEM_SIZE] = {0};
 // Memory Read
 
+extern CPU_state cpu_npc;
+
+static uint64_t boot_time = 0;
+uint64_t s                = 0;
+uint64_t us               = 0;
+
 uint8_t* cpu2mem(ll addr) { return mem + (addr - MEM_BASE); }
 
+// extern bool diff_skip_ref_flag;
+
 extern "C" void pmem_read(ll raddr, ll *rdata) {
-    //printf("[pmem_read]  raddr is:%llx\n", raddr);
-//     if (RTC_MMIO  <= raddr && raddr <= RTC_MMIO + 8) { 
-// #ifdef NPC_HAS_TIMER
-//     time_t t = time(NULL);
-//     struct tm *tm = localtime(&t);
-//     //pmem_write(RTC_MMIO, time(NULL), 0xff);
-//     //printf("%s\n",1 time(NULL));
-//     //printf("%lx\n", time(NULL));
-//     *rdata = t;
-//     //printf("%lx\n", t);  d 
-//     //   tm->tm_sec;
-//     //   tm->tm_min;
-//     //   tm->tm_hour;
-//     //   tm->tm_mday;
-//     //   tm->tm_mon + 1;
-//     //   tm->tm_year;
-// #endif
-//         return ; 
-//     } // 时钟
-    
+    // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, rdata);
+    if (RTC_MMIO <= raddr && raddr <= RTC_MMIO + 8) { 
+        if (cpu_npc.pc != 0){
+            // extern bool diff_skip_ref_flag; = true;
+            // unsigned long rtc = get_time();
+            // diff_skip_ref_flag = 2; 
+            unsigned long rtc = mmio_read(raddr, 4);
+            // struct timeval now;
+            // gettimeofday(&now, NULL);
+            // if (boot_time == 0) boot_time = now.tv_sec;
+            // s  = now.tv_sec - boot_time;
+            // us = s * 1000000 + now.tv_usec;
+            // unsigned long rtc = us;
+            if (raddr == RTC_MMIO) {
+                *rdata = rtc;
+            } 
+            else if (raddr == RTC_MMIO + 4) {
+                *rdata = rtc >> 32;
+            }
+            printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
+        } // 判断不要多次执行
+        return ; 
+    } // 时钟
     if (raddr < MEM_BASE) {
         //printf("[pmem_read]  raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
         return ;
@@ -48,15 +63,18 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 
 // Memory Write
 extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
-    //printf("[pmem_write] waddr is:%llx\n", waddr);
-    //MUXDEF(NPC_HAS_SERIAL, putch(wdata), putc(wdata, stderr));
-    // if (SERIAL_MMIO <= waddr && waddr <= SERIAL_MMIO + 8) { 
-    //     MUXDEF(NPC_HAS_SERIAL, putch(wdata), putc(wdata, stderr));// 写串口
-    //     printf("hello\n"); // 写串口
-    //     return ;
-    // }
+    // Log("[pmem_write] waddr is:%llx", waddr);
+    if (SERIAL_MMIO <= waddr && waddr <= SERIAL_MMIO + 8) { 
+        // putc(wdata, stdio);// 写串口
+        if (cpu_npc.pc != 0){
+            // diff_skip_ref_flag = true; 
+            // diff_skip_ref_flag = 2; 
+            mmio_write(waddr, 1, wdata); // 写串口
+        } // 判断不要多次执行
+        return ;
+    } 
     if (waddr < MEM_BASE) {
-        // printf("[pmem_write] waddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", waddr, MEM_BASE);
+        Printf("[pmem_write] waddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", RED, waddr, MEM_BASE);
         return;
     }
 #ifdef CONFIG_NPC_MTRACE

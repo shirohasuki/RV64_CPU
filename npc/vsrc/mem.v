@@ -37,9 +37,8 @@
     
 import "DPI-C" function void pmem_read( input longint raddr, output longint rdata);
 import "DPI-C" function void pmem_write( input longint waddr, input longint wdata, input byte mask);
-// import "DPI-C" function void get_pc(input longint pc);
 
-// `define pmem_rw
+`define pmem_rw
 
 module mem (
     input               clk,
@@ -80,9 +79,9 @@ module mem (
     output              ram_wen_o,
 
     // to mem_wb
-    output reg[63:0]    rd_wdata_o,
-    output reg[4:0]     rd_waddr_o,
-    output reg          reg_wen_o,  // to wb
+    output reg[63:0]       rd_wdata_o,
+    output reg[4:0]        rd_waddr_o,
+    output reg             reg_wen_o,  // to wb
 
     // to ctrl 
     input reg              isload_i,
@@ -108,14 +107,14 @@ module mem (
 
 
     assign inst_addr_o = inst_addr_i;
-    assign rd_waddr_o = rd_waddr_i;
-    assign rd_wdata_o = rd_wdata_i;
-    assign reg_wen_o  = reg_wen_i;
+    assign rd_waddr_o  = rd_waddr_i;
+    assign rd_wdata_o  = rd_wdata_i;
+    assign reg_wen_o   = reg_wen_i;
 
     assign isload_o = isload_i;
     assign issave_o = issave_i;
 
-    // always @(negedge clk ) begin
+    // always @(negedge clk) begin
     //     get_pc(inst_addr_i);
     // end
 
@@ -123,28 +122,33 @@ module mem (
     assign ram_wen_o = wen_i & ~axi_busy_i;
 // TODO：再次读取问题处理的可能有隐患
 
+    assign ram_raddr_o = ren_i ? raddr_i     : 64'b0;
+    assign rdata_o     = ren_i ? ram_rdata_i : 64'b0;
+    assign ram_wdata_o = wen_i ? wdata_i     : 64'b0;
+    assign ram_waddr_o = wen_i ? waddr_i     : 64'b0;
+
+
 `ifdef pmem_rw
-    always @(posedge clk) begin
-        if (ren_i) pmem_read(raddr_i, rdata_o); 
-        else rdata_o = 64'b0;
+    always @(*) begin
+        // $display("waddr = %x\n", waddr_i);
+        if ((waddr_i >= 64'ha000_0000) | (raddr_i >= 64'ha000_0000)) begin
+            // $display("HERE");
+            if (ren_i) pmem_read(raddr_i, rdata_o); 
+            else rdata_o = 64'b0;
 
-        if (wen_i) pmem_write(waddr_i, wdata_i, wmask_i);
+            if (wen_i) pmem_write(waddr_i, wdata_i, wmask_i);
 
-        if ((ren_i && wen_i) && (raddr_i == waddr_i)) begin
-            rdata_o = wdata_i;  // 处理读写冲突
+            if ((ren_i && wen_i) && (raddr_i == waddr_i)) rdata_o = wdata_i; 
+            // 处理读写冲突
+        end 
+        else begin
+            rdata_o = 64'b0;
         end
     end
 `endif
 
-    assign ram_raddr_o = ren_i ? raddr_i : 64'b0;
-    assign rdata_o     = ren_i ? ram_rdata_i : 64'b0;
-    assign ram_wdata_o = wen_i ? wdata_i : 64'b0;
-    assign ram_waddr_o = wen_i ? waddr_i : 64'b0;
-
     always @(*) begin
-        if (ren_i == 1'b0) begin
-            rd_wdata_o = rd_wdata_i;
-        end
+        if (ren_i == 1'b0) begin rd_wdata_o = rd_wdata_i; end
         else begin
             case (opcode) 
                 `INST_TYPE_L: begin
@@ -178,10 +182,9 @@ module mem (
                 default begin
                     rd_wdata_o = 64'b0;
                 end
-           endcase
+            endcase
         end
-    end
-
+    end 
 
     always @(*) begin
         case (wmask_i) 
@@ -191,7 +194,66 @@ module mem (
             8'b11111111: ram_wmask_o  = 64'hffff_ffff_ffff_ffff;
             default begin ram_wmask_o = 64'h0; end
         endcase
-    end
+    end 
+
+
+
+
+// `ifndef pmem_rw
+
+//     always @(*) begin
+//         if (ren_i == 1'b0) begin
+//             rd_wdata_o = rd_wdata_i;
+//         end
+//         else begin
+//             case (opcode) 
+//                 `INST_TYPE_L: begin
+//                     case (func3)
+//                         `INST_LB: begin 
+//                             rd_wdata_o = {{56{rdata_o[7]}}, rdata_o[7:0]}; 
+//                         end
+//                         `INST_LH: begin 
+//                             rd_wdata_o = {{48{rdata_o[15]}}, rdata_o[15:0]};
+//                         end
+//                         `INST_LW: begin
+//                             rd_wdata_o = {{32{rdata_o[31]}}, rdata_o[31:0]};
+//                         end
+//                         `INST_LD: begin
+//                             rd_wdata_o = {rdata_o[63:0]};
+//                         end
+//                         `INST_LBU: begin 
+//                             rd_wdata_o = {56'b0,rdata_o[7:0]};
+//                         end
+//                         `INST_LHU: begin
+//                             rd_wdata_o = {48'b0,rdata_o[15:0]};
+//                         end
+//                         `INST_LWU: begin
+//                             rd_wdata_o = {32'b0,rdata_o[31:0]};
+//                         end
+//                         default begin
+//                             rd_wdata_o = 64'b0;
+//                         end
+//                     endcase
+//                 end
+//                 default begin
+//                     rd_wdata_o = 64'b0;
+//                 end
+//            endcase
+//         end
+//     end
+
+
+//     always @(*) begin
+//         case (wmask_i) 
+//             8'b00000001: ram_wmask_o  = 64'h0000_0000_0000_00ff;
+//             8'b00000011: ram_wmask_o  = 64'h0000_0000_0000_ffff;
+//             8'b00001111: ram_wmask_o  = 64'h0000_0000_ffff_ffff;
+//             8'b11111111: ram_wmask_o  = 64'hffff_ffff_ffff_ffff;
+//             default begin ram_wmask_o = 64'h0; end
+//         endcase
+//     end
+
+// `endif
 
 
 endmodule

@@ -1,9 +1,9 @@
 #include "npc.h"
-
+#include <utils/macro.h>
+#include <utils/debug.h>
 
 #define MAX_SIM_TIME 15000000// 最大仿真周期，中途读取到ebreak自动退出
 vluint64_t sim_time = 0;
-
 
 VerilatedContext* contextp = NULL;
 VerilatedVcdC* tfp = NULL;
@@ -13,7 +13,10 @@ static Vtb* top;
 ll img_size = 0;
 
 CPU_state cpu_npc;
-CPU_state ref_cpu;
+extern CPU_state cpu_nemu;
+
+// bool diff_skip_ref_flag = false;
+int diff_skip_ref_flag = 0;
 
 
 //================ SIM FUNCTION =====================//
@@ -59,62 +62,31 @@ int main() {
     
     sim_init();
 
-    // IFDEF(CONFIG_NPC_DEVICE, init_device());  // 初始化外设
 
-#ifdef CONFIG_NPC_ITRACE
-    init_disasm("riscv64-pc-linux-gnu");
-#endif
+    IFDEF(CONFIG_NPC_DEVICE, init_device());  // 初始化外设
 
-    // exec_once();
+    IFDEF(CONFIG_NPC_ITRACE, init_disasm("riscv64-pc-linux-gnu")); 
+
 #ifdef CONFIG_NPC_DIFFTEST
-    while (cpu_npc.pc != MEM_BASE) {
-        exec_once();
-        // exec_once();
-        // exec_once();
-    } // pc先走三拍到EXU
-    init_difftest("/home/shiroha/Code/ysyx/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size);
+    while (cpu_npc.pc != MEM_BASE) { exec_once(); } // pc先走三拍到EXU
 #endif
-    // dump_gpr();
-    // exec_once();
-    // exec_once();
-    // exec_once();
-    
+
+    IFDEF(CONFIG_NPC_DIFFTEST, init_difftest("/home/shiroha/Code/ysyx/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size););
+
     while (sim_time < MAX_SIM_TIME) {
-        // dump_gpr(); // 打印寄存器
+        // dump_gpr(); // 打印通用寄存器
+        // dump_csr(); // 打印异常寄存器
         exec_once();
-        // print_mtrace();
-        
+        // IFDEF(CONFIG_DEVICE, device_update());
 #ifdef CONFIG_NPC_DIFFTEST
-        // if (cpu_npc.pc == 0x0) {
-        //     exec_once();
-        //     exec_once();
-        //     // exec_once();
-        //     // if (cpu_npc.pc == ref_cpu.pc) break;
-        //     // exec_once();
-        // } // 遇到流水线冲刷，pc再走两拍到EXU
-        // if (cpu_npc.pc == 0x0) {
-        //     exec_once();
-        //     // exec_once();
-        //     // exec_once();
-        //     // if (cpu_npc.pc == ref_cpu.pc) break;
-        //     // exec_once();
-        // } // 遇到流水线冲刷，pc再走两拍到EXU
         while (cpu_npc.pc == 0x0) {
-            exec_once();    
-            // exec_once();
-        }
-        // printf("%lx %lx\n", cpu_npc.pc, ref_cpu.pc);
-        // while (cpu_npc.pc == ref_cpu.pc) {
-        //      exec_once();  
-        // }
-        // // if () {
-
-        // // }
+            // Printf("nemu_pc=%lx, npc_pc=%lx\n", GREEN, cpu_nemu.pc, cpu_npc.pc);
+            exec_once();   
+        } // EX被冲刷以后，pc再走几拍
+        // Printf("nemu_pc=%lx, npc_pc=%lx\n", BLUE, cpu_nemu.pc, cpu_npc.pc);
         difftest_exec_once();
 #endif
-        //dump_gpr();
     }
-    
-    
+
     sim_exit();
 } 

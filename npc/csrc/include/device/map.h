@@ -25,11 +25,12 @@ static inline int find_mapid_by_addr(IOMap *maps, int size, paddr_t addr) {
     int i;
     for (i = 0; i < size; i ++) {
         if (map_inside(maps + i, addr)) {
-                // difftest_skip_ref(); //TODO:加上
-                diff_skip_flag = true; 
+                diff_skip_ref_flag = true; 
+                printf("[map.h]diff_skip_ref_flag = true\n");
             return i;
         }
     }
+    printf("no map match\n");
     return -1;
 }
 

@@ -50,7 +50,7 @@ word_t map_read(paddr_t addr, int len, IOMap *map) {
     invoke_callback(map->callback, offset, len, false); // prepare data to read
     // printf("mapread\n");
     word_t ret = host_read((uint64_t *)map->space + offset, len);
-    printf("ret = %lx\n", ret);
+    // printf("ret = %lx\n", ret);
     return ret;
 }
 

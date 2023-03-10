@@ -1,5 +1,6 @@
 #include "npc.h"
 #include <utils/macro.h>
+#include <utils/debug.h>
 
 #define MAX_SIM_TIME 15000000// 最大仿真周期，中途读取到ebreak自动退出
 vluint64_t sim_time = 0;
@@ -13,9 +14,9 @@ static Vtb* top;
 ll img_size = 0;
 
 CPU_state cpu_npc;
-CPU_state ref_cpu;
+CPU_state cpu_nemu;
 
-bool diff_skip_flag = false;
+bool diff_skip_ref_flag = false;
 
 //================ SIM FUNCTION =====================//
 void step_and_dump_wave() {
@@ -63,28 +64,32 @@ int main() {
 
     IFDEF(CONFIG_NPC_DEVICE, init_device());  // 初始化外设
 
-#ifdef CONFIG_NPC_ITRACE
-    init_disasm("riscv64-pc-linux-gnu");
-#endif
+    IFDEF(CONFIG_NPC_ITRACE, init_disasm("riscv64-pc-linux-gnu")); 
 
 #ifdef CONFIG_NPC_DIFFTEST
-    while (cpu_npc.pc != MEM_BASE) {
-        exec_once();
-    } // pc先走三拍到EXU
-    init_difftest("/home/shiroha/Code/ysyx/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size);
+    while (cpu_npc.pc != MEM_BASE) { exec_once(); } // pc先走三拍到EXU
 #endif
 
+    IFDEF(CONFIG_NPC_DIFFTEST, init_difftest("/home/shiroha/Code/ysyx/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size););
+
     while (sim_time < MAX_SIM_TIME) {
-        dump_gpr(); // 打印通用寄存器
+        // dump_gpr(); // 打印通用寄存器
         // dump_csr(); // 打印异常寄存器
         exec_once();
         // IFDEF(CONFIG_DEVICE, device_update());
 #ifdef CONFIG_NPC_DIFFTEST
         while (cpu_npc.pc == 0x0) {
+            // Printf("nemu_pc=%lx, npc_pc=%lx\n", GREEN, cpu_nemu.pc, cpu_npc.pc);
             exec_once();    
         } // EX被冲刷以后，pc再走几拍
         // if (!diff_skip_flag) {
-           difftest_exec_once();
+        // Printf("nemu_pc=%lx, npc_pc=%lx\n", BLUE, cpu_nemu.pc, cpu_npc.pc);
+        difftest_exec_once();
+
+        // while (cpu_npc.pc == 0x0) {
+        //     Printf("nemu_pc=%lx, npc_pc=%lx\n", GREEN, cpu_nemu.pc, cpu_npc.pc);
+        //     exec_once();    
+        // } // EX被冲刷以后，pc再走几拍
         // } else {
             // diff_skip_flag = 0;
         // }

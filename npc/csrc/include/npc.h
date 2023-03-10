@@ -26,7 +26,7 @@
 #define CONFIG_NPC_ITRACE 1
 #define CONFIG_NPC_GPRTRACE 1
 #define CONFIG_NPC_IFTRACE 1
-// #define CONFIG_NPC_DIFFTEST 1
+#define CONFIG_NPC_DIFFTEST 1
 #define CONFIG_NPC_MTRACE 1
 
 
@@ -35,13 +35,11 @@ static int status = 0;
 typedef struct {
     word_t gpr[32];
     vaddr_t pc;
-    word_t csr[4];    
+    word_t csr[4];      
 } CPU_state;
 
 extern CPU_state cpu_npc;
-extern CPU_state ref_cpu;
-
-extern bool diff_skip_flag;
+extern CPU_state cpu_nemu;
 
 void npc_exit(int status);
 
@@ -84,19 +82,21 @@ void dump_csr(); // 打印异常寄存器
 
 void init_difftest(const char *ref_so_file, ll img_size);
 void difftest_exec_once();
-int check_regs_npc(CPU_state ref_cpu);
-
+int  check_regs_npc(CPU_state cpu_nemu);
 
 enum {
     DIFFTEST_TO_DUT,
     DIFFTEST_TO_REF
 };
+
 extern void (*ref_difftest_memcpy)(paddr_t addr, void *buf, size_t n, bool direction);
 extern void (*ref_difftest_regcpy)(void *dut, bool direction);
 extern void (*ref_difftest_exec)(uint64_t n);
 extern void (*ref_difftest_raise_intr)(uint64_t NO);
 extern void (*ref_difftest_init)();
 // void difftest_skip_ref();
+extern bool diff_skip_ref_flag;
+
 #endif
 
 // ============== DEVICE =============== //

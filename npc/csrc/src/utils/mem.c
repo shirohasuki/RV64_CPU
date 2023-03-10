@@ -15,13 +15,16 @@ uint64_t us               = 0;
 
 uint8_t* cpu2mem(ll addr) { return mem + (addr - MEM_BASE); }
 
+// extern bool diff_skip_ref_flag;
+
 extern "C" void pmem_read(ll raddr, ll *rdata) {
     // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, rdata);
     if (RTC_MMIO <= raddr && raddr <= RTC_MMIO + 8) { 
         if (cpu_npc.pc != 0){
-            diff_skip_flag = true;
-            unsigned long rtc = get_time();
-            // unsigned long rtc = mmio_read(raddr, 8);
+            // extern bool diff_skip_ref_flag; = true;
+            // unsigned long rtc = get_time();
+            diff_skip_ref_flag = true; 
+            unsigned long rtc = mmio_read(raddr, 8);
             // struct timeval now;
             // gettimeofday(&now, NULL);
             // if (boot_time == 0) boot_time = now.tv_sec;
@@ -79,6 +82,7 @@ extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
     if (SERIAL_MMIO <= waddr && waddr <= SERIAL_MMIO + 8) { 
         // putc(wdata, stdio);// 写串口
         if (cpu_npc.pc != 0){
+            // diff_skip_ref_flag = true; 
             serial_putc(wdata); // 写串口
         } // 判断不要多次执行
         return ;

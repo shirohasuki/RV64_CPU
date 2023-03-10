@@ -1,4 +1,5 @@
 #include "npc.h"
+#include <utils/macro.h>
 #include <utils/debug.h>
 
 uint64_t *cpu_gpr = NULL;
@@ -58,16 +59,10 @@ void dump_csr() {
 void npc_exit(int status) {
     if (status == 0) puts("\33[1;32m[Sim Result]: HIT GOOD TRAP\33[0m");
     else {
-#ifdef CONFIG_NPC_ITRACE
-    itrace_output();
-#endif
-#ifdef CONFIG_NPC_MTRACE
-    print_mtrace();
-#endif
-#ifdef CONFIG_NPC_GPRTRACE
-    dump_gpr(); 
-    dump_csr();
-#endif
+        IFDEF(CONFIG_NPC_ITRACE, itrace_output());
+        IFDEF(CONFIG_NPC_MTRACE, print_mtrace());
+        IFDEF(CONFIG_NPC_GPRTRACE, dump_gpr());
+        IFDEF(CONFIG_NPC_GPRTRACE, dump_csr());
         puts("\33[1;31m[Sim Result]: HIT BAD TRAP\33[0m");
     }
     exit(status);

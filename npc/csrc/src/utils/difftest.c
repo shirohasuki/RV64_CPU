@@ -1,9 +1,11 @@
 #include "npc.h"
 #include <utils/debug.h>
 
-extern CPU_state ref_cpu;
+extern CPU_state cpu_nemu;
 
 //=====================Difftest=========================
+// NEMU是REF，NPC是DUT
+
 #ifdef CONFIG_NPC_DIFFTEST
 
 // Definations of Ref
@@ -40,53 +42,60 @@ void init_difftest(const char *ref_so_file, ll img_size) {
 
 
 
-int check_regs_npc(CPU_state ref_cpu) {
-    if (cpu_npc.pc != ref_cpu.pc) {
-        Printf("Missing match at pc, nemu_val=%lx, npc_val=%lx\n", RED, ref_cpu.pc, cpu_npc.pc);
+int check_regs_npc(CPU_state cpu_nemu) {
+    if (cpu_npc.pc != cpu_nemu.pc) {
+        Printf("Missing match at pc, nemu_val=%lx, npc_val=%lx\n", RED, cpu_nemu.pc, cpu_npc.pc);
         return 0;
     }
     for (int i = 0; i < 32; i++) {
-        // printf(GREEN("[difftest] nemu_gpr[%2d]=%16lx, npc_gpr[%2d]=%16lx\n"), i, ref_cpu.gpr[i], i, cpu_npc.gpr[i]);
-        if (cpu_npc.gpr[i] != ref_cpu.gpr[i]) {
-            Printf("Missing match gpr[%d], nemu_val=%lx, npc_val=%lx\n", RED, i, ref_cpu.gpr[i], cpu_npc.gpr[i]);
+        // printf(GREEN("[difftest] nemu_gpr[%2d]=%16lx, npc_gpr[%2d]=%16lx\n"), i, cpu_nemu.gpr[i], i, cpu_npc.gpr[i]);
+        if (cpu_npc.gpr[i] != cpu_nemu.gpr[i]) {
+            Printf("Missing match gpr[%d], nemu_val=%lx, npc_val=%lx\n", RED, i, cpu_nemu.gpr[i], cpu_npc.gpr[i]);
             // printf(RED("npc_pc=%lx\n"), cpu_npc.pc);
             return 0;
         }
     }
     for (int i = 0; i < 4; i++) {
-        // printf(GREEN("[difftest] nemu_gpr[%2d]=%16lx, npc_gpr[%2d]=%16lx\n"), i, ref_cpu.gpr[i], i, cpu_npc.gpr[i]);
-        if (cpu_npc.csr[i] != ref_cpu.csr[i]) {
-            Printf("Missing match csr[%d], nemu_val=%lx, npc_val=%lx\n", RED, i, ref_cpu.csr[i], cpu_npc.csr[i]);
+        // printf(GREEN("[difftest] nemu_gpr[%2d]=%16lx, npc_gpr[%2d]=%16lx\n"), i, cpu_nemu.gpr[i], i, cpu_npc.gpr[i]);
+        if (cpu_npc.csr[i] != cpu_nemu.csr[i]) {
+            Printf("Missing match csr[%d], nemu_val=%lx, npc_val=%lx\n", RED, i, cpu_nemu.csr[i], cpu_npc.csr[i]);
             // printf(RED("npc_pc=%lx\n"), cpu_npc.pc);
             return 0;
         }
     }
-    // printf(GREEN("[difftest] nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
+    // printf(GREEN("[difftest] nemu_pc=%lx, npc_pc=%lx\n"), cpu_nemu.pc, cpu_npc.pc);
     return 1;
 }
 
+extern bool diff_skip_ref_flag;
 
 void difftest_exec_once() {
 
-    if (diff_skip_flag) {
+    if (diff_skip_ref_flag) {
         // to skip the checking of an instruction, just copy the reg state to reference design
+        Log("diff_skip_ref_flag = %d", diff_skip_ref_flag);
+        Printf("nemu_pc=%lx, npc_pc=%lx\n", GREEN, cpu_nemu.pc, cpu_npc.pc);
         ref_difftest_regcpy(&cpu_npc, DIFFTEST_TO_REF); // `direction`为`DIFFTEST_TO_REF`时, 设置REF的寄存器状态为`dut`;
-        diff_skip_flag = false;
-        return;
+        // cpu_nemu.pc = cpu_npc.pc;
+        Printf("nemu_pc=%lx, npc_pc=%lx\n", GREEN, cpu_nemu.pc, cpu_npc.pc);
+        diff_skip_ref_flag = false;
+        return ;
     }
-
+    // Printf("Jump failed\n", RED);
+    Printf("nemu_pc=%lx, npc_pc=%lx\n", RED, cpu_nemu.pc, cpu_npc.pc);
     ref_difftest_exec(1);
-    ref_difftest_regcpy(&ref_cpu, DIFFTEST_TO_DUT);
-    // printf(GREEN("3. check at nemu_pc=%lx, npc_pc=%lx\n"), ref_cpu.pc, cpu_npc.pc);
-    if (!check_regs_npc(ref_cpu)) npc_exit(-1);
+    // Printf("nemu_pc=%lx, npc_pc=%lx\n", RED, cpu_nemu.pc, cpu_npc.pc);
+    ref_difftest_regcpy(&cpu_nemu, DIFFTEST_TO_DUT);
+    // Printf("check at nemu_pc=%lx, npc_pc=%lx\n", GREEN, cpu_nemu.pc, cpu_npc.pc);
+    if (!check_regs_npc(cpu_nemu)) npc_exit(-1);
 }
 
 
 // static bool is_skip_ref = false;
 // static int skip_dut_nr_inst = 0;
 
-// // this is used to let ref skip instructions which
-// // can not produce consistent behavior with NEMU
+// this is used to let ref skip instructions which
+// can not produce consistent behavior with NEMU
 // void difftest_skip_ref() {
 //     is_skip_ref = true;
 //     // If such an instruction is one of the instruction packing in QEMU

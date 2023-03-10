@@ -3,10 +3,13 @@
 #include <memory/vaddr.h>
 #include <device/map.h>
 #include <utils/debug.h>
+#include <utils/macro.h>
 #include <common.h>
 #include "npc.h"
 
 #define IO_SPACE_MAX (2 * 1024 * 1024)
+
+extern CPU_state cpu_npc;
 
 static uint8_t *io_space = NULL;
 static uint8_t *p_space = NULL;
@@ -41,9 +44,7 @@ void init_map() {
 
 word_t map_read(paddr_t addr, int len, IOMap *map) {
     assert(len >= 1 && len <= 8);
-// #ifdef CONFIG_DTRACE
-    Printf("[Dtrace - Read] %s\n", BLUE, map->name);
-// #endif
+    IFDEF(CONFIG_NPC_DTRACE, Printf("[Dtrace - Read] %s\n", BLUE, map->name);)
     check_bound(map, addr);
     paddr_t offset = addr - map->low;
     // printf("mapread\n");
@@ -54,13 +55,11 @@ word_t map_read(paddr_t addr, int len, IOMap *map) {
     return ret;
 }
 
-// void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
-//     assert(len >= 1 && len <= 8);
-// #ifdef CONFIG_DTRACE
-//     Log("[Dtrace - Write] %s", map -> name);
-// #endif
-//     check_bound(map, addr);
-//     paddr_t offset = addr - map->low;
-//     host_write(map->space + offset, len, data);
-//     invoke_callback(map->callback, offset, len, true);
-// }
+void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
+    assert(len >= 1 && len <= 8);
+    IFDEF(CONFIG_NPC_DTRACE, Printf("[Dtrace - Write] %s\n", BLUE, map -> name);)
+    check_bound(map, addr);
+    paddr_t offset = addr - map->low;
+    host_write((uint64_t *)map->space + offset, len, data);
+    invoke_callback(map->callback, offset, len, true);
+}

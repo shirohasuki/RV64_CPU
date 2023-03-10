@@ -28,6 +28,7 @@
 #define CONFIG_NPC_IFTRACE 1
 #define CONFIG_NPC_DIFFTEST 1
 #define CONFIG_NPC_MTRACE 1
+// #define CONFIG_NPC_DTRACE 1
 
 
 // ================ CPU ===================
@@ -38,8 +39,8 @@ typedef struct {
     word_t csr[4];      
 } CPU_state;
 
-extern CPU_state cpu_npc;
-extern CPU_state cpu_nemu;
+// extern CPU_state cpu_npc;
+// extern CPU_state cpu_nemu;
 
 void npc_exit(int status);
 
@@ -95,7 +96,9 @@ extern void (*ref_difftest_exec)(uint64_t n);
 extern void (*ref_difftest_raise_intr)(uint64_t NO);
 extern void (*ref_difftest_init)();
 // void difftest_skip_ref();
-extern bool diff_skip_ref_flag;
+// extern bool diff_skip_ref_flag;
+extern int diff_skip_ref_flag;
+
 
 #endif
 

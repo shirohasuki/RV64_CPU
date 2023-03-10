@@ -2,6 +2,8 @@
 #include <utils/macro.h>
 #include <utils/debug.h>
 
+extern CPU_state cpu_npc;
+
 uint64_t *cpu_gpr = NULL;
 uint64_t *cpu_csr = NULL;
 uint64_t cpu_pc = 0x80000000;

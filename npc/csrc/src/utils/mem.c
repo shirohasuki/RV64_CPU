@@ -9,6 +9,8 @@
 uint8_t mem[MEM_SIZE] = {0};
 // Memory Read
 
+extern CPU_state cpu_npc;
+
 static uint64_t boot_time = 0;
 uint64_t s                = 0;
 uint64_t us               = 0;
@@ -23,8 +25,8 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
         if (cpu_npc.pc != 0){
             // extern bool diff_skip_ref_flag; = true;
             // unsigned long rtc = get_time();
-            diff_skip_ref_flag = true; 
-            unsigned long rtc = mmio_read(raddr, 8);
+            // diff_skip_ref_flag = 2; 
+            unsigned long rtc = mmio_read(raddr, 4);
             // struct timeval now;
             // gettimeofday(&now, NULL);
             // if (boot_time == 0) boot_time = now.tv_sec;
@@ -41,23 +43,6 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
         } // 判断不要多次执行
         return ; 
     } // 时钟
-    
-    // if (RTC_MMIO <= raddr && raddr <= RTC_MMIO + 8) { 
-    //     unsigned long rtc;
-    //     if (cpu_npc.pc != 0){
-    //         rtc = (uint32_t)get_time();
-    //         if (raddr == RTC_MMIO) {
-    //             *rdata = rtc;
-    //         } 
-    //         else if (raddr == RTC_MMIO + 4) {
-    //             *rdata = rtc >> 32;
-    //         }
-    //         // *rdata = mmio_read(raddr, 8);
-    //         // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
-    //     } // 判断不要多次执行
-    //     return ; 
-    // } // 时钟
-
     if (raddr < MEM_BASE) {
         //printf("[pmem_read]  raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
         return ;
@@ -83,7 +68,8 @@ extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
         // putc(wdata, stdio);// 写串口
         if (cpu_npc.pc != 0){
             // diff_skip_ref_flag = true; 
-            serial_putc(wdata); // 写串口
+            // diff_skip_ref_flag = 2; 
+            mmio_write(waddr, 1, wdata); // 写串口
         } // 判断不要多次执行
         return ;
     } 

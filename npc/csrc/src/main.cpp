@@ -5,7 +5,6 @@
 #define MAX_SIM_TIME 15000000// 最大仿真周期，中途读取到ebreak自动退出
 vluint64_t sim_time = 0;
 
-
 VerilatedContext* contextp = NULL;
 VerilatedVcdC* tfp = NULL;
 static Vtb* top;
@@ -14,9 +13,11 @@ static Vtb* top;
 ll img_size = 0;
 
 CPU_state cpu_npc;
-CPU_state cpu_nemu;
+extern CPU_state cpu_nemu;
 
-bool diff_skip_ref_flag = false;
+// bool diff_skip_ref_flag = false;
+int diff_skip_ref_flag = 0;
+
 
 //================ SIM FUNCTION =====================//
 void step_and_dump_wave() {
@@ -80,19 +81,10 @@ int main() {
 #ifdef CONFIG_NPC_DIFFTEST
         while (cpu_npc.pc == 0x0) {
             // Printf("nemu_pc=%lx, npc_pc=%lx\n", GREEN, cpu_nemu.pc, cpu_npc.pc);
-            exec_once();    
+            exec_once();   
         } // EX被冲刷以后，pc再走几拍
-        // if (!diff_skip_flag) {
         // Printf("nemu_pc=%lx, npc_pc=%lx\n", BLUE, cpu_nemu.pc, cpu_npc.pc);
         difftest_exec_once();
-
-        // while (cpu_npc.pc == 0x0) {
-        //     Printf("nemu_pc=%lx, npc_pc=%lx\n", GREEN, cpu_nemu.pc, cpu_npc.pc);
-        //     exec_once();    
-        // } // EX被冲刷以后，pc再走几拍
-        // } else {
-            // diff_skip_flag = 0;
-        // }
 #endif
     }
 

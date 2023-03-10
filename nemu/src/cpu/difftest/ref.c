@@ -8,11 +8,6 @@ void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
         buf = (void *)guest_to_host(addr);
     }
     else if (direction == DIFFTEST_TO_REF) {
-        // Log("%x,%lx", addr, n);
-        // char *buf_char = (char *)buf;
-        // for (int i = 0; i < n; i++) {
-        //     paddr_write(addr + i, 1, buf_char[i]);
-        // }
         for (size_t i = 0; i < n; i++) {
             paddr_write(addr + i, 1, *((uint8_t*)buf + i));
         }
@@ -24,16 +19,16 @@ void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
 void difftest_regcpy(void *dut, bool direction) {
     if (direction == DIFFTEST_TO_DUT) {
         for (int i = 0; i < 32; i++) { ((CPU_state *)dut)->gpr[i] = cpu.gpr[i]; }
-        for (int i = 0; i <  4; i++)  { ((CPU_state *)dut)->csr[i] = cpu.csr[i]; }
         ((CPU_state *)dut)->pc = cpu.pc;
+        for (int i = 0; i <  4; i++) { ((CPU_state *)dut)->csr[i] = cpu.csr[i]; }
         // printf("%lx  %lx\n", ((CPU_state *)dut)->pc, cpu.pc);
     }
     else {
-        printf("[/home/shiroha/Code/ysyx/ysyx-workbench/nemu/src/cpu/difftest/ref.c]HHHHHHHHHHHHHHHHHHHHH\n");
-        printf("PC:DUT:%lx -> REF:%lx\n", ((CPU_state *)dut)->pc, cpu.pc); cpu.pc = ((CPU_state *)dut)->pc; printf("PC:DUT:%lx = REF:%lx\n", ((CPU_state *)dut)->pc, cpu.pc); 
-        for (int i = 0; i < 32; ++i) { printf("REG[%02d] DUT:%lx -> REF:%lx\n", i, ((CPU_state *)dut)->gpr[i], cpu.gpr[i]); cpu.gpr[i] = ((CPU_state *)dut)->gpr[i]; }
-        for (int i = 0; i <  4; ++i) { printf("CSR[%02d] DUT:%lx -> REF:%lx\n", i, ((CPU_state *)dut)->csr[i], cpu.csr[i]); cpu.csr[i] = ((CPU_state *)dut)->csr[i]; }
-        // printf("cpu.pc =%lx\n", cpu.pc);
+        // printf("PC:DUT:%lx -> REF:%lx\n", ((CPU_state *)dut)->pc, cpu.pc); 
+        for (int i = 0; i < 32; ++i) { cpu.gpr[i] = ((CPU_state *)dut)->gpr[i]; }
+        cpu.pc = ((CPU_state *)dut)->pc; 
+        for (int i = 0; i <  4; ++i) { cpu.csr[i] = ((CPU_state *)dut)->csr[i]; }
+
     }
 }
 

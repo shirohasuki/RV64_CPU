@@ -25,8 +25,9 @@ static inline int find_mapid_by_addr(IOMap *maps, int size, paddr_t addr) {
     int i;
     for (i = 0; i < size; i ++) {
         if (map_inside(maps + i, addr)) {
-                diff_skip_ref_flag = true; 
-                printf("[map.h]diff_skip_ref_flag = true\n");
+                // diff_skip_ref_flag = true; 
+                diff_skip_ref_flag = 2; 
+                // printf("[map.h]diff_skip_ref_flag = true\n");
             return i;
         }
     }

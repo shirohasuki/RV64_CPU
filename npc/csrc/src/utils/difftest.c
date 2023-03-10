@@ -1,7 +1,9 @@
 #include "npc.h"
 #include <utils/debug.h>
 
-extern CPU_state cpu_nemu;
+extern CPU_state cpu_npc;
+CPU_state cpu_nemu;
+
 
 //=====================Difftest=========================
 // NEMU是REF，NPC是DUT
@@ -41,8 +43,7 @@ void init_difftest(const char *ref_so_file, ll img_size) {
 }
 
 
-
-int check_regs_npc(CPU_state cpu_nemu) {
+int check_regs_npc(CPU_state cpu_nemu, CPU_state cpu_npc) {
     if (cpu_npc.pc != cpu_nemu.pc) {
         Printf("Missing match at pc, nemu_val=%lx, npc_val=%lx\n", RED, cpu_nemu.pc, cpu_npc.pc);
         return 0;
@@ -67,29 +68,30 @@ int check_regs_npc(CPU_state cpu_nemu) {
     return 1;
 }
 
-extern bool diff_skip_ref_flag;
+// extern bool diff_skip_ref_flag;
+extern int diff_skip_ref_flag;
 
 void difftest_exec_once() {
-
     if (diff_skip_ref_flag) {
         // to skip the checking of an instruction, just copy the reg state to reference design
-        Log("diff_skip_ref_flag = %d", diff_skip_ref_flag);
-        Printf("nemu_pc=%lx, npc_pc=%lx\n", GREEN, cpu_nemu.pc, cpu_npc.pc);
+        // Log("diff_skip_ref_flag = %d", diff_skip_ref_flag);
         ref_difftest_regcpy(&cpu_npc, DIFFTEST_TO_REF); // `direction`为`DIFFTEST_TO_REF`时, 设置REF的寄存器状态为`dut`;
-        // cpu_nemu.pc = cpu_npc.pc;
-        Printf("nemu_pc=%lx, npc_pc=%lx\n", GREEN, cpu_nemu.pc, cpu_npc.pc);
-        diff_skip_ref_flag = false;
+
+        // ref_difftest_regcpy(&cpu_nemu, DIFFTEST_TO_DUT);
+
+        diff_skip_ref_flag -= 1;
+        // diff_skip_ref_flag = false;
         return ;
     }
-    // Printf("Jump failed\n", RED);
-    Printf("nemu_pc=%lx, npc_pc=%lx\n", RED, cpu_nemu.pc, cpu_npc.pc);
+
     ref_difftest_exec(1);
+
     // Printf("nemu_pc=%lx, npc_pc=%lx\n", RED, cpu_nemu.pc, cpu_npc.pc);
     ref_difftest_regcpy(&cpu_nemu, DIFFTEST_TO_DUT);
-    // Printf("check at nemu_pc=%lx, npc_pc=%lx\n", GREEN, cpu_nemu.pc, cpu_npc.pc);
-    if (!check_regs_npc(cpu_nemu)) npc_exit(-1);
-}
+    // Printf("nemu_pc=%lx, npc_pc=%lx\n", RED, cpu_nemu.pc, cpu_npc.pc);
 
+    if (!check_regs_npc(cpu_nemu, cpu_npc)) npc_exit(-1);
+}
 
 // static bool is_skip_ref = false;
 // static int skip_dut_nr_inst = 0;

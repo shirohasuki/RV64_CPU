@@ -75,6 +75,8 @@ int main() {
 
     while (sim_time < MAX_SIM_TIME) {
         // dump_gpr(); // 打印通用寄存器
+        // Printf("nemu_a4=%lx, npc_a4=%lx\n", GREEN, cpu_nemu.gpr[14], cpu_npc.gpr[14]);
+        // Printf("nemu_a5=%lx, npc_a5=%lx\n", GREEN, cpu_nemu.gpr[15], cpu_npc.gpr[15]);
         // dump_csr(); // 打印异常寄存器
         exec_once();
         // IFDEF(CONFIG_DEVICE, device_update());

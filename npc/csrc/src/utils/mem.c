@@ -22,17 +22,8 @@ uint8_t* cpu2mem(ll addr) { return mem + (addr - MEM_BASE); }
 extern "C" void pmem_read(ll raddr, ll *rdata) {
     // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, rdata);
     if (RTC_MMIO <= raddr && raddr <= RTC_MMIO + 8) { 
-        if (cpu_npc.pc != 0){
-            // extern bool diff_skip_ref_flag; = true;
-            // unsigned long rtc = get_time();
-            // diff_skip_ref_flag = 2; 
+        if (cpu_npc.pc != 0) {
             unsigned long rtc = mmio_read(raddr, 4);
-            // struct timeval now;
-            // gettimeofday(&now, NULL);
-            // if (boot_time == 0) boot_time = now.tv_sec;
-            // s  = now.tv_sec - boot_time;
-            // us = s * 1000000 + now.tv_usec;
-            // unsigned long rtc = us;
             if (raddr == RTC_MMIO) {
                 *rdata = rtc;
             } 

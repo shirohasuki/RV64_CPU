@@ -11,40 +11,51 @@ uint8_t mem[MEM_SIZE] = {0};
 
 extern CPU_state cpu_npc;
 
-static uint64_t boot_time = 0;
-uint64_t s                = 0;
-uint64_t us               = 0;
+unsigned long rtc;
 
 uint8_t* cpu2mem(ll addr) { return mem + (addr - MEM_BASE); }
 
 // extern bool diff_skip_ref_flag;
 
+        // struct timeval time_day;
+        // diff_skip_ref_flag = 2;
+        // gettimeofday(&time_day, NULL);
+        // if (boot_time == 0) {
+        //     boot_time = time_day.tv_sec;
+        // }
+        // uint64_t s   = time_day.tv_sec - boot_time;
+        // uint64_t us  = s * 1000000 + time_day.tv_usec;
+        
+        // if (raddr == RTC_MMIO) {
+        //     *rdata = us;
+        // } 
+        // else if (raddr == RTC_MMIO + 4) {
+        //     *rdata = us >> 32;
+        // }
+
 extern "C" void pmem_read(ll raddr, ll *rdata) {
     // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, rdata);
     if (RTC_MMIO <= raddr && raddr <= RTC_MMIO + 8) { 
-        if (cpu_npc.pc != 0){
-            // extern bool diff_skip_ref_flag; = true;
-            // unsigned long rtc = get_time();
-            // diff_skip_ref_flag = 2; 
-            unsigned long rtc = mmio_read(raddr, 4);
-            // struct timeval now;
-            // gettimeofday(&now, NULL);
-            // if (boot_time == 0) boot_time = now.tv_sec;
-            // s  = now.tv_sec - boot_time;
-            // us = s * 1000000 + now.tv_usec;
-            // unsigned long rtc = us;
-            if (raddr == RTC_MMIO) {
-                *rdata = rtc;
-            } 
-            else if (raddr == RTC_MMIO + 4) {
-                *rdata = rtc >> 32;
-            }
-            printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
-        } // 判断不要多次执行
+        if (cpu_npc.pc != 0) {
+            rtc = mmio_read(raddr, 8);
+            //printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
+        } // 判断不要多次执行 
+        if (raddr == RTC_MMIO) {
+            *rdata = rtc;
+        } 
+        else if (raddr == RTC_MMIO + 4) {
+            *rdata = rtc >> 32;
+        }
+    // 下面放在if里面 cpu_npc.pc == 0时会没有值给rdata
+#ifdef CONFIG_NPC_MTRACE
+    sprintf(mtrace_buf[mtrace_count], "read:  addr:%016llx data:%016llx", raddr, (*rdata));
+    mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
+#endif
+        // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
         return ; 
     } // 时钟
     if (raddr < MEM_BASE) {
-        //printf("[pmem_read]  raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
+        printf("[pmem_read]  raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
         return ;
     }
 
@@ -54,21 +65,24 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
         ret = (ret << 8) | (*pt--);
     }
     *rdata = ret;
-    // printf("[pmem_read] addr is:%llx, data is:%llx\n", raddr, *rdata);
 #ifdef CONFIG_NPC_MTRACE
     sprintf(mtrace_buf[mtrace_count], "read:  addr:%016llx data:%016llx", raddr, (*rdata));
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
 #endif
+    // printf("[pmem_read] addr is:%llx, data is:%llx\n", raddr, *rdata);
+
 }
 
 // Memory Write
 extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
-    // Log("[pmem_write] waddr is:%llx", waddr);
+#ifdef CONFIG_NPC_MTRACE
+    sprintf(mtrace_buf[mtrace_count],"write: addr:%016llx data:%016llx\n            wmask:%08x", waddr,  wdata, mask);
+    mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
+#endif
+    // Log("[pmem_write] waddr is:%llx pc = %llx ", waddr, cpu_npc.pc);
     if (SERIAL_MMIO <= waddr && waddr <= SERIAL_MMIO + 8) { 
         // putc(wdata, stdio);// 写串口
         if (cpu_npc.pc != 0){
-            // diff_skip_ref_flag = true; 
-            // diff_skip_ref_flag = 2; 
             mmio_write(waddr, 1, wdata); // 写串口
         } // 判断不要多次执行
         return ;
@@ -77,10 +91,7 @@ extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
         Printf("[pmem_write] waddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", RED, waddr, MEM_BASE);
         return;
     }
-#ifdef CONFIG_NPC_MTRACE
-    sprintf(mtrace_buf[mtrace_count],"write: addr:%016llx data:%016llx\n            wmask:%08x", waddr,  wdata, mask);
-    mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
-#endif
+
     uint8_t *pt = cpu2mem(waddr);
     for (int i = 0; i < 8; ++i) {
         if (mask & 1) *pt = (wdata & 0xff);

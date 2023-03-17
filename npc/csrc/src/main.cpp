@@ -2,7 +2,8 @@
 #include <utils/macro.h>
 #include <utils/debug.h>
 
-#define MAX_SIM_TIME 15000000// 最大仿真周期，中途读取到ebreak自动退出
+// #define MAX_SIM_TIME 15000000// 最大仿真周期，中途读取到ebreak自动退出
+#define MAX_SIM_TIME 150000000000// 最大仿真周期，中途读取到ebreak自动退出
 vluint64_t sim_time = 0;
 
 VerilatedContext* contextp = NULL;
@@ -78,6 +79,7 @@ int main() {
         // dump_csr(); // 打印异常寄存器
         exec_once();
         // IFDEF(CONFIG_DEVICE, device_update());
+        // IFDEF(CONFIG_NPC_MTRACE, print_mtrace());
 #ifdef CONFIG_NPC_DIFFTEST
         while (cpu_npc.pc == 0x0) {
             // Printf("nemu_pc=%lx, npc_pc=%lx\n", GREEN, cpu_nemu.pc, cpu_npc.pc);

@@ -25,7 +25,6 @@ uint64_t get_time() {
 // old version
     if (boot_time == 0) boot_time = get_time_internal();
     uint64_t now = get_time_internal();
-    uint64_t us = now - boot_time;
     return now - boot_time;
 // new version   
     // struct timeval now;
@@ -38,21 +37,21 @@ uint64_t get_time() {
 
 static void rtc_io_handler(uint32_t offset, int len, bool is_write) {
     // assert(offset == 0 || offset == 4);
-    if (!is_write && offset == 4) {
-    // printf("HERE\n");
-    // if (!is_write) {
+    // if (!is_write && offset == 4) {
+    if (!is_write) {
         uint64_t us = get_time();
         rtc_port_base[0] = (uint32_t)us;
         rtc_port_base[1] = us >> 32;
+        // printf("WE GET TIME= %lx\n", us);
     }
 } 
 
-static void timer_intr() {
+// static void timer_intr() {
     // if (npc_state.state == NPC_RUNNING) {
         // extern void dev_raise_intr();
         // dev_raise_intr(); // from intr.c
     // }
-}
+// }
 
 void init_timer() {
     // printf("rtc_init:HERE\n");

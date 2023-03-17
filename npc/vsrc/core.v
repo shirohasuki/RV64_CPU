@@ -265,7 +265,7 @@ module core (
     // wire[2:0]   ex_stall_flag_o; 
     // wire[2:0]   ex_flush_flag_o; 
     wire        ex_isload_o; 
-    wire        ex_issave_o; 
+    wire        ex_isstore_o; 
 
     ex ex_inst(
         .clk           ( clk ),
@@ -294,7 +294,7 @@ module core (
         .mem_wdata_o   ( ex_ex_mem_wdata_o    ), // to ram
         .mem_wmask_o   ( ex_ex_mem_wmask_o    ),  // to ram
         .isload_o      ( ex_isload_o          ),
-        .issave_o      ( ex_issave_o          ),
+        .isstore_o      ( ex_isstore_o          ),
         .csr_data_o    ( ex_csr_wdata_o       ),
         .csr_waddr_o   ( ex_csr_waddr_o       ),
         .csr_wen_o     ( ex_csr_wen_o         )
@@ -324,9 +324,9 @@ module core (
         .jump_addr_o      ( ctrl_jump_addr_o   ),
         .jump_en_o        ( ctrl_jump_en_o     ),
         .ex_inst_isload_i ( ex_isload_o ),
-        .ex_inst_issave_i ( ex_issave_o ),
+        .ex_inst_isstore_i ( ex_isstore_o ),
         .mem_inst_isload_i ( mem_isload_o ),
-        .mem_inst_issave_i ( mem_issave_o ),
+        .mem_inst_isstore_i ( mem_isstore_o ),
         .rs_id_ex_hit_i   ( rs_id_ex_hit_o    ),
         .axi_busy_i       ( axi_busy_i        ),
         .axi_busy_end_i   ( axi_busy_end_i ),
@@ -357,7 +357,7 @@ module core (
     wire[2:0]   ex_mem_mem_stall_flag_o;
     wire[2:0]   ex_mem_mem_flush_flag_o; 
     wire        ex_mem_isload_o;
-    wire        ex_mem_issave_o;
+    wire        ex_mem_isstore_o;
 
     ex_mem ex_mem_inst (
         .clk         ( clk         ),
@@ -366,8 +366,8 @@ module core (
         .inst_addr_i ( ex_inst_addr_o     ),
         .load_inst_i ( ex_isload_o ),
         .load_inst_o ( ex_mem_isload_o ),
-        .save_inst_i ( ex_issave_o ),
-        .save_inst_o ( ex_mem_issave_o ),
+        .store_inst_i ( ex_isstore_o ),
+        .store_inst_o ( ex_mem_isstore_o ),
         .stall_flag_i( ctrl_ex_mem_stall_en_o    ),
         .flush_flag_i( ctrl_ex_mem_flush_en_o    ),
         .ex_ren_i    ( ex_ex_mem_ren_o        ),
@@ -402,11 +402,11 @@ module core (
     wire        mem_reg_wen_o;
 
     // mem to ex
-    wire[63:0]  mem_ex_rdata_o;
+    // wire[63:0]  mem_ex_rdata_o;
 
     // mem to ctrl
     wire         mem_isload_o;
-    wire         mem_issave_o;
+    wire         mem_isstore_o;
     // wire[2:0] mem_stall_flag_o;
     // wire[2:0] mem_flush_flag_o;
 
@@ -427,8 +427,8 @@ module core (
         .inst_addr_o ( mem_inst_addr_o),
         .isload_i ( ex_mem_isload_o ),
         .isload_o    ( mem_isload_o ),
-        .issave_i ( ex_mem_issave_o ),
-        .issave_o    ( mem_issave_o ),
+        .isstore_i ( ex_mem_isstore_o ),
+        .isstore_o    ( mem_isstore_o ),
         // .stall_flag_i( ex_mem_mem_stall_flag_o),
         // .stall_flag_o( mem_stall_flag_o     ),
         // .flush_flag_i( ex_mem_mem_flush_flag_o),
@@ -438,7 +438,7 @@ module core (
         .ren_i       ( ex_mem_mem_ren_o       ),
         .wen_i       ( ex_mem_mem_wen_o       ),
         .raddr_i     ( ex_mem_mem_raddr_o     ),
-        .rdata_o     ( mem_ex_rdata_o         ),   // 从内存读出，要写入reg的数据
+        // .rdata_o     ( mem_ex_rdata_o         ),   // 从内存读出，要写入reg的数据
         .waddr_i     ( ex_mem_mem_waddr_o     ),
         .wdata_i     ( ex_mem_mem_wdata_o     ),
         .wmask_i     ( ex_mem_mem_wmask_o     ),

@@ -51,7 +51,7 @@ module ex (
 
     // to ctrl and ex_mem
     output wire       isload_o,
-    output wire       issave_o
+    output wire       isstore_o
 );
 
     wire[6:0] opcode; // 7byte (6~0)
@@ -94,23 +94,27 @@ module ex (
     wire op1_i_less_op2_i_signed;
     wire op1_i_less_op2_i_unsigned;
 
-    assign op1_i_add_op2_i                  = op1_i + op2_i;               // 加法器
-    assign op1_i_sub_op2_i                  = op1_i - op2_i;               // 减(待改进)
-    assign op1_i_mul_op2_i                  = op1_i * op2_i;               // 乘
-    assign op1_i_and_op2_i                  = op1_i & op2_i;               // 与
-    assign op1_i_xor_op2_i                  = op1_i ^ op2_i;               // 异或
-    assign op1_i_or_op2_i                   = op1_i | op2_i;               // 或
-    assign op1_i_rem_op2_i                  = $signed(op1_i) % $signed(op2_i);               // 取余
+    assign op1_i_add_op2_i                  = op1_i + op2_i;                            // 加法器
+    assign op1_i_sub_op2_i                  = op1_i - op2_i;                            // 减(待改进)
+    assign op1_i_mul_op2_i                  = op1_i * op2_i;                            // 乘
+    assign op1_i_and_op2_i                  = op1_i & op2_i;                            // 与
+    assign op1_i_xor_op2_i                  = op1_i ^ op2_i;                            // 异或
+    assign op1_i_or_op2_i                   = op1_i | op2_i;                            // 或
+    assign op1_i_rem_op2_i                  = $signed(op1_i) % $signed(op2_i);          // 取余(没有signed默认为无符号)
     assign op1_i_rem_op2_i_unsigned         = op1_i % op2_i;
-    assign op1_i_div_op2_i                  = $signed(op1_i) / $signed(op2_i);               // 除
-    assign op1_i_div_op2_i_unsigned         = op1_i / op2_i;               // 除
-    assign op1_i_shift_left_op2_i_unsigned  = op1_i << op2_i;              // 逻辑左移 sll
-    assign op1_i_shift_right_op2_i_unsigned = op1_i >> op2_i;              // 逻辑右移 srl
-    assign op1_i_shift_right_op2_i_signed   = $signed(op1_i) >>> op2_i;    // 算术右移 sra                            
-    assign base_addr_add_addr_offset        = base_addr_i + offset_addr_i; // 计算地址单元
+    assign op1_i_div_op2_i                  = $signed(op1_i) / $signed(op2_i);          // 除
+    assign op1_i_div_op2_i_unsigned         = op1_i / op2_i;                            // 除
+    assign op1_i_shift_left_op2_i_unsigned  = op1_i << op2_i[5:0];                           // 逻辑左移 sll
+    assign op1_i_shift_right_op2_i_unsigned = op1_i >> op2_i[5:0];                           // 逻辑右移 srl
+    assign op1_i_shift_right_op2_i_signed   = $signed(op1_i) >>> op2_i[5:0];                 // 算术右移 sra                            
+    assign base_addr_add_addr_offset        = base_addr_i + offset_addr_i;              // 计算地址单元
     assign op1_i_equal_op2_i                = (op1_i == op2_i)? 1'b1 : 1'b0;
-    assign op1_i_less_op2_i_signed          = ($signed(op1_i) < $signed(op2_i))? 1'b1 : 1'b0;
     assign op1_i_less_op2_i_unsigned        = (op1_i < op2_i)? 1'b1 : 1'b0;
+    assign op1_i_less_op2_i_signed          = ($signed(op1_i) < $signed(op2_i))? 1'b1 : 1'b0;
+    // 算数右移>>>和逻辑右移。
+    // 对于无符号数，>>和>>>没有区别，都是按位右移，左侧补零。
+    // 有符号数的逻辑右移>>与无符号数一样，将所有位整体右移，左侧补零。
+    // 而有符号数的算数右移>>>，左侧扩位符号位，如右移n位，则左侧增加n个符号位，右侧删除n位，即进行除n运算
     
     // compress to 32
     wire[63:0] compress_add;
@@ -120,6 +124,7 @@ module ex (
     wire[63:0] compress_xor;
     wire[63:0] compress_or;
     wire[63:0] compress_rem;
+    wire[63:0] compress_rem_unsigned;
     wire[63:0] compress_div;
     wire[63:0] compress_shift_left_unsigned;
     wire[63:0] compress_shift_right_unsigned;
@@ -127,9 +132,10 @@ module ex (
     wire[63:0] compress_addr_offset; // 偏移地址计算
 
     // 中间转换变量
-    wire[31:0] compress_rem_tmp;            assign compress_rem_tmp           = op1_i[31:0] % op2_i[31:0];
-    wire[31:0] compress_shift_left_u_tmp;   assign compress_shift_left_u_tmp  = op1_i[31:0] << op2_i[31:0];
-    wire[31:0] compress_shift_right_u_tmp;  assign compress_shift_right_u_tmp = op1_i[31:0] >> op2_i[31:0];
+    wire[31:0] compress_rem_tmp;            assign compress_rem_tmp           = $signed(op1_i[31:0]) % op2_i[31:0];
+    wire[31:0] compress_rem_unsigned_tmp;   assign compress_rem_unsigned_tmp  = op1_i[31:0] % op2_i[31:0];
+    wire[31:0] compress_shift_left_u_tmp;   assign compress_shift_left_u_tmp  = op1_i[31:0] << op2_i[4:0];
+    wire[31:0] compress_shift_right_u_tmp;  assign compress_shift_right_u_tmp = op1_i[31:0] >> op2_i[4:0];
     wire[31:0] compress_shift_right_s_tmp;  assign compress_shift_right_s_tmp = $signed(op1_i[31:0]) >>> op2_i[4:0];
 
     assign compress_add                  = {{32{op1_i_add_op2_i[31]}}, op1_i_add_op2_i[31:0]};                  // 加法器       
@@ -139,6 +145,7 @@ module ex (
     assign compress_xor                  = {{32{op1_i_xor_op2_i[31]}}, op1_i_xor_op2_i[31:0]};                  // 异或
     assign compress_or                   = {{32{op1_i_or_op2_i[31]}}, op1_i_or_op2_i[31:0]};                    // 或
     assign compress_rem                  = {{32{compress_rem_tmp[31]}}, compress_rem_tmp[31:0]};
+    assign compress_rem_unsigned         = {{32{compress_rem_unsigned_tmp[31]}}, compress_rem_unsigned_tmp[31:0]};
     assign compress_div                  = {{32{op1_i_div_op2_i[31]}}, op1_i_div_op2_i[31:0]};
     assign compress_shift_left_unsigned  = {{32{compress_shift_left_u_tmp[31]}}, compress_shift_left_u_tmp[31:0]};  // 逻辑左移
     assign compress_shift_right_unsigned = {{32{compress_shift_right_u_tmp[31]}}, compress_shift_right_u_tmp[31:0]};// 逻辑右移
@@ -184,7 +191,7 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o   = 1'b0;
-                issave_o    = 1'b0; 
+                isstore_o    = 1'b0; 
                 csr_waddr_o = 12'b0;
                 csr_data_o  = 64'b0;
                 csr_wen_o   = 1'b0; 
@@ -262,7 +269,7 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o   = 1'b0; 
-                issave_o    = 1'b0;
+                isstore_o    = 1'b0;
                 csr_waddr_o = 12'b0;
                 csr_data_o  = 64'b0;
                 csr_wen_o   = 1'b0;                  
@@ -308,7 +315,7 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o    = 1'b0;
-                issave_o    = 1'b0;
+                isstore_o    = 1'b0;
                 csr_waddr_o = 12'b0;
                 csr_data_o  = 64'b0;
                 csr_wen_o   = 1'b0;   
@@ -412,7 +419,7 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o    = 1'b0;
-                issave_o    = 1'b0;
+                isstore_o    = 1'b0;
                 csr_waddr_o = 12'b0;
                 csr_data_o  = 64'b0;
                 csr_wen_o   = 1'b0;   
@@ -440,7 +447,7 @@ module ex (
                         reg_wen_o  = 1'b1;
                     end // 逻辑左移
                     `INST_SRW:begin // SR包含srl和sra
-                        if (func7[5] == 1'b1) begin // SRAW
+                        if (func7[5] == 1'b1) begin // SRAW 算术右移
                             // rd_wdata_o = ((op1_i_shift_right_op2_i) & SRA_mask) | ({32{op1_i[31]}} & (~SRA_mask));
                             rd_wdata_o = compress_shift_right_signed; 
                             rd_waddr_o = rd_addr_i;
@@ -454,6 +461,11 @@ module ex (
                     end 
                     `INST_REMW: begin 
                         rd_wdata_o = compress_rem; 
+                        rd_waddr_o = rd_addr_i;
+                        reg_wen_o  = 1'b1;
+                    end 
+                    `INST_REMUW: begin 
+                        rd_wdata_o = compress_rem_unsigned; 
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
                     end 
@@ -481,7 +493,7 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o    = 1'b0;
-                issave_o    = 1'b0;
+                isstore_o    = 1'b0;
                 csr_waddr_o = 12'b0;
                 csr_data_o  = 64'b0;
                 csr_wen_o   = 1'b0;   
@@ -531,7 +543,7 @@ module ex (
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
                 mem_wmask_o = 8'b0;
-                issave_o    = 1'b0;
+                isstore_o    = 1'b0;
                 csr_waddr_o = 12'b0;
                 csr_data_o  = 64'b0;
                 csr_wen_o   = 1'b0;   
@@ -618,7 +630,7 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o    = 1'b0;
-                issave_o    = 1'b1;
+                isstore_o    = 1'b1;
                 csr_waddr_o = 12'b0;
                 csr_data_o  = 64'b0;
                 csr_wen_o   = 1'b0; 
@@ -667,7 +679,7 @@ module ex (
                 mem_wdata_o = 64'b0;
                 mem_wmask_o = 8'b0;
                 isload_o    = 1'b0;
-                issave_o    = 1'b0;
+                isstore_o    = 1'b0;
                 case (func3)
                     `INST_CSRRS: begin
                         rd_wdata_o  = op1_i; 
@@ -709,7 +721,7 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o    = 1'b0;
-                issave_o    = 1'b0;
+                isstore_o    = 1'b0;
                 csr_waddr_o = 12'b0;
                 csr_data_o  = 64'b0;
                 csr_wen_o   = 1'b0;   
@@ -731,7 +743,7 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o    = 1'b0;
-                issave_o    = 1'b0;
+                isstore_o    = 1'b0;
                 csr_waddr_o = 12'b0;
                 csr_data_o  = 64'b0;
                 csr_wen_o   = 1'b0;   
@@ -751,7 +763,7 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o    = 1'b0;
-                issave_o    = 1'b0;
+                isstore_o    = 1'b0;
                 csr_waddr_o = 12'b0;
                 csr_data_o  = 64'b0;
                 csr_wen_o   = 1'b0;         
@@ -771,7 +783,7 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o    = 1'b0; 
-                issave_o    = 1'b0;
+                isstore_o    = 1'b0;
                 csr_waddr_o = 12'b0;
                 csr_data_o  = 64'b0;
                 csr_wen_o   = 1'b0;      
@@ -791,7 +803,7 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o    = 1'b0; 
-                issave_o    = 1'b0; 
+                isstore_o    = 1'b0; 
                 csr_waddr_o = 12'b0;
                 csr_data_o  = 64'b0;
                 csr_wen_o   = 1'b0;     

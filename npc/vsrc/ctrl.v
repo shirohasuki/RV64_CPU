@@ -1,13 +1,15 @@
+`include "./defines.v"
+
 module ctrl (
     // from ex 
     input wire[63:0] jump_addr_i,
     input wire       jump_en_i,
     // from ex
     input wire       ex_inst_isload_i,
-    input wire       ex_inst_issave_i,
+    input wire       ex_inst_isstore_i,
     // from mem 
     input wire       mem_inst_isload_i,
-    input wire       mem_inst_issave_i,
+    input wire       mem_inst_isstore_i,
     //from redirect
     input wire       rs_id_ex_hit_i, 
     // from axi 
@@ -40,15 +42,15 @@ module ctrl (
     reg jump;          // flush 011 stall 无
     reg busy;          // flush 001 stall 110
     reg load_inst;     // flush 001 stall 110
-    reg save_inst;     // flush 001 stall 110
+    reg store_inst;     // flush 001 stall 110
  
     assign load_data_hit =  (rs_id_ex_hit_i & ex_inst_isload_i) ? 1'b1: 1'b0;
-    assign jump          =  jump_en_i ? 1'b1: 1'b0;
+    assign jump          =  jump_en_i  ? 1'b1: 1'b0;
     assign busy          =  axi_busy_i ? 1'b1: 1'b0;
-    assign load_inst     =  (ex_inst_isload_i | mem_inst_isload_i) ? 1'b1: 1'b0;
-    assign save_inst     =  (ex_inst_issave_i | mem_inst_issave_i) ? 1'b1: 1'b0;
+    assign load_inst     =  (ex_inst_isload_i  | mem_inst_isload_i) ? 1'b1: 1'b0;
+    assign store_inst    =  (ex_inst_isstore_i | mem_inst_isstore_i) ? 1'b1: 1'b0;
 
-        always @(*) begin
+    always @(*) begin
         if (jump == 1'b1) begin
             assign pc_flush_en_o    = 1'b0;
             assign if_id_flush_en_o = 1'b1;
@@ -62,6 +64,7 @@ module ctrl (
             assign id_ex_flush_en_o  = 1'b1 & ~axi_busy_end_i;
             assign ex_mem_flush_en_o = 1'b0;
             assign mem_wb_flush_en_o = 1'b0;
+            // $display("HERE");
         end
         else if (load_inst) begin
             assign pc_flush_en_o     = 1'b0;
@@ -69,13 +72,15 @@ module ctrl (
             assign id_ex_flush_en_o  = 1'b1; // 只要load_inst还在mem模块EX就一直flush
             assign ex_mem_flush_en_o = 1'b0;
             assign mem_wb_flush_en_o = 1'b0;
+            // $display("HERE");
         end
-        else if (save_inst) begin
+        else if (store_inst) begin
             assign pc_flush_en_o     = 1'b0;
             assign if_id_flush_en_o  = 1'b0;
             assign id_ex_flush_en_o  = 1'b1;
             assign ex_mem_flush_en_o = 1'b0;
             assign mem_wb_flush_en_o = 1'b0;
+            // $display("HERE");
         end  // 和load_inst情况可以合并
         else if (load_data_hit) begin
             assign pc_flush_en_o     = 1'b0;
@@ -108,11 +113,11 @@ module ctrl (
             assign ex_mem_stall_en_o = mem_inst_isload_i;
             assign mem_wb_stall_en_o = 1'b0;
         end
-        else if (save_inst) begin
+        else if (store_inst) begin
             assign pc_stall_en_o     = 1'b1;
             assign if_id_stall_en_o  = 1'b1;
             assign id_ex_stall_en_o  = 1'b0;
-            assign ex_mem_stall_en_o = mem_inst_issave_i ;//&& ~ex_inst_issave_i);
+            assign ex_mem_stall_en_o = mem_inst_isstore_i ;//&& ~ex_inst_isstore_i);
             assign mem_wb_stall_en_o = 1'b0;
         end
         else if (load_data_hit) begin
@@ -130,7 +135,6 @@ module ctrl (
             assign mem_wb_stall_en_o = 1'b0;        
         end 
     end
-
 
 
     // always @(*) begin

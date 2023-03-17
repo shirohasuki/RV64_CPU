@@ -1,7 +1,6 @@
 #ifndef __DEVICE_MAP_H__
 #define __DEVICE_MAP_H__
 
-// #include <cpu/difftest.h>
 #include <common.h>
 #include "npc.h" //difftest
 
@@ -25,9 +24,9 @@ static inline int find_mapid_by_addr(IOMap *maps, int size, paddr_t addr) {
     int i;
     for (i = 0; i < size; i ++) {
         if (map_inside(maps + i, addr)) {
-                // diff_skip_ref_flag = true; 
-                diff_skip_ref_flag = 2; 
-                // printf("[map.h]diff_skip_ref_flag = true\n");
+#ifdef CONFIG_NPC_DIFFTEST 
+            diff_skip_ref_flag = 2; // skip the difftest check, copy DUT regs to REF
+#endif 
             return i;
         }
     }

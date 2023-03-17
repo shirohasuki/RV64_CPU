@@ -38,7 +38,7 @@
 import "DPI-C" function void pmem_read( input longint raddr, output longint rdata);
 import "DPI-C" function void pmem_write( input longint waddr, input longint wdata, input byte mask);
 
-`define pmem_rw
+
 
 module mem (
     input               clk,
@@ -57,7 +57,7 @@ module mem (
     input               ren_i,
     input               wen_i,
     input  reg[63:0]    raddr_i,
-    output reg[63:0]    rdata_o,
+    // output reg[63:0]    rdata_o,
 
     input  reg[63:0]    waddr_i,
     input  reg[63:0]    wdata_i,
@@ -86,11 +86,12 @@ module mem (
     // to ctrl 
     input reg              isload_i,
     output reg             isload_o,
-    input reg              issave_i,
-    output reg             issave_o
+    input reg              isstore_i,
+    output reg             isstore_o
     // output reg[2:0]     stall_flag_o,
     // output reg[2:0]     flush_flag_o
 );
+    reg[63:0]    rdata_o;
 
     wire[6:0] opcode; // 7byte (6~0)
     wire[4:0] rd; // 5byte (11~7)
@@ -108,44 +109,75 @@ module mem (
 
     assign inst_addr_o = inst_addr_i;
     assign rd_waddr_o  = rd_waddr_i;
-    assign rd_wdata_o  = rd_wdata_i;
+    // assign rd_wdata_o  = rd_wdata_i;
+    // assign rd_wdata_o =  ren_i ? rdata_o : rd_wdata_i;
     assign reg_wen_o   = reg_wen_i;
 
-    assign isload_o = isload_i;
-    assign issave_o = issave_i;
+// `ifdef pmem_rw
+    assign isload_o  = isload_i;
+    assign isstore_o = isstore_i;
 
-    // always @(negedge clk) begin
-    //     get_pc(inst_addr_i);
-    // end
 
     assign ram_ren_o = ren_i & ~axi_busy_i; // 防止再次读取
     assign ram_wen_o = wen_i & ~axi_busy_i;
 // TODO：再次读取问题处理的可能有隐患
 
+    reg [63:0] rdata;
+    reg        visit_interface;
+
     assign ram_raddr_o = ren_i ? raddr_i     : 64'b0;
-    assign rdata_o     = ren_i ? ram_rdata_i : 64'b0;
+`ifdef pmem_wr
+    // assign rdata_o     = 64'b0;
+`endif    
+`ifndef pmem_wr
+    // assign rdata_o     = ren_i ? ram_rdata_i : 64'b0;
+`endif    
     assign ram_wdata_o = wen_i ? wdata_i     : 64'b0;
     assign ram_waddr_o = wen_i ? waddr_i     : 64'b0;
 
+    // always @(*) begin
+    //     if ((waddr_i >= 64'ha000_0000) | (raddr_i >= 64'ha000_0000)) begin
+    //         visit_interface = 1'b1;
+    //     end else begin
+    //         visit_interface = 1'b0;            
+    //     end 
+    // end
+ 
+// `ifdef pmem_rw
+    // always @(*) begin
+    //     // if ((waddr_i >= 64'ha000_0000) | (raddr_i >= 64'ha000_0000)) begin
+    //         if (ren_i) begin
+    //             pmem_read(raddr_i, rdata_o); 
+    //         end
+    //         else rdata_o = 64'b0;
 
-`ifdef pmem_rw
-    always @(*) begin
-        // $display("waddr = %x\n", waddr_i);
+    //         if (wen_i) pmem_write(waddr_i, wdata_i, wmask_i);
+
+    //         if ((ren_i && wen_i) && (raddr_i == waddr_i)) rdata_o = wdata_i; 
+    //         // 处理读写冲突
+    //     // end 
+    //     else begin
+    //         rdata_o = 64'b0;
+    //     end
+    // end
+// `endif
+
+    always @(negedge clk) begin // TODO:negedge 要去掉的
         if ((waddr_i >= 64'ha000_0000) | (raddr_i >= 64'ha000_0000)) begin
-            // $display("HERE");
-            if (ren_i) pmem_read(raddr_i, rdata_o); 
+            if (ren_i) begin
+                pmem_read(raddr_i, rdata_o); 
+                // $display("raddr is:%x rdata is:%x", raddr_i, rdata_o);
+            end 
             else rdata_o = 64'b0;
 
             if (wen_i) pmem_write(waddr_i, wdata_i, wmask_i);
 
-            if ((ren_i && wen_i) && (raddr_i == waddr_i)) rdata_o = wdata_i; 
-            // 处理读写冲突
+            if ((ren_i && wen_i) && (raddr_i == waddr_i)) rdata_o = wdata_i;  // 处理读写冲突
         end 
         else begin
-            rdata_o = 64'b0;
+            rdata_o = ren_i ? ram_rdata_i : 64'b0;
         end
     end
-`endif
 
     always @(*) begin
         if (ren_i == 1'b0) begin rd_wdata_o = rd_wdata_i; end

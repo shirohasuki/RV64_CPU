@@ -46,8 +46,9 @@ extern NPCState npc_state;
 #define DEVICE_BASE         0xa0000000
 
 #define SERIAL_MMIO         (DEVICE_BASE + 0x000003f8)
-#define KBD_ADDR            (DEVICE_BASE + 0x00000060)
+#define KBD_MMIO            (DEVICE_BASE + 0x00000060)
 #define RTC_MMIO            (DEVICE_BASE + 0x00000048) // 映射的地址
+
 
 
 #endif

@@ -25,8 +25,8 @@ module ex_mem (
 
     input reg           load_inst_i,  // mem use
     output reg           load_inst_o,  // mem use
-    input reg           save_inst_i,  // mem use
-    output reg           save_inst_o,  // mem use
+    input reg           store_inst_i,  // mem use
+    output reg           store_inst_o,  // mem use
 
     // input wire[63:0] csr_data_i,
     // input wire[11:0] csr_waddr_i,
@@ -82,7 +82,7 @@ module ex_mem (
     // others
     // dff_set #(3)  dff11(clk, rst, 1'b0, 1'b0, 3'b0, stall_flag_i, stall_flag_o);
     dff_set #(1)  dff11(clk, rst, flush_flag_i, stall_flag_i, 1'b0, load_inst_i, load_inst_o);
-    dff_set #(1)  dff12(clk, rst, flush_flag_i, stall_flag_i, 1'b0, save_inst_i, save_inst_o);
+    dff_set #(1)  dff12(clk, rst, flush_flag_i, stall_flag_i, 1'b0, store_inst_i, store_inst_o);
     // dff_set #(3)  dff12(clk, rst, 1'b0, 1'b0, 3'b0, flush_flag_i, flush_flag_o);
 
     // dff_set #(64) dff13(clk, rst, flush_flag_i, stall_flag_i,  64'b0, csr_data_i, csr_data_o);

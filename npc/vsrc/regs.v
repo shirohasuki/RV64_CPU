@@ -54,16 +54,11 @@ module regs (
         else if (reg_wen && reg_waddr_i != 5'b0) begin // x0不准写
             regs[reg_waddr_i] <= reg_wdata_i;
         end 
-        // $display("REGS: %x", pc_reg);   
-        get_regs(regs);
-        get_pc(pc_reg);
+        get_gprs(regs);
         // 组合逻辑要补全else，时序不需要
     end // 回写rd
 */
 
-    // always @(*) begin
-        
-    // end // 回写rd
 
     always @(*) begin
         if (rst == 1'b0) begin

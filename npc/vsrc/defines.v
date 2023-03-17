@@ -78,7 +78,7 @@
 // `define INST_XOR    3'b100
 `define INST_SRW       3'b101
 `define INST_REMW      3'b110 // 无orw
-// `define INST_AND    3'b111
+`define INST_REMUW     3'b111 
 `define INST_DIVW      3'b100
 
 // J type inst
@@ -121,3 +121,5 @@
 // `define CSR_MTIME     12'h
 // `define CSR_MTIMECMP  12'h
 
+// ============= CONFIG =========
+`define pmem_wr 

@@ -2,7 +2,7 @@
 
 // import "DPI-C" function void ebreak();
 
-module id(
+module id (
 	//from if_id
 	input wire[31:0] inst_i,
 	input wire[63:0] inst_addr_i,
@@ -199,7 +199,7 @@ module id(
                 csr_waddr_o   = 12'b0;
                 csr_wen_o     = 1'b0;
                 case (func3)
-                    `INST_ADDW_SUBW_MULW,`INST_DIVW,`INST_SLLW,`INST_REMW,`INST_SRW:begin 
+                    `INST_ADDW_SUBW_MULW,`INST_DIVW,`INST_SLLW,`INST_REMW,`INST_REMUW, `INST_SRW:begin 
                         rs1_addr_o = rs1;
                         rs2_addr_o = rs2;
                         op1_o = rs1_data_i;

@@ -7,7 +7,6 @@
 #include <device/mmio.h>
 
 uint8_t mem[MEM_SIZE] = {0};
-// Memory Read
 
 extern CPU_state cpu_npc;
 
@@ -17,17 +16,12 @@ uint8_t* cpu2mem(ll addr) { return mem + (addr - MEM_BASE); }
 
 extern "C" void pmem_read(ll raddr, ll *rdata) {
     if (RTC_MMIO <= raddr && raddr <= RTC_MMIO + 8) { 
-        if (cpu_npc.pc != 0) {
-            rtc = mmio_read(raddr, 8);
-            //printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
-        } // 判断不要多次执行 
-        if (raddr == RTC_MMIO) {
+        if (cpu_npc.pc != 0) { rtc = mmio_read(raddr, 8); } // 判断不要多次执行 
+        if (raddr == RTC_MMIO) { 
             *rdata = rtc;
-        } 
-        else if (raddr == RTC_MMIO + 4) {
+        } else if (raddr == RTC_MMIO + 4) {
             *rdata = rtc >> 32;
-        }
-    // 下面放在if里面 cpu_npc.pc == 0时会没有值给rdata
+        } // 下面放在if里面 cpu_npc.pc == 0时会没有值给rdata
 #ifdef CONFIG_NPC_MTRACE
     sprintf(mtrace_buf[mtrace_count], "read:  addr:%016llx data:%016llx", raddr, (*rdata));
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;

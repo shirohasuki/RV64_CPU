@@ -35,7 +35,6 @@ void itrace_output() {
 			if (i == ringptr) { printf("---> %s\n", ringbuf[i]); break;}
 			else printf("     %s\n", ringbuf[i]);
 		}
-		// printf("\n");
     printf("====================================\n");
 }
 #endif
@@ -52,7 +51,7 @@ void print_mtrace() {
     puts("========== MTRACE Result ==========");
     for (int i = 0; i < SIZE_MTRACEBUF; i++) {
         if (strlen(mtrace_buf[i]) == 0) break;
-        if ((i+1)%SIZE_MTRACEBUF == mtrace_count) printf("-->");
+        if ((i + 1) % SIZE_MTRACEBUF == mtrace_count) printf("-->");
         else printf("   ");
         printf("%s\n", mtrace_buf[i]);
     }

@@ -7,7 +7,7 @@ void init_map();
 void init_serial();
 void init_timer();
 // void init_vga();
-// void init_i8042();
+void init_i8042();
 void init_alarm();
 
 void send_key(uint8_t, bool);
@@ -62,6 +62,6 @@ void init_device() {
 
     IFDEF(NPC_HAS_TIMER, init_timer());
 //   IFDEF(NPC_HAS_VGA, init_vga());
-//   IFDEF(NPC_HAS_KEYBOARD, init_i8042());
+    IFDEF(NPC_HAS_KEYBOARD, init_i8042());
     // init_alarm();
 }

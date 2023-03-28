@@ -54,6 +54,7 @@ VM_USER_CLASSES = \
 	keyboard \
 	rtc \
 	serial \
+	vga \
 	main \
 	difftest \
 	disasm \
@@ -91,6 +92,8 @@ keyboard.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/ioe/keyboard.c
 rtc.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/ioe/rtc.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 serial.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/ioe/serial.c
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+vga.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/ioe/vga.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 main.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/main.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<

@@ -7,12 +7,12 @@
 void init_map();
 void init_serial();
 void init_timer();
-// void init_vga();
+void init_vga();
 void init_i8042();
 void init_alarm();
 
 void send_key(uint8_t, bool);
-// void vga_update_screen();
+void vga_update_screen();
 
 
 void device_update() {
@@ -23,7 +23,7 @@ void device_update() {
     }
     last = now;
     
-    // IFDEF(CONFIG_HAS_VGA, vga_update_screen());
+    IFDEF(NPC_HAS_VGA, vga_update_screen());
     
     SDL_Event event;
     // printf("event.type=%d\n", event.type);
@@ -62,7 +62,7 @@ void init_device() {
     IFDEF(NPC_HAS_SERIAL, init_serial());
 
     IFDEF(NPC_HAS_TIMER, init_timer());
-    // IFDEF(NPC_HAS_VGA, init_vga());
+    IFDEF(NPC_HAS_VGA, init_vga());
     IFDEF(NPC_HAS_KBD, init_i8042());
     // init_alarm();
 }

@@ -10,11 +10,13 @@ VerilatedContext* contextp = NULL;
 VerilatedVcdC* tfp = NULL;
 static Vtb* top;
 
-// extern uint64_t cpu_pc;
+
 ll img_size = 0;
 
-CPU_state cpu_npc;
-extern CPU_state cpu_nemu;
+CPU_state cpu_npc;  // DUT
+CPU_state cpu_nemu; // REF
+
+NPCState npc_state;
 
 // bool diff_skip_ref_flag = false;
 int diff_skip_ref_flag = 0;
@@ -78,14 +80,12 @@ int main() {
         // dump_gpr(); // 打印通用寄存器
         // dump_csr(); // 打印异常寄存器
         exec_once();
-        // IFDEF(CONFIG_DEVICE, device_update());
+        IFDEF(CONFIG_NPC_DEVICE, device_update());
         // IFDEF(CONFIG_NPC_MTRACE, print_mtrace());
 #ifdef CONFIG_NPC_DIFFTEST
         while (cpu_npc.pc == 0x0) {
-            // Printf("nemu_pc=%lx, npc_pc=%lx\n", GREEN, cpu_nemu.pc, cpu_npc.pc);
             exec_once();   
         } // EX被冲刷以后，pc再走几拍
-        // Printf("nemu_pc=%lx, npc_pc=%lx\n", BLUE, cpu_nemu.pc, cpu_npc.pc);
         difftest_exec_once();
 #endif
     }

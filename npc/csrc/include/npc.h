@@ -104,7 +104,7 @@ extern int diff_skip_ref_flag;
 
 // ============== DEVICE =============== //
 void init_device();
-
+void device_update();
 
 // // ============== DEVICE MAP ===============
 // #define DEVICE_BASE 0xa0000000

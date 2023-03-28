@@ -11,6 +11,7 @@ uint8_t mem[MEM_SIZE] = {0};
 extern CPU_state cpu_npc;
 
 unsigned long rtc;
+unsigned long keycode;
 
 uint8_t* cpu2mem(ll addr) { return mem + (addr - MEM_BASE); }
 
@@ -29,6 +30,18 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
         // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
         return ; 
     } // 时钟
+
+    if (KBD_MMIO <= raddr && raddr <= KBD_MMIO + 4) { 
+        if (cpu_npc.pc != 0) { keycode = mmio_read(raddr, 4); } // 判断不要多次执行 
+        *rdata = keycode; // 下面放在if里面 cpu_npc.pc == 0时会没有值给rdata
+#ifdef CONFIG_NPC_MTRACE
+    sprintf(mtrace_buf[mtrace_count], "read:  addr:%016llx data:%016llx", raddr, (*rdata));
+    mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
+#endif
+        // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
+        return ; 
+    } // 键盘
+    
     if (raddr < MEM_BASE) {
         printf("[pmem_read]  raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
         return ;

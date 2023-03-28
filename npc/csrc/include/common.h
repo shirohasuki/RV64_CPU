@@ -40,7 +40,7 @@ extern NPCState npc_state;
 #define CONFIG_NPC_DEVICE   1
 #define NPC_HAS_SERIAL      1
 #define NPC_HAS_TIMER       1
-// #define NPC_HAS_KEYBOARD    1
+#define NPC_HAS_KBD         1
 
 // ============== DEVICE MAP ===============
 #define DEVICE_BASE         0xa0000000

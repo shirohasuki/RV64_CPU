@@ -79,9 +79,11 @@ module ram (
         case (inst_addr_i[2])
             1'b0: begin
                 inst_o = {32'b0, ram_mem[inst_addr_i[22:3]][31:0]};
+                `ifdef MTRACE $display("raddr:%d  rstart: 00, rdata:%x[IF]", raddr[22:3], ram_rdata_o); `endif
             end
             1'b1: begin
                 inst_o = {32'b0, ram_mem[inst_addr_i[22:3]][63:32]};                
+                `ifdef MTRACE $display("raddr:%d  rstart: 01, rdata:%x[IF]", raddr[22:3], ram_rdata_o); `endif
             end
         endcase
     end
@@ -177,13 +179,13 @@ module ram (
 
     always @(posedge clk) begin 
 `ifdef MTRACE
-        $display("======= ram list ==========");
-        for (integer i = 1000; i < 4095; i++) begin
-            if (ram_mem[i] != 'b0) begin
-                $display("rom[%4d] | %8x", i, ram_mem[i]);
-            end
-        end
-        $display("===========================");
+        // $display("======= ram list ==========");
+        // for (integer i = 0; i < 1000; i++) begin
+        //     if (ram_mem[i] != 'b0) begin
+        //         $display("rom[%4d] | %8x", i, ram_mem[i]);
+        //     end
+        // end
+        // $display("===========================");
 `endif
     end
 endmodule

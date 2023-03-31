@@ -63,7 +63,7 @@ void vga_update_screen() {
 void init_vga() {
     vgactl_port_base = (uint32_t *)new_space(8);
     vgactl_port_base[0] = (screen_width() << 16) | screen_height();
-    add_mmio_map("vgactl", VGA_MMIO, vgactl_port_base, 8, NULL);
+    add_mmio_map("vga", VGA_MMIO, vgactl_port_base, 8, NULL);
     vmem = new_space(screen_size());
     add_mmio_map("vmem", FB_MMIO, vmem, screen_size(), NULL);
     IFDEF(VGA_SHOW_SCREEN, init_screen());

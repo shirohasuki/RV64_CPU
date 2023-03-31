@@ -3,8 +3,6 @@
 #include <utils/macro.h>
 #include <utils/debug.h>
 
-// #define SCREEN_W (MUXDEF(CONFIG_VGA_SIZE_800x600, 800, 400))
-// #define SCREEN_H (MUXDEF(CONFIG_VGA_SIZE_800x600, 600, 300))
 #define SCREEN_W 400
 #define SCREEN_H 300
 
@@ -33,12 +31,9 @@ static SDL_Texture *texture = NULL;
 static void init_screen() {
     SDL_Window *window = NULL;
     char title[128];
-    sprintf(title, "%s-NEMU", str(__GUEST_ISA__));
+    sprintf(title, "NPC");
     SDL_Init(SDL_INIT_VIDEO);
-    SDL_CreateWindowAndRenderer(
-        SCREEN_W * (MUXDEF(CONFIG_VGA_SIZE_400x300, 2, 1)),
-        SCREEN_H * (MUXDEF(CONFIG_VGA_SIZE_400x300, 2, 1)),
-        0, &window, &renderer);
+    SDL_CreateWindowAndRenderer(SCREEN_W * 2, SCREEN_H * 2, 0, &window, &renderer);
     SDL_SetWindowTitle(window, title);
     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
         SDL_TEXTUREACCESS_STATIC, SCREEN_W, SCREEN_H);
@@ -63,9 +58,9 @@ void vga_update_screen() {
 void init_vga() {
     vgactl_port_base = (uint32_t *)new_space(8);
     vgactl_port_base[0] = (screen_width() << 16) | screen_height();
-    add_mmio_map("vga", VGA_MMIO, vgactl_port_base, 8, NULL);
+    add_mmio_map("vga", VGA_MMIO, vgactl_port_base, 8, NULL); // VGA寄存器，存储屏幕大小
     vmem = new_space(screen_size());
-    add_mmio_map("vmem", FB_MMIO, vmem, screen_size(), NULL);
+    add_mmio_map("vmem", FB_MMIO, vmem, screen_size(), NULL); // vmem显存
     IFDEF(VGA_SHOW_SCREEN, init_screen());
     IFDEF(VGA_SHOW_SCREEN, memset(vmem, 0, screen_size()));
 }

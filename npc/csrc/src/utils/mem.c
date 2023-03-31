@@ -46,7 +46,7 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
     if (VGA_MMIO <= raddr && raddr <= VGA_MMIO + 8) { 
         if (cpu_npc.pc != 0){ vga = mmio_read(raddr, 8); } // 判断不要多次执行
         *rdata = vga; // 下面放在if里面 cpu_npc.pc == 0时会没有值给rdata
-        // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
+        printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
         return ;
     } 
 
@@ -89,7 +89,7 @@ extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
     // } 
     if (FB_MMIO <= waddr && waddr <= FB_MMIO + 0x75300) { 
         if (cpu_npc.pc != 0){
-            mmio_write(waddr, 1, wdata); // 写串口
+            mmio_write(waddr, 1, wdata); // 写显存
         } // 判断不要多次执行
         return ;
     } 

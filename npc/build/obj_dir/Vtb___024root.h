@@ -147,10 +147,10 @@ VL_MODULE(Vtb___024root) {
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_shift_left_unsigned;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_shift_right_unsigned;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_shift_right_signed;
-        QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__rdata_o;
+        QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__rdata;
     };
     struct {
-        QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__rdata;
+        QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__device_rdata;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__axi_inst__DOT__wdata;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wdata;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wmask;

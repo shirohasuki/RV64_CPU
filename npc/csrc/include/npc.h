@@ -24,7 +24,7 @@
 
 // ============== 调试选项 ============= //
 #define CONFIG_NPC_ITRACE 1
-// #define CONFIG_NPC_GPRTRACE 1
+#define CONFIG_NPC_GPRTRACE 1
 // #define CONFIG_NPC_IFTRACE 1
 #define CONFIG_NPC_DIFFTEST 1
 // #define CONFIG_NPC_MTRACE 1
@@ -104,7 +104,7 @@ extern int diff_skip_ref_flag;
 
 // ============== DEVICE =============== //
 void init_device();
-
+void device_update();
 
 // // ============== DEVICE MAP ===============
 // #define DEVICE_BASE 0xa0000000

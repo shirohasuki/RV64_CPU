@@ -24,7 +24,7 @@
 // endmodule
 
 
-// `define MTRACE 1
+`define MTRACE 1
 
 // =================  version 2 ==================//
 module ram (
@@ -79,9 +79,11 @@ module ram (
         case (inst_addr_i[2])
             1'b0: begin
                 inst_o = {32'b0, ram_mem[inst_addr_i[22:3]][31:0]};
+                `ifdef MTRACE if (inst_addr_i[22:0] != 'b0) begin $display("raddr:%h  rstart: 00, rdata:%x[IF]", inst_addr_i[22:0], inst_o); end `endif
             end
             1'b1: begin
                 inst_o = {32'b0, ram_mem[inst_addr_i[22:3]][63:32]};                
+                `ifdef MTRACE if (inst_addr_i[22:0] != 'b0) begin $display("raddr:%h  rstart: 01, rdata:%x[IF]", inst_addr_i[22:0], inst_o); end `endif
             end
         endcase
     end
@@ -93,35 +95,35 @@ module ram (
             case (raddr[2:0]) 
                 3'b000: begin
                     ram_rdata_o = ram_mem[raddr[22:3]];
-                    `ifdef MTRACE $display("raddr:%d  rstart:000, rdata:%x", raddr[22:3], ram_rdata_o); `endif
+                    `ifdef MTRACE $display("raddr:%h  rstart:000, rdata:%x", raddr[22:0], ram_rdata_o); `endif
                 end
                 3'b001: begin
                     ram_rdata_o = {ram_mem[raddr[22:3]+1][7:0], ram_mem[raddr[22:3]][63:8]};
-                    `ifdef MTRACE $display("raddr:%d  rstart:001, rdata:%x", raddr[22:3], ram_rdata_o); `endif
+                    `ifdef MTRACE $display("raddr:%h  rstart:001, rdata:%x", raddr[22:0], ram_rdata_o); `endif
                 end
                 3'b010: begin
                     ram_rdata_o = {ram_mem[raddr[22:3]+1][15:0], ram_mem[raddr[22:3]][63:16]};
-                    `ifdef MTRACE $display("raddr:%d  rstart:010, rdata:%x", raddr[22:3], ram_rdata_o); `endif
+                    `ifdef MTRACE $display("raddr:%h  rstart:010, rdata:%x", raddr[22:0], ram_rdata_o); `endif
                 end
                 3'b011: begin
                     ram_rdata_o = {ram_mem[raddr[22:3]+1][23:0], ram_mem[raddr[22:3]][63:24]};
-                    `ifdef MTRACE $display("raddr:%d  rstart:011, rdata:%x", raddr[22:3], ram_rdata_o); `endif
+                    `ifdef MTRACE $display("raddr:%h  rstart:011, rdata:%x", raddr[22:0], ram_rdata_o); `endif
                 end
                 3'b100: begin
                     ram_rdata_o = {ram_mem[raddr[22:3]+1][31:0], ram_mem[raddr[22:3]][63:32]};
-                    `ifdef MTRACE $display("raddr:%d  rstart:100, rdata:%x", raddr[22:3], ram_rdata_o); `endif
+                    `ifdef MTRACE $display("raddr:%h  rstart:100, rdata:%x", raddr[22:0], ram_rdata_o); `endif
                 end
                 3'b101: begin
                     ram_rdata_o = {ram_mem[raddr[22:3]+1][39:0], ram_mem[raddr[22:3]][63:40]};
-                    `ifdef MTRACE $display("raddr:%d  rstart:101, rdata:%x", raddr[22:3], ram_rdata_o); `endif
+                    `ifdef MTRACE $display("raddr:%h  rstart:101, rdata:%x", raddr[22:0], ram_rdata_o); `endif
                 end
                 3'b110: begin
                     ram_rdata_o = {ram_mem[raddr[22:3]+1][47:0], ram_mem[raddr[22:3]][63:48]};
-                    `ifdef MTRACE $display("raddr:%d  rstart:110, rdata:%x", raddr[22:3], ram_rdata_o); `endif
+                    `ifdef MTRACE $display("raddr:%h  rstart:110, rdata:%x", raddr[22:0], ram_rdata_o); `endif
                 end
                 3'b111: begin
                     ram_rdata_o = {ram_mem[raddr[22:3]+1][55:0], ram_mem[raddr[22:3]][63:56]};
-                    `ifdef MTRACE $display("raddr:%d  rstart:111, rdata:%x", raddr[22:3], ram_rdata_o); `endif
+                    `ifdef MTRACE $display("raddr:%h  rstart:111, rdata:%x", raddr[22:0], ram_rdata_o); `endif
                 end
             endcase
         end
@@ -138,35 +140,35 @@ module ram (
             case (waddr[2:0]) 
                 3'b000: begin
                     ram_mem[waddr[22:3]] <= ram_wdata_i | (ram_mem[waddr[22:3]] & ~ram_wmask_i); // 参考ram_mem[A[13:2]] <= (D & bwen) | (ram_mem[A[13:2]] & ~bwen); 
-                    `ifdef MTRACE $display("waddr:%d  wstart:000, wdata:%x", waddr[22:3], ram_wdata_i);  `endif
+                    `ifdef MTRACE $display("waddr:%h  wstart:000, wdata:%x", waddr[22:3], ram_wdata_i);  `endif
                 end
                 3'b001: begin
                     {ram_mem[raddr[22:3]+1][7:0], ram_mem[waddr[22:3]][63:8]} <= ram_wdata_i | ({ram_mem[raddr[22:3]+1][7:0], ram_mem[waddr[22:3]][63:8]} & ~ram_wmask_i);
-                    `ifdef MTRACE $display("waddr:%d  wstart:001, wdata:%x", waddr[22:3], ram_wdata_i);  `endif
+                    `ifdef MTRACE $display("waddr:%h  wstart:001, wdata:%x", waddr[22:0], ram_wdata_i);  `endif
                 end
                 3'b010: begin
                     {ram_mem[waddr[22:3]+1][15:0], ram_mem[waddr[22:3]][63:16]} <= ram_wdata_i | ({ram_mem[waddr[22:3]+1][15:0], ram_mem[waddr[22:3]][63:16]} & ~ram_wmask_i);
-                    `ifdef MTRACE $display("waddr:%d  wstart:010, wdata:%x", waddr[22:3], ram_wdata_i);  `endif
+                    `ifdef MTRACE $display("waddr:%h  wstart:010, wdata:%x", waddr[22:0], ram_wdata_i);  `endif
                 end
                 3'b011: begin
                     {ram_mem[waddr[22:3]+1][23:0], ram_mem[waddr[22:3]][63:24]} <= ram_wdata_i | ({ram_mem[waddr[22:3]+1][23:0], ram_mem[waddr[22:3]][63:24]} & ~ram_wmask_i);
-                    `ifdef MTRACE $display("waddr:%d  wstart:011, wdata:%x", waddr[22:3], ram_wdata_i);  `endif
+                    `ifdef MTRACE $display("waddr:%h  wstart:011, wdata:%x", waddr[22:0], ram_wdata_i);  `endif
                 end
                 3'b100: begin
                     {ram_mem[waddr[22:3]+1][31:0], ram_mem[waddr[22:3]][63:32]} <= ram_wdata_i | ({ram_mem[waddr[22:3]+1][31:0], ram_mem[waddr[22:3]][63:32]} & ~ram_wmask_i);
-                    `ifdef MTRACE $display("waddr:%d  wstart:100, wdata:%x", waddr[22:3], ram_wdata_i);  `endif
+                    `ifdef MTRACE $display("waddr:%h  wstart:100, wdata:%x", waddr[22:0], ram_wdata_i);  `endif
                 end
                 3'b101: begin
                     {ram_mem[raddr[22:3]+1][39:0], ram_mem[waddr[22:3]][63:40]} <= ram_wdata_i | ({ram_mem[waddr[22:3]+1][39:0], ram_mem[waddr[22:3]][63:40]}& ~ram_wmask_i);
-                    `ifdef MTRACE $display("waddr:%d  wstart:101, wdata:%x", waddr[22:3], ram_wdata_i);  `endif
+                    `ifdef MTRACE $display("waddr:%h  wstart:101, wdata:%x", waddr[22:0], ram_wdata_i);  `endif
                 end
                 3'b110: begin
                     {ram_mem[waddr[22:3]+1][47:0], ram_mem[waddr[22:3]][63:48]} <= ram_wdata_i | ({ram_mem[waddr[22:3]+1][47:0], ram_mem[waddr[22:3]][63:48]}& ~ram_wmask_i);
-                    `ifdef MTRACE $display("waddr:%d  wstart:110, wdata:%x", waddr[22:3], ram_wdata_i);  `endif
+                    `ifdef MTRACE $display("waddr:%h  wstart:110, wdata:%x", waddr[22:0], ram_wdata_i);  `endif
                 end
                 3'b111: begin
                     {ram_mem[waddr[22:3]+1][55:0], ram_mem[waddr[22:3]][63:56]} <= ram_wdata_i | ({ram_mem[waddr[22:3]+1][55:0], ram_mem[waddr[22:3]][63:56]}& ~ram_wmask_i);
-                    `ifdef MTRACE $display("waddr:%d  wstart:111, wdata:%x", waddr[22:3], ram_wdata_i);  `endif
+                    `ifdef MTRACE $display("waddr:%h  wstart:111, wdata:%x", waddr[22:0], ram_wdata_i);  `endif
                 end
             endcase
         end
@@ -177,13 +179,13 @@ module ram (
 
     always @(posedge clk) begin 
 `ifdef MTRACE
-        $display("======= ram list ==========");
-        for (integer i = 1000; i < 4095; i++) begin
-            if (ram_mem[i] != 'b0) begin
-                $display("rom[%4d] | %8x", i, ram_mem[i]);
-            end
-        end
-        $display("===========================");
+        // $display("======= ram list ==========");
+        // for (integer i = 0; i < 1000; i++) begin
+        //     if (ram_mem[i] != 'b0) begin
+        //         $display("rom[%4d] | %8x", i, ram_mem[i]);
+        //     end
+        // end
+        // $display("===========================");
 `endif
     end
 endmodule

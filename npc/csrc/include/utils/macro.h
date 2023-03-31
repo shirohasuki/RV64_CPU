@@ -66,7 +66,7 @@
 // NOTE1: `c` should be defined as a list like:
 //   f(a0) f(a1) f(a2) ...
 // NOTE2: each element in the container can be a tuple
-// #define MAP(c, f) c(f)
+#define MAP(c, f) c(f)
 
 #define BITMASK(bits) ((1ull << (bits)) - 1)
 #define BITS(x, hi, lo) (((x) >> (lo)) & BITMASK((hi) - (lo) + 1)) // similar to x[hi:lo] in verilog 取x的hi到lo位,这么用的吗，人麻了(22.8.5)

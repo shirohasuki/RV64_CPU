@@ -2,7 +2,7 @@
 #include <utils/debug.h>
 
 extern CPU_state cpu_npc;
-CPU_state cpu_nemu;
+extern CPU_state cpu_nemu;
 
 
 //=====================Difftest=========================

@@ -5,7 +5,6 @@
 static uint32_t *rtc_port_base = NULL;
 
 static void rtc_io_handler(uint32_t offset, int len, bool is_write) {
-    // printf("timer.c:HERE\n");
     assert(offset == 0 || offset == 4);
     if (!is_write && offset == 4) {
         uint64_t us = get_time();

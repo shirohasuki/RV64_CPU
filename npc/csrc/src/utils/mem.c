@@ -7,46 +7,23 @@
 #include <device/mmio.h>
 
 uint8_t mem[MEM_SIZE] = {0};
-// Memory Read
 
 extern CPU_state cpu_npc;
 
 unsigned long rtc;
+unsigned long keycode;
+unsigned long vga;
 
 uint8_t* cpu2mem(ll addr) { return mem + (addr - MEM_BASE); }
 
-// extern bool diff_skip_ref_flag;
-
-        // struct timeval time_day;
-        // diff_skip_ref_flag = 2;
-        // gettimeofday(&time_day, NULL);
-        // if (boot_time == 0) {
-        //     boot_time = time_day.tv_sec;
-        // }
-        // uint64_t s   = time_day.tv_sec - boot_time;
-        // uint64_t us  = s * 1000000 + time_day.tv_usec;
-        
-        // if (raddr == RTC_MMIO) {
-        //     *rdata = us;
-        // } 
-        // else if (raddr == RTC_MMIO + 4) {
-        //     *rdata = us >> 32;
-        // }
-
 extern "C" void pmem_read(ll raddr, ll *rdata) {
-    // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, rdata);
     if (RTC_MMIO <= raddr && raddr <= RTC_MMIO + 8) { 
-        if (cpu_npc.pc != 0) {
-            rtc = mmio_read(raddr, 8);
-            //printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
-        } // 判断不要多次执行 
-        if (raddr == RTC_MMIO) {
+        if (cpu_npc.pc != 0) { rtc = mmio_read(raddr, 8); } // 判断不要多次执行 
+        if (raddr == RTC_MMIO) { 
             *rdata = rtc;
-        } 
-        else if (raddr == RTC_MMIO + 4) {
+        } else if (raddr == RTC_MMIO + 4) {
             *rdata = rtc >> 32;
-        }
-    // 下面放在if里面 cpu_npc.pc == 0时会没有值给rdata
+        } // 下面放在if里面 cpu_npc.pc == 0时会没有值给rdata
 #ifdef CONFIG_NPC_MTRACE
     sprintf(mtrace_buf[mtrace_count], "read:  addr:%016llx data:%016llx", raddr, (*rdata));
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
@@ -54,6 +31,25 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
         // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
         return ; 
     } // 时钟
+
+    if (KBD_MMIO <= raddr && raddr <= KBD_MMIO + 4) { 
+        if (cpu_npc.pc != 0) { keycode = mmio_read(raddr, 4); } // 判断不要多次执行 
+        *rdata = keycode; // 下面放在if里面 cpu_npc.pc == 0时会没有值给rdata
+#ifdef CONFIG_NPC_MTRACE
+    sprintf(mtrace_buf[mtrace_count], "read:  addr:%016llx data:%016llx", raddr, (*rdata));
+    mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
+#endif
+        printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
+        return ; 
+    } // 键盘
+    
+    if (VGA_MMIO <= raddr && raddr <= VGA_MMIO + 8) { 
+        if (cpu_npc.pc != 0){ vga = mmio_read(raddr, 8); } // 判断不要多次执行
+        *rdata = vga; // 下面放在if里面 cpu_npc.pc == 0时会没有值给rdata
+        // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
+        return ;
+    } 
+
     if (raddr < MEM_BASE) {
         printf("[pmem_read]  raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
         return ;
@@ -69,8 +65,7 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
     sprintf(mtrace_buf[mtrace_count], "read:  addr:%016llx data:%016llx", raddr, (*rdata));
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
 #endif
-    // printf("[pmem_read] addr is:%llx, data is:%llx\n", raddr, *rdata);
-
+    // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
 }
 
 // Memory Write
@@ -79,9 +74,20 @@ extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
     sprintf(mtrace_buf[mtrace_count],"write: addr:%016llx data:%016llx\n            wmask:%08x", waddr,  wdata, mask);
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
 #endif
-    // Log("[pmem_write] waddr is:%llx pc = %llx ", waddr, cpu_npc.pc);
+    // printf("[pmem_write] waddr is:%llx wdata is:%llx\n", waddr, wdata);
     if (SERIAL_MMIO <= waddr && waddr <= SERIAL_MMIO + 8) { 
-        // putc(wdata, stdio);// 写串口
+        if (cpu_npc.pc != 0){
+            mmio_write(waddr, 1, wdata); // 写串口
+        } // 判断不要多次执行
+        return ;
+    } 
+    // if (VGA_MMIO <= waddr && waddr <= VGA_MMIO + 8) { 
+    //     if (cpu_npc.pc != 0){
+    //         mmio_write(waddr, 1, wdata); // 写串口
+    //     } // 判断不要多次执行
+    //     return ;
+    // } 
+    if (FB_MMIO <= waddr && waddr <= FB_MMIO + 0x75300) { 
         if (cpu_npc.pc != 0){
             mmio_write(waddr, 1, wdata); // 写串口
         } // 判断不要多次执行

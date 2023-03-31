@@ -30,6 +30,7 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
     IData/*19:0*/ __Vdlyvdim0__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v1;
     CData/*5:0*/ __Vdlyvlsb__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v1;
     CData/*7:0*/ __Vdlyvval__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v1;
+    CData/*0:0*/ __Vdlyvset__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v1;
     IData/*19:0*/ __Vdlyvdim0__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v2;
     CData/*5:0*/ __Vdlyvlsb__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v2;
     QData/*47:0*/ __Vdlyvval__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v2;
@@ -93,6 +94,7 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
     __Vdly__tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o 
         = vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o;
     __Vdlyvset__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v0 = 0U;
+    __Vdlyvset__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v1 = 0U;
     __Vdlyvset__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v2 = 0U;
     __Vdlyvset__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v4 = 0U;
     __Vdlyvset__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v6 = 0U;
@@ -202,8 +204,6 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
                 | (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_ram_wen_o)) 
                | ((~ (IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__busy_end)) 
                   & (IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__axi_busy)));
-        vlSelf->tb__DOT__soc_inst__DOT__ram_axi_bvalid_o 
-            = vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__wen_o;
         vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_rdready 
             = ((IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_ravalid) 
                & ((IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raready) 
@@ -211,8 +211,6 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
     } else {
         __Vdly__tb__DOT__soc_inst__DOT__axi_inst__DOT__rwaddr = 0U;
         vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__axi_busy = 0U;
-        vlSelf->tb__DOT__soc_inst__DOT__ram_axi_bvalid_o 
-            = vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__wen_o;
         vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_rdready = 0U;
     }
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_isstore_o 
@@ -594,6 +592,9 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
                         = (0xfffffU & ((IData)(1U) 
                                        + (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr 
                                           >> 3U)));
+                    VL_WRITEF("waddr:%x  wstart:111, wdata:%x\n",
+                              23,(0x7fffffU & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr),
+                              64,vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wdata);
                     __Vdlyvval__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v1 
                         = (0xffU & ((IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wdata) 
                                     | ((IData)((vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
@@ -602,11 +603,15 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
                                                      >> 3U))] 
                                                 >> 0x38U)) 
                                        & (~ (IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wmask)))));
+                    __Vdlyvset__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v1 = 1U;
                     __Vdlyvlsb__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v1 = 0x38U;
                     __Vdlyvdim0__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v1 
                         = (0xfffffU & (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr 
                                        >> 3U));
                 } else {
+                    VL_WRITEF("waddr:%x  wstart:110, wdata:%x\n",
+                              23,(0x7fffffU & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr),
+                              64,vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wdata);
                     __Vdlyvval__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v2 
                         = (0xffffffffffffULL & ((vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wdata 
                                                  >> 0x10U) 
@@ -651,6 +656,9 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
                                        >> 3U));
                 }
             } else if ((1U & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr)) {
+                VL_WRITEF("waddr:%x  wstart:101, wdata:%x\n",
+                          23,(0x7fffffU & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr),
+                          64,vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wdata);
                 __Vdlyvval__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v4 
                     = (0xffffffffffULL & ((vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wdata 
                                            >> 0x18U) 
@@ -691,6 +699,9 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
                     = (0xfffffU & (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr 
                                    >> 3U));
             } else {
+                VL_WRITEF("waddr:%x  wstart:100, wdata:%x\n",
+                          23,(0x7fffffU & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr),
+                          64,vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wdata);
                 __Vdlyvval__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v6 
                     = (IData)(((vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wdata 
                                 >> 0x20U) | (((0xffffffffULL 
@@ -730,6 +741,9 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
             }
         } else if ((2U & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr)) {
             if ((1U & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr)) {
+                VL_WRITEF("waddr:%x  wstart:011, wdata:%x\n",
+                          23,(0x7fffffU & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr),
+                          64,vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wdata);
                 __Vdlyvval__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v8 
                     = (0xffffffU & (IData)(((vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wdata 
                                              >> 0x28U) 
@@ -764,6 +778,9 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
                     = (0xfffffU & (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr 
                                    >> 3U));
             } else {
+                VL_WRITEF("waddr:%x  wstart:010, wdata:%x\n",
+                          23,(0x7fffffU & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr),
+                          64,vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wdata);
                 __Vdlyvval__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v10 
                     = (0xffffU & (IData)(((vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wdata 
                                            >> 0x30U) 
@@ -799,6 +816,9 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
                                    >> 3U));
             }
         } else if ((1U & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr)) {
+            VL_WRITEF("waddr:%x  wstart:001, wdata:%x\n",
+                      23,(0x7fffffU & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr),
+                      64,vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wdata);
             __Vdlyvval__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v12 
                 = (0xffU & (IData)(((vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wdata 
                                      >> 0x38U) | (0xffULL 
@@ -841,7 +861,13 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
             __Vdlyvdim0__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v14 
                 = (0xfffffU & (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr 
                                >> 3U));
+            VL_WRITEF("waddr:%x  wstart:000, wdata:%x\n",
+                      20,(0xfffffU & (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr 
+                                      >> 3U)),64,vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wdata);
         }
+        vlSelf->tb__DOT__soc_inst__DOT__ram_axi_bvalid_o = 1U;
+    } else {
+        vlSelf->tb__DOT__soc_inst__DOT__ram_axi_bvalid_o = 0U;
     }
     if ((1U & ((~ (IData)(vlSelf->rst)) | (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_id_ex_flush_en_o)))) {
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_op1_o = 0ULL;
@@ -866,6 +892,8 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
                 [__Vdlyvdim0__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v0]) 
                | (__Vdlyvval__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v0 
                   << (IData)(__Vdlyvlsb__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v0)));
+    }
+    if (__Vdlyvset__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v1) {
         vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem[__Vdlyvdim0__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v1] 
             = (((~ (0xffULL << (IData)(__Vdlyvlsb__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v1))) 
                 & vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
@@ -1770,6 +1798,11 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
                                                         (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__pc_reg_pc_o 
                                                          >> 3U)))] 
                                    >> 0x20U)));
+            if (VL_UNLIKELY((0U != (0x7fffffU & (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__pc_reg_pc_o))))) {
+                VL_WRITEF("raddr:%x  rstart: 01, rdata:%x[IF]\n",
+                          23,(0x7fffffU & (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__pc_reg_pc_o)),
+                          64,vlSelf->tb__DOT__soc_inst__DOT__ram_core_inst_o);
+            }
         }
     } else {
         vlSelf->tb__DOT__soc_inst__DOT__ram_core_inst_o 
@@ -1777,6 +1810,11 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
                               [(0xfffffU & (IData)(
                                                    (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__pc_reg_pc_o 
                                                     >> 3U)))]));
+        if (VL_UNLIKELY((0U != (0x7fffffU & (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__pc_reg_pc_o))))) {
+            VL_WRITEF("raddr:%x  rstart: 00, rdata:%x[IF]\n",
+                      23,(0x7fffffU & (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__pc_reg_pc_o)),
+                      64,vlSelf->tb__DOT__soc_inst__DOT__ram_core_inst_o);
+        }
     }
     if (vlSelf->rst) {
         vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
@@ -2080,12 +2118,12 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
         = (((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__redirect_inst__DOT__rs1_id_ex_hit) 
             | (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__redirect_inst__DOT__rs2_id_ex_hit)) 
            & (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_isload_o));
-    vlSelf->tb__DOT__soc_inst__DOT__ram_axi_rdata_o 
-        = ((IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__ren_o)
-            ? ((4U & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr)
-                ? ((2U & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr)
-                    ? ((1U & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr)
-                        ? ((vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
+    if (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__ren_o) {
+        if ((4U & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr)) {
+            if ((2U & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr)) {
+                if ((1U & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr)) {
+                    vlSelf->tb__DOT__soc_inst__DOT__ram_axi_rdata_o 
+                        = ((vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
                             [(0xfffffU & ((IData)(1U) 
                                           + (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
                                              >> 3U)))] 
@@ -2097,8 +2135,13 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
                                                                  (0xfffffU 
                                                                   & (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
                                                                      >> 3U))] 
-                                                                 >> 0x38U))))))
-                        : ((vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
+                                                                 >> 0x38U))))));
+                    VL_WRITEF("raddr:%x  rstart:111, rdata:%x\n",
+                              23,(0x7fffffU & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr),
+                              64,vlSelf->tb__DOT__soc_inst__DOT__ram_axi_rdata_o);
+                } else {
+                    vlSelf->tb__DOT__soc_inst__DOT__ram_axi_rdata_o 
+                        = ((vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
                             [(0xfffffU & ((IData)(1U) 
                                           + (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
                                              >> 3U)))] 
@@ -2110,82 +2153,112 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
                                                                     (0xfffffU 
                                                                      & (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
                                                                         >> 3U))] 
-                                                                    >> 0x30U)))))))
-                    : ((1U & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr)
-                        ? ((vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
-                            [(0xfffffU & ((IData)(1U) 
-                                          + (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
-                                             >> 3U)))] 
-                            << 0x18U) | (QData)((IData)(
-                                                        (0xffffffU 
-                                                         & (IData)(
-                                                                   (vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
-                                                                    [
-                                                                    (0xfffffU 
-                                                                     & (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
-                                                                        >> 3U))] 
-                                                                    >> 0x28U))))))
-                        : (((QData)((IData)(vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
-                                            [(0xfffffU 
-                                              & ((IData)(1U) 
-                                                 + 
-                                                 (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
-                                                  >> 3U)))])) 
-                            << 0x20U) | (QData)((IData)(
-                                                        (vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
-                                                         [
-                                                         (0xfffffU 
-                                                          & (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
-                                                             >> 3U))] 
-                                                         >> 0x20U))))))
-                : ((2U & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr)
-                    ? ((1U & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr)
-                        ? (((QData)((IData)((0xffffffU 
-                                             & (IData)(
-                                                       vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
-                                                       [
-                                                       (0xfffffU 
-                                                        & ((IData)(1U) 
-                                                           + 
-                                                           (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
-                                                            >> 3U)))])))) 
-                            << 0x28U) | (vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
-                                         [(0xfffffU 
-                                           & (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
-                                              >> 3U))] 
-                                         >> 0x18U))
-                        : (((QData)((IData)((0xffffU 
-                                             & (IData)(
-                                                       vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
-                                                       [
-                                                       (0xfffffU 
-                                                        & ((IData)(1U) 
-                                                           + 
-                                                           (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
-                                                            >> 3U)))])))) 
-                            << 0x30U) | (vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
-                                         [(0xfffffU 
-                                           & (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
-                                              >> 3U))] 
-                                         >> 0x10U)))
-                    : ((1U & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr)
-                        ? (((QData)((IData)((0xffU 
-                                             & (IData)(
-                                                       vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
-                                                       [
-                                                       (0xfffffU 
-                                                        & ((IData)(1U) 
-                                                           + 
-                                                           (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
-                                                            >> 3U)))])))) 
-                            << 0x38U) | (vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
-                                         [(0xfffffU 
-                                           & (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
-                                              >> 3U))] 
-                                         >> 8U)) : 
-                       vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
-                       [(0xfffffU & (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
-                                     >> 3U))]))) : 0ULL);
+                                                                    >> 0x30U))))));
+                    VL_WRITEF("raddr:%x  rstart:110, rdata:%x\n",
+                              23,(0x7fffffU & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr),
+                              64,vlSelf->tb__DOT__soc_inst__DOT__ram_axi_rdata_o);
+                }
+            } else if ((1U & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr)) {
+                vlSelf->tb__DOT__soc_inst__DOT__ram_axi_rdata_o 
+                    = ((vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
+                        [(0xfffffU & ((IData)(1U) + 
+                                      (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
+                                       >> 3U)))] << 0x18U) 
+                       | (QData)((IData)((0xffffffU 
+                                          & (IData)(
+                                                    (vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
+                                                     [
+                                                     (0xfffffU 
+                                                      & (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
+                                                         >> 3U))] 
+                                                     >> 0x28U))))));
+                VL_WRITEF("raddr:%x  rstart:101, rdata:%x\n",
+                          23,(0x7fffffU & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr),
+                          64,vlSelf->tb__DOT__soc_inst__DOT__ram_axi_rdata_o);
+            } else {
+                vlSelf->tb__DOT__soc_inst__DOT__ram_axi_rdata_o 
+                    = (((QData)((IData)(vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
+                                        [(0xfffffU 
+                                          & ((IData)(1U) 
+                                             + (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
+                                                >> 3U)))])) 
+                        << 0x20U) | (QData)((IData)(
+                                                    (vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
+                                                     [
+                                                     (0xfffffU 
+                                                      & (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
+                                                         >> 3U))] 
+                                                     >> 0x20U))));
+                VL_WRITEF("raddr:%x  rstart:100, rdata:%x\n",
+                          23,(0x7fffffU & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr),
+                          64,vlSelf->tb__DOT__soc_inst__DOT__ram_axi_rdata_o);
+            }
+        } else if ((2U & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr)) {
+            if ((1U & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr)) {
+                vlSelf->tb__DOT__soc_inst__DOT__ram_axi_rdata_o 
+                    = (((QData)((IData)((0xffffffU 
+                                         & (IData)(
+                                                   vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
+                                                   [
+                                                   (0xfffffU 
+                                                    & ((IData)(1U) 
+                                                       + 
+                                                       (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
+                                                        >> 3U)))])))) 
+                        << 0x28U) | (vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
+                                     [(0xfffffU & (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
+                                                   >> 3U))] 
+                                     >> 0x18U));
+                VL_WRITEF("raddr:%x  rstart:011, rdata:%x\n",
+                          23,(0x7fffffU & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr),
+                          64,vlSelf->tb__DOT__soc_inst__DOT__ram_axi_rdata_o);
+            } else {
+                vlSelf->tb__DOT__soc_inst__DOT__ram_axi_rdata_o 
+                    = (((QData)((IData)((0xffffU & (IData)(
+                                                           vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
+                                                           [
+                                                           (0xfffffU 
+                                                            & ((IData)(1U) 
+                                                               + 
+                                                               (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
+                                                                >> 3U)))])))) 
+                        << 0x30U) | (vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
+                                     [(0xfffffU & (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
+                                                   >> 3U))] 
+                                     >> 0x10U));
+                VL_WRITEF("raddr:%x  rstart:010, rdata:%x\n",
+                          23,(0x7fffffU & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr),
+                          64,vlSelf->tb__DOT__soc_inst__DOT__ram_axi_rdata_o);
+            }
+        } else if ((1U & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr)) {
+            vlSelf->tb__DOT__soc_inst__DOT__ram_axi_rdata_o 
+                = (((QData)((IData)((0xffU & (IData)(
+                                                     vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
+                                                     [
+                                                     (0xfffffU 
+                                                      & ((IData)(1U) 
+                                                         + 
+                                                         (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
+                                                          >> 3U)))])))) 
+                    << 0x38U) | (vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
+                                 [(0xfffffU & (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
+                                               >> 3U))] 
+                                 >> 8U));
+            VL_WRITEF("raddr:%x  rstart:001, rdata:%x\n",
+                      23,(0x7fffffU & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr),
+                      64,vlSelf->tb__DOT__soc_inst__DOT__ram_axi_rdata_o);
+        } else {
+            vlSelf->tb__DOT__soc_inst__DOT__ram_axi_rdata_o 
+                = vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
+                [(0xfffffU & (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
+                              >> 3U))];
+            VL_WRITEF("raddr:%x  rstart:000, rdata:%x\n",
+                      23,(0x7fffffU & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr),
+                      64,vlSelf->tb__DOT__soc_inst__DOT__ram_axi_rdata_o);
+        }
+    } else {
+        vlSelf->tb__DOT__soc_inst__DOT__ram_axi_rdata_o = 0ULL;
+    }
     vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raready 
         = vlSelf->rst;
     vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wdready 
@@ -2538,16 +2611,12 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__1(Vtb___024root* vlSelf) {
     CData/*6:0*/ __Vtableidx2;
     // Body
     if (vlSelf->rst) {
-        vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__busy_end 
-            = ((IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_rdready) 
-               | (IData)(vlSelf->tb__DOT__soc_inst__DOT__ram_axi_bvalid_o));
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__regs_inst__DOT__regs[vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_wb_wb_rd_waddr_o] 
             = (((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_wb_wb_reg_wen_o) 
                 & (0U != (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_wb_wb_rd_waddr_o)))
                 ? vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_wb_wb_rd_wdata_o
                 : 0ULL);
     } else {
-        vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__busy_end = 0U;
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__regs_inst__DOT__regs[0U] = 0ULL;
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__regs_inst__DOT__regs[1U] = 0ULL;
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__regs_inst__DOT__regs[2U] = 0ULL;
@@ -2582,19 +2651,24 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__1(Vtb___024root* vlSelf) {
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__regs_inst__DOT__regs[0x1fU] = 0ULL;
     }
     Vtb___024unit____Vdpiimwrap_get_gprs__Vdpioc2_TOP____024unit(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__regs_inst__DOT__regs);
-    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_id_rdata_o 
-        = ((IData)(vlSelf->rst) ? ((0x300U == (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_csr_raddr_o))
-                                    ? vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__mstatus
-                                    : ((0x305U == (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_csr_raddr_o))
-                                        ? vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__mtvec
-                                        : ((0x341U 
-                                            == (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_csr_raddr_o))
-                                            ? vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__mepc
-                                            : ((0x342U 
-                                                == (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_csr_raddr_o))
-                                                ? vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__mcause
-                                                : 0ULL))))
-            : 0ULL);
+    if (vlSelf->rst) {
+        vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__busy_end 
+            = ((IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_rdready) 
+               | (IData)(vlSelf->tb__DOT__soc_inst__DOT__ram_axi_bvalid_o));
+        vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_id_rdata_o 
+            = ((0x300U == (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_csr_raddr_o))
+                ? vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__mstatus
+                : ((0x305U == (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_csr_raddr_o))
+                    ? vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__mtvec
+                    : ((0x341U == (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_csr_raddr_o))
+                        ? vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__mepc
+                        : ((0x342U == (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_csr_raddr_o))
+                            ? vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__mcause
+                            : 0ULL))));
+    } else {
+        vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__busy_end = 0U;
+        vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_id_rdata_o = 0ULL;
+    }
     __Vtableidx1 = (((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_inst__DOT__load_data_hit) 
                      << 5U) | (((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_inst__DOT__store_inst) 
                                 << 4U) | (((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_inst__DOT__load_inst) 

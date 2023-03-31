@@ -560,8 +560,8 @@ module ex (
                         mem_ren_o   = 1'b1;
                         mem_raddr_o = base_addr_add_addr_offset;
                         // rd_wdata_o = {{48{mem_rdata_i[15]}}, mem_rdata_i[15:0]};
-                        rd_waddr_o = rd_addr_i;
-                        reg_wen_o  = 1'b1; 
+                        rd_waddr_o  = rd_addr_i;
+                        reg_wen_o   = 1'b1; 
                         isload_o    = 1'b1;
                     end
                     `INST_LW: begin
@@ -569,17 +569,17 @@ module ex (
                         mem_raddr_o = base_addr_add_addr_offset;
                         // rd_wdata_o = {{32{mem_rdata_i[31]}}, mem_rdata_i[31:0]};
                         // rd_wdata_o = {32'b0, mem_rdata_i[31:0]};  
-                        rd_waddr_o = rd_addr_i;
-                        reg_wen_o  = 1'b1;
+                        rd_waddr_o  = rd_addr_i;
+                        reg_wen_o   = 1'b1;
                         isload_o    = 1'b1;
-                        // $display("EX: lw_data = %l", rd_wdata_o);
+                        // $display("EX: lw_data = %d", rd_wdata_o);
                     end
                     `INST_LD: begin
                         mem_ren_o   = 1'b1;
                         mem_raddr_o = base_addr_add_addr_offset;
                         // rd_wdata_o = {mem_rdata_i[63:0]};
-                        rd_waddr_o = rd_addr_i;
-                        reg_wen_o  = 1'b1;
+                        rd_waddr_o  = rd_addr_i;
+                        reg_wen_o   = 1'b1;
                         // flush_flag_o = 3'b001; // 给id_ex NOP此处当作冲刷该级流水线
                         // stall_flag_o = 3'b110; // 流水线延迟用于访存
                         isload_o    = 1'b1;
@@ -589,8 +589,8 @@ module ex (
                         mem_ren_o   = 1'b1;
                         mem_raddr_o = base_addr_add_addr_offset;
                         // rd_wdata_o = {56'b0,mem_rdata_i[7:0]};
-                        rd_waddr_o = rd_addr_i;
-                        reg_wen_o  = 1'b1;
+                        rd_waddr_o  = rd_addr_i;
+                        reg_wen_o   = 1'b1;
                         isload_o    = 1'b1;
                         // $display("here");
                     end
@@ -598,16 +598,16 @@ module ex (
                         mem_ren_o   = 1'b1;
                         mem_raddr_o = base_addr_add_addr_offset;
                         // rd_wdata_o = {48'b0,mem_rdata_i[15:0]};
-                        rd_waddr_o = rd_addr_i;
-                        reg_wen_o  = 1'b1;
+                        rd_waddr_o  = rd_addr_i;
+                        reg_wen_o   = 1'b1;
                         isload_o    = 1'b1;
                     end
                     `INST_LWU: begin
                         mem_ren_o   = 1'b1;
                         mem_raddr_o = base_addr_add_addr_offset;
                         // rd_wdata_o = {32'b0,mem_rdata_i[31:0]};
-                        rd_waddr_o = rd_addr_i;
-                        reg_wen_o  = 1'b1;
+                        rd_waddr_o  = rd_addr_i;
+                        reg_wen_o   = 1'b1;
                         isload_o    = 1'b1;
                     end
                     default begin

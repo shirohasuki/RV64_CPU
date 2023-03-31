@@ -51,8 +51,10 @@ VM_USER_CLASSES = \
 	device \
 	map \
 	mmio \
+	keyboard \
 	rtc \
 	serial \
+	vga \
 	main \
 	difftest \
 	disasm \
@@ -85,9 +87,13 @@ map.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/ioe/io/map.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 mmio.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/ioe/io/mmio.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+keyboard.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/ioe/keyboard.c
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 rtc.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/ioe/rtc.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 serial.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/ioe/serial.c
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+vga.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/ioe/vga.c
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 main.o: /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/src/main.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<

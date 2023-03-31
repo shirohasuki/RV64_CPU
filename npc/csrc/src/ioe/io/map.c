@@ -47,11 +47,8 @@ word_t map_read(paddr_t addr, int len, IOMap *map) {
     IFDEF(CONFIG_NPC_DTRACE, Printf("[Dtrace - Read] %s\n", BLUE, map->name);)
     check_bound(map, addr);
     paddr_t offset = addr - map->low;
-    // printf("mapread\n");
     invoke_callback(map->callback, offset, len, false); // prepare data to read
-    // printf("mapread\n");
     word_t ret = host_read((uint64_t *)map->space + offset, len);
-    // printf("ret = %lx\n", ret);
     return ret;
 }
 

@@ -393,6 +393,8 @@ module id (
                 csr_data_o    = 64'b0;
                 csr_waddr_o   = 12'b0;
                 csr_wen_o     = 1'b0;
+                // $display("here");
+                // $display("op2_o = %h,immU =%h", op2_o, immU);
             end // 不跳转
             `INST_AUIPC: begin
                 rs1_addr_o    = 5'b0;
@@ -406,7 +408,7 @@ module id (
                 csr_data_o    = 64'b0;
                 csr_waddr_o   = 12'b0;
                 csr_wen_o     = 1'b0;
-            end// 不跳转
+            end // 不跳转
             default: begin
                 rs1_addr_o    = 5'b0;
                 rs2_addr_o    = 5'b0;
@@ -419,8 +421,14 @@ module id (
                 csr_data_o    = 64'b0;
                 csr_waddr_o   = 12'b0;
                 csr_wen_o     = 1'b0;
+                // $display("Here");
             end 
         endcase
+        // $display("op2_o = %h,immU =%h", op2_o, immU);
     end
+
+always @(*) begin
+                // $display("op2_o = %h,immU =%h", op2_o, immU);
+end
 
 endmodule 

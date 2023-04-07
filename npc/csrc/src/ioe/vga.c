@@ -49,15 +49,18 @@ static inline void update_screen() {
 #endif
 
 void vga_update_screen() {
-    if (vgactl_port_base[1]) {
-        update_screen();
-        vgactl_port_base[1] = 0;
+    // printf("vgactl_port_base[0] = %d [1] = %d [2] = %d [3] = %d [4] = %d [5] = %d [6] = %d [7] = %d\n", 
+    //         vgactl_port_base[8], vgactl_port_base[16], vgactl_port_base[24], vgactl_port_base[32], vgactl_port_base[12], vgactl_port_base[13], vgactl_port_base[14], vgactl_port_base[15]);
+    if (vgactl_port_base[8]) { // 
+        // printf("update_screen!\n");8
+        IFDEF(VGA_SHOW_SCREEN, update_screen());
+        vgactl_port_base[8] = 0;
     }
 }
 
 void init_vga() {
     vgactl_port_base = (uint32_t *)new_space(8);
-    vgactl_port_base[0] = (screen_width() << 16) | screen_height();
+    vgactl_port_base[0] = (screen_width() << 16) | screen_height(); // 每次VGA_CONFIG直接读这个值就行
     add_mmio_map("vga", VGA_MMIO, vgactl_port_base, 8, NULL); // VGA寄存器，存储屏幕大小
     vmem = new_space(screen_size());
     add_mmio_map("vmem", FB_MMIO, vmem, screen_size(), NULL); // vmem显存

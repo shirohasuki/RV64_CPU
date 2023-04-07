@@ -10,6 +10,8 @@
 
 void Vtb___024unit____Vdpiimwrap_ebreak_TOP____024unit();
 void Vtb___024unit____Vdpiimwrap_get_gprs__Vdpioc2_TOP____024unit(const VlUnpacked<QData/*63:0*/, 32> &regs);
+void Vtb___024unit____Vdpiimwrap_pmem_write_TOP____024unit(QData/*63:0*/ waddr, QData/*63:0*/ wdata, CData/*7:0*/ mask);
+void Vtb___024unit____Vdpiimwrap_pmem_read_TOP____024unit(QData/*63:0*/ raddr, QData/*63:0*/ &rdata);
 extern const VlUnpacked<CData/*0:0*/, 64> Vtb__ConstPool__TABLE_ha41e00fd_0;
 extern const VlUnpacked<CData/*0:0*/, 64> Vtb__ConstPool__TABLE_h257ad544_0;
 extern const VlUnpacked<CData/*0:0*/, 64> Vtb__ConstPool__TABLE_hb68ce13d_0;
@@ -324,9 +326,6 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_ram_ren_o 
         = ((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_ren_o) 
            & (~ (IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__axi_busy)));
-    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_ram_wen_o 
-        = ((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_wen_o) 
-           & (~ (IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__axi_busy)));
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__csrs[0U] 
         = vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__mstatus;
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__csrs[1U] 
@@ -437,9 +436,6 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
     Vtb___024unit____Vdpiimwrap_get_gprs__Vdpioc2_TOP____024unit(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__regs_inst__DOT__regs);
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_isstore_o 
         = (IData)((0x23U == (0x7fU & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o)));
-    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__visit_interface 
-        = ((0xa0000000ULL <= vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_waddr_o) 
-           | (0xa0000000ULL <= vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_raddr_o));
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_sub_op2_i 
         = (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_op1_o 
            - vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_op2_o);
@@ -930,6 +926,12 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
                                           : (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_rd_addr_o))
                                       : 0U) : 0U)));
     }
+    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__visit_interface 
+        = ((0xa0000000ULL <= vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_waddr_o) 
+           | (0xa0000000ULL <= vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_raddr_o));
+    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_ram_wen_o 
+        = ((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_wen_o) 
+           & (~ (IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__axi_busy)));
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_offset_addr_o 
         = ((0x40U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o)
             ? ((0x20U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__if_id_inst_o)
@@ -1055,14 +1057,6 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_inst__DOT__store_inst 
         = ((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_isstore_o) 
            | (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_isstore_o));
-    if (VL_UNLIKELY(((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_ren_o) 
-                     & (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__visit_interface)))) {
-        VL_WRITEF("[ read] raddr = %x\n",64,vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_raddr_o);
-    }
-    if (VL_UNLIKELY(((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_wen_o) 
-                     & (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__visit_interface)))) {
-        VL_WRITEF("[write] waddr = %x\n",64,vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_waddr_o);
-    }
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_csr_wdata_o 
         = ((0x40U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o)
             ? ((0x20U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o)
@@ -1155,6 +1149,18 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
              == (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_rd_waddr_o)) 
             & (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_reg_wen_o)) 
            & (0U != (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_re_rs1_addr_o)));
+    if (((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__visit_interface) 
+         & (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_wen_o))) {
+        Vtb___024unit____Vdpiimwrap_pmem_write_TOP____024unit(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_waddr_o, vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_wdata_o, (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_wmask_o));
+    }
+    if (((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__visit_interface) 
+         & (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_ren_o))) {
+        Vtb___024unit____Vdpiimwrap_pmem_read_TOP____024unit(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_raddr_o, vlSelf->__Vtask_pmem_read__4__rdata);
+        vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__device_rdata 
+            = vlSelf->__Vtask_pmem_read__4__rdata;
+    } else {
+        vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__device_rdata = 0ULL;
+    }
     if ((0x40U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o)) {
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_rd_wdata_o 
             = ((0x20U & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o)

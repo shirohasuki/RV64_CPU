@@ -20,7 +20,7 @@ Vtb__Syms::Vtb__Syms(VerilatedContext* contextp, const char* namep,Vtb* modelp)
     , TOP____024unit(Verilated::catName(namep, "$unit"))
 {
     // Configure time unit / time precision
-    _vm_contextp__->timeunit(-9);
+    _vm_contextp__->timeunit(-12);
     _vm_contextp__->timeprecision(-12);
     // Setup each module's pointers to their submodules
     TOP.__PVT____024unit = &TOP____024unit;

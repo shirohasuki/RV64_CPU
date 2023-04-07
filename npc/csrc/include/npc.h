@@ -45,11 +45,13 @@ typedef struct {
 void npc_exit(int status);
 
 // =============== Memory ===============
-#define MEM_BASE 0x80000000
-
-#define MEM_SIZE 0x7ff00000
+#define MEM_BASE           0x80000000
+#define MEM_SIZE           0x20000000
+// #define INTERFACE_MEM_BASE 0xa0000000
+// #define INTERFACE_MEM_SIZE 0x10000000
 
 extern uint8_t mem[MEM_SIZE];
+// extern uint8_t interface_mem[INTERFACE_MEM_SIZE];
 
 // Memory transfer
 uint8_t* cpu2mem(ll addr);

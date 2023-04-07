@@ -51,9 +51,8 @@ extern NPCState npc_state;
 #define RTC_MMIO            (DEVICE_BASE + 0x00000048) // 映射的地址
 
 #define FB_MMIO             (DEVICE_BASE + 0x01000000)
-#define VGA_MMIO            (DEVICE_BASE + 0x00003000)
+#define VGA_MMIO            (DEVICE_BASE + 0x00000100)
 #define VGA_SHOW_SCREEN     1
-// #define CONFIG_VGA_SIZE_400x300 1
 
 
 #endif

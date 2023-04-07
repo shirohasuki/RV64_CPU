@@ -115,16 +115,21 @@ module axi #(
     parameter AXI_DATA_WIDTH   = 64,                 // AXI数据宽度
     parameter AXI_ADDR_WIDTH   = 32,                 // AXI地址宽度
 
-    parameter AXI_BURST_WIDTH  = 8,                 // burst传输长度
-    parameter AXI_STRB_WIDTH   = AXI_DATA_WIDTH,///8     // mask宽度
+    parameter AXI_BURST_WIDTH  = 8,                  // burst传输长度
+    parameter AXI_STRB_WIDTH   = AXI_DATA_WIDTH,     //8     // mask宽度
 
-    parameter AXI_SID_WIDTH    = 4,                 // 从机ID宽度
-    parameter AXI_MID_WIDTH    = 1                  // 主机ID宽度（IF和MEM两个）
+    parameter AXI_SID_WIDTH    = 4,                  // 从机ID宽度
+    parameter AXI_MID_WIDTH    = 1                   // 主机ID宽度（IF和MEM两个）
 )
 (
     // clock & reset
     input clk,
     input rst,
+
+    // from mem
+    input  wire[63:0]                      inst_addr_i,  // 用于调试
+    // to ram
+    output wire[63:0]                      inst_addr_o,  // 用于调试
 
     // to ctrl
     output reg                     axi_busy_o,
@@ -252,6 +257,8 @@ module axi #(
 
     reg[AXI_ADDR_WIDTH-1:0]  rwaddr; 
     reg[AXI_DATA_WIDTH-1:0]  wdata; 
+
+    assign inst_addr_o = inst_addr_i;
 
     always @(posedge clk) begin
         if (!rst) begin 

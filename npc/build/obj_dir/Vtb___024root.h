@@ -150,10 +150,12 @@ VL_MODULE(Vtb___024root) {
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__rdata;
     };
     struct {
+        QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__device_rdata_tmp;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__device_rdata;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__axi_inst__DOT__wdata;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wdata;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wmask;
+        QData/*63:0*/ __Vtask_pmem_read__4__rdata;
         VlUnpacked<QData/*63:0*/, 32> tb__DOT__soc_inst__DOT__core_inst__DOT__regs_inst__DOT__regs;
         VlUnpacked<QData/*63:0*/, 4> tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__csrs;
         VlUnpacked<QData/*63:0*/, 1048576> tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem;

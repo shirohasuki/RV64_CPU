@@ -762,6 +762,7 @@ VL_ATTR_COLD void Vtb___024root___ctor_var_reset(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ctrl_inst__DOT__store_inst = 0;
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__func7 = 0;
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__rdata = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__device_rdata_tmp = 0;
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__device_rdata = 0;
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__visit_interface = 0;
     vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__rwaddr = 0;
@@ -783,6 +784,7 @@ VL_ATTR_COLD void Vtb___024root___ctor_var_reset(Vtb___024root* vlSelf) {
     for (int __Vi0=0; __Vi0<1048576; ++__Vi0) {
         vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem[__Vi0] = 0;
     }
+    vlSelf->__Vtask_pmem_read__4__rdata = 0;
     for (int __Vi0=0; __Vi0<3; ++__Vi0) {
         vlSelf->__Vm_traceActivity[__Vi0] = 0;
     }

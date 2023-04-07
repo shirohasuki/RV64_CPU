@@ -74,6 +74,7 @@ module ex (
     //assign imm  = inst_i[31:20];
     assign inst_o = inst_i;
 
+    // wire[63:0] immU = {{32{inst_i[31]}}, inst_i[31:12], 12'b0};
 
     // ALU
     wire[63:0] op1_i_add_op2_i;
@@ -493,7 +494,7 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o    = 1'b0;
-                isstore_o    = 1'b0;
+                isstore_o   = 1'b0;
                 csr_waddr_o = 12'b0;
                 csr_data_o  = 64'b0;
                 csr_wen_o   = 1'b0;   
@@ -749,6 +750,7 @@ module ex (
                 csr_wen_o   = 1'b0;   
             end // Jump And Link Reg (PC = rs1 + imm, rd = PC + 4)		
             `INST_LUI: begin
+                // rd_wdata_o  = immU;
                 rd_wdata_o  = op2_i; 
                 rd_waddr_o  = rd_addr_i;
                 reg_wen_o   = 1'b1; 

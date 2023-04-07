@@ -1,4 +1,4 @@
-`timescale 1ns/1ps
+// `timescale 1ns/1ps
 
 module core (
     input  wire clk, 
@@ -7,6 +7,7 @@ module core (
     // from mem
     input	wire[63:0]	  mem_rdata_i,	
     input	wire[63:0]	  if_inst_i,
+    output  wire[63:0]    mem_axi_inst_addr_o, // 传给axi和ram用于调试
 	// to mem
     output  wire 	   	  mem_ren_o,
 	output  wire[63:0]    mem_raddr_o,
@@ -418,6 +419,8 @@ module core (
 
     wire          mem_ram_ren_o; 
     wire          mem_ram_wen_o; 
+
+    assign mem_axi_inst_addr_o = mem_inst_addr_o;
 
     mem mem_inst(
         .clk         ( clk         ),

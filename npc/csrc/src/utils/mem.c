@@ -7,14 +7,19 @@
 #include <device/mmio.h>
 
 uint8_t mem[MEM_SIZE] = {0};
+// uint8_t interface_mem[INTERFACE_MEM_SIZE] = {0};
 
 extern CPU_state cpu_npc;
 
 unsigned long rtc;
 unsigned long keycode;
-unsigned long vga;
+unsigned long vgactl;
 
-uint8_t* cpu2mem(ll addr) { return mem + (addr - MEM_BASE); }
+uint8_t* cpu2mem(ll addr) { 
+    // printf("offset = %llx\n", addr - INTERFACE_MEM_BASE); 
+    // return interface_mem + (addr - INTERFACE_MEM_BASE); 
+    return mem + (addr - MEM_BASE); 
+}
 
 extern "C" void pmem_read(ll raddr, ll *rdata) {
     if (RTC_MMIO <= raddr && raddr <= RTC_MMIO + 8) { 
@@ -42,19 +47,19 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
         printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
         return ; 
     } // 键盘
-    
-    if (VGA_MMIO <= raddr && raddr <= VGA_MMIO + 8) { 
-        if (cpu_npc.pc != 0){ vga = mmio_read(raddr, 8); } // 判断不要多次执行
-        *rdata = vga; // 下面放在if里面 cpu_npc.pc == 0时会没有值给rdata
-        printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
-        return ;
-    } 
 
+    if (VGA_MMIO <= raddr && raddr <= VGA_MMIO + 8) {  // VGA w,h
+        // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
+        if (cpu_npc.pc != 0){ vgactl = mmio_read(raddr, 8); } // 判断不要多次执行
+        *rdata = vgactl;
+        return ;
+    }      
     if (raddr < MEM_BASE) {
         printf("[pmem_read]  raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
         return ;
     }
-
+  
+    Printf("[pmem_read] Invalid Read Mem, raddr is:%llx\n", RED, raddr);
     uint8_t *pt = cpu2mem(raddr) + 7;
     ll ret = 0;
     for (int i = 0; i < 8; ++i) {
@@ -71,7 +76,7 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 // Memory Write
 extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
 #ifdef CONFIG_NPC_MTRACE
-    sprintf(mtrace_buf[mtrace_count],"write: addr:%016llx data:%016llx\n            wmask:%08x", waddr,  wdata, mask);
+    sprintf(mtrace_buf[mtrace_count],"write: addr:%016llx data:%016llx wmask:%08x\n", waddr,  wdata, mask);
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
 #endif
     // printf("[pmem_write] waddr is:%llx wdata is:%llx\n", waddr, wdata);
@@ -81,15 +86,16 @@ extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
         } // 判断不要多次执行
         return ;
     } 
-    // if (VGA_MMIO <= waddr && waddr <= VGA_MMIO + 8) { 
-    //     if (cpu_npc.pc != 0){
-    //         mmio_write(waddr, 1, wdata); // 写串口
-    //     } // 判断不要多次执行
-    //     return ;
-    // } 
-    if (FB_MMIO <= waddr && waddr <= FB_MMIO + 0x75300) { 
+    if (VGA_MMIO <= waddr && waddr <= VGA_MMIO + 8) {  // sync_addr
+        if (cpu_npc.pc != 0){ 
+            // printf("[pmem_write] waddr is:%llx wdata is:%llx\n", waddr, wdata);
+            mmio_write(waddr, 1, wdata); 
+        } // 判断不要多次执行
+        return ;
+    } 
+    if (FB_MMIO <= waddr && waddr <= FB_MMIO + 480000) { // 400x300x4 = 0x75300 
         if (cpu_npc.pc != 0){
-            mmio_write(waddr, 1, wdata); // 写显存
+            mmio_write(waddr, 4, wdata); // 写显存
         } // 判断不要多次执行
         return ;
     } 
@@ -97,32 +103,33 @@ extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
         Printf("[pmem_write] waddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", RED, waddr, MEM_BASE);
         return;
     }
-
+    Printf("[pmem_write] Invalid write Mem, waddr is:%llx wdata is:%llx\n", RED, waddr, wdata);
     uint8_t *pt = cpu2mem(waddr);
     for (int i = 0; i < 8; ++i) {
         if (mask & 1) *pt = (wdata & 0xff);
         wdata >>= 8, mask >>= 1, pt++;
     }
-
+    return ;
 }
 
-extern "C" void inst_fetch(ll raddr, ll *rdata) {
-    if (raddr < MEM_BASE) {
-#ifdef CONFIG_NPC_IFTRACE
-        printf("[inst_fetch] raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
-#endif
-        return;
-    }
-    uint8_t *pt = cpu2mem(raddr) + 7;
-    ll ret = 0;
-    for (int i = 0; i < 8; ++i) {
-        ret = (ret << 8) | (*pt--);
-    }
-    *rdata = ret;
-#ifdef CONFIG_NPC_IFTRACE
-    printf("[inst_fetch] addr is:%llx, data is:%llx\n", raddr, *rdata);
-#endif
-} // 和pmem_read一样，引用方便临时改个名字
+// extern "C" void inst_fetch(ll raddr, ll *rdata) {
+//     if (raddr < MEM_BASE) {
+// #ifdef CONFIG_NPC_IFTRACE
+//         printf("[inst_fetch] raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
+// #endif
+//         return;
+//     }
+//     uint8_t *pt = cpu2mem(raddr) + 7;
+//     ll ret = 0;
+//     for (int i = 0; i < 8; ++i) {
+//         ret = (ret << 8) | (*pt--);
+//     }
+//     *rdata = ret;
+// #ifdef CONFIG_NPC_IFTRACE
+//     printf("[inst_fetch] addr is:%llx, data is:%llx\n", raddr, *rdata);
+// #endif
+// } // 和pmem_read一样，引用方便临时改个名字
+
 
 // Load image from am-kernels (Makefile -> ./image.bin)
 long load_image(char const *img_file) {

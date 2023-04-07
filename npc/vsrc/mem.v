@@ -113,12 +113,12 @@ module mem (
     assign isload_o  = isload_i;
     assign isstore_o = isstore_i;
 
-
-    assign ram_ren_o = ren_i & ~axi_busy_i; // 防止再次读取
-    assign ram_wen_o = wen_i & ~axi_busy_i; // TODO：再次读取问题处理的可能有隐患
+    assign ram_ren_o = ren_i && ~axi_busy_i; // 防止再次读取
+    assign ram_wen_o = wen_i && ~axi_busy_i; // TODO：再次读取问题处理的可能有隐患
 
     reg [63:0]      rdata;
     reg [63:0]      ram_rdata;
+    reg [63:0]      device_rdata_tmp;
     reg [63:0]      device_rdata;
     reg             visit_interface;
 
@@ -129,29 +129,38 @@ module mem (
 
 
     always @(*) begin
-        if (ren_i && visit_interface) begin
-            $display("[ read] raddr = %h", raddr_i);             
-        end
-        if (wen_i && visit_interface) begin
-            $display("[write] waddr = %h", waddr_i);             
-        end
+        // if (ren_i && visit_interface) begin
+        //     $display("[ read] raddr = %h", raddr_i);             
+        // end
+        // if (wen_i && visit_interface) begin
+        //     $display("[write] waddr = %h, wdata = %h", waddr_i, wdata_i);                  
+        // end
+        // if (wen_i && ~visit_interface) begin
+        //     $display("[write] waddr = %h, wdata = %h", waddr_i, wdata_i);             
+        // end
     end
 
     always @(*) begin
-        if ((waddr_i >= 64'ha000_0000) | (raddr_i >= 64'ha000_0000)) begin
-            visit_interface = 1'b1;
-        end else begin
-            visit_interface = 1'b0;            
-        end 
+        if ((waddr_i >= 64'ha000_0000) | (raddr_i >= 64'ha000_0000)) begin visit_interface = 1'b1; end 
+        else begin visit_interface = 1'b0; end 
     end
  
-    always @(negedge clk) begin // TODO:negedge 要去掉的
-        if (visit_interface == 1'b1) begin
-            if (ren_i) begin pmem_read(raddr_i, device_rdata); end 
-            else device_rdata = 64'b0;
-            if (wen_i) pmem_write(waddr_i, wdata_i, wmask_i);
-            if ((ren_i && wen_i) && (raddr_i == waddr_i)) device_rdata = wdata_i;  // 处理读写冲突
-        end 
+
+    always @(*) begin
+        // if (visit_interface == 1'b1 && ren_i) pmem_read(raddr_i, device_rdata_tmp);  
+        // else device_rdata_tmp = 64'b0;
+        if (visit_interface && ren_i) begin pmem_read(raddr_i, device_rdata); end  
+        else begin device_rdata = 64'b0; end 
+        // if ((ren_i && wen_i) && (raddr_i == waddr_i)) device_rdata_tmp = wdata_i;  // 处理读写冲突
+    end
+
+    // always @(posedge clk) begin
+    //     device_rdata <= device_rdata_tmp;
+    // end
+
+    always @(*) begin
+        if (visit_interface && wen_i) begin pmem_write(waddr_i, wdata_i, wmask_i); end 
+            // if (wen_i && (((!ren_i))||((ren_i)&&(raddr_i != waddr_i)))) begin  
     end
 
     assign ram_rdata = ram_rdata_i;
@@ -163,7 +172,7 @@ module mem (
             case (opcode) 
                 `INST_TYPE_L: begin
                     case (func3)
-                        `INST_LB:  begin rd_wdata_o = {{56{rdata[7]}}, rdata[7:0]};   end
+                        `INST_LB:  begin rd_wdata_o = {{56{rdata[ 7]}}, rdata[ 7:0]}; end
                         `INST_LH:  begin rd_wdata_o = {{48{rdata[15]}}, rdata[15:0]}; end
                         `INST_LW:  begin rd_wdata_o = {{32{rdata[31]}}, rdata[31:0]}; end
                         `INST_LD:  begin rd_wdata_o = {rdata[63:0]};                  end
@@ -181,13 +190,20 @@ module mem (
     end 
 
     always @(*) begin
-        case (wmask_i) 
-            8'b00000001: ram_wmask_o  = 64'h0000_0000_0000_00ff;
-            8'b00000011: ram_wmask_o  = 64'h0000_0000_0000_ffff;
-            8'b00001111: ram_wmask_o  = 64'h0000_0000_ffff_ffff;
-            8'b11111111: ram_wmask_o  = 64'hffff_ffff_ffff_ffff;
-            default begin ram_wmask_o = 64'h0; end
-        endcase
+        if (wen_i) begin
+            if (visit_interface) begin ram_wmask_o = 64'h0; end
+            else begin
+                case (wmask_i) 
+                    8'b00000001:  ram_wmask_o = 64'h0000_0000_0000_00ff;
+                    8'b00000011:  ram_wmask_o = 64'h0000_0000_0000_ffff;
+                    8'b00001111:  ram_wmask_o = 64'h0000_0000_ffff_ffff;
+                    8'b11111111:  ram_wmask_o = 64'hffff_ffff_ffff_ffff;
+                    default begin ram_wmask_o = 64'h0; end
+                endcase
+            end
+        end
+        else begin ram_wmask_o = 64'h0; end
+            
     end 
 
 

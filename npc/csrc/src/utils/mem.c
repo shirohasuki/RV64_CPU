@@ -79,7 +79,7 @@ extern "C" void pmem_write(ll waddr, ll wdata, ll mask) {
     sprintf(mtrace_buf[mtrace_count],"write: addr:%016llx data:%016llx wmask:%08x\n", waddr,  wdata, mask);
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
 #endif
-    // printf("[pmem_write] waddr is:%llx wdata is:%llx wmask is:%llx\n", waddr, wdata, mask);
+    printf("[pmem_write] waddr is:%llx wdata is:%llx wmask is:%llx\n", waddr, wdata, mask);
     if (SERIAL_MMIO <= waddr && waddr <= SERIAL_MMIO + 8) { 
         if (cpu_npc.pc != 0){
             mmio_write(waddr, 1, wdata & mask); // 写串口

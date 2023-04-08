@@ -74,28 +74,27 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 }
 
 // Memory Write
-extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
+extern "C" void pmem_write(ll waddr, ll wdata, ll mask) {
 #ifdef CONFIG_NPC_MTRACE
     sprintf(mtrace_buf[mtrace_count],"write: addr:%016llx data:%016llx wmask:%08x\n", waddr,  wdata, mask);
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
 #endif
-    // printf("[pmem_write] waddr is:%llx wdata is:%llx\n", waddr, wdata);
+    // printf("[pmem_write] waddr is:%llx wdata is:%llx wmask is:%llx\n", waddr, wdata, mask);
     if (SERIAL_MMIO <= waddr && waddr <= SERIAL_MMIO + 8) { 
         if (cpu_npc.pc != 0){
-            mmio_write(waddr, 1, wdata); // 写串口
+            mmio_write(waddr, 1, wdata & mask); // 写串口
         } // 判断不要多次执行
         return ;
     } 
-    if (VGA_MMIO <= waddr && waddr <= VGA_MMIO + 8) {  // sync_addr
+    if (VGA_MMIO + 4 <= waddr && waddr <= VGA_MMIO + 8) {  // sync_addr
         if (cpu_npc.pc != 0){ 
-            // printf("[pmem_write] waddr is:%llx wdata is:%llx\n", waddr, wdata);
-            mmio_write(waddr, 1, wdata); 
+            mmio_write(waddr, 1, wdata & mask); 
         } // 判断不要多次执行
         return ;
     } 
     if (FB_MMIO <= waddr && waddr <= FB_MMIO + 480000) { // 400x300x4 = 0x75300 
         if (cpu_npc.pc != 0){
-            mmio_write(waddr, 4, wdata); // 写显存
+            mmio_write(waddr, 4, wdata & mask); // 写显存
         } // 判断不要多次执行
         return ;
     } 

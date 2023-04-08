@@ -27,7 +27,7 @@ extern "C" {
     // DPI import at /home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/mem.v:38:30
     extern void pmem_read(long long raddr, long long* rdata);
     // DPI import at /home/shiroha/Code/ysyx/ysyx-workbench/npc/vsrc/mem.v:39:30
-    extern void pmem_write(long long waddr, long long wdata, char mask);
+    extern void pmem_write(long long waddr, long long wdata, long long mask);
 
 #ifdef __cplusplus
 }

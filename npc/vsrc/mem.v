@@ -36,7 +36,7 @@
 
     
 import "DPI-C" function void pmem_read( input longint raddr, output longint rdata);
-import "DPI-C" function void pmem_write( input longint waddr, input longint wdata, input byte mask);
+import "DPI-C" function void pmem_write( input longint waddr, input longint wdata, input longint mask);
 
 
 
@@ -159,8 +159,9 @@ module mem (
     // end
 
     always @(*) begin
-        if (visit_interface && wen_i) begin pmem_write(waddr_i, wdata_i, wmask_i); end 
-            // if (wen_i && (((!ren_i))||((ren_i)&&(raddr_i != waddr_i)))) begin  
+        if (visit_interface && wen_i) begin pmem_write(waddr_i, wdata_i, wmask_o); end 
+        // 为了给八位的mask，此处换了ram_wmask_o
+        // if (wen_i && (((!ren_i))||((ren_i)&&(raddr_i != waddr_i)))) begin  
     end
 
     assign ram_rdata = ram_rdata_i;
@@ -189,23 +190,25 @@ module mem (
         end
     end 
 
+    reg [63:0] wmask_o;
+
     always @(*) begin
         if (wen_i) begin
-            if (visit_interface) begin ram_wmask_o = 64'h0; end
-            else begin
+            // if (visit_interface) begin ram_wmask_o = 64'h0; end
+            // else begin
                 case (wmask_i) 
-                    8'b00000001:  ram_wmask_o = 64'h0000_0000_0000_00ff;
-                    8'b00000011:  ram_wmask_o = 64'h0000_0000_0000_ffff;
-                    8'b00001111:  ram_wmask_o = 64'h0000_0000_ffff_ffff;
-                    8'b11111111:  ram_wmask_o = 64'hffff_ffff_ffff_ffff;
-                    default begin ram_wmask_o = 64'h0; end
+                    8'b00000001:  wmask_o = 64'h0000_0000_0000_00ff;
+                    8'b00000011:  wmask_o = 64'h0000_0000_0000_ffff;
+                    8'b00001111:  wmask_o = 64'h0000_0000_ffff_ffff;
+                    8'b11111111:  wmask_o = 64'hffff_ffff_ffff_ffff;
+                    default begin wmask_o = 64'h0; end
                 endcase
-            end
+            // end
         end
-        else begin ram_wmask_o = 64'h0; end
+        else begin wmask_o = 64'h0; end
             
     end 
 
-
+    assign ram_wmask_o = visit_interface ? 64'b0 : wmask_o;
 
 endmodule

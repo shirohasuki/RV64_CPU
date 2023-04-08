@@ -765,6 +765,7 @@ VL_ATTR_COLD void Vtb___024root___ctor_var_reset(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__device_rdata_tmp = 0;
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__device_rdata = 0;
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__visit_interface = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__wmask_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__rwaddr = 0;
     vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__wdata = 0;
     vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__ren_o = 0;

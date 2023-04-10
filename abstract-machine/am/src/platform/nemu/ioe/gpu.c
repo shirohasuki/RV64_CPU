@@ -10,7 +10,7 @@ void __am_gpu_init() {
     int w = width; //800;
     int h = height;//600; 
     uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
-    for (i = 0; i < w * h; i ++)  {if (i >= 400 && i <= 800) fb[i] = i;}
+    for (i = 0; i < w * h; i ++)  {if (i >= 400 && i <= 800) fb[i] = 199199199; else fb[i] = 0; }
     outl(SYNC_ADDR, 1);
 }
 

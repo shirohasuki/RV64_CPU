@@ -14,7 +14,6 @@ static void *vmem = NULL;
 static uint32_t *vgactl_port_base = NULL;
 
 #ifdef VGA_SHOW_SCREEN
-
 #include <SDL2/SDL.h>
 
 static SDL_Renderer *renderer = NULL;
@@ -41,9 +40,10 @@ static inline void update_screen() {
 #endif
 
 void vga_update_screen() {
-    // printf("vgactl_port_base[0] = %d  [1] = %d  [2] = %d  [3] = %d  [4] = %d  [5] = %d  [6] = %d  [7] = %d\nvgactl_port_base[8] = %d  [9] = %d  [10] = %d [11] = %d [12] = %d [13] = %d [14] = %d [15] = %d\nvgactl_port_base[16] = %d [17] = %d [18] = %d [19] = %d [20] = %d [21] = %d [22] = %d [23] = %d\nvgactl_port_base[24] = %d [25] = %d [26] = %d [27] = %d [28] = %d [29] = %d [30] = %d [31] = %d\nvgactl_port_base[32] = %d [33] = %d [34] = %d [35] = %d [36] = %d [37] = %d [38] = %d [39] = %d\n", vgactl_port_base[0],vgactl_port_base[1],vgactl_port_base[2],vgactl_port_base[3],vgactl_port_base[4],vgactl_port_base[5],vgactl_port_base[6],vgactl_port_base[7],vgactl_port_base[8],vgactl_port_base[9],vgactl_port_base[10],vgactl_port_base[11],vgactl_port_base[12],vgactl_port_base[13],vgactl_port_base[14],vgactl_port_base[15],vgactl_port_base[16],vgactl_port_base[17],vgactl_port_base[18],vgactl_port_base[19],vgactl_port_base[20],vgactl_port_base[21],vgactl_port_base[22],vgactl_port_base[23],vgactl_port_base[24],vgactl_port_base[25],vgactl_port_base[26],vgactl_port_base[27],vgactl_port_base[28],vgactl_port_base[29],vgactl_port_base[30],vgactl_port_base[31],vgactl_port_base[32],vgactl_port_base[33],vgactl_port_base[34],vgactl_port_base[35],vgactl_port_base[36],vgactl_port_base[37],vgactl_port_base[38],vgactl_port_base[39]);
+    // printf("vgactl_port_base[0] = %d  [1] = %d  [2] = %d  [3]= %d  [4] = %d  [5] = %d  [6] = %d  [7] = %d\nvgactl_port_base[8] = %d  [9] = %d  [10] = %d [11] = %d [12] = %d [13] = %d [14] = %d [15] = %d\nvgactl_port_base[16] = %d [17] = %d [18] = %d [19] = %d [20] = %d [21] = %d [22] = %d [23] = %d\nvgactl_port_base[24] = %d [25] = %d [26] = %d [27] = %d [28] = %d [29] = %d [30] = %d [31] = %d\nvgactl_port_base[32] = %d [33] = %d [34] = %d [35] = %d [36] = %d [37] = %d [38] = %d [39] = %d\n", vgactl_port_base[0],vgactl_port_base[1],vgactl_port_base[2],vgactl_port_base[3],vgactl_port_base[4],vgactl_port_base[5],vgactl_port_base[6],vgactl_port_base[7],vgactl_port_base[8],vgactl_port_base[9],vgactl_port_base[10],vgactl_port_base[11],vgactl_port_base[12],vgactl_port_base[13],vgactl_port_base[14],vgactl_port_base[15],vgactl_port_base[16],vgactl_port_base[17],vgactl_port_base[18],vgactl_port_base[19],vgactl_port_base[20],vgactl_port_base[21],vgactl_port_base[22],vgactl_port_base[23],vgactl_port_base[24],vgactl_port_base[25],vgactl_port_base[26],vgactl_port_base[27],vgactl_port_base[28],vgactl_port_base[29],vgactl_port_base[30],vgactl_port_base[31],vgactl_port_base[32],vgactl_port_base[33],vgactl_port_base[34],vgactl_port_base[35],vgactl_port_base[36],vgactl_port_base[37],vgactl_port_base[38],vgactl_port_base[39]);
+    // printf("%lx\n", &vgactl_port_base[8] - &vgactl_port_base[0]);
     if (vgactl_port_base[8]) { // 
-        // printf("update_screen!\n");8
+        // printf("update_screen!\n");
         IFDEF(VGA_SHOW_SCREEN, update_screen());
         vgactl_port_base[8] = 0;
     }

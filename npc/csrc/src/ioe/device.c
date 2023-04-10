@@ -25,27 +25,27 @@ void device_update() {
     
     IFDEF(NPC_HAS_VGA, vga_update_screen());
     
-//     SDL_Event event;
-//     // printf("event.type=%d\n", event.type);
-//     while (SDL_PollEvent(&event)) {
-//         // printf("here\n");
-//         switch (event.type) {
-//         case SDL_QUIT:
-//             npc_state.state = NPC_QUIT;
-//             break;
-// #ifdef NPC_HAS_KBD
-//         // If a key was pressed
-//         case SDL_KEYDOWN: 
-//         case SDL_KEYUP: {
-//             uint8_t k = event.key.keysym.scancode;
-//             bool is_keydown = (event.key.type == SDL_KEYDOWN);
-//             send_key(k, is_keydown);
-//             break;
-//         }
-// #endif
-//         default: break;
-//         }
-//     }
+    SDL_Event event;
+    // printf("event.type=%d\n", event.type);
+    while (SDL_PollEvent(&event)) {
+        // printf("here\n");
+        switch (event.type) {
+        case SDL_QUIT:
+            npc_state.state = NPC_QUIT;
+            break;
+#ifdef NPC_HAS_KBD
+        // If a key was pressed
+        case SDL_KEYDOWN: 
+        case SDL_KEYUP: {
+            uint8_t k = event.key.keysym.scancode;
+            bool is_keydown = (event.key.type == SDL_KEYDOWN);
+            send_key(k, is_keydown);
+            break;
+        }
+#endif
+        default: break;
+        }
+    }
 }
 
 // void sdl_clear_event_queue() {

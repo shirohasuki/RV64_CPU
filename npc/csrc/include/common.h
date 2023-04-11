@@ -40,8 +40,9 @@ extern NPCState npc_state;
 #define CONFIG_NPC_DEVICE   1
 #define NPC_HAS_SERIAL      1
 #define NPC_HAS_TIMER       1
-// #define NPC_HAS_KBD         1
-#define NPC_HAS_VGA         1
+#define NPC_HAS_KBD         1
+// #define NPC_HAS_VGA         1
+// #define VGA_SHOW_SCREEN     1
 
 // ============== DEVICE MAP ===============
 #define DEVICE_BASE         0xa0000000
@@ -52,7 +53,7 @@ extern NPCState npc_state;
 
 #define FB_MMIO             (DEVICE_BASE + 0x01000000)
 #define VGA_MMIO            (DEVICE_BASE + 0x00000100)
-#define VGA_SHOW_SCREEN     1
+
 
 
 #endif

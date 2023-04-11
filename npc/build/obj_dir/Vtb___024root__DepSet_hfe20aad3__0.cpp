@@ -582,10 +582,10 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
             = vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_op2_o;
     }
     if (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__wen_o) {
-        if (VL_UNLIKELY(((0x800014ffU > vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr) 
+        if (VL_UNLIKELY(((0x80000000U > vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr) 
                          & (0U != vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr)))) {
             VL_WRITEF("[ram]invalid write\n[ram]waddr:%x  wstart:%b, wdata:%x\n",
-                      23,(0x7fffffU & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr),
+                      32,vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr,
                       3,(7U & vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_waddr),
                       64,vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wdata);
         }

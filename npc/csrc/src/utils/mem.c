@@ -44,12 +44,12 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
     sprintf(mtrace_buf[mtrace_count], "read:  addr:%016llx data:%016llx", raddr, (*rdata));
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
 #endif
-        printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
+        // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
         return ; 
     } // 键盘
 
-    if (VGA_MMIO <= raddr && raddr <= VGA_MMIO + 8) {  // VGA w,h sync
-        // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
+    if (VGA_MMIO <= raddr && raddr <= VGA_MMIO + 8) {  // VGA w, h, sync
+        printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
         if (cpu_npc.pc != 0){ vgactl = mmio_read(raddr, 4); } // 判断不要多次执行
         *rdata = vgactl;
         return ;
@@ -82,19 +82,20 @@ extern "C" void pmem_write(ll waddr, ll wdata, ll mask) {
     // if (cpu_npc.pc != 0) { printf("[pmem_write] waddr is:%llx wdata is:%llx wmask is:%llx\n", waddr, wdata & mask, mask); }
     // 其实&mask是没必要的，因为ex.v已经帮忙改造过了
     if (SERIAL_MMIO <= waddr && waddr <= SERIAL_MMIO + 8) { 
-        if (cpu_npc.pc != 0){
+        if (cpu_npc.pc != 0) {
             mmio_write(waddr, 1, wdata & mask); // 写串口
         } // 判断不要多次执行
         return ;
     } 
     if (VGA_MMIO <= waddr && waddr <= VGA_MMIO + 8) {  // sync_addr
-        if (cpu_npc.pc != 0){ 
+        if (cpu_npc.pc != 0) { 
+            printf("[pmem_write] waddr is:%llx wdata is:%llx wmask is:%llx\n", waddr, wdata & mask, mask); 
             mmio_write(waddr, 4, wdata & mask); 
         } // 判断不要多次执行
         return ;
     } 
     if (FB_MMIO <= waddr && waddr <= FB_MMIO + 480000) { // 400x300x4 = 0x75300 
-        if (cpu_npc.pc != 0){
+        if (cpu_npc.pc != 0) {
             mmio_write(waddr, 4, wdata & mask); // 写显存
         } // 判断不要多次执行
         return ;

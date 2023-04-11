@@ -21,8 +21,6 @@ static inline bool map_inside(IOMap *map, paddr_t addr) {
 }
 
 static inline int find_mapid_by_addr(IOMap *maps, int size, paddr_t addr) {
-            // printf("addr = %x\n", addr);
-        // if (addr == 0xa103fefc) { printf("catch\n");}
     for (int i = 0; i < size; i ++) {
         if (map_inside(maps + i, addr)) {
 #ifdef CONFIG_NPC_DIFFTEST 

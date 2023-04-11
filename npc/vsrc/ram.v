@@ -120,9 +120,9 @@ module ram (
     always @(posedge clk) begin
         // if (ram_wen_i == 1'b1 && ~visit_interface) begin
         if (ram_wen_i == 1'b1) begin
-            if (waddr[31:0] < 32'h800014ff && waddr[31:0] != 'b0) begin
+            if (waddr[31:0] < 32'h80000000 && waddr[31:0] != 'b0) begin
                 $display("[ram]invalid write");
-                $display("[ram]waddr:%h  wstart:%b, wdata:%x", waddr[22:0], waddr[2:0], ram_wdata_i);
+                $display("[ram]waddr:%h  wstart:%b, wdata:%x", waddr[31:0], waddr[2:0], ram_wdata_i);
             end 
             ram_bvalid_o <= 1'b1;
             case (waddr[2:0]) 

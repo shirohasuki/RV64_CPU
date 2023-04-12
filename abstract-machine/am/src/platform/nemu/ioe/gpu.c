@@ -36,7 +36,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
         }
     }
     if (ctl->sync) {
-        outl(SYNC_ADDR, 1);
+        // outl(SYNC_ADDR, 1);
     }
 }
 // AM帧缓冲控制器, 可写入绘图信息, 向屏幕(x, y)坐标处绘制w*h的矩形图像. 

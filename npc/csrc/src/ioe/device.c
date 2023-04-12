@@ -3,6 +3,11 @@
 #include <device/alarm.h>
 #include <device/rtc.h>
 #include <SDL2/SDL.h>
+#include <stdlib.h>
+// #include "npc.h"
+
+void npc_exit(int status);
+// extern uint64_t *cpu_gpr;
 
 void init_map();
 void init_serial();
@@ -30,11 +35,13 @@ void device_update() {
     // printf("SDL_PollEvent(&event)=%d\n", SDL_PollEvent(&event));
     while (SDL_PollEvent(&event)) {
         // printf("here\n");
-        printf("event.type= %d\n", event.type);
+        // printf("event.type= %d\n", event.type);
         switch (event.type) {
             case SDL_QUIT:{
-                printf("NPC QUIT!\n"); break;
+                printf("NPC QUIT!\n");
                 npc_state.state = NPC_QUIT;
+                exit(0);
+                // npc_exit(0);
                 break;
             }
 #ifdef NPC_HAS_KBD

@@ -10,10 +10,6 @@
 #include <assert.h>
 #include <stdlib.h>
 
-// typedef MUXDEF(CONFIG_ISA64, uint64_t, uint32_t) word_t;
-// typedef MUXDEF(CONFIG_ISA64, int64_t, int32_t)  sword_t;
-// #define FMT_WORD MUXDEF(CONFIG_ISA64, "0x%016lx", "0x%08x")
-
 // ============== Typedef ================= //
 typedef long long ll;
 typedef uint32_t paddr_t;
@@ -41,8 +37,8 @@ extern NPCState npc_state;
 #define NPC_HAS_SERIAL      1
 #define NPC_HAS_TIMER       1
 #define NPC_HAS_KBD         1
-// #define NPC_HAS_VGA         1
-// #define VGA_SHOW_SCREEN     1
+#define NPC_HAS_VGA         1
+#define VGA_SHOW_SCREEN     1
 
 // ============== DEVICE MAP ===============
 #define DEVICE_BASE         0xa0000000

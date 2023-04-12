@@ -37,7 +37,7 @@ bool ioe_init() {
     for (int i = 0; i < LENGTH(lut); i++)
         if (!lut[i]) lut[i] = fail; 
         // if (!lut[i]) lut[i] = fail_with_RegID(i); 
-    // __am_gpu_init();
+    __am_gpu_init();
     __am_timer_init();   
     return true;
 }

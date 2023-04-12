@@ -89,13 +89,14 @@ extern "C" void pmem_write(ll waddr, ll wdata, ll mask) {
     } 
     if (VGA_MMIO <= waddr && waddr <= VGA_MMIO + 8) {  // sync_addr
         if (cpu_npc.pc != 0) { 
-            printf("[pmem_write] waddr is:%llx wdata is:%llx wmask is:%llx\n", waddr, wdata & mask, mask); 
+            // printf("[pmem_write] waddr is:%llx wdata is:%llx wmask is:%llx\n", waddr, wdata & mask, mask); 
             mmio_write(waddr, 4, wdata & mask); 
         } // 判断不要多次执行
         return ;
     } 
     if (FB_MMIO <= waddr && waddr <= FB_MMIO + 480000) { // 400x300x4 = 0x75300 
         if (cpu_npc.pc != 0) {
+            printf("[pmem_write] waddr is:%llx wdata is:%llx wmask is:%llx\n", waddr, wdata & mask, mask);
             mmio_write(waddr, 4, wdata & mask); // 写显存
         } // 判断不要多次执行
         return ;

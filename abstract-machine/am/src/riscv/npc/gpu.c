@@ -8,9 +8,7 @@
 
 void __am_gpu_init() {
     uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
-    for (int i = 0; i < W * H; i++) { if (i >= 400 && i <= 800) fb[i] = 199199199; else fb[i] = 0; 
-    // outl(SYNC_ADDR, 1);
-    }
+    for (int i = 0; i < W * H; i++)  {if (i >= 0 && i <= 400) fb[i] = 199199199; else fb[i] = 0; }
     outl(SYNC_ADDR, 1);
 }
 

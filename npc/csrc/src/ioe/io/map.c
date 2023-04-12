@@ -63,6 +63,6 @@ void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
     check_bound(map, addr);
     paddr_t offset = addr - map->low;
     // printf("addr = %lx data = %lx \n", (uint64_t *)map->space + offset, data);
-    host_write((uint64_t *)map->space + offset, len, data);
+    host_write(map->space + offset, len, data);
     invoke_callback(map->callback, offset, len, true);
 }

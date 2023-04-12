@@ -89,6 +89,8 @@ VL_MODULE(Vtb___024root) {
         IData/*31:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o;
         IData/*31:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_inst_o;
         IData/*31:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__regs_inst__DOT__unnamedblk1__DOT__i;
+        IData/*31:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_div_tmp;
+        IData/*31:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_div_unsigned_tmp;
         IData/*31:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_rem_tmp;
         IData/*31:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_rem_unsigned_tmp;
         IData/*31:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_shift_left_u_tmp;
@@ -138,7 +140,6 @@ VL_MODULE(Vtb___024root) {
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_and_op2_i;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_xor_op2_i;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_or_op2_i;
-        QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_div_op2_i;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_shift_left_op2_i_unsigned;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_shift_right_op2_i_unsigned;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_shift_right_op2_i_signed;
@@ -147,13 +148,16 @@ VL_MODULE(Vtb___024root) {
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_shift_left_unsigned;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_shift_right_unsigned;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_shift_right_signed;
-        QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__rdata_o;
     };
     struct {
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__rdata;
+        QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__device_rdata_tmp;
+        QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__device_rdata;
+        QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__wmask_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__axi_inst__DOT__wdata;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wdata;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wmask;
+        QData/*63:0*/ __Vtask_pmem_read__4__rdata;
         VlUnpacked<QData/*63:0*/, 32> tb__DOT__soc_inst__DOT__core_inst__DOT__regs_inst__DOT__regs;
         VlUnpacked<QData/*63:0*/, 4> tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__csrs;
         VlUnpacked<QData/*63:0*/, 1048576> tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem;

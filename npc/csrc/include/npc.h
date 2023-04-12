@@ -23,10 +23,10 @@
 // typedef word_t vaddr_t;
 
 // ============== 调试选项 ============= //
-#define CONFIG_NPC_ITRACE 1
-#define CONFIG_NPC_GPRTRACE 1
+// #define CONFIG_NPC_ITRACE 1
+// #define CONFIG_NPC_GPRTRACE 1
 // #define CONFIG_NPC_IFTRACE 1
-#define CONFIG_NPC_DIFFTEST 1
+// #define CONFIG_NPC_DIFFTEST 1
 // #define CONFIG_NPC_MTRACE 1
 // #define CONFIG_NPC_DTRACE 1
 
@@ -45,11 +45,13 @@ typedef struct {
 void npc_exit(int status);
 
 // =============== Memory ===============
-#define MEM_BASE 0x80000000
-
-#define MEM_SIZE 0x7ff00000
+#define MEM_BASE           0x80000000
+#define MEM_SIZE           0x20000000
+// #define INTERFACE_MEM_BASE 0xa0000000
+// #define INTERFACE_MEM_SIZE 0x10000000
 
 extern uint8_t mem[MEM_SIZE];
+// extern uint8_t interface_mem[INTERFACE_MEM_SIZE];
 
 // Memory transfer
 uint8_t* cpu2mem(ll addr);

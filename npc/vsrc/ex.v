@@ -74,6 +74,7 @@ module ex (
     //assign imm  = inst_i[31:20];
     assign inst_o = inst_i;
 
+    // wire[63:0] immU = {{32{inst_i[31]}}, inst_i[31:12], 12'b0};
 
     // ALU
     wire[63:0] op1_i_add_op2_i;
@@ -126,12 +127,15 @@ module ex (
     wire[63:0] compress_rem;
     wire[63:0] compress_rem_unsigned;
     wire[63:0] compress_div;
+    wire[63:0] compress_div_unsigned;
     wire[63:0] compress_shift_left_unsigned;
     wire[63:0] compress_shift_right_unsigned;
     wire[63:0] compress_shift_right_signed;
     wire[63:0] compress_addr_offset; // 偏移地址计算
 
     // 中间转换变量
+    wire[31:0] compress_div_tmp;            assign compress_div_tmp           = $signed(op1_i[31:0]) / op2_i[31:0];
+    wire[31:0] compress_div_unsigned_tmp;   assign compress_div_unsigned_tmp  = op1_i[31:0] / op2_i[31:0];
     wire[31:0] compress_rem_tmp;            assign compress_rem_tmp           = $signed(op1_i[31:0]) % op2_i[31:0];
     wire[31:0] compress_rem_unsigned_tmp;   assign compress_rem_unsigned_tmp  = op1_i[31:0] % op2_i[31:0];
     wire[31:0] compress_shift_left_u_tmp;   assign compress_shift_left_u_tmp  = op1_i[31:0] << op2_i[4:0];
@@ -146,7 +150,8 @@ module ex (
     assign compress_or                   = {{32{op1_i_or_op2_i[31]}}, op1_i_or_op2_i[31:0]};                    // 或
     assign compress_rem                  = {{32{compress_rem_tmp[31]}}, compress_rem_tmp[31:0]};
     assign compress_rem_unsigned         = {{32{compress_rem_unsigned_tmp[31]}}, compress_rem_unsigned_tmp[31:0]};
-    assign compress_div                  = {{32{op1_i_div_op2_i[31]}}, op1_i_div_op2_i[31:0]};
+    assign compress_div                  = {{32{compress_div_tmp[31]}}, compress_div_tmp[31:0]};
+    assign compress_div_unsigned         = {{32{compress_div_unsigned_tmp[31]}}, compress_div_unsigned_tmp[31:0]};
     assign compress_shift_left_unsigned  = {{32{compress_shift_left_u_tmp[31]}}, compress_shift_left_u_tmp[31:0]};  // 逻辑左移
     assign compress_shift_right_unsigned = {{32{compress_shift_right_u_tmp[31]}}, compress_shift_right_u_tmp[31:0]};// 逻辑右移
     assign compress_shift_right_signed   = {{32{compress_shift_right_s_tmp[31]}}, compress_shift_right_s_tmp[31:0]};    // 算术右移
@@ -446,10 +451,15 @@ module ex (
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
                     end // 逻辑左移
-                    `INST_SRW:begin // SR包含srl和sra
+                    `INST_SRW_DIVUW:begin // SR包含srl和sra
                         if (func7[5] == 1'b1) begin // SRAW 算术右移
                             // rd_wdata_o = ((op1_i_shift_right_op2_i) & SRA_mask) | ({32{op1_i[31]}} & (~SRA_mask));
                             rd_wdata_o = compress_shift_right_signed; 
+                            rd_waddr_o = rd_addr_i;
+                            reg_wen_o  = 1'b1;
+                        end 
+                        if (func7[0] == 1'b1) begin // DIVUW 截断除法
+                            rd_wdata_o = compress_div_unsigned; 
                             rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
                         end 
@@ -493,7 +503,7 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o    = 1'b0;
-                isstore_o    = 1'b0;
+                isstore_o   = 1'b0;
                 csr_waddr_o = 12'b0;
                 csr_data_o  = 64'b0;
                 csr_wen_o   = 1'b0;   
@@ -749,6 +759,7 @@ module ex (
                 csr_wen_o   = 1'b0;   
             end // Jump And Link Reg (PC = rs1 + imm, rd = PC + 4)		
             `INST_LUI: begin
+                // rd_wdata_o  = immU;
                 rd_wdata_o  = op2_i; 
                 rd_waddr_o  = rd_addr_i;
                 reg_wen_o   = 1'b1; 

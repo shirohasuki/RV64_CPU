@@ -3,6 +3,11 @@
 #include <device/alarm.h>
 #include <device/rtc.h>
 #include <SDL2/SDL.h>
+#include <stdlib.h>
+// #include "npc.h"
+
+void npc_exit(int status);
+// extern uint64_t *cpu_gpr;
 
 void init_map();
 void init_serial();
@@ -27,23 +32,29 @@ void device_update() {
     
     SDL_Event event;
     // printf("event.type=%d\n", event.type);
+    // printf("SDL_PollEvent(&event)=%d\n", SDL_PollEvent(&event));
     while (SDL_PollEvent(&event)) {
         // printf("here\n");
+        // printf("event.type= %d\n", event.type);
         switch (event.type) {
-        case SDL_QUIT:
-            npc_state.state = NPC_QUIT;
-            break;
+            case SDL_QUIT:{
+                printf("\nNPC QUIT!\n");
+                npc_state.state = NPC_QUIT;
+                exit(0);
+                // npc_exit(0);
+                break;
+            }
 #ifdef NPC_HAS_KBD
         // If a key was pressed
-        case SDL_KEYDOWN: 
-        case SDL_KEYUP: {
-            uint8_t k = event.key.keysym.scancode;
-            bool is_keydown = (event.key.type == SDL_KEYDOWN);
-            send_key(k, is_keydown);
-            break;
-        }
+            case SDL_KEYDOWN: 
+            case SDL_KEYUP: {
+                uint8_t k = event.key.keysym.scancode;
+                bool is_keydown = (event.key.type == SDL_KEYDOWN);
+                send_key(k, is_keydown);
+                break;
+            }
 #endif
-        default: break;
+            default: break;
         }
     }
 }

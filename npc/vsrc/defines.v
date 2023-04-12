@@ -72,14 +72,14 @@
   // 结果截断系列
 `define INST_TYPE_R_M_W 7'b0111011
 `define INST_ADDW_SUBW_MULW 3'b000
-`define INST_SLLW      3'b001
-// `define INST_SLT    3'b010
-// `define INST_SLTU   3'b011
-// `define INST_XOR    3'b100
-`define INST_SRW       3'b101
-`define INST_REMW      3'b110 // 无orw
-`define INST_REMUW     3'b111 
-`define INST_DIVW      3'b100
+`define INST_SLLW           3'b001
+// `define INST_SLT         3'b010
+// `define INST_SLTU        3'b011
+// `define INST_XOR         3'b100
+`define INST_SRW_DIVUW      3'b101
+`define INST_REMW           3'b110 // 无orw
+`define INST_REMUW          3'b111 
+`define INST_DIVW           3'b100
 
 // J type inst
 `define INST_JAL    7'b1101111

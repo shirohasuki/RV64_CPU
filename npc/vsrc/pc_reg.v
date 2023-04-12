@@ -17,13 +17,17 @@ module pc_reg(
             pc_o <= 64'h80000000;  // PC指向0x80000000
         else if (jump_en_i)
             pc_o <= jump_addr_i;
-        else if (stall_en_i)
+        else if (stall_en_i) begin
             pc_o <= pc_o;
+            // $display("pc = %h", pc_o);
+        end
+
         else
             pc_o <= pc_o + 64'd4;
         // pc_o <= ~rst ? 64'h80000000: // 如果复位(默认低电平复位，PC指向0x80000000)
         //         jump_en_i ? jump_addr_i : 
         //         pc_o + 64'h4;
+
     end
     
 endmodule

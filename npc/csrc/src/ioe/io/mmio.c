@@ -26,9 +26,12 @@ void add_mmio_map(const char *name, paddr_t addr, void *space, uint32_t len, io_
 /* bus interface */
 word_t mmio_read(paddr_t addr, int len) {
     // printf("MMIO:HERE");
+    // if (addr == 0xa103fefc) { printf("catch\n");}
     return map_read(addr, len, fetch_mmio_map(addr));
 }
 
 void mmio_write(paddr_t addr, int len, word_t data) {
+    // if (addr == 0xa103fefc) { printf("catch\n");}
+    // if (addr == 0xa103ff00) { printf("catch\n");} 
     map_write(addr, len, data, fetch_mmio_map(addr));
 }

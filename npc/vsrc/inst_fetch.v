@@ -1,4 +1,4 @@
-`timescale 1ns/10ps
+// `timescale 1ns/10ps
 `include "./defines.v"
 
 // import "DPI-C" function void inst_fetch(input longint raddr, output longint rdata);

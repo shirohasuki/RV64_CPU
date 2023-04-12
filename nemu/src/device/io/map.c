@@ -40,23 +40,23 @@ void init_map() {
 word_t map_read(paddr_t addr, int len, IOMap *map) {
     // printf("map.c:HERE\n");
     assert(len >= 1 && len <= 8);
-#ifdef CONFIG_DTRACE
-    Log("[Dtrace - Read] %s", map -> name);
-#endif
     check_bound(map, addr);
     paddr_t offset = addr - map->low;
     invoke_callback(map->callback, offset, len, false); // prepare data to read
     word_t ret = host_read(map->space + offset, len);
+#ifdef CONFIG_DTRACE
+    Log("[Dtrace - Read] %s, addr = 0x%x, len = %d, data = 0x%lx", map -> name, addr, len , ret);
+#endif
     return ret;
 }
 
 void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
     assert(len >= 1 && len <= 8);
-#ifdef CONFIG_DTRACE
-    Log("[Dtrace - Write] %s", map -> name);
-#endif
     check_bound(map, addr);
     paddr_t offset = addr - map->low;
     host_write(map->space + offset, len, data);
     invoke_callback(map->callback, offset, len, true);
+#ifdef CONFIG_DTRACE
+    Log("[Dtrace - Write] %s addr = 0x%x, len = %d, data = 0x%lx", map -> name, addr, len , data);
+#endif
 }

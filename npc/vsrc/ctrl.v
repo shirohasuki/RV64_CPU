@@ -52,87 +52,87 @@ module ctrl (
 
     always @(*) begin
         if (jump == 1'b1) begin
-            assign pc_flush_en_o    = 1'b0;
-            assign if_id_flush_en_o = 1'b1;
-            assign id_ex_flush_en_o = 1'b1;
-            assign ex_mem_flush_en_o = 1'b0;
-            assign mem_wb_flush_en_o = 1'b0;
+            pc_flush_en_o    = 1'b0;
+            if_id_flush_en_o = 1'b1;
+            id_ex_flush_en_o = 1'b1;
+            ex_mem_flush_en_o = 1'b0;
+            mem_wb_flush_en_o = 1'b0;
         end    
         else if (busy) begin
-            assign pc_flush_en_o     = 1'b0;
-            assign if_id_flush_en_o  = 1'b0;
-            assign id_ex_flush_en_o  = 1'b1 & ~axi_busy_end_i;
-            assign ex_mem_flush_en_o = 1'b0;
-            assign mem_wb_flush_en_o = 1'b0;
+            pc_flush_en_o     = 1'b0;
+            if_id_flush_en_o  = 1'b0;
+            id_ex_flush_en_o  = 1'b1 & ~axi_busy_end_i;
+            ex_mem_flush_en_o = 1'b0;
+            mem_wb_flush_en_o = 1'b0;
             // $display("HERE");
         end
         else if (load_inst) begin
-            assign pc_flush_en_o     = 1'b0;
-            assign if_id_flush_en_o  = 1'b0;
-            assign id_ex_flush_en_o  = 1'b1; // 只要load_inst还在mem模块EX就一直flush
-            assign ex_mem_flush_en_o = 1'b0;
-            assign mem_wb_flush_en_o = 1'b0;
+            pc_flush_en_o     = 1'b0;
+            if_id_flush_en_o  = 1'b0;
+            id_ex_flush_en_o  = 1'b1; // 只要load_inst还在mem模块EX就一直flush
+            ex_mem_flush_en_o = 1'b0;
+            mem_wb_flush_en_o = 1'b0;
             // $display("HERE");
         end
         else if (store_inst) begin
-            assign pc_flush_en_o     = 1'b0;
-            assign if_id_flush_en_o  = 1'b0;
-            assign id_ex_flush_en_o  = 1'b1;
-            assign ex_mem_flush_en_o = 1'b0;
-            assign mem_wb_flush_en_o = 1'b0;
+            pc_flush_en_o     = 1'b0;
+            if_id_flush_en_o  = 1'b0;
+            id_ex_flush_en_o  = 1'b1;
+            ex_mem_flush_en_o = 1'b0;
+            mem_wb_flush_en_o = 1'b0;
             // $display("HERE");
         end  // 和load_inst情况可以合并
         else if (load_data_hit) begin
-            assign pc_flush_en_o     = 1'b0;
-            assign if_id_flush_en_o  = 1'b0;
-            assign id_ex_flush_en_o  = 1'b1;
-            assign ex_mem_flush_en_o = 1'b0;
-            assign mem_wb_flush_en_o = 1'b0;
+            pc_flush_en_o     = 1'b0;
+            if_id_flush_en_o  = 1'b0;
+            id_ex_flush_en_o  = 1'b1;
+            ex_mem_flush_en_o = 1'b0;
+            mem_wb_flush_en_o = 1'b0;
         end
         else begin
-            assign pc_flush_en_o     = 1'b0;
-            assign if_id_flush_en_o  = 1'b0;
-            assign id_ex_flush_en_o  = 1'b0; 
-            assign ex_mem_flush_en_o = 1'b0;
-            assign mem_wb_flush_en_o = 1'b0;       
+            pc_flush_en_o     = 1'b0;
+            if_id_flush_en_o  = 1'b0;
+            id_ex_flush_en_o  = 1'b0; 
+            ex_mem_flush_en_o = 1'b0;
+            mem_wb_flush_en_o = 1'b0;       
         end 
     end
 
     always @(*) begin
         if (busy) begin
-            assign pc_stall_en_o     = 1'b1 & ~axi_busy_end_i;
-            assign if_id_stall_en_o  = 1'b1 & ~axi_busy_end_i;
-            assign id_ex_stall_en_o  = 1'b0;//1'b1 & ~axi_busy_end_i;
-            assign ex_mem_stall_en_o = 1'b1 & ~axi_busy_end_i;
-            assign mem_wb_stall_en_o = 1'b0;
+            pc_stall_en_o     = 1'b1 & ~axi_busy_end_i;
+            if_id_stall_en_o  = 1'b1 & ~axi_busy_end_i;
+            id_ex_stall_en_o  = 1'b0;//1'b1 & ~axi_busy_end_i;
+            ex_mem_stall_en_o = 1'b1 & ~axi_busy_end_i;
+            mem_wb_stall_en_o = 1'b0;
         end
         else if (load_inst) begin
-            assign pc_stall_en_o     = 1'b1;
-            assign if_id_stall_en_o  = 1'b1;
-            assign id_ex_stall_en_o  = 1'b0;
-            assign ex_mem_stall_en_o = mem_inst_isload_i;
-            assign mem_wb_stall_en_o = 1'b0;
+            pc_stall_en_o     = 1'b1;
+            if_id_stall_en_o  = 1'b1;
+            id_ex_stall_en_o  = 1'b0;
+            ex_mem_stall_en_o = mem_inst_isload_i;
+            mem_wb_stall_en_o = 1'b0;
         end
         else if (store_inst) begin
-            assign pc_stall_en_o     = 1'b1;
-            assign if_id_stall_en_o  = 1'b1;
-            assign id_ex_stall_en_o  = 1'b0;
-            assign ex_mem_stall_en_o = mem_inst_isstore_i ;//&& ~ex_inst_isstore_i);
-            assign mem_wb_stall_en_o = 1'b0;
+            pc_stall_en_o     = 1'b1;
+            if_id_stall_en_o  = 1'b1;
+            id_ex_stall_en_o  = 1'b0;
+            ex_mem_stall_en_o = mem_inst_isstore_i ;//&& ~ex_inst_isstore_i);
+            mem_wb_stall_en_o = 1'b0;
         end
         else if (load_data_hit) begin
-            assign pc_stall_en_o     = 1'b1;
-            assign if_id_stall_en_o  = 1'b1;
-            assign id_ex_stall_en_o  = 1'b0;
-            assign ex_mem_stall_en_o = 1'b0;
-            assign mem_wb_stall_en_o = 1'b0;
+            pc_stall_en_o     = 1'b1;
+            if_id_stall_en_o  = 1'b1;
+            id_ex_stall_en_o  = 1'b0;
+            ex_mem_stall_en_o = 1'b0;
+            mem_wb_stall_en_o = 1'b0;
         end
         else begin
-            assign pc_stall_en_o     = 1'b0;
-            assign if_id_stall_en_o  = 1'b0;
-            assign id_ex_stall_en_o  = 1'b0;
-            assign ex_mem_stall_en_o = 1'b0;
-            assign mem_wb_stall_en_o = 1'b0;        
+            pc_stall_en_o     = 1'b0;
+            if_id_stall_en_o  = 1'b0;
+            id_ex_stall_en_o  = 1'b0;
+            ex_mem_stall_en_o = 1'b0;
+            mem_wb_stall_en_o = 1'b0;        
         end 
     end
 

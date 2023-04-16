@@ -70,10 +70,10 @@ module regs (
             regs[reg_waddr_i] = reg_wdata_i;
         end 
         else
-            regs[reg_waddr_i] = 64'b0;
-        // $display("REGS: %x", pc_reg);   
+            regs[reg_waddr_i] = 64'b0;  
+        
         get_gprs(regs);
-        //get_pc(pc_reg);
+        
         // 组合逻辑要补全else，时序不需要
     end // 回写rd
 

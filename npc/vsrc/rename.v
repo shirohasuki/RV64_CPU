@@ -1,4 +1,4 @@
-module redirect (
+module rename (
 	//from id
 	input wire [4 :0] rs1_addr_i       ,
 	input wire [4 :0] rs2_addr_i       ,

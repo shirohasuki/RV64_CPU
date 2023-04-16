@@ -7,7 +7,7 @@ module core (
     // from mem
     input	wire[63:0]	  mem_rdata_i,	
     input	wire[63:0]	  if_inst_i,
-    output  wire[63:0]    mem_axi_inst_addr_o, // 传给axi和ram用于调试
+    // output  wire[63:0]    mem_axi_inst_addr_o, // 传给axi和ram用于调试
 	// to mem
     output  wire 	   	  mem_ren_o,
 	output  wire[63:0]    mem_raddr_o,
@@ -93,17 +93,21 @@ module core (
     wire[4:0] id_re_rs2_addr_o;
     
     // id 2 id_ex
-    wire[31:0]  id_inst_o;  
-    wire[63:0]  id_inst_addr_o; 
-    wire[63:0]  id_op1_o; 
-    wire[63:0]  id_op2_o;
-    wire[4:0]   id_rd_addr_o; 
-    wire        id_reg_wen; 
-    wire[63:0]  id_base_addr_o; 
-    wire[63:0]  id_offset_addr_o;
+    wire[31:0]  id_id_ex_inst_o;  
+    wire[63:0]  id_id_ex_inst_addr_o; 
+    wire[63:0]  id_id_ex_op1_o; 
+    wire[63:0]  id_id_ex_op2_o;
+    wire[4:0]   id_id_ex_rd_addr_o; 
+    wire        id_id_ex_reg_wen; 
+    wire[63:0]  id_id_ex_base_addr_o; 
+    wire[63:0]  id_id_ex_offset_addr_o;
     wire[11:0]  id_id_ex_csr_waddr_o; 
     wire[63:0]  id_id_ex_csr_wdata_o; 
     wire        id_id_ex_csr_wen_o; 
+
+    // id 2 id_clint
+    wire[31:0]  id_id_clint_inst_o;  
+    wire[63:0]  id_id_clint_inst_addr_o; 
 
     // id 2 csr_regs 
     wire[11:0]  id_csr_raddr_o;
@@ -121,59 +125,109 @@ module core (
         .csr_data_i     ( csr_id_rdata_o        ), // Read
         .csr_addr_o     ( id_csr_raddr_o        ), // Read
 
-        .inst_o         ( id_inst_o             ),
-        .inst_addr_o    ( id_inst_addr_o        ),
-        .op1_o          ( id_op1_o              ),
-        .op2_o          ( id_op2_o              ),
-        .rd_addr_o      ( id_rd_addr_o          ),
-        .reg_wen        ( id_reg_wen            ),
-        .base_addr_o    ( id_base_addr_o        ),
-        .offset_addr_o  ( id_offset_addr_o      ),
-        .csr_data_o     ( id_id_ex_csr_wdata_o  ),
+        .inst_o         ( id_id_ex_inst_o             ),
+        .inst_addr_o    ( id_id_ex_inst_addr_o        ),
+        .op1_o          ( id_id_ex_op1_o              ),
+        .op2_o          ( id_id_ex_op2_o              ),
+        .rd_addr_o      ( id_id_ex_rd_addr_o          ),
+        .reg_wen        ( id_id_ex_reg_wen            ),
+        .base_addr_o    ( id_id_ex_base_addr_o        ),
+        .offset_addr_o  ( id_id_ex_offset_addr_o      ),
+        // .csr_data_o     ( id_id_ex_csr_wdata_o  ),
         .csr_waddr_o    ( id_id_ex_csr_waddr_o  ),
         .csr_wen_o      ( id_id_ex_csr_wen_o    )
     );
 
-    //reges 2 redirect
+    //reges 2 rename
     wire[63:0] regs_re_rs1_rdata_o;
     wire[63:0] regs_re_rs2_rdata_o;
 
     regs regs_inst (
-        .clk         ( clk             ),
-        .rst         ( rst             ),
-        .rs1_raddr_i ( re_reg_rs1_raddr_o   ),
-        .rs2_raddr_i ( re_reg_rs2_raddr_o   ),
+        .clk         ( clk                 ),
+        .rst         ( rst                 ),
+        .rs1_raddr_i ( re_reg_rs1_raddr_o  ),
+        .rs2_raddr_i ( re_reg_rs2_raddr_o  ),
         .rs1_rdata_o ( regs_re_rs1_rdata_o ),
         .rs2_rdata_o ( regs_re_rs2_rdata_o ),
-        .reg_waddr_i ( wb_rd_waddr_o ),   // from wb
-        .reg_wdata_i ( wb_rd_wdata_o ),   // from wb
-        .reg_wen     ( wb_reg_wen_o  ),   // from wb
-        .inst_addr_i ( wb_inst_addr_o  ) 
+        .reg_waddr_i ( wb_rd_waddr_o       ),   // from wb
+        .reg_wdata_i ( wb_rd_wdata_o       ),   // from wb
+        .reg_wen     ( wb_reg_wen_o        ),   // from wb
+        .inst_addr_i ( wb_inst_addr_o      ) 
+    );
+
+    // id_clint 2 clint
+    wire[31:0]  id_clint_clint_inst_o;  
+    wire[63:0]  id_clint_clint_inst_addr_o; 
+
+    id_clint id_clint_inst(
+        .clk          ( clk                       ),
+        .rst          ( rst                       ),
+        .flush_flag_i ( ctrl_id_clint_flush_en_o  ),
+        .stall_flag_i ( ctrl_id_clint_stall_en_o  ),
+        .inst_i       ( id_id_ex_inst_o           ),
+        .inst_addr_i  ( id_id_ex_inst_addr_o      ),
+        .inst_o       ( id_clint_clint_inst_o     ),
+        .inst_addr_o  ( id_clint_clint_inst_addr_o)
+    );
+
+    // clint 2 ctrl
+    wire[63:0]  clint_ctrl_intr_jump_addr_o;  
+    wire        clint_ctrl_intr_jump_en_o; 
+
+        // clint 2 csr_regs
+    wire[63:0]  clint_csr_mepc_o;  
+    wire[63:0]  clint_csr_mcause_o;
+    wire[63:0]  clint_csr_mstatus_o;
+    wire        clint_csr_wen_o;
+
+    clint clint_inst(
+        .clk              ( clk                         ),
+        .rst              ( rst                         ),
+        .inst_i           ( id_clint_clint_inst_o       ),
+        .inst_addr_i      ( id_clint_clint_inst_addr_o  ),
+        .intr_jump_addr_o ( clint_ctrl_intr_jump_addr_o ),
+        .intr_jump_en_o   ( clint_ctrl_intr_jump_en_o   ),
+        .mtvec_i          ( csr_clint_mtvec_o                     ),
+        .mstatus_i        ( csr_clint_mstatus_o                   ),
+        .csr_wen_o        ( clint_csr_wen_o                   ),
+        .mepc_o           ( clint_csr_mepc_o                      ),
+        .mcause_o         ( clint_csr_mcause_o                    ),
+        .mstatus_o        ( clint_csr_mstatus_o                   )
     );
 
     // csr 2 id
     wire[63:0]  csr_id_rdata_o;
     
+    // csr 2 clint
+    wire[63:0]  csr_clint_mtvec_o;  
+    wire[63:0]  csr_clint_mstatus_o;
+
     csr_regs csr_regs_inst(
-        .clk         ( clk         ),
-        .rst         ( rst         ),
-        .csr_raddr_i ( id_csr_raddr_o ),
-        .csr_rdata_o ( csr_id_rdata_o ),
-        .csr_wdata_i ( ex_csr_wdata_o ),
-        .csr_waddr_i ( ex_csr_waddr_o ),
-        .csr_wen_i   ( ex_csr_wen_o  )
+        .clk             ( clk                       ),
+        .rst             ( rst                       ),
+        .ex_csr_raddr_i  ( id_csr_raddr_o            ),
+        .ex_csr_rdata_o  ( csr_id_rdata_o            ),
+        .ex_csr_wdata_i  ( ex_csr_wdata_o            ),
+        .ex_csr_waddr_i  ( ex_csr_waddr_o            ),
+        .ex_csr_wen_i    ( ex_csr_wen_o              ),
+        .clint_csr_wen_i ( clint_csr_wen_o           ),
+        .mepc_i          ( clint_csr_mepc_o          ),
+        .mcause_i        ( clint_csr_mcause_o        ),
+        .mstatus_i       ( clint_csr_mstatus_o       ),
+        .mtvec_o         ( csr_clint_mtvec_o         ),
+        .mstatus_o       ( csr_clint_mstatus_o       )
     );
 
-    // redirect to id
+    // rename to id
     wire[63:0] re_id_rs1_rdata_o;
     wire[63:0] re_id_rs2_rdata_o;
-    // redirect to ctrl
+    // rename to ctrl
     wire       rs_id_ex_hit_o;
-    // redirect to reg
+    // rename to reg
     wire[4:0] re_reg_rs1_raddr_o;
     wire[4:0] re_reg_rs2_raddr_o;
 
-    redirect redirect_inst (
+    rename rename_inst (
         .rs1_addr_i     ( id_re_rs1_addr_o     ),
         .rs2_addr_i     ( id_re_rs2_addr_o     ),
         .rs1_addr_o     ( re_reg_rs1_raddr_o   ),
@@ -209,35 +263,35 @@ module core (
     wire        id_ex_ex_csr_wen_o;  
 
     id_ex id_ex_inst (
-        .clk         ( clk               ),
-        .rst         ( rst               ),
-        .flush_flag_i ( ctrl_id_ex_flush_en_o ),
-        .stall_flag_i ( ctrl_id_ex_stall_en_o  ),
-        .inst_i      ( id_inst_o         ),
-        .inst_addr_i ( id_inst_addr_o ),
-        .op1_i       ( id_op1_o       ),
-        .op2_i       ( id_op2_o       ),
-        .rd_addr_i   ( id_rd_addr_o   ),
-        .reg_wen_i   ( id_reg_wen     ),
-        .base_addr_i   ( id_base_addr_o   ),
-        .offset_addr_i ( id_offset_addr_o ),
-        .csr_data_i  ( id_id_ex_csr_wdata_o ),
-        .csr_waddr_i ( id_id_ex_csr_waddr_o ),  
-        .csr_wen_i   ( id_id_ex_csr_wen_o   ),
-        .inst_o      ( id_ex_inst_o      ),
-        .inst_addr_o ( id_ex_inst_addr_o ),
-        .op1_o       ( id_ex_op1_o       ),
-        .op2_o       ( id_ex_op2_o       ),
-        .rd_addr_o   ( id_ex_rd_addr_o   ),
-        .reg_wen_o   ( id_ex_reg_wen     ),
+        .clk            ( clk               ),
+        .rst            ( rst               ),
+        .flush_flag_i   ( ctrl_id_ex_flush_en_o ),
+        .stall_flag_i   ( ctrl_id_ex_stall_en_o  ),
+        .inst_i         ( id_id_ex_inst_o         ),
+        .inst_addr_i    ( id_id_ex_inst_addr_o ),
+        .op1_i          ( id_id_ex_op1_o       ),
+        .op2_i          ( id_id_ex_op2_o       ),
+        .rd_addr_i      ( id_id_ex_rd_addr_o   ),
+        .reg_wen_i      ( id_id_ex_reg_wen     ),
+        .base_addr_i    ( id_id_ex_base_addr_o   ),
+        .offset_addr_i  ( id_id_ex_offset_addr_o ),
+        // .csr_data_i  ( id_id_ex_csr_wdata_o ),
+        .csr_waddr_i    ( id_id_ex_csr_waddr_o ),  
+        .csr_wen_i      ( id_id_ex_csr_wen_o   ),
+        .inst_o         ( id_ex_inst_o      ),
+        .inst_addr_o    ( id_ex_inst_addr_o ),
+        .op1_o          ( id_ex_op1_o       ),
+        .op2_o          ( id_ex_op2_o       ),
+        .rd_addr_o      ( id_ex_rd_addr_o   ),
+        .reg_wen_o      ( id_ex_reg_wen     ),
         .base_addr_o    ( id_ex_base_addr_o   ),
         .offset_addr_o  ( id_ex_offset_addr_o ),
-        .csr_data_o  (  id_ex_ex_csr_wdata_o ),
-        .csr_waddr_o (  id_ex_ex_csr_waddr_o),  
-        .csr_wen_o   (  id_ex_ex_csr_wen_o)
+        // .csr_data_o  (  id_ex_ex_csr_wdata_o ),
+        .csr_waddr_o    (  id_ex_ex_csr_waddr_o),  
+        .csr_wen_o      (  id_ex_ex_csr_wen_o)
     );
 
-    // ex 2 ex_mem and redirect
+    // ex 2 ex_mem and rename
 	wire[63:0]  ex_rd_wdata_o;
 	wire[4:0]   ex_rd_waddr_o;
 	wire        ex_reg_wen_o;
@@ -261,8 +315,8 @@ module core (
     wire        ex_csr_wen_o;
 
     // ex 2 ctrl
-    wire[63:0]  ex_jump_addr_o;    
-    wire        ex_jump_en_o;      
+    wire[63:0]  ex_ctrl_typej_jump_addr_o;    
+    wire        ex_ctrl_typej_jump_en_o;      
     // wire[2:0]   ex_stall_flag_o; 
     // wire[2:0]   ex_flush_flag_o; 
     wire        ex_isload_o; 
@@ -281,11 +335,11 @@ module core (
         .rd_wdata_o    ( ex_rd_wdata_o       ),
         .rd_waddr_o    ( ex_rd_waddr_o       ),
         .reg_wen_o     ( ex_reg_wen_o        ),
-        .inst_o        (  ex_ex_mem_inst_o   ),
+        .inst_o        ( ex_ex_mem_inst_o   ),
         .inst_addr_o   ( ex_inst_addr_o      ),
-        .jump_addr_o   ( ex_jump_addr_o      ),
-        .jump_en_o     ( ex_jump_en_o        ),
-        .csr_data_i    ( id_ex_ex_csr_wdata_o ),
+        .typej_jump_addr_o   ( ex_ctrl_typej_jump_addr_o      ),
+        .typej_jump_en_o     ( ex_ctrl_typej_jump_en_o        ),
+        // .csr_data_i    ( id_ex_ex_csr_wdata_o ),
         .csr_waddr_i   ( id_ex_ex_csr_waddr_o ),
         .csr_wen_i     ( id_ex_ex_csr_wen_o   ),
         .mem_ren_o     ( ex_ex_mem_ren_o      ),     // to ram
@@ -313,34 +367,42 @@ module core (
     // ctrl 2 id_ex
     wire        ctrl_id_ex_flush_en_o;
     wire        ctrl_id_ex_stall_en_o;
+    // ctrl 2 id_ex
+    wire        ctrl_id_clint_flush_en_o;
+    wire        ctrl_id_clint_stall_en_o;
     // ctrl 2 ex_mem
     wire        ctrl_ex_mem_flush_en_o;
     wire        ctrl_ex_mem_stall_en_o;
         // ctrl 2 mem_wb
     wire        ctrl_mem_wb_flush_en_o;
     wire        ctrl_mem_wb_stall_en_o;
+
     ctrl ctrl_inst(
-        .jump_addr_i      ( ex_jump_addr_o    ),
-        .jump_en_i        ( ex_jump_en_o      ),
-        .jump_addr_o      ( ctrl_jump_addr_o   ),
-        .jump_en_o        ( ctrl_jump_en_o     ),
-        .ex_inst_isload_i ( ex_isload_o ),
-        .ex_inst_isstore_i ( ex_isstore_o ),
-        .mem_inst_isload_i ( mem_isload_o ),
+        .typej_jump_addr_i  ( ex_ctrl_typej_jump_addr_o    ),
+        .typej_jump_en_i    ( ex_ctrl_typej_jump_en_o      ),
+        .intr_jump_addr_i   ( clint_ctrl_intr_jump_addr_o    ),
+        .intr_jump_en_i     ( clint_ctrl_intr_jump_en_o      ),
+        .jump_addr_o        ( ctrl_jump_addr_o   ),
+        .jump_en_o          ( ctrl_jump_en_o     ),
+        .ex_inst_isload_i   ( ex_isload_o ),
+        .ex_inst_isstore_i  ( ex_isstore_o ),
+        .mem_inst_isload_i  ( mem_isload_o ),
         .mem_inst_isstore_i ( mem_isstore_o ),
-        .rs_id_ex_hit_i   ( rs_id_ex_hit_o    ),
-        .axi_busy_i       ( axi_busy_i        ),
-        .axi_busy_end_i   ( axi_busy_end_i ),
-        .pc_stall_en_o    ( ctrl_pc_stall_en_o),
-        .pc_flush_en_o    ( ctrl_pc_flush_en_o),
-        .if_id_stall_en_o ( ctrl_if_id_stall_en_o ),
-        .if_id_flush_en_o ( ctrl_if_id_flush_en_o ),
-        .id_ex_stall_en_o ( ctrl_id_ex_stall_en_o ),
-        .id_ex_flush_en_o ( ctrl_id_ex_flush_en_o  ),
-        .ex_mem_stall_en_o ( ctrl_ex_mem_stall_en_o ),
-        .ex_mem_flush_en_o ( ctrl_ex_mem_flush_en_o  ),
-        .mem_wb_stall_en_o ( ctrl_mem_wb_stall_en_o ),
-        .mem_wb_flush_en_o ( ctrl_mem_wb_flush_en_o  )    
+        .rs_id_ex_hit_i     ( rs_id_ex_hit_o    ),
+        .axi_busy_i         ( axi_busy_i        ),
+        .axi_busy_end_i     ( axi_busy_end_i ),
+        .pc_stall_en_o      ( ctrl_pc_stall_en_o),
+        .pc_flush_en_o      ( ctrl_pc_flush_en_o),
+        .if_id_stall_en_o   ( ctrl_if_id_stall_en_o ),
+        .if_id_flush_en_o   ( ctrl_if_id_flush_en_o ),
+        .id_clint_stall_en_o( ctrl_id_clint_stall_en_o ),
+        .id_clint_flush_en_o( ctrl_id_clint_flush_en_o ),
+        .id_ex_stall_en_o   ( ctrl_id_ex_stall_en_o ),
+        .id_ex_flush_en_o   ( ctrl_id_ex_flush_en_o  ),
+        .ex_mem_stall_en_o  ( ctrl_ex_mem_stall_en_o ),
+        .ex_mem_flush_en_o  ( ctrl_ex_mem_flush_en_o  ),
+        .mem_wb_stall_en_o  ( ctrl_mem_wb_stall_en_o ),
+        .mem_wb_flush_en_o  ( ctrl_mem_wb_flush_en_o  )    
     );  
 
     // ex_mem to mem
@@ -395,7 +457,7 @@ module core (
         .reg_wen_o   ( ex_mem_mem_reg_wen_o   )
     );
 
-    // mem to mem_wb and redirect
+    // mem to mem_wb and rename
     wire[63:0]  mem_inst_addr_o;
     
     wire[63:0]  mem_rd_wdata_o;
@@ -420,7 +482,7 @@ module core (
     wire          mem_ram_ren_o; 
     wire          mem_ram_wen_o; 
 
-    assign mem_axi_inst_addr_o = mem_inst_addr_o;
+    // assign mem_axi_inst_addr_o = mem_inst_addr_o;
 
     mem mem_inst(
         .clk         ( clk         ),
@@ -428,10 +490,10 @@ module core (
         .inst_i      ( ex_mem_mem_inst_o  ),
         .inst_addr_i ( ex_mem_inst_addr_o ),
         .inst_addr_o ( mem_inst_addr_o),
-        .isload_i ( ex_mem_isload_o ),
+        .isload_i    ( ex_mem_isload_o ),
         .isload_o    ( mem_isload_o ),
-        .isstore_i ( ex_mem_isstore_o ),
-        .isstore_o    ( mem_isstore_o ),
+        .isstore_i   ( ex_mem_isstore_o ),
+        .isstore_o   ( mem_isstore_o ),
         // .stall_flag_i( ex_mem_mem_stall_flag_o),
         // .stall_flag_o( mem_stall_flag_o     ),
         // .flush_flag_i( ex_mem_mem_flush_flag_o),
@@ -481,7 +543,7 @@ module core (
         .reg_wen_o   ( mem_wb_wb_reg_wen_o   )
     );
      
-    // wb to reg and redirect
+    // wb to reg and rename
     wire[63:0]  wb_inst_addr_o;
     wire[63:0]  wb_rd_wdata_o; 
     wire[4:0]   wb_rd_waddr_o; 

@@ -52,7 +52,7 @@ word_t map_read(paddr_t addr, int len, IOMap *map) {
     check_bound(map, addr);
     paddr_t offset = addr - map->low;
     invoke_callback(map->callback, offset, len, false); // prepare data to read
-    word_t ret = host_read((uint64_t *)map->space + offset, len);
+    word_t ret = host_read((uint8_t *)map->space + offset, len);
     return ret;
 }
 
@@ -62,7 +62,6 @@ void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
     IFDEF(CONFIG_NPC_DTRACE, Printf("[Dtrace - Write] %s\n", BLUE, map -> name);)
     check_bound(map, addr);
     paddr_t offset = addr - map->low;
-    // printf("addr = %lx data = %lx \n", (uint64_t *)map->space + offset, data);
-    host_write(map->space + offset, len, data);
+    host_write((uint8_t *)map->space + offset, len, data);  // TODO:这个强制转换有一定的隐患，但是不加有warning
     invoke_callback(map->callback, offset, len, true);
 }

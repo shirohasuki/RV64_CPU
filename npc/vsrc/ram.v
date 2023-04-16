@@ -31,7 +31,7 @@ module ram (
     input wire              clk,
     input wire              rst,
 
-    input wire [63:0]          inst_addr_i_from_mem, // 用于调试
+    // input wire [63:0]          inst_addr_i_from_mem, // 用于调试
 
     // from AXI
     // input wire              ram_ravalid_i,
@@ -151,7 +151,6 @@ module ram (
                 // $display("rom[%4d] | %8x", i, ram_mem[i]);
             // end
         // end
-        // $display("pc = %h, ram[ 639] | %8x", inst_addr_i_from_mem, ram_mem[639]);
         // $display("===========================");
 // `endif
     end

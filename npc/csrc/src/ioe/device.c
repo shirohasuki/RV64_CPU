@@ -38,7 +38,7 @@ void device_update() {
         // printf("event.type= %d\n", event.type);
         switch (event.type) {
             case SDL_QUIT:{
-                printf("NPC QUIT!\n");
+                printf("\nNPC QUIT!\n");
                 npc_state.state = NPC_QUIT;
                 exit(0);
                 // npc_exit(0);

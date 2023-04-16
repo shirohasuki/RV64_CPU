@@ -127,9 +127,9 @@ module axi #(
     input rst,
 
     // from mem
-    input  wire[63:0]                      inst_addr_i,  // 用于调试
-    // to ram
-    output wire[63:0]                      inst_addr_o,  // 用于调试
+    // input  wire[63:0]                      inst_addr_i,  // 用于调试
+    // // to ram
+    // output wire[63:0]                      inst_addr_o,  // 用于调试
 
     // to ctrl
     output reg                     axi_busy_o,
@@ -258,7 +258,7 @@ module axi #(
     reg[AXI_ADDR_WIDTH-1:0]  rwaddr; 
     reg[AXI_DATA_WIDTH-1:0]  wdata; 
 
-    assign inst_addr_o = inst_addr_i;
+    // assign inst_addr_o = inst_addr_i;
 
     always @(posedge clk) begin
         if (!rst) begin 

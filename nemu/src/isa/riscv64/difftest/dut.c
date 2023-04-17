@@ -13,12 +13,12 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
             return false;
         }
     }
-    // for (int i = 0; i < 4; i++) {
-    //     if (cpu.csr[i] != ref_r->csr[i]) {
-    //         printf("[difftest] CSR[%2d] unequal(pc=%lx): nemu: %lx native: %lx\n", i, cpu.pc, cpu.csr[i], ref_r->csr[i]);
-    //         return false;
-    //     }
-    // }
+    for (int i = 0; i < 4; i++) {
+        if (cpu.csr[i] != ref_r->csr[i]) {
+            printf("[difftest] CSR[%2d] unequal(pc=%lx): nemu: %lx native: %lx\n", i, cpu.pc, cpu.csr[i], ref_r->csr[i]);
+            return false;
+        }
+    }
     return true;
 }
 

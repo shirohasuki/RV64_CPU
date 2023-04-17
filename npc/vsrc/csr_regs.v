@@ -118,9 +118,9 @@ module csr_regs (
                 csrs[i] <= 64'b0;
             end
             mstatus <= 64'b0;
-            mtvec   <= 64'ha00001800; 
+            mtvec   <= 64'h0; 
             mepc    <= 64'b0;   
-            mcause  <= 64'b0;
+            mcause  <= 64'ha00001800;
         end // 初始化寄存器
         else if (ex_csr_wen_i) begin // x0不准写
             case(ex_csr_waddr_i)

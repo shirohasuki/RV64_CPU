@@ -1108,8 +1108,6 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_ctrl_intr_jump_en_o = 1U;
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_wen_o = 1U;
     } else if ((0x30200073U == vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_clint_clint_inst_o)) {
-        vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_mepc_o 
-            = (4ULL + vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_clint_clint_inst_addr_o);
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_mstatus_o 
             = ((0xffffffffffffff00ULL & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o) 
                | (QData)((IData)((0x80U | ((0x70U & 
@@ -1125,7 +1123,7 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
                                               | (7U 
                                                  & (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o))))))));
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_ctrl_intr_jump_addr_o 
-            = vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mtvec_o;
+            = (4ULL + vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mtvec_o);
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_ctrl_intr_jump_en_o = 1U;
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_wen_o = 1U;
     } else {
@@ -1248,9 +1246,9 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
     }
     if (((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__visit_interface) 
          & (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_ren_o))) {
-        Vtb___024unit____Vdpiimwrap_pmem_read_TOP____024unit(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_raddr_o, vlSelf->__Vtask_pmem_read__5__rdata);
+        Vtb___024unit____Vdpiimwrap_pmem_read_TOP____024unit(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_raddr_o, vlSelf->__Vtask_pmem_read__4__rdata);
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__device_rdata 
-            = vlSelf->__Vtask_pmem_read__5__rdata;
+            = vlSelf->__Vtask_pmem_read__4__rdata;
     } else {
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__device_rdata = 0ULL;
     }

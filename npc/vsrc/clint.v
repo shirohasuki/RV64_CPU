@@ -46,10 +46,10 @@ module clint (
                 csr_wen_o        = 1'b1;
             end
             `INST_MRET: begin
-                mepc_o           = inst_addr_i + 4;
+                // mepc_o           = inst_addr_i + 4;
                 // mcause_o         = 64'd11;
                 mstatus_o        = {mstatus_i[63:8], 1'b1, mstatus_i[6:4], mstatus_i[7], mstatus_i[2:0]}; // mstatus[7(MPIE)] = 1, mstatus[3(MIE)] = MPIE
-                intr_jump_addr_o = mtvec_i;
+                intr_jump_addr_o = mtvec_i + 4;
                 intr_jump_en_o   = 1'b1;
                 csr_wen_o        = 1'b1;
             end

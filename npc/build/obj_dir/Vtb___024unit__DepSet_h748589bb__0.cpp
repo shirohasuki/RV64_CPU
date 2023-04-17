@@ -44,8 +44,8 @@ VL_INLINE_OPT void Vtb___024unit____Vdpiimwrap_ebreak_TOP____024unit() {
 
 extern "C" void get_csrs(const svOpenArrayHandle csrs);
 
-VL_INLINE_OPT void Vtb___024unit____Vdpiimwrap_get_csrs__Vdpioc3_TOP____024unit(const VlUnpacked<QData/*63:0*/, 4> &csrs) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+        Vtb___024unit____Vdpiimwrap_get_csrs__Vdpioc3_TOP____024unit\n"); );
+VL_INLINE_OPT void Vtb___024unit____Vdpiimwrap_get_csrs__Vdpioc2_TOP____024unit(const VlUnpacked<QData/*63:0*/, 4> &csrs) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+        Vtb___024unit____Vdpiimwrap_get_csrs__Vdpioc2_TOP____024unit\n"); );
     // Body
     static const int csrs__Vopenprops__ulims[2] = {0, 3};
     static const VerilatedVarProps csrs__Vopenprops(VLVT_UINT64, VLVD_IN, VerilatedVarProps::Packed(), 63, 0, VerilatedVarProps::Unpacked(), 1, csrs__Vopenprops__ulims);

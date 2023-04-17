@@ -9,7 +9,7 @@
 #include "Vtb___024root.h"
 
 void Vtb___024unit____Vdpiimwrap_get_pc_TOP____024unit(QData/*63:0*/ pc);
-void Vtb___024unit____Vdpiimwrap_get_csrs__Vdpioc3_TOP____024unit(const VlUnpacked<QData/*63:0*/, 4> &csrs);
+void Vtb___024unit____Vdpiimwrap_get_csrs__Vdpioc2_TOP____024unit(const VlUnpacked<QData/*63:0*/, 4> &csrs);
 extern const VlUnpacked<QData/*63:0*/, 512> Vtb__ConstPool__TABLE_h5ca10654_0;
 void Vtb___024unit____Vdpiimwrap_pmem_write_TOP____024unit(QData/*63:0*/ waddr, QData/*63:0*/ wdata, QData/*63:0*/ mask);
 void Vtb___024unit____Vdpiimwrap_pmem_read_TOP____024unit(QData/*63:0*/ raddr, QData/*63:0*/ &rdata);
@@ -102,8 +102,7 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
     __Vdlyvset__tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__csrs__v0 = 0U;
     __Vdlyvset__tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__csrs__v1 = 0U;
     Vtb___024unit____Vdpiimwrap_get_pc_TOP____024unit(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_addr_o);
-    Vtb___024unit____Vdpiimwrap_get_csrs__Vdpioc3_TOP____024unit(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__csrs);
-    Vtb___024unit____Vdpiimwrap_get_csrs__Vdpioc3_TOP____024unit(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__csrs);
+    Vtb___024unit____Vdpiimwrap_get_csrs__Vdpioc2_TOP____024unit(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__csrs);
     __Vdlyvset__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v0 = 0U;
     __Vdlyvset__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v2 = 0U;
     __Vdlyvset__tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem__v4 = 0U;
@@ -2597,9 +2596,9 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
     }
     if (((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__visit_interface) 
          & (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_ren_o))) {
-        Vtb___024unit____Vdpiimwrap_pmem_read_TOP____024unit(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_raddr_o, vlSelf->__Vtask_pmem_read__5__rdata);
+        Vtb___024unit____Vdpiimwrap_pmem_read_TOP____024unit(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_raddr_o, vlSelf->__Vtask_pmem_read__4__rdata);
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__device_rdata 
-            = vlSelf->__Vtask_pmem_read__5__rdata;
+            = vlSelf->__Vtask_pmem_read__4__rdata;
     } else {
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__device_rdata = 0ULL;
     }
@@ -2763,8 +2762,6 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__1(Vtb___024root* vlSelf) {
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_ctrl_intr_jump_en_o = 1U;
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_wen_o = 1U;
     } else if ((0x30200073U == vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_clint_clint_inst_o)) {
-        vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_mepc_o 
-            = (4ULL + vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_clint_clint_inst_addr_o);
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_mstatus_o 
             = ((0xffffffffffffff00ULL & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o) 
                | (QData)((IData)((0x80U | ((0x70U & 
@@ -2780,7 +2777,7 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__1(Vtb___024root* vlSelf) {
                                               | (7U 
                                                  & (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o))))))));
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_ctrl_intr_jump_addr_o 
-            = vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mtvec_o;
+            = (4ULL + vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mtvec_o);
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_ctrl_intr_jump_en_o = 1U;
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_wen_o = 1U;
     } else {

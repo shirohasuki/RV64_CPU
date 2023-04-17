@@ -40,9 +40,9 @@ module csr_regs (
     assign csrs[3] = mcause;
 
 
-    always @(posedge clk) begin
-        get_csrs(csrs);
-    end
+    // always @(posedge clk) begin
+    //     get_csrs(csrs);
+    // end
 
 // =========== 初始化 ===============
     // always @(posedge clk) begin
@@ -137,6 +137,21 @@ module csr_regs (
         //     $display("Unexcept Visit CSRs!");
         // end
     end
+
+
+    // reg[63:0] csrs1[0:3];
+
+    // always @(posedge clk) begin
+    //     csrs1[0] = mstatus;
+    //     csrs1[1] = mtvec;
+    //     csrs1[2] = mepc;
+    //     csrs1[3] = mcause; 
+    // end
+
+    // always @(posedge clk) begin
+    //     get_csrs(csrs1);
+    // end
+
     always @(posedge clk) begin
         get_csrs(csrs);
     end

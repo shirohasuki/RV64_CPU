@@ -156,7 +156,5 @@ static int decode_exec(Decode *s) {
 
 int isa_exec_once(Decode *s) {
     s->isa.inst.val = inst_fetch(&s->snpc, 4); // 取指:1.访问，2.更新pc
-    // printf("1.[inst.c]:snpc = %ln\n", &s->snpc);
-    // printf("2.[inst.c]:inst = %x\n", s->isa.inst.val);
     return decode_exec(s); // 译码
 }

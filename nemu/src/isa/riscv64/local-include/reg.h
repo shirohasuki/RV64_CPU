@@ -10,8 +10,8 @@ static inline int check_reg_idx(int idx) {
 
 static inline int idx2csr(int idx) {
     switch (idx) {
-        case 0x300: return 0; // mstatus
-        case 0x305: return 1; // mtvec
+        case 0x300: return 1; // mstatus
+        case 0x305: return 0; // mtvec
         case 0x341: return 2; // mepc
         case 0x342: return 3; // mcause
     }

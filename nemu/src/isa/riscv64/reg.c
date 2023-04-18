@@ -15,8 +15,8 @@ const char *regs[] = {
 //     }
 // }
 const char *csrs[] = {
-//   "mstatus", "mtvec", "mepc", "mcause"
- "mtvec", "mepc", "mstatus", "mcause",
+  "mstatus", "mtvec", "mepc", "mcause"
+//  "mtvec", "mepc", "mstatus", "mcause"
 };
 
 

@@ -137,8 +137,8 @@ static int decode_exec(Decode *s) {
     // 异常
     INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs , I, word_t t = csr(src2); csr(src2) = t | src1; R(dest) = t);
     INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw , I, word_t t = csr(src2); csr(src2) = src1; R(dest) = t);
-    INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall , N, s->dnpc = isa_raise_intr(0x0b, s->pc)); // R(17) is $a7
-    INSTPAT("0011000 00010 00000 000 00000 11100 11", mret  , N, s->dnpc = isa_mret()+4);
+    INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall , N, s->dnpc = isa_raise_intr(0x0b, s->pc)); 
+    INSTPAT("0011000 00010 00000 000 00000 11100 11", mret  , N, s->dnpc = isa_mret());
     // INSTPAT("0011000 00010 00000 000 00000 11100 11", mret  , N, s->dnpc = csrval(mepc) + 4);
 
     // J-Type       

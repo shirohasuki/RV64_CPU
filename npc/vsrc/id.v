@@ -327,7 +327,7 @@ module id (
                         csr_addr_o    = csr;
                         op1_o         = csr_data_i;
                         op2_o         = rs1_data_i;  
-                        rd_addr_o     = rd_addr_o;  // csr的值写入rd
+                        rd_addr_o     = rd;  // csr的值写入rd
                         reg_wen       = 1'b1; 
                         csr_waddr_o   = csr;
                         csr_wen_o     = 1'b1;
@@ -338,7 +338,7 @@ module id (
                         csr_addr_o    = csr;
                         op1_o         = csr_data_i;
                         op2_o         = Zimm;  
-                        rd_addr_o     = rd_addr_o;  // csr的值写入rd
+                        rd_addr_o     = rd;  // csr的值写入rd
                         reg_wen       = 1'b1; 
                         csr_waddr_o   = csr;
                         csr_wen_o     = 1'b1;

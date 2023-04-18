@@ -6,10 +6,10 @@ module csr_regs (
     input               rst,
 
     // from id
-    input wire[11:0]    ex_csr_raddr_i,
+    input wire[11:0]     id_csr_raddr_i,
     
     // to id
-    output reg[63:0]     ex_csr_rdata_o,
+    output reg[63:0]     id_csr_rdata_o,
 
     // from ex
     input wire[63:0]     ex_csr_wdata_i,
@@ -61,32 +61,22 @@ module csr_regs (
     // mtime;          // 实时计数器（不是CSR） 
     // mtimecmp;       // 计数比较寄存器（不是CSR），当mtime>=mtimecmp时，计时器中断
 
-// ================  from EX ====================
+// ================  from ID ====================
     // always @(*) begin
     //     $display("csr_waddr = %h, csr_wdata = %h", ex_csr_waddr_i, ex_csr_wdata_i);
     // end
 
     always @(*) begin
         if (!rst) begin
-            ex_csr_rdata_o = 64'b0;
+            id_csr_rdata_o = 64'b0;
         end
         else begin
-            case(ex_csr_raddr_i)
-                `CSR_MSTATUS: begin
-                    ex_csr_rdata_o = mstatus;
-                end
-                `CSR_MTVEC  : begin
-                    ex_csr_rdata_o = mtvec;
-                end
-                `CSR_MEPC   : begin
-                    ex_csr_rdata_o = mepc;
-                end
-                `CSR_MCAUSE : begin
-                    ex_csr_rdata_o = mcause;
-                end            
-                default begin
-                    ex_csr_rdata_o = 64'b0;
-                end
+            case(id_csr_raddr_i)
+                `CSR_MSTATUS: begin id_csr_rdata_o = mstatus; end
+                `CSR_MTVEC  : begin id_csr_rdata_o = mtvec;   end
+                `CSR_MEPC   : begin id_csr_rdata_o = mepc;    end
+                `CSR_MCAUSE : begin id_csr_rdata_o = mcause;  end            
+                default       begin id_csr_rdata_o = 64'b0;   end
             endcase
         end
     end
@@ -117,10 +107,10 @@ module csr_regs (
             for (integer i = 0; i < 32; i = i + 1) begin
                 csrs[i] <= 64'b0;
             end
-            mstatus <= 64'b0;
+            mstatus <= 64'ha00001800;
             mtvec   <= 64'h0; 
-            mepc    <= 64'b0;   
-            mcause  <= 64'ha00001800;
+            mepc    <= 64'h0;   
+            mcause  <= 64'h0;
         end // 初始化寄存器
         else if (ex_csr_wen_i) begin // x0不准写
             case(ex_csr_waddr_i)

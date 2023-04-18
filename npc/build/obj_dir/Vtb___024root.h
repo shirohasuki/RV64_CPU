@@ -178,7 +178,7 @@ VL_MODULE(Vtb___024root) {
         QData/*63:0*/ __Vtask_pmem_read__4__rdata;
         VlUnpacked<QData/*63:0*/, 32> tb__DOT__soc_inst__DOT__core_inst__DOT__regs_inst__DOT__regs;
         VlUnpacked<QData/*63:0*/, 4> tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__csrs;
-        VlUnpacked<QData/*63:0*/, 1048576> tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem;
+        VlUnpacked<QData/*63:0*/, 67108864> tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem;
         VlUnpacked<CData/*0:0*/, 3> __Vm_traceActivity;
     };
 

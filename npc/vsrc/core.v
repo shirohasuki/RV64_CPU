@@ -205,8 +205,8 @@ module core (
     csr_regs csr_regs_inst(
         .clk             ( clk                       ),
         .rst             ( rst                       ),
-        .ex_csr_raddr_i  ( id_csr_raddr_o            ),
-        .ex_csr_rdata_o  ( csr_id_rdata_o            ),
+        .id_csr_raddr_i  ( id_csr_raddr_o            ),
+        .id_csr_rdata_o  ( csr_id_rdata_o            ),
         .ex_csr_wdata_i  ( ex_csr_wdata_o            ),
         .ex_csr_waddr_i  ( ex_csr_waddr_o            ),
         .ex_csr_wen_i    ( ex_csr_wen_o              ),

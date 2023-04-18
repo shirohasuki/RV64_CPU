@@ -256,8 +256,8 @@ VL_ATTR_COLD void Vtb___024root__trace_init_sub__TOP__0(Vtb___024root* vlSelf, V
     tracep->pushNamePrefix("csr_regs_inst ");
     tracep->declBit(c+350,"clk", false,-1);
     tracep->declBit(c+351,"rst", false,-1);
-    tracep->declBus(c+154,"ex_csr_raddr_i", false,-1, 11,0);
-    tracep->declQuad(c+18,"ex_csr_rdata_o", false,-1, 63,0);
+    tracep->declBus(c+154,"id_csr_raddr_i", false,-1, 11,0);
+    tracep->declQuad(c+18,"id_csr_rdata_o", false,-1, 63,0);
     tracep->declQuad(c+187,"ex_csr_wdata_i", false,-1, 63,0);
     tracep->declBus(c+189,"ex_csr_waddr_i", false,-1, 11,0);
     tracep->declBit(c+190,"ex_csr_wen_i", false,-1);

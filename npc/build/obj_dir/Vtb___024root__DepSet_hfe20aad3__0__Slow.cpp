@@ -332,11 +332,11 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
         = ((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_wen_o) 
            & (~ (IData)(vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__axi_busy)));
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__csrs[0U] 
-        = vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__mstatus;
-    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__csrs[1U] 
         = vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__mtvec;
-    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__csrs[2U] 
+    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__csrs[1U] 
         = vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__mepc;
+    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__csrs[2U] 
+        = vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__mstatus;
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__csrs[3U] 
         = vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__mcause;
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__base_addr_add_addr_offset 
@@ -457,11 +457,14 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
     }
     Vtb___024unit____Vdpiimwrap_get_gprs__Vdpioc2_TOP____024unit(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__regs_inst__DOT__regs);
     if (vlSelf->rst) {
+        vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mepc_o 
+            = vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__mepc;
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mtvec_o 
             = vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__mtvec;
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o 
             = vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__mstatus;
     } else {
+        vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mepc_o = 0ULL;
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mtvec_o = 0ULL;
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o = 0ULL;
     }
@@ -1130,7 +1133,7 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
                                               | (7U 
                                                  & (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o))))))));
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_ctrl_intr_jump_addr_o 
-            = (4ULL + vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mtvec_o);
+            = (4ULL + vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mepc_o);
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_ctrl_intr_jump_en_o = 1U;
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_wen_o = 1U;
     } else {

@@ -23,6 +23,7 @@ module csr_regs (
     input wire [63:0]    mstatus_i,
 
     // to clint
+    output wire [63:0]   mepc_o,
     output wire [63:0]   mtvec_o,
     output wire [63:0]   mstatus_o
 );
@@ -149,10 +150,12 @@ module csr_regs (
 // ================ from clint  ===================
     always @(*) begin
         if (!rst) begin
+            mepc_o    = 64'b0;
             mtvec_o   = 64'b0;
             mstatus_o = 64'b0;
         end
         else begin
+            mepc_o    = mepc;
             mtvec_o   = mtvec;
             mstatus_o = mstatus;
         end

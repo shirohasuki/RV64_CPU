@@ -123,6 +123,7 @@ VL_MODULE(Vtb___024root) {
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_mcause_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_mstatus_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__csr_id_rdata_o;
+        QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mepc_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mtvec_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__re_id_rs1_rdata_o;
@@ -147,9 +148,9 @@ VL_MODULE(Vtb___024root) {
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__id_inst__DOT__immU;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__id_inst__DOT__immB;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__id_inst__DOT__immL;
-        QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__id_inst__DOT__Zimm;
     };
     struct {
+        QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__id_inst__DOT__Zimm;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__mstatus;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__mtvec;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__csr_regs_inst__DOT__mepc;

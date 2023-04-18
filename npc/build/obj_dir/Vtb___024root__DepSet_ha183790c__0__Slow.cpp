@@ -691,6 +691,7 @@ VL_ATTR_COLD void Vtb___024root___ctor_var_reset(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_mstatus_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_wen_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_id_rdata_o = 0;
+    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mepc_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mtvec_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o = 0;
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__re_id_rs1_rdata_o = 0;

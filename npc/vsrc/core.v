@@ -187,6 +187,7 @@ module core (
         .inst_addr_i      ( id_clint_clint_inst_addr_o  ),
         .intr_jump_addr_o ( clint_ctrl_intr_jump_addr_o ),
         .intr_jump_en_o   ( clint_ctrl_intr_jump_en_o   ),
+        .mepc_i           ( csr_clint_mepc_o          ),
         .mtvec_i          ( csr_clint_mtvec_o                     ),
         .mstatus_i        ( csr_clint_mstatus_o                   ),
         .csr_wen_o        ( clint_csr_wen_o                   ),
@@ -199,6 +200,7 @@ module core (
     wire[63:0]  csr_id_rdata_o;
     
     // csr 2 clint
+    wire[63:0]  csr_clint_mepc_o;  
     wire[63:0]  csr_clint_mtvec_o;  
     wire[63:0]  csr_clint_mstatus_o;
 
@@ -214,6 +216,7 @@ module core (
         .mepc_i          ( clint_csr_mepc_o          ),
         .mcause_i        ( clint_csr_mcause_o        ),
         .mstatus_i       ( clint_csr_mstatus_o       ),
+        .mepc_o          ( csr_clint_mepc_o          ),
         .mtvec_o         ( csr_clint_mtvec_o         ),
         .mstatus_o       ( csr_clint_mstatus_o       )
     );

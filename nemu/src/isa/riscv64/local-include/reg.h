@@ -10,15 +10,15 @@ static inline int check_reg_idx(int idx) {
 
 static inline int idx2csr(int idx) {
     switch (idx) {
-        case 0x300: return 0; // mstatus
-        case 0x305: return 1; // mtvec
-        case 0x341: return 2; // mepc
-        case 0x342: return 3; // mcause
-
-        // case 0x305: return 0; // mtvec
-        // case 0x341: return 1; // mepc
-        // case 0x300: return 2; // mstatus
+        // case 0x300: return 0; // mstatus
+        // case 0x305: return 1; // mtvec
+        // case 0x341: return 2; // mepc
         // case 0x342: return 3; // mcause
+
+        case 0x305: return 0; // mtvec
+        case 0x341: return 1; // mepc
+        case 0x300: return 2; // mstatus
+        case 0x342: return 3; // mcause
     }
     panic("idx2csr error, reading 0x%x", idx);
 }

@@ -16,7 +16,8 @@ const char *riscv64_gprs[] = {
 };
 
 const char *riscv64_csrs[] = {
-  "mstatus", "mtvec", "mepc", "mcause"
+//   "mstatus", "mtvec", "mepc", "mcause"
+      "mtvec", "mepc", "mstatus", "mcause"
 };
 
 extern "C" void get_pc(long long int pc) {

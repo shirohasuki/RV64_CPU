@@ -34,9 +34,9 @@ module csr_regs (
 
 // =========== For Trace ============ 
     reg[63:0] csrs[0:3];
-    assign csrs[0] = mstatus;
-    assign csrs[1] = mtvec;
-    assign csrs[2] = mepc;
+    assign csrs[0] = mtvec;
+    assign csrs[1] = mepc;
+    assign csrs[2] = mstatus;
     assign csrs[3] = mcause;
 
 

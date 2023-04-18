@@ -4,8 +4,8 @@
 #include <common.h>
 
 enum {
-    // mstatus, mtvec, mepc, mcause,
-      mtvec, mepc, mstatus, mcause,
+    mstatus, mtvec, mepc, mcause,
+    //   mtvec, mepc, mstatus, mcause,
     csr_regnum, // none
 };
 

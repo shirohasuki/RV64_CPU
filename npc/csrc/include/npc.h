@@ -29,6 +29,7 @@
 #define CONFIG_NPC_DIFFTEST 1
 // #define CONFIG_NPC_MTRACE 1
 // #define CONFIG_NPC_DTRACE 1
+// #define CONFIG_NPC_ETRACE 1
 
 
 // ================ CPU ===================

@@ -1103,37 +1103,52 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
             = vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_clint_clint_inst_addr_o;
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_mcause_o = 0xbULL;
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_mstatus_o 
-            = ((0xffffffffffffff00ULL & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o) 
-               | (QData)((IData)(((0x80U & ((IData)(
-                                                    (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o 
-                                                     >> 3U)) 
-                                            << 7U)) 
-                                  | ((0x70U & ((IData)(
-                                                       (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o 
-                                                        >> 4U)) 
-                                               << 4U)) 
-                                     | (7U & (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o)))))));
+            = ((0xffffffffffffe000ULL & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o) 
+               | (QData)((IData)((0x1800U | ((0x700U 
+                                              & ((IData)(
+                                                         (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o 
+                                                          >> 8U)) 
+                                                 << 8U)) 
+                                             | ((0x80U 
+                                                 & ((IData)(
+                                                            (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o 
+                                                             >> 3U)) 
+                                                    << 7U)) 
+                                                | ((0x70U 
+                                                    & ((IData)(
+                                                               (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o 
+                                                                >> 4U)) 
+                                                       << 4U)) 
+                                                   | (7U 
+                                                      & (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o)))))))));
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_ctrl_intr_jump_addr_o 
             = vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mtvec_o;
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_ctrl_intr_jump_en_o = 1U;
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_wen_o = 1U;
     } else if ((0x30200073U == vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_clint_clint_inst_o)) {
+        vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_mepc_o 
+            = vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mepc_o;
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_mstatus_o 
-            = ((0xffffffffffffff00ULL & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o) 
-               | (QData)((IData)((0x80U | ((0x70U & 
-                                            ((IData)(
-                                                     (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o 
-                                                      >> 4U)) 
-                                             << 4U)) 
-                                           | ((8U & 
-                                               ((IData)(
-                                                        (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o 
-                                                         >> 7U)) 
-                                                << 3U)) 
-                                              | (7U 
-                                                 & (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o))))))));
+            = ((0xffffffffffffe000ULL & vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o) 
+               | (QData)((IData)((0x80U | ((0x700U 
+                                            & ((IData)(
+                                                       (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o 
+                                                        >> 8U)) 
+                                               << 8U)) 
+                                           | ((0x70U 
+                                               & ((IData)(
+                                                          (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o 
+                                                           >> 4U)) 
+                                                  << 4U)) 
+                                              | ((8U 
+                                                  & ((IData)(
+                                                             (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o 
+                                                              >> 7U)) 
+                                                     << 3U)) 
+                                                 | (7U 
+                                                    & (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mstatus_o)))))))));
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_ctrl_intr_jump_addr_o 
-            = (4ULL + vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mepc_o);
+            = vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__csr_clint_mepc_o;
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_ctrl_intr_jump_en_o = 1U;
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_wen_o = 1U;
     } else {

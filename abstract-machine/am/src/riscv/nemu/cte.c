@@ -19,7 +19,7 @@ Context* __am_irq_handle(Context *c) {
         case  8: ev.event = EVENT_SYSCALL; break; // lseek
         case  9: ev.event = EVENT_SYSCALL; break; // brk
         case 19: ev.event = EVENT_SYSCALL; break; // SYS_gettimeofday
-        default: ev.event = EVENT_ERROR; break;
+        default: ev.event = EVENT_ERROR;   break;
     }
     // printf("mcause = %d\n", c->mcause);
     c = user_handler(ev, c);

@@ -41,16 +41,16 @@ module clint (
             `INST_ECALL: begin
                 mepc_o           = inst_addr_i;
                 mcause_o         = 64'd11;
-                mstatus_o        = {mstatus_i[63:8], mstatus_i[3], mstatus_i[6:4], 1'b0, mstatus_i[2:0]}; // mstatus[7(MPIE)] = MIE, mstatus[3(MIE)] = 0
+                mstatus_o        = {mstatus_i[63:13], 2'b11, mstatus_i[10:8], mstatus_i[3], mstatus_i[6:4], 1'b0, mstatus_i[2:0]}; // mstatus[7(MPIE)] = MIE, mstatus[3(MIE)] = 0
                 intr_jump_addr_o = mtvec_i;
                 intr_jump_en_o   = 1'b1;
                 csr_wen_o        = 1'b1;
             end
             `INST_MRET: begin
-                // mepc_o           = inst_addr_i + 4;
-                // mcause_o         = 64'd11;
-                mstatus_o        = {mstatus_i[63:8], 1'b1, mstatus_i[6:4], mstatus_i[7], mstatus_i[2:0]}; // mstatus[7(MPIE)] = 1, mstatus[3(MIE)] = MPIE
-                intr_jump_addr_o = mepc_i + 4;
+                mepc_o           = mepc_i; // 硬件层不实现+4，交给软件
+                // mstatus_o        = {mstatus_i[63:8], 1'b1, mstatus_i[6:4], mstatus_i[7], mstatus_i[2:0]}; // mstatus[7(MPIE)] = 1, mstatus[3(MIE)] = MPIE
+                mstatus_o        = {mstatus_i[63:13], 2'b0, mstatus_i[10:8], 1'b1, mstatus_i[6:4], mstatus_i[7], mstatus_i[2:0]}; // mstatus[7(MPIE)] = 1, mstatus[3(MIE)] = MPIE
+                intr_jump_addr_o = mepc_i; 
                 intr_jump_en_o   = 1'b1;
                 csr_wen_o        = 1'b1;
             end

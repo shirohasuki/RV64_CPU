@@ -34,7 +34,7 @@ module csr_regs (
     reg[63:0] mcause;         // 导致异常的事件
 
 // =========== For Trace ============ 
-    reg[63:0] csrs[0:3];
+    reg [63:0] csrs[0:3];
     assign csrs[0] = mtvec;
     assign csrs[1] = mepc;
     assign csrs[2] = mstatus;

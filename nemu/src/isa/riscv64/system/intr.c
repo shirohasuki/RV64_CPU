@@ -10,7 +10,6 @@
 // }
 
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
-    // printf("here\n");
     word_t mstatus_buf = 0; mstatus_buf = cpu.csr[mstatus];
     cpu.csr[mstatus] = (SEXT(BITS(mstatus_buf, 63, 13), 51) << 13) | (BITS(3, 1, 0) << 11) | (BITS(mstatus_buf, 10, 8) << 8) | (BITS(mstatus_buf, 3, 3) << 7) | (BITS(mstatus_buf, 6, 4) << 4) | (BITS(0, 1, 1) << 3) | (BITS(mstatus_buf, 2, 0)) ;
     cpu.csr[mepc]    = epc; 

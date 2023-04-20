@@ -138,7 +138,7 @@ static int decode_exec(Decode *s) {
     INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs , I, word_t t = csr(src2); csr(src2) = t | src1; R(dest) = t);
     INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw , I, word_t t = csr(src2); csr(src2) = src1; R(dest) = t);
     INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall , N, s->dnpc = isa_raise_intr(0x0b, s->pc));  // 按道理应该读a7的值(前一句为li a7 -1),但是为了能用difftest这边参照了spike填0x0b
-    INSTPAT("0011000 00010 00000 000 00000 11100 11", mret  , N, s->dnpc = isa_mret()+4);
+    INSTPAT("0011000 00010 00000 000 00000 11100 11", mret  , N, s->dnpc = isa_mret());
 
     // J-Type       
     INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, R(dest) = s->pc + 4, s->dnpc = s->pc + src1);                         // jal:跳转并链接，把 pc 设置成当前值+偏移值，然后将 pc+4 当做下一条指令的地址存入 rd 中

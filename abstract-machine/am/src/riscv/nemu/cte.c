@@ -8,7 +8,8 @@ Context* __am_irq_handle(Context *c) {
   if (user_handler) {
     Event ev = {0};
     switch (c->mcause) {
-        case -1: ev.event = EVENT_YIELD;   break;   // yield
+        case -1: ev.event = EVENT_YIELD;   break; // yield nemu本身
+        case 11: ev.event = EVENT_YIELD;   break; // yield spike
         case  0: ev.event = EVENT_SYSCALL; break; // exit
         case  1: ev.event = EVENT_SYSCALL; break; // yield
         case  2: ev.event = EVENT_SYSCALL; break; // open

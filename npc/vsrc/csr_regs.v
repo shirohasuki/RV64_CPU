@@ -153,11 +153,13 @@ module csr_regs (
             mepc_o    = 64'b0;
             mtvec_o   = 64'b0;
             mstatus_o = 64'b0;
+            // mcause_o  = 64'b0;
         end
         else begin
             mepc_o    = mepc;
             mtvec_o   = mtvec;
             mstatus_o = mstatus;
+            // mcause_o  = mcause;
         end
     end
 

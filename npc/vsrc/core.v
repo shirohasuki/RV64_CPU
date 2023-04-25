@@ -142,6 +142,8 @@ module core (
     wire[63:0] regs_re_rs1_rdata_o;
     wire[63:0] regs_re_rs2_rdata_o;
 
+    wire[63:0]  reg_clint_a7_o;
+
     regs regs_inst (
         .clk         ( clk                 ),
         .rst         ( rst                 ),
@@ -152,7 +154,8 @@ module core (
         .reg_waddr_i ( wb_rd_waddr_o       ),   // from wb
         .reg_wdata_i ( wb_rd_wdata_o       ),   // from wb
         .reg_wen     ( wb_reg_wen_o        ),   // from wb
-        .inst_addr_i ( wb_inst_addr_o      ) 
+        .inst_addr_i ( wb_inst_addr_o      ),
+        .a7_o        ( reg_clint_a7_o      )  
     );
 
     // id_clint 2 clint
@@ -187,9 +190,10 @@ module core (
         .inst_addr_i      ( id_clint_clint_inst_addr_o  ),
         .intr_jump_addr_o ( clint_ctrl_intr_jump_addr_o ),
         .intr_jump_en_o   ( clint_ctrl_intr_jump_en_o   ),
-        .mepc_i           ( csr_clint_mepc_o          ),
+        .mepc_i           ( csr_clint_mepc_o            ),
         .mtvec_i          ( csr_clint_mtvec_o                     ),
         .mstatus_i        ( csr_clint_mstatus_o                   ),
+        .a7_i             ( reg_clint_a7_o                ), // mcause_i
         .csr_wen_o        ( clint_csr_wen_o                   ),
         .mepc_o           ( clint_csr_mepc_o                      ),
         .mcause_o         ( clint_csr_mcause_o                    ),
@@ -219,6 +223,7 @@ module core (
         .mepc_o          ( csr_clint_mepc_o          ),
         .mtvec_o         ( csr_clint_mtvec_o         ),
         .mstatus_o       ( csr_clint_mstatus_o       )
+        // .mcause_o        ( csr_clint_mcause_o       )
     );
 
     // rename to id

@@ -2760,6 +2760,7 @@ VL_INLINE_OPT void Vtb___024root___combo__TOP__1(Vtb___024root* vlSelf) {
             = vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_rd_wdata_o;
     }
     if ((0x100073U == vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_clint_clint_inst_o)) {
+        vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_mcause_o = 3ULL;
         Vtb___024unit____Vdpiimwrap_ebreak_TOP____024unit();
     } else if ((0x73U == vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_clint_clint_inst_o)) {
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_mepc_o 

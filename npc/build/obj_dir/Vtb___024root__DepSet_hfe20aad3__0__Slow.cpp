@@ -1097,6 +1097,7 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__0(Vtb___024root* vlSelf) {
                                                 : 0ULL))))
             : 0ULL);
     if ((0x100073U == vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_clint_clint_inst_o)) {
+        vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_mcause_o = 3ULL;
         Vtb___024unit____Vdpiimwrap_ebreak_TOP____024unit();
     } else if ((0x73U == vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_clint_clint_inst_o)) {
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__clint_csr_mepc_o 

@@ -34,16 +34,16 @@ module clint (
         case (inst_i) 
             `INST_EBREAK: begin
                 // mepc_o           = inst_addr_i;
-                // mcause_o         = 64'd3;
-                mcause_o          = a7_i;
+                mcause_o         = 64'd3;
+                // mcause_o          = a7_i;
                 // mstatus_o        = {mstatus_i[63:8], mstatus_i[3], mstatus_i[6:4], 1'b0, mstatus_i[2:0]}; // mstatus[7(MPIE)] = MIE, mstatus[3(MIE)] = 0
                 // intr_jump_addr_o = mtvec_i;
                 ebreak();
             end
             `INST_ECALL: begin
                 mepc_o           = inst_addr_i;
-                mcause_o         = a7_i;
-                // mcause_o         = 64'd11;
+                // mcause_o         = a7_i;
+                mcause_o         = 64'd11;
                 mstatus_o        = {mstatus_i[63:13], 2'b11, mstatus_i[10:8], mstatus_i[3], mstatus_i[6:4], 1'b0, mstatus_i[2:0]}; // mstatus[7(MPIE)] = MIE, mstatus[3(MIE)] = 0
                 intr_jump_addr_o = mtvec_i;
                 intr_jump_en_o   = 1'b1;

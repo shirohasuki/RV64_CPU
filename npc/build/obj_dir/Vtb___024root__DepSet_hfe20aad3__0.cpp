@@ -2293,6 +2293,9 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
         = __Vdly__tb__DOT__soc_inst__DOT__axi_inst__DOT__wdata;
     vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__rwaddr 
         = __Vdly__tb__DOT__soc_inst__DOT__axi_inst__DOT__rwaddr;
+    VL_WRITEF("[inst_fetch] pc_addr: %x inst: %x\n",
+              32,(IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__pc_reg_pc_o),
+              32,(IData)(vlSelf->tb__DOT__soc_inst__DOT__ram_core_inst_o));
     __Vtableidx3 = (((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_wmask_o) 
                      << 1U) | (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_wen_o));
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__wmask_o 

@@ -148,9 +148,6 @@ VL_ATTR_COLD void Vtb___024root___settle__TOP__1(Vtb___024root* vlSelf) {
                        vlSelf->tb__DOT__soc_inst__DOT__ram_inst__DOT__ram_mem
                        [(0x3ffffffU & (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_raddr 
                                        >> 3U))]))) : 0ULL);
-    VL_WRITEF("[inst_fetch] pc_addr: %x inst: %x\n",
-              32,(IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__pc_reg_pc_o),
-              32,(IData)(vlSelf->tb__DOT__soc_inst__DOT__ram_core_inst_o));
     if (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_mem_mem_ren_o) {
         vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__rdata 
             = ((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__mem_inst__DOT__visit_interface)

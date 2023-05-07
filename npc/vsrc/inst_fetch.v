@@ -28,7 +28,7 @@ module inst_fetch(
     assign inst_o = inst_get[31:0];
     
     always @(*) begin
-        $display("[inst_fetch] pc_addr: %x inst: %x", pc_addr_i[31:0], inst_o);
+        // $display("[inst_fetch] pc_addr: %x inst: %x", pc_addr_i[31:0], inst_o);
     end
 
     

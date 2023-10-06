@@ -5,12 +5,12 @@
 
 enum {
     // mstatus, mtvec, mepc, mcause,
-      mtvec, mepc, mstatus, mcause,
+    mtvec, mepc, mstatus, mcause,
     csr_regnum, // none
 };
 
 typedef struct {
-    word_t gpr[32];
+    word_t gpr[32];  // General-Purpose Registers 通用存储器
     vaddr_t pc;
     word_t csr[4];    
 } riscv64_CPU_state;

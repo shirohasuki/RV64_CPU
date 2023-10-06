@@ -1457,19 +1457,19 @@ VL_ATTR_COLD void Vtb___024root__trace_full_sub_0(Vtb___024root* vlSelf, Verilat
     tracep->fullBit(oldp+278,(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_equal_op2_i));
     tracep->fullBit(oldp+279,(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_less_op2_i_signed));
     tracep->fullBit(oldp+280,(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_less_op2_i_unsigned));
-    tracep->fullQData(oldp+281,((((QData)((IData)((- (IData)(
-                                                             (1U 
-                                                              & (IData)(
-                                                                        (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_add_op2_i 
-                                                                         >> 0x1fU))))))) 
-                                  << 0x20U) | (QData)((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_add_op2_i)))),64);
+    tracep->fullQData(oldp+281,(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_add),64);
     tracep->fullQData(oldp+283,((((QData)((IData)((- (IData)(
                                                              (1U 
                                                               & (IData)(
                                                                         (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_sub_op2_i 
                                                                          >> 0x1fU))))))) 
                                   << 0x20U) | (QData)((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_sub_op2_i)))),64);
-    tracep->fullQData(oldp+285,(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_mul),64);
+    tracep->fullQData(oldp+285,((((QData)((IData)((- (IData)(
+                                                             (1U 
+                                                              & (IData)(
+                                                                        (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_mul_op2_i 
+                                                                         >> 0x1fU))))))) 
+                                  << 0x20U) | (QData)((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_mul_op2_i)))),64);
     tracep->fullQData(oldp+287,((((QData)((IData)((- (IData)(
                                                              (1U 
                                                               & (IData)(

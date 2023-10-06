@@ -5,7 +5,7 @@
 #include <memory/paddr.h>
 #include "sdb.h"
 
-static int is_batch_mode = true;
+static int is_batch_mode = false;
 
 void init_regex();
 

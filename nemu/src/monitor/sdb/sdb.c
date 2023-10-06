@@ -51,16 +51,16 @@ static struct {
     int (*handler) (char *);
 } cmd_table [] = {
     { "help", "Display informations about all supported commands", cmd_help },
-    { "c   ", "Continue the execution of the program", cmd_c },
-    { "q   ", "Exit NEMU", cmd_q },
+    { "c", "Continue the execution of the program", cmd_c },
+    { "q", "Exit NEMU", cmd_q },
 
     /* TODO: Add more commands */
-    {"si  ", "Execute the program in n steps\n\t\t-n nsteps", cmd_si },
+    {"si", "Execute the program in n steps\n\t\t-n nsteps", cmd_si },
     {"info", "print status\n\t\t-r print register status\n\t\t-w print watchpoints", cmd_info },
-    {"x   ", "scan the rom", cmd_x },
-    {"p   ", "eval the expr", cmd_p },
-    {"w   ", "define a new watchpoint", cmd_w },
-    {"d   ", "delete NO.x watchpoint", cmd_d},
+    {"x", "scan the rom", cmd_x },
+    {"p", "eval the expr", cmd_p },
+    {"w", "define a new watchpoint", cmd_w },
+    {"d", "delete NO.x watchpoint", cmd_d},
 };
 
 #define NR_CMD ARRLEN(cmd_table)
@@ -74,7 +74,7 @@ static int cmd_help(char *args) {
 		/* no argument given */
 		printf("Common options:\n");
 		for (i = 0; i < NR_CMD; i ++) {
-			printf("\t%-s - %s\n", cmd_table[i].name, cmd_table[i].description);
+			printf("\t%-4s - %s\n", cmd_table[i].name, cmd_table[i].description);
 		}
 	}
 	else {

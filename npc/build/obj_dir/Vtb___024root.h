@@ -165,7 +165,7 @@ VL_MODULE(Vtb___024root) {
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_shift_right_op2_i_unsigned;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_shift_right_op2_i_signed;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__base_addr_add_addr_offset;
-        QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_add;
+        QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_mul;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_shift_left_unsigned;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_shift_right_unsigned;
         QData/*63:0*/ tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_shift_right_signed;

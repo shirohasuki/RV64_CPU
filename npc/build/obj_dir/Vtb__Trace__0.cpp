@@ -507,7 +507,13 @@ void Vtb___024root__trace_chg_sub_0(Vtb___024root* vlSelf, VerilatedVcd* tracep)
         tracep->chgBit(oldp+277,(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_equal_op2_i));
         tracep->chgBit(oldp+278,(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_less_op2_i_signed));
         tracep->chgBit(oldp+279,(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_less_op2_i_unsigned));
-        tracep->chgQData(oldp+280,(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_add),64);
+        tracep->chgQData(oldp+280,((((QData)((IData)(
+                                                     (- (IData)(
+                                                                (1U 
+                                                                 & (IData)(
+                                                                           (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_add_op2_i 
+                                                                            >> 0x1fU))))))) 
+                                     << 0x20U) | (QData)((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_add_op2_i)))),64);
         tracep->chgQData(oldp+282,((((QData)((IData)(
                                                      (- (IData)(
                                                                 (1U 
@@ -515,13 +521,7 @@ void Vtb___024root__trace_chg_sub_0(Vtb___024root* vlSelf, VerilatedVcd* tracep)
                                                                            (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_sub_op2_i 
                                                                             >> 0x1fU))))))) 
                                      << 0x20U) | (QData)((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_sub_op2_i)))),64);
-        tracep->chgQData(oldp+284,((((QData)((IData)(
-                                                     (- (IData)(
-                                                                (1U 
-                                                                 & (IData)(
-                                                                           (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_mul_op2_i 
-                                                                            >> 0x1fU))))))) 
-                                     << 0x20U) | (QData)((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_mul_op2_i)))),64);
+        tracep->chgQData(oldp+284,(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_mul),64);
         tracep->chgQData(oldp+286,((((QData)((IData)(
                                                      (- (IData)(
                                                                 (1U 

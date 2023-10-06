@@ -1876,12 +1876,12 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_equal_op2_i 
         = (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_op1_o 
            == vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_op2_o);
+    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_add_op2_i 
+        = (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_op1_o 
+           + vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_op2_o);
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_sub_op2_i 
         = (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_op1_o 
            - vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_op2_o);
-    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_mul_op2_i 
-        = (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_op1_o 
-           * vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_op2_o);
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_xor_op2_i 
         = (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_op1_o 
            ^ vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_op2_o);
@@ -1922,9 +1922,9 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
     vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_shift_right_s_tmp 
         = VL_SHIFTRS_III(32,32,5, (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_op1_o), 
                          (0x1fU & (IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_op2_o)));
-    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_add_op2_i 
+    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_mul_op2_i 
         = (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_op1_o 
-           + vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_op2_o);
+           * vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_op2_o);
     if (vlSelf->rst) {
         if (vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__maxi_wdready) {
             vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__wen_o = 1U;
@@ -2284,11 +2284,11 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
         = (((QData)((IData)((- (IData)((vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_shift_right_s_tmp 
                                         >> 0x1fU))))) 
             << 0x20U) | (QData)((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_shift_right_s_tmp)));
-    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_add 
+    vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_mul 
         = (((QData)((IData)((- (IData)((1U & (IData)(
-                                                     (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_add_op2_i 
+                                                     (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_mul_op2_i 
                                                       >> 0x1fU))))))) 
-            << 0x20U) | (QData)((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_add_op2_i)));
+            << 0x20U) | (QData)((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_mul_op2_i)));
     vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__wdata 
         = __Vdly__tb__DOT__soc_inst__DOT__axi_inst__DOT__wdata;
     vlSelf->tb__DOT__soc_inst__DOT__axi_inst__DOT__rwaddr 
@@ -2412,21 +2412,13 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
                                                     == 
                                                     (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o 
                                                      >> 0x19U))
-                                                    ? vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_add
+                                                    ? vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_mul
                                                     : 
                                                    ((1U 
                                                      == 
                                                      (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o 
                                                       >> 0x19U))
-                                                     ? 
-                                                    (((QData)((IData)(
-                                                                      (- (IData)(
-                                                                                (1U 
-                                                                                & (IData)(
-                                                                                (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_mul_op2_i 
-                                                                                >> 0x1fU))))))) 
-                                                      << 0x20U) 
-                                                     | (QData)((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_mul_op2_i)))
+                                                     ? vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_mul
                                                      : 
                                                     (((QData)((IData)(
                                                                       (- (IData)(
@@ -2525,7 +2517,14 @@ VL_INLINE_OPT void Vtb___024root___sequent__TOP__0(Vtb___024root* vlSelf) {
                                    ? ((0U == (7U & 
                                               (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o 
                                                >> 0xcU)))
-                                       ? vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__compress_add
+                                       ? (((QData)((IData)(
+                                                           (- (IData)(
+                                                                      (1U 
+                                                                       & (IData)(
+                                                                                (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_add_op2_i 
+                                                                                >> 0x1fU))))))) 
+                                           << 0x20U) 
+                                          | (QData)((IData)(vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__ex_inst__DOT__op1_i_add_op2_i)))
                                        : ((1U == (7U 
                                                   & (vlSelf->tb__DOT__soc_inst__DOT__core_inst__DOT__id_ex_inst_o 
                                                      >> 0xcU)))

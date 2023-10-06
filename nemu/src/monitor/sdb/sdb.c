@@ -66,26 +66,27 @@ static struct {
 #define NR_CMD ARRLEN(cmd_table)
 
 static int cmd_help(char *args) {
-  /* extract the first argument */
-  char *arg = strtok(NULL, " ");
-  int i;
+	/* extract the first argument */
+	char *arg = strtok(NULL, " ");
+	int i;
 
-  if (arg == NULL) {
-    /* no argument given */
-    for (i = 0; i < NR_CMD; i ++) {
-      printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
-    }
-  }
-  else {
-    for (i = 0; i < NR_CMD; i ++) {
-      if (strcmp(arg, cmd_table[i].name) == 0) {
-        printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
-        return 0;
-      }
-    }
-    printf("Unknown command '%s'\n", arg);
-  }
-  return 0;
+	if (arg == NULL) {
+		/* no argument given */
+		printf("Common options:\n");
+		for (i = 0; i < NR_CMD; i ++) {
+			printf("\t%s - %s\n", cmd_table[i].name, cmd_table[i].description);
+		}
+	}
+	else {
+		for (i = 0; i < NR_CMD; i ++) {
+		if (strcmp(arg, cmd_table[i].name) == 0) {
+			printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
+			return 0;
+		}
+		}
+		printf("Unknown command '%s'\n", arg);
+	}
+	return 0;
 }
 
 

@@ -15,12 +15,16 @@ module regs (
     input wire[4:0]  reg_waddr_i,
 	input wire[63:0] reg_wdata_i,
 	input wire       reg_wen,
-    input reg[63:0]  inst_addr_i
+    input reg[63:0]  inst_addr_i,
+
+    output wire[63:0] a7_o
     // r:read, w:write
 );
 
     reg[63:0] regs[0:31]; // 32个64位宽
     reg[63:0] pc_reg  = inst_addr_i;
+
+
 
     always @(*) begin
         if (rst == 1'b0) 
@@ -70,13 +74,22 @@ module regs (
             regs[reg_waddr_i] = reg_wdata_i;
         end 
         else
-            regs[reg_waddr_i] = 64'b0;
-        // $display("REGS: %x", pc_reg);   
+            regs[reg_waddr_i] = 64'b0;  
+        
         get_gprs(regs);
-        //get_pc(pc_reg);
+        
         // 组合逻辑要补全else，时序不需要
     end // 回写rd
 
+    // reg [63:0] tmp;
+    // always @(posedge clk) begin
+    //     tmp = regs[17];
+    // end
+    // always @(posedge clk) begin
+    //     a7_o = tmp;
+    // end
+
+    assign a7_o = regs[17];
 
 endmodule 
 

@@ -106,11 +106,15 @@
 `define INST_FENCE  7'b0001111
 `define INST_ECALL  32'h73
 `define INST_EBREAK 32'h00100073
+`define INST_MRET   32'h30200073
 
 `define INST_TYPE_INTR 7'b1110011
-`define INST_CSRRW  3'b001
-`define INST_CSRRS  3'b010
-`define INST_CSRRC  3'b011
+`define INST_CSRRW        3'b001
+`define INST_CSRRS        3'b010
+`define INST_CSRRC        3'b011
+`define INST_CSRRWI       3'b101
+`define INST_CSRRSI       3'b110
+`define INST_CSRRCI       3'b111
 
 `define CSR_MSTATUS   12'h300
 `define CSR_MTVEC     12'h305

@@ -4,8 +4,9 @@
 #include <common.h>
 
 enum {
-  mtvec, mepc, mstatus, mcause,
-  csr_regnum, // none
+    // mstatus, mtvec, mepc, mcause,
+      mtvec, mepc, mstatus, mcause,
+    csr_regnum, // none
 };
 
 typedef struct {
@@ -16,9 +17,9 @@ typedef struct {
 
 // decode
 typedef struct {
-  union {
-    uint32_t val;
-  } inst;
+    union {
+        uint32_t val;
+    } inst;
 } riscv64_ISADecodeInfo;
 
 #define isa_mmu_check(vaddr, len, type) (MMU_DIRECT)

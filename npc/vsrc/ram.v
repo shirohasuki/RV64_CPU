@@ -31,7 +31,7 @@ module ram (
     input wire              clk,
     input wire              rst,
 
-    input wire [63:0]          inst_addr_i_from_mem, // 用于调试
+    // input wire [63:0]          inst_addr_i_from_mem, // 用于调试
 
     // from AXI
     // input wire              ram_ravalid_i,
@@ -67,9 +67,9 @@ module ram (
 );
   
     // reg[63:0]  ram_mem[0:4095]; // 4096个64b的空间,深度为4096
-    reg[63:0]  ram_mem[0:1048575]; // 1048576个64b的空间,深度为1048576(2^20)
+    // reg[63:0]  ram_mem[0:1048575]; // 1048576个64b的空间,深度为1048576(2^20)
     // reg[63:0]  ram_mem[0:4194304]; // 4194304个64b的空间,深度为4194304(2^23),到0x9000_0000
-
+    reg[63:0]  ram_mem[0:67108863]; // 67108864个64b的空间,深度为67108864(2^26),刚好装下仙剑
 
     reg[31:0]  waddr = ram_waddr_i;
     reg[31:0]  raddr = ram_raddr_i;
@@ -87,8 +87,8 @@ module ram (
 // =========== if 取指
     always @(*) begin
         case (inst_addr_i[2])
-            1'b0: begin inst_o = {32'b0, ram_mem[inst_addr_i[22:3]][31: 0]}; end
-            1'b1: begin inst_o = {32'b0, ram_mem[inst_addr_i[22:3]][63:32]}; end
+            1'b0: begin inst_o = {32'b0, ram_mem[inst_addr_i[28:3]][31: 0]}; end
+            1'b1: begin inst_o = {32'b0, ram_mem[inst_addr_i[28:3]][63:32]}; end
         endcase
         `ifdef MTRACE $display("raddr:%h  rstart: %b, rdata:%x[IF]", inst_addr_i[22:0], inst_addr_i[2], inst_o);  `endif
     end
@@ -99,14 +99,14 @@ module ram (
         if (ram_ren_i == 1'b1) begin
             // ram_rready_o <= 1'b1;
             case (raddr[2:0]) 
-                3'b000: begin ram_rdata_o = ram_mem[raddr[22:3]]; end
-                3'b001: begin ram_rdata_o = {ram_mem[raddr[22:3]+1][ 7:0], ram_mem[raddr[22:3]][63: 8]}; end
-                3'b010: begin ram_rdata_o = {ram_mem[raddr[22:3]+1][15:0], ram_mem[raddr[22:3]][63:16]}; end
-                3'b011: begin ram_rdata_o = {ram_mem[raddr[22:3]+1][23:0], ram_mem[raddr[22:3]][63:24]}; end
-                3'b100: begin ram_rdata_o = {ram_mem[raddr[22:3]+1][31:0], ram_mem[raddr[22:3]][63:32]}; end
-                3'b101: begin ram_rdata_o = {ram_mem[raddr[22:3]+1][39:0], ram_mem[raddr[22:3]][63:40]}; end
-                3'b110: begin ram_rdata_o = {ram_mem[raddr[22:3]+1][47:0], ram_mem[raddr[22:3]][63:48]}; end
-                3'b111: begin ram_rdata_o = {ram_mem[raddr[22:3]+1][55:0], ram_mem[raddr[22:3]][63:56]}; end
+                3'b000: begin ram_rdata_o = ram_mem[raddr[28:3]]; end
+                3'b001: begin ram_rdata_o = {ram_mem[raddr[28:3]+1][ 7:0], ram_mem[raddr[28:3]][63: 8]}; end
+                3'b010: begin ram_rdata_o = {ram_mem[raddr[28:3]+1][15:0], ram_mem[raddr[28:3]][63:16]}; end
+                3'b011: begin ram_rdata_o = {ram_mem[raddr[28:3]+1][23:0], ram_mem[raddr[28:3]][63:24]}; end
+                3'b100: begin ram_rdata_o = {ram_mem[raddr[28:3]+1][31:0], ram_mem[raddr[28:3]][63:32]}; end
+                3'b101: begin ram_rdata_o = {ram_mem[raddr[28:3]+1][39:0], ram_mem[raddr[28:3]][63:40]}; end
+                3'b110: begin ram_rdata_o = {ram_mem[raddr[28:3]+1][47:0], ram_mem[raddr[28:3]][63:48]}; end
+                3'b111: begin ram_rdata_o = {ram_mem[raddr[28:3]+1][55:0], ram_mem[raddr[28:3]][63:56]}; end
             endcase
             `ifdef MTRACE $display("raddr:%h  rstart:%b, rdata:%x", raddr[22:0], raddr[2:0], ram_rdata_o); `endif
         end
@@ -127,14 +127,14 @@ module ram (
             ram_bvalid_o <= 1'b1;
             case (waddr[2:0]) 
                 // 参考ram_mem[A[13:2]] <= (D & bwen) | (ram_mem[A[13:2]] & ~bwen);
-                3'b000: begin ram_mem[waddr[22:3]] <= ram_wdata_i | (ram_mem[waddr[22:3]] & ~ram_wmask_i);  end
-                3'b001: begin {ram_mem[waddr[22:3]+1][ 7:0], ram_mem[waddr[22:3]][63: 8]} <= ram_wdata_i | ({ram_mem[waddr[22:3]+1][ 7:0], ram_mem[waddr[22:3]][63: 8]} & ~ram_wmask_i); end
-                3'b010: begin {ram_mem[waddr[22:3]+1][15:0], ram_mem[waddr[22:3]][63:16]} <= ram_wdata_i | ({ram_mem[waddr[22:3]+1][15:0], ram_mem[waddr[22:3]][63:16]} & ~ram_wmask_i); end
-                3'b011: begin {ram_mem[waddr[22:3]+1][23:0], ram_mem[waddr[22:3]][63:24]} <= ram_wdata_i | ({ram_mem[waddr[22:3]+1][23:0], ram_mem[waddr[22:3]][63:24]} & ~ram_wmask_i); end
-                3'b100: begin {ram_mem[waddr[22:3]+1][31:0], ram_mem[waddr[22:3]][63:32]} <= ram_wdata_i | ({ram_mem[waddr[22:3]+1][31:0], ram_mem[waddr[22:3]][63:32]} & ~ram_wmask_i); end
-                3'b101: begin {ram_mem[waddr[22:3]+1][39:0], ram_mem[waddr[22:3]][63:40]} <= ram_wdata_i | ({ram_mem[waddr[22:3]+1][39:0], ram_mem[waddr[22:3]][63:40]} & ~ram_wmask_i); end
-                3'b110: begin {ram_mem[waddr[22:3]+1][47:0], ram_mem[waddr[22:3]][63:48]} <= ram_wdata_i | ({ram_mem[waddr[22:3]+1][47:0], ram_mem[waddr[22:3]][63:48]} & ~ram_wmask_i); end
-                3'b111: begin {ram_mem[waddr[22:3]+1][55:0], ram_mem[waddr[22:3]][63:56]} <= ram_wdata_i | ({ram_mem[waddr[22:3]+1][55:0], ram_mem[waddr[22:3]][63:56]} & ~ram_wmask_i); end
+                3'b000: begin ram_mem[waddr[28:3]] <= ram_wdata_i | (ram_mem[waddr[28:3]] & ~ram_wmask_i);  end
+                3'b001: begin {ram_mem[waddr[28:3]+1][ 7:0], ram_mem[waddr[28:3]][63: 8]} <= ram_wdata_i | ({ram_mem[waddr[28:3]+1][ 7:0], ram_mem[waddr[28:3]][63: 8]} & ~ram_wmask_i); end
+                3'b010: begin {ram_mem[waddr[28:3]+1][15:0], ram_mem[waddr[28:3]][63:16]} <= ram_wdata_i | ({ram_mem[waddr[28:3]+1][15:0], ram_mem[waddr[28:3]][63:16]} & ~ram_wmask_i); end
+                3'b011: begin {ram_mem[waddr[28:3]+1][23:0], ram_mem[waddr[28:3]][63:24]} <= ram_wdata_i | ({ram_mem[waddr[28:3]+1][23:0], ram_mem[waddr[28:3]][63:24]} & ~ram_wmask_i); end
+                3'b100: begin {ram_mem[waddr[28:3]+1][31:0], ram_mem[waddr[28:3]][63:32]} <= ram_wdata_i | ({ram_mem[waddr[28:3]+1][31:0], ram_mem[waddr[28:3]][63:32]} & ~ram_wmask_i); end
+                3'b101: begin {ram_mem[waddr[28:3]+1][39:0], ram_mem[waddr[28:3]][63:40]} <= ram_wdata_i | ({ram_mem[waddr[28:3]+1][39:0], ram_mem[waddr[28:3]][63:40]} & ~ram_wmask_i); end
+                3'b110: begin {ram_mem[waddr[28:3]+1][47:0], ram_mem[waddr[28:3]][63:48]} <= ram_wdata_i | ({ram_mem[waddr[28:3]+1][47:0], ram_mem[waddr[28:3]][63:48]} & ~ram_wmask_i); end
+                3'b111: begin {ram_mem[waddr[28:3]+1][55:0], ram_mem[waddr[28:3]][63:56]} <= ram_wdata_i | ({ram_mem[waddr[28:3]+1][55:0], ram_mem[waddr[28:3]][63:56]} & ~ram_wmask_i); end
             endcase
             `ifdef MTRACE $display("waddr:%h  wstart:%b, wdata:%x", waddr[22:0], waddr[2:0], ram_wdata_i);  `endif
         end
@@ -151,7 +151,6 @@ module ram (
                 // $display("rom[%4d] | %8x", i, ram_mem[i]);
             // end
         // end
-        // $display("pc = %h, ram[ 639] | %8x", inst_addr_i_from_mem, ram_mem[639]);
         // $display("===========================");
 // `endif
     end

@@ -30,7 +30,7 @@ module id (
     output reg[63:0] base_addr_o, // 基地址
     output reg[63:0] offset_addr_o, // 偏移地址
 
-    output reg[63:0] csr_data_o,
+    // output reg[63:0] csr_data_o,
     output reg[11:0] csr_waddr_o,
     output reg       csr_wen_o
 );
@@ -51,6 +51,8 @@ module id (
     wire[63:0] immB = {{52{inst_i[31]}}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
     wire[63:0] immJ = {{44{inst_i[31]}}, inst_i[19:12], inst_i[20], inst_i[30:21], 1'b0};
     wire[63:0] immL = {{52{inst_i[31]}}, inst_i[31:20]}; // 和immI相同
+    
+    wire[63:0] Zimm = {{59{inst_i[19]}}, inst_i[19:15]}; // CSRRCI,CSRRSI,CSRRWI
 
     assign opcode = inst_i[6:0];
     assign rd     = inst_i[11:7];
@@ -71,7 +73,6 @@ module id (
             `INST_TYPE_I: begin
                 base_addr_o   = 64'b0;// 基地址
                 offset_addr_o = 64'b0;// 偏移地址
-                csr_data_o    = 64'b0;
                 csr_waddr_o   = 12'b0;
                 csr_wen_o     = 1'b0;
                 case (func3)
@@ -107,7 +108,6 @@ module id (
             `INST_TYPE_I_W: begin
                 base_addr_o   = 64'b0;// 基地址
                 offset_addr_o = 64'b0;// 偏移地址
-                csr_data_o    = 64'b0;
                 csr_waddr_o   = 12'b0;
                 csr_wen_o     = 1'b0;
                 case (func3)
@@ -143,7 +143,6 @@ module id (
             `INST_TYPE_R_M:begin
                 base_addr_o   = 64'b0;// 基地址
                 offset_addr_o = 64'b0;// 偏移地址
-                csr_data_o    = 64'b0;
                 csr_waddr_o   = 12'b0;
                 csr_wen_o     = 1'b0;
                 case (func3)
@@ -195,7 +194,6 @@ module id (
             `INST_TYPE_R_M_W:begin
                 base_addr_o   = 64'b0;// 基地址
                 offset_addr_o = 64'b0;// 偏移地址
-                csr_data_o    = 64'b0;
                 csr_waddr_o   = 12'b0;
                 csr_wen_o     = 1'b0;
                 case (func3)
@@ -228,7 +226,6 @@ module id (
 
 
             `INST_TYPE_B: begin
-                csr_data_o    = 64'b0;
                 csr_waddr_o   = 12'b0;
                 csr_wen_o     = 1'b0;
                 case (func3)
@@ -256,7 +253,6 @@ module id (
             end
             // L为内存->寄存器
             `INST_TYPE_L: begin
-                csr_data_o    = 64'b0;
                 csr_waddr_o   = 12'b0;
                 csr_wen_o     = 1'b0;
                 case (func3)
@@ -291,7 +287,6 @@ module id (
             // SB(bite 8位),SH(half 16位),SW(word 32位) 
             // S为寄存器->内存
             `INST_TYPE_S: begin
-                csr_data_o    = 64'b0;
                 csr_waddr_o   = 12'b0;
                 csr_wen_o     = 1'b0;
                 case (func3)
@@ -332,12 +327,21 @@ module id (
                         csr_addr_o    = csr;
                         op1_o         = csr_data_i;
                         op2_o         = rs1_data_i;  
-                        rd_addr_o     = rd_addr_o;  // csr的值写入rd
+                        rd_addr_o     = rd;  // csr的值写入rd
                         reg_wen       = 1'b1; 
-                        csr_data_o    = csr_data_i; // 按位或结果写入csr
                         csr_waddr_o   = csr;
                         csr_wen_o     = 1'b1;
-                        // $display("here1");
+                    end 
+                    `INST_CSRRSI, `INST_CSRRWI, `INST_CSRRCI: begin
+                        rs1_addr_o    = 5'b0;
+                        rs2_addr_o    = 5'b0;
+                        csr_addr_o    = csr;
+                        op1_o         = csr_data_i;
+                        op2_o         = Zimm;  
+                        rd_addr_o     = rd;  // csr的值写入rd
+                        reg_wen       = 1'b1; 
+                        csr_waddr_o   = csr;
+                        csr_wen_o     = 1'b1;
                     end 
                     default begin
                         rs1_addr_o    = 5'b0;
@@ -346,7 +350,6 @@ module id (
                         op2_o         = 64'b0;
                         rd_addr_o     = 5'b0;
                         reg_wen       = 1'b0; 
-                        csr_data_o    = 64'b0;
                         csr_waddr_o   = 12'b0;
                         csr_wen_o     = 1'b0;
                         // $display("here2");
@@ -364,7 +367,6 @@ module id (
                 reg_wen       = 1'b1; 
                 base_addr_o   = inst_addr_i; // 基地址
                 offset_addr_o = immJ;        // 偏移地址 
-                csr_data_o    = 64'b0;
                 csr_waddr_o   = 12'b0;
                 csr_wen_o     = 1'b0;
             end 
@@ -377,7 +379,6 @@ module id (
                 reg_wen       = 1'b1; 
                 base_addr_o   = rs1_data_i; // 基地址
                 offset_addr_o = immI;       // 偏移地址 
-                csr_data_o    = 64'b0;
                 csr_waddr_o   = 12'b0;
                 csr_wen_o     = 1'b0;
             end 
@@ -390,7 +391,6 @@ module id (
                 reg_wen       = 1'b1; 
                 base_addr_o   = 64'b0;
                 offset_addr_o = 64'b0;
-                csr_data_o    = 64'b0;
                 csr_waddr_o   = 12'b0;
                 csr_wen_o     = 1'b0;
                 // $display("here");
@@ -405,7 +405,6 @@ module id (
                 reg_wen       = 1'b1;
                 base_addr_o   = 64'b0; // 基地址
                 offset_addr_o = immU ; // 偏移地址  
-                csr_data_o    = 64'b0;
                 csr_waddr_o   = 12'b0;
                 csr_wen_o     = 1'b0;
             end // 不跳转
@@ -418,7 +417,6 @@ module id (
                 reg_wen       = 1'b0; 
                 base_addr_o   = 64'b0; // 基地址
                 offset_addr_o = 64'b0; // 偏移地址 
-                csr_data_o    = 64'b0;
                 csr_waddr_o   = 12'b0;
                 csr_wen_o     = 1'b0;
                 // $display("Here");

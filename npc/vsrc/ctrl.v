@@ -2,15 +2,18 @@
 
 module ctrl (
     // from ex 
-    input wire[63:0] jump_addr_i,
-    input wire       jump_en_i,
+    input wire[63:0] typej_jump_addr_i,
+    input wire       typej_jump_en_i,
+    // from clint 
+    input wire[63:0] intr_jump_addr_i,
+    input wire       intr_jump_en_i,
     // from ex
     input wire       ex_inst_isload_i,
     input wire       ex_inst_isstore_i,
     // from mem 
     input wire       mem_inst_isload_i,
     input wire       mem_inst_isstore_i,
-    //from redirect
+    //from rename
     input wire       rs_id_ex_hit_i, 
     // from axi 
     input wire       axi_busy_i,
@@ -27,6 +30,9 @@ module ctrl (
     // to id_ex
     output reg       id_ex_stall_en_o,
     output reg       id_ex_flush_en_o,
+    // to id_clint
+    output reg       id_clint_stall_en_o,
+    output reg       id_clint_flush_en_o,
     // to ex_mem
     output reg       ex_mem_stall_en_o,
     output reg       ex_mem_flush_en_o,
@@ -35,17 +41,22 @@ module ctrl (
     output reg       mem_wb_flush_en_o
 );
 
-    assign jump_addr_o = jump_addr_i;
-    assign jump_en_o   = jump_en_i; 
+    assign jump_addr_o = typej_jump_addr_i | intr_jump_addr_i;
+    assign jump_en_o   = typej_jump_en_i | intr_jump_en_i; 
+    always @(*) begin
+        if ((typej_jump_en_i & intr_jump_en_i) | (typej_jump_addr_i != 64'b0 && intr_jump_addr_i != 64'b0)) begin
+            $display("JUMP conflict!\n"); // 防跳转冲突检测,按道理不应该出现
+        end 
+    end
 
     reg load_data_hit; // flush 001 stall 110
     reg jump;          // flush 011 stall 无
     reg busy;          // flush 001 stall 110
     reg load_inst;     // flush 001 stall 110
-    reg store_inst;     // flush 001 stall 110
+    reg store_inst;    // flush 001 stall 110
  
     assign load_data_hit =  (rs_id_ex_hit_i & ex_inst_isload_i) ? 1'b1: 1'b0;
-    assign jump          =  jump_en_i  ? 1'b1: 1'b0;
+    assign jump          =  typej_jump_en_i | intr_jump_en_i  ? 1'b1: 1'b0;
     assign busy          =  axi_busy_i ? 1'b1: 1'b0;
     assign load_inst     =  (ex_inst_isload_i  | mem_inst_isload_i) ? 1'b1: 1'b0;
     assign store_inst    =  (ex_inst_isstore_i | mem_inst_isstore_i) ? 1'b1: 1'b0;
@@ -136,53 +147,6 @@ module ctrl (
         end 
     end
 
-
-    // always @(*) begin
-    //     if (jump_en_i == 1'b1) begin
-    //         assign pc_flush_en_o    = 1'b0;
-    //         assign if_id_flush_en_o = 1'b1;
-    //         assign id_ex_flush_en_o = 1'b1;
-    //     end // 为跳转指令(flush_flag = 011)且跳转时
-    //     else if (flush_flag_axi_i == 3'b001) begin
-    //         assign pc_flush_en_o    = flush_flag_axi_i[2];
-    //         assign if_id_flush_en_o = flush_flag_axi_i[1];
-    //         assign id_ex_flush_en_o = flush_flag_axi_i[0];
-    //     end // 为ex插入气泡(flush_flag = 001)时
-    //     else if (flush_flag_ex_i == 3'b001) begin
-    //         assign pc_flush_en_o    = flush_flag_ex_i[2];
-    //         assign if_id_flush_en_o = flush_flag_ex_i[1];
-    //         assign id_ex_flush_en_o = flush_flag_ex_i[0];
-    //     end // 为ex插入气泡(flush_flag = 001)时
-    //     else if (flush_flag_mem_i == 3'b001) begin
-    //         assign pc_flush_en_o    = flush_flag_mem_i[2];
-    //         assign if_id_flush_en_o = flush_flag_mem_i[1];
-    //         assign id_ex_flush_en_o = flush_flag_mem_i[0];
-    //     end // 为ex插入气泡(flush_flag = 001)时
-    //     else begin
-    //         assign pc_flush_en_o    = 1'b0;
-    //         assign if_id_flush_en_o = 1'b0;
-    //         assign id_ex_flush_en_o = 1'b0;
-    //     end
-    // end
-
-    // always @(*) begin
-    //     if (stall_flag_ex_i != 3'b0) begin
-    //         assign pc_stall_en_o    = stall_flag_ex_i[2];
-    //         assign if_id_stall_en_o = stall_flag_ex_i[1];
-    //         assign id_ex_stall_en_o = stall_flag_ex_i[0];
-    //     end
-    //     else if (stall_flag_axi_i != 3'b0) begin
-    //         assign pc_stall_en_o    = stall_flag_axi_i[2];
-    //         assign if_id_stall_en_o = stall_flag_axi_i[1];
-    //         assign id_ex_stall_en_o = stall_flag_axi_i[0];
-    //     end
-    //     else begin
-    //         assign pc_stall_en_o    = stall_flag_mem_i[2];
-    //         assign if_id_stall_en_o = stall_flag_mem_i[1];
-    //         assign id_ex_stall_en_o = stall_flag_mem_i[0];
-    //     end
-    // end
-    
     
 
 /*

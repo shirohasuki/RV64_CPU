@@ -15,7 +15,8 @@ const char *regs[] = {
 //     }
 // }
 const char *csrs[] = {
-  "mstatus", "mtvec", "mepc", "mcause"
+//   "mstatus", "mtvec", "mepc", "mcause"
+ "mtvec", "mepc", "mstatus", "mcause"
 };
 
 
@@ -30,7 +31,7 @@ void dump_reg() {
 void dump_csr() {
     printf("============= CSRs =================\n");
     for (int i = 0; i < 4; i++) {
-        printf("csr[%2d] = 0x%-14lx\t%s\n", i, cpu.gpr[i], csrs[i]);
+        printf("csr[%2d] = 0x%-14lx\t%s\n", i, cpu.csr[i], csrs[i]);
     } // -:左对齐
     printf("pc      = 0x%lx\n", cpu.pc);
     printf("====================================\n");
@@ -51,7 +52,7 @@ word_t isa_reg_str2val(const char *s, bool *success) {
     }
     for (int i = 0; i < 32; ++i) {
         if (s[0] == regs[i][0] && s[1] == regs[i][1]) {
-        return gpr(i);
+            return gpr(i);
         }
     }
     if (s[0] == 'p' && s[1] == 'c') {

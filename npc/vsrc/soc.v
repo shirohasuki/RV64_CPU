@@ -33,7 +33,7 @@ module soc (
     core core_inst(
         .clk            ( clk                   ),
         .rst            ( rst                   ),
-        .mem_axi_inst_addr_o( core_axi_inst_addr_o ),
+        // .mem_axi_inst_addr_o( core_axi_inst_addr_o ),
           
         .axi_stall_flag_i ( axi_core_stall_flag_o ),
         .axi_flush_flag_i ( axi_core_flush_flag_o ),
@@ -76,8 +76,8 @@ module soc (
     axi axi_inst(
         .clk             ( clk                 ),
         .rst             ( rst                 ),
-        .inst_addr_i     ( core_axi_inst_addr_o),
-        .inst_addr_o     ( axi_ram_inst_addr_o ),
+        // .inst_addr_i     ( core_axi_inst_addr_o),
+        // .inst_addr_o     ( axi_ram_inst_addr_o ),
         .axi_busy_o      ( axi_core_busy_o     ),
         .axi_busy_end_o  ( axi_core_busy_end_o ),
         .core_ren_i      ( core_axi_ren_o      ),
@@ -112,7 +112,7 @@ module soc (
     ram ram_inst(
         .clk         ( clk                  ),
         .rst         ( rst                  ),
-        .inst_addr_i_from_mem (axi_ram_inst_addr_o),
+        // .inst_addr_i_from_mem (axi_ram_inst_addr_o),
         .ram_waddr_i ( axi_ram_waddr_o     ),
         .ram_wdata_i ( axi_ram_wdata_o     ),
         .ram_wmask_i ( axi_ram_wmask_o     ),

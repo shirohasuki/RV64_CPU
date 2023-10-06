@@ -147,21 +147,12 @@ module mem (
  
 
     always @(*) begin
-        // if (visit_interface == 1'b1 && ren_i) pmem_read(raddr_i, device_rdata_tmp);  
-        // else device_rdata_tmp = 64'b0;
         if (visit_interface && ren_i) begin pmem_read(raddr_i, device_rdata); end  
         else begin device_rdata = 64'b0; end 
-        // if ((ren_i && wen_i) && (raddr_i == waddr_i)) device_rdata_tmp = wdata_i;  // 处理读写冲突
     end
-
-    // always @(posedge clk) begin
-    //     device_rdata <= device_rdata_tmp;
-    // end
 
     always @(*) begin
         if (visit_interface && wen_i) begin pmem_write(waddr_i, wdata_i, wmask_o); end 
-        // 为了给八位的mask，此处换了ram_wmask_o
-        // if (wen_i && (((!ren_i))||((ren_i)&&(raddr_i != waddr_i)))) begin  
     end
 
     assign ram_rdata = ram_rdata_i;

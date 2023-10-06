@@ -37,9 +37,11 @@ void difftest_exec(uint64_t n) {
 } // 让REF执行`n`条指令
 
 void difftest_raise_intr(word_t NO) {
-    cpu.csr[mepc] = cpu.pc;
-    cpu.csr[mcause] = NO;
-    // return cpu.csr[mtvec];
+    word_t mstatus_buf = 0; mstatus_buf = cpu.csr[mstatus];
+    cpu.csr[mstatus] = (SEXT(BITS(mstatus_buf, 63, 13), 51) << 13) | (BITS(3, 1, 0) << 11) | (BITS(mstatus_buf, 10, 8) << 8) | (BITS(mstatus_buf, 3, 3) << 7) | (BITS(mstatus_buf, 6, 4) << 4) | (BITS(0, 1, 1) << 3) | (BITS(mstatus_buf, 2, 0)) ;
+    cpu.csr[mepc]    = mepc; 
+    cpu.csr[mcause]  = NO;  
+    // return cpu.csr[mtvec]; 
 }
 
 void difftest_init(int port) {

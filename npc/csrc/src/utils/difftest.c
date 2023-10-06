@@ -49,22 +49,21 @@ int check_regs_npc(CPU_state cpu_nemu, CPU_state cpu_npc) {
         return 0;
     }
     for (int i = 0; i < 32; i++) {
-        // printf(GREEN("[difftest] nemu_gpr[%2d]=%16lx, npc_gpr[%2d]=%16lx\n"), i, cpu_nemu.gpr[i], i, cpu_npc.gpr[i]);
+        // Printf("[difftest] nemu_gpr[%2d]=%16lx, npc_gpr[%2d]=%16lx\n", GREEN, i, cpu_nemu.gpr[i], i, cpu_npc.gpr[i]);
         if (cpu_npc.gpr[i] != cpu_nemu.gpr[i]) {
             Printf("Missing match gpr[%d], nemu_val=%lx, npc_val=%lx\n", RED, i, cpu_nemu.gpr[i], cpu_npc.gpr[i]);
-            // printf(RED("npc_pc=%lx\n"), cpu_npc.pc);
             return 0;
         }
     }
     for (int i = 0; i < 4; i++) {
-        // printf(GREEN("[difftest] nemu_gpr[%2d]=%16lx, npc_gpr[%2d]=%16lx\n"), i, cpu_nemu.gpr[i], i, cpu_npc.gpr[i]);
+        // Printf("[difftest] nemu_csr[%2d]=%16lx, npc_csr[%2d]=%16lx\n", GREEN, i, cpu_nemu.csr[i], i, cpu_npc.csr[i]);
         if (cpu_npc.csr[i] != cpu_nemu.csr[i]) {
             Printf("Missing match csr[%d], nemu_val=%lx, npc_val=%lx\n", RED, i, cpu_nemu.csr[i], cpu_npc.csr[i]);
             // printf(RED("npc_pc=%lx\n"), cpu_npc.pc);
             return 0;
         }
     }
-    // printf(GREEN("[difftest] nemu_pc=%lx, npc_pc=%lx\n"), cpu_nemu.pc, cpu_npc.pc);
+    // // printf(GREEN("[difftest] nemu_pc=%lx, npc_pc=%lx\n"), cpu_nemu.pc, cpu_npc.pc);
     return 1;
 }
 

@@ -1,6 +1,6 @@
 `include "./defines.v"
 
-import "DPI-C" function void ebreak();
+// import "DPI-C" function void ebreak();
 import "DPI-C" function void get_pc(input longint pc);
 
 module ex (
@@ -16,13 +16,13 @@ module ex (
     input wire[63:0]  base_addr_i, // 基地址
     input wire[63:0]  offset_addr_i, // 偏移地址
 
-    input wire[63:0]  csr_data_i,
+    // input wire[63:0]  csr_data_i,
     input wire[11:0]  csr_waddr_i,
     input wire        csr_wen_i,
 
     // to ctrl
-    output reg[63:0]  jump_addr_o,
-    output reg        jump_en_o,
+    output reg[63:0]  typej_jump_addr_o,
+    output reg        typej_jump_en_o,
     // output reg[2:0]   flush_flag_o,
     // output reg[2:0]   stall_flag_o,
 
@@ -133,6 +133,8 @@ module ex (
     wire[63:0] compress_shift_right_signed;
     wire[63:0] compress_addr_offset; // 偏移地址计算
 
+
+    // wire signed [31:0] compress_op1_i; assign compress_op1_i = op1_i[31:0];
     // 中间转换变量
     wire[31:0] compress_div_tmp;            assign compress_div_tmp           = $signed(op1_i[31:0]) / op2_i[31:0];
     wire[31:0] compress_div_unsigned_tmp;   assign compress_div_unsigned_tmp  = op1_i[31:0] / op2_i[31:0];
@@ -141,6 +143,7 @@ module ex (
     wire[31:0] compress_shift_left_u_tmp;   assign compress_shift_left_u_tmp  = op1_i[31:0] << op2_i[4:0];
     wire[31:0] compress_shift_right_u_tmp;  assign compress_shift_right_u_tmp = op1_i[31:0] >> op2_i[4:0];
     wire[31:0] compress_shift_right_s_tmp;  assign compress_shift_right_s_tmp = $signed(op1_i[31:0]) >>> op2_i[4:0];
+        // wire[31:0] compress_shift_right_s_tmp;  assign compress_shift_right_s_tmp = (op1_i[31] == 1'b1) ? ($signed(compress_op1_i) >>> op2_i[4:0]) : ((op1_i[31:0]) >> op2_i[4:0]);
 
     assign compress_add                  = {{32{op1_i_add_op2_i[31]}}, op1_i_add_op2_i[31:0]};                  // 加法器       
     assign compress_sub                  = {{32{op1_i_sub_op2_i[31]}}, op1_i_sub_op2_i[31:0]};                  // 减(待改进)
@@ -154,7 +157,7 @@ module ex (
     assign compress_div_unsigned         = {{32{compress_div_unsigned_tmp[31]}}, compress_div_unsigned_tmp[31:0]};
     assign compress_shift_left_unsigned  = {{32{compress_shift_left_u_tmp[31]}}, compress_shift_left_u_tmp[31:0]};  // 逻辑左移
     assign compress_shift_right_unsigned = {{32{compress_shift_right_u_tmp[31]}}, compress_shift_right_u_tmp[31:0]};// 逻辑右移
-    assign compress_shift_right_signed   = {{32{compress_shift_right_s_tmp[31]}}, compress_shift_right_s_tmp[31:0]};    // 算术右移
+    assign compress_shift_right_signed   = {{32{compress_shift_right_s_tmp[31]}}, compress_shift_right_s_tmp[31:0]};// 算术右移
     assign compress_addr_offset          = {{32{base_addr_add_addr_offset[31]}}, base_addr_add_addr_offset[31:0]};  // 计算地址单元
     // assign op1_i_equal_op2_i         = (op1_i == op2_i)? 1'b1 : 1'b0;
     // assign op1_i_less_op2_i_signed   = ($signed(op1_i) < $signed(op2_i))? 1'b1 : 1'b0;
@@ -182,21 +185,21 @@ module ex (
 
     always @(*) begin
         inst_addr_o = inst_addr_i; // pc传递
-        if (inst_i == `INST_EBREAK) begin 
-            ebreak();
-        end 
+        // if (inst_i == `INST_EBREAK) begin 
+        //     ebreak();
+        // end 
         case (opcode) 
             `INST_TYPE_I:begin
-                jump_addr_o = 64'b0;
-                jump_en_o   = 1'b0;
+                typej_jump_addr_o = 64'b0;
+                typej_jump_en_o   = 1'b0;
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
                 mem_wmask_o = 8'b0;
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
-                isload_o   = 1'b0;
-                isstore_o    = 1'b0; 
+                isload_o    = 1'b0;
+                isstore_o   = 1'b0; 
                 csr_waddr_o = 12'b0;
                 csr_data_o  = 64'b0;
                 csr_wen_o   = 1'b0; 
@@ -265,8 +268,8 @@ module ex (
             end
 
             `INST_TYPE_I_W: begin
-                jump_addr_o = 64'b0;
-                jump_en_o   = 1'b0;
+                typej_jump_addr_o = 64'b0;
+                typej_jump_en_o   = 1'b0;
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
@@ -311,8 +314,8 @@ module ex (
             end
 
             `INST_TYPE_R_M:begin
-                jump_addr_o = 64'b0;
-                jump_en_o = 1'b0;
+                typej_jump_addr_o = 64'b0;
+                typej_jump_en_o = 1'b0;
                 mem_wen_o = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
@@ -413,8 +416,8 @@ module ex (
             end
 
             `INST_TYPE_R_M_W:begin
-                jump_addr_o = 64'b0;
-                jump_en_o = 1'b0;
+                typej_jump_addr_o = 64'b0;
+                typej_jump_en_o = 1'b0;
                 // flush_flag_o = 3'b0;// 设置初值，防止出现锁存器
                 // stall_flag_o = 3'b0;
                 mem_wen_o = 1'b0;
@@ -451,14 +454,14 @@ module ex (
                         rd_waddr_o = rd_addr_i;
                         reg_wen_o  = 1'b1;
                     end // 逻辑左移
-                    `INST_SRW_DIVUW:begin // SR包含srl和sra
+                    `INST_SRW_DIVUW: begin // SR包含srl和sra
                         if (func7[5] == 1'b1) begin // SRAW 算术右移
                             // rd_wdata_o = ((op1_i_shift_right_op2_i) & SRA_mask) | ({32{op1_i[31]}} & (~SRA_mask));
                             rd_wdata_o = compress_shift_right_signed; 
                             rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
                         end 
-                        if (func7[0] == 1'b1) begin // DIVUW 截断除法
+                        else if (func7[0] == 1'b1) begin // DIVUW 截断除法
                             rd_wdata_o = compress_div_unsigned; 
                             rd_waddr_o = rd_addr_i;
                             reg_wen_o  = 1'b1;
@@ -509,46 +512,46 @@ module ex (
                 csr_wen_o   = 1'b0;   
                 case (func3)
                     `INST_BNE: begin
-                        jump_addr_o = base_addr_add_addr_offset;
-                        jump_en_o   = ~op1_i_equal_op2_i;
+                        typej_jump_addr_o = base_addr_add_addr_offset;
+                        typej_jump_en_o   = ~op1_i_equal_op2_i;
                         // flush_flag_o = 1'b0;
                     end // 不等跳转
                     `INST_BEQ: begin
-                        jump_addr_o = base_addr_add_addr_offset;
-                        jump_en_o   = op1_i_equal_op2_i;
+                        typej_jump_addr_o = base_addr_add_addr_offset;
+                        typej_jump_en_o   = op1_i_equal_op2_i;
                         // flush_flag_o = 1'b0;
                     end // 相等跳转
                     `INST_BLT: begin
-                        jump_addr_o = base_addr_add_addr_offset;
-                        jump_en_o   = op1_i_less_op2_i_signed;
+                        typej_jump_addr_o = base_addr_add_addr_offset;
+                        typej_jump_en_o   = op1_i_less_op2_i_signed;
                         // flush_flag_o = 1'b0;
                     end // 小于跳转(有符号)
                     `INST_BLTU: begin
-                        jump_addr_o = base_addr_add_addr_offset;
-                        jump_en_o   = op1_i_less_op2_i_unsigned;
+                        typej_jump_addr_o = base_addr_add_addr_offset;
+                        typej_jump_en_o   = op1_i_less_op2_i_unsigned;
                         // flush_flag_o = 1'b0;
                     end //小于跳转(无符号)
                     `INST_BGE: begin
-                        jump_addr_o = base_addr_add_addr_offset;
-                        jump_en_o   = ~op1_i_less_op2_i_signed;
+                        typej_jump_addr_o = base_addr_add_addr_offset;
+                        typej_jump_en_o   = ~op1_i_less_op2_i_signed;
                         // flush_flag_o = 1'b0;
                     end // 大于等于跳转(有符号)
                     `INST_BGEU: begin
-                        jump_addr_o = base_addr_add_addr_offset;
-                        jump_en_o   = ~op1_i_less_op2_i_unsigned;
+                        typej_jump_addr_o = base_addr_add_addr_offset;
+                        typej_jump_en_o   = ~op1_i_less_op2_i_unsigned;
                         // flush_flag_o = 1'b0;
                     end // 大于等于跳转(无符号)
                     default: begin
-                        jump_addr_o = 64'b0;
-                        jump_en_o   = 1'b0;
+                        typej_jump_addr_o = 64'b0;
+                        typej_jump_en_o   = 1'b0;
                         // flush_flag_o = 1'b0;
                     end 
                 endcase
             end
             // L:mem->reg
             `INST_TYPE_L: begin
-                jump_addr_o = 64'b0;
-                jump_en_o   = 1'b0;
+                typej_jump_addr_o = 64'b0;
+                typej_jump_en_o   = 1'b0;
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
@@ -632,8 +635,8 @@ module ex (
             end
             // S:reg->mem
             `INST_TYPE_S: begin
-                jump_addr_o = 64'b0;
-                jump_en_o   = 1'b0;
+                typej_jump_addr_o = 64'b0;
+                typej_jump_en_o   = 1'b0;
                 rd_wdata_o  = 64'b0; 
                 rd_waddr_o  = 5'b0;
                 reg_wen_o   = 1'b0;
@@ -680,8 +683,8 @@ module ex (
             end
 
             `INST_TYPE_INTR: begin
-                jump_addr_o = 64'b0;
-                jump_en_o   = 1'b0;
+                typej_jump_addr_o = 64'b0;
+                typej_jump_en_o   = 1'b0;
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 mem_wen_o   = 1'b0;
@@ -689,7 +692,7 @@ module ex (
                 mem_wdata_o = 64'b0;
                 mem_wmask_o = 8'b0;
                 isload_o    = 1'b0;
-                isstore_o    = 1'b0;
+                isstore_o   = 1'b0;
                 case (func3)
                     `INST_CSRRS: begin
                         rd_wdata_o  = op1_i; 
@@ -699,7 +702,39 @@ module ex (
                         csr_data_o  = op1_i_or_op2_i;
                         csr_wen_o   = 1'b1;
                     end
+                    `INST_CSRRC: begin
+                        rd_wdata_o  = op1_i; 
+                        rd_waddr_o  = rd_addr_i;
+                        reg_wen_o   = 1'b1;
+                        csr_waddr_o = csr_waddr_i;
+                        csr_data_o  = op1_i_and_op2_i;
+                        csr_wen_o   = 1'b1;
+                    end
                     `INST_CSRRW: begin
+                        rd_wdata_o  = op1_i; 
+                        rd_waddr_o  = rd_addr_i;
+                        reg_wen_o   = 1'b1;
+                        csr_waddr_o = csr_waddr_i;
+                        csr_data_o  = op2_i;
+                        csr_wen_o   = 1'b1;
+                    end
+                    `INST_CSRRSI: begin
+                        rd_wdata_o  = op1_i; 
+                        rd_waddr_o  = rd_addr_i;
+                        reg_wen_o   = 1'b1;
+                        csr_waddr_o = csr_waddr_i;
+                        csr_data_o  = op1_i_or_op2_i;
+                        csr_wen_o   = 1'b1;
+                    end
+                    `INST_CSRRCI: begin
+                        rd_wdata_o  = op1_i; 
+                        rd_waddr_o  = rd_addr_i;
+                        reg_wen_o   = 1'b1;
+                        csr_waddr_o = csr_waddr_i;
+                        csr_data_o  = op1_i_and_op2_i;
+                        csr_wen_o   = 1'b1;
+                    end
+                    `INST_CSRRWI: begin
                         rd_wdata_o  = op1_i; 
                         rd_waddr_o  = rd_addr_i;
                         reg_wen_o   = 1'b1;
@@ -722,8 +757,8 @@ module ex (
                 rd_wdata_o  = op1_i_add_op2_i; // rd = PC + 4
                 rd_waddr_o  = rd_addr_i;
                 reg_wen_o   = 1'b1; 
-                jump_addr_o = base_addr_add_addr_offset; // PC = PC + imm
-                jump_en_o   = 1'b1;
+                typej_jump_addr_o = base_addr_add_addr_offset; // PC = PC + imm
+                typej_jump_en_o   = 1'b1;
                 mem_wen_o   = 1'b0;
                 mem_waddr_o = 64'b0;
                 mem_wdata_o = 64'b0;
@@ -736,14 +771,14 @@ module ex (
                 csr_data_o  = 64'b0;
                 csr_wen_o   = 1'b0;   
                 //$display("here2");
-                //$display("%llx", jump_addr_o );
+                //$display("%llx", typej_jump_addr_o );
             end // Jump And Link (PC += imm, rd = PC + 4)
             `INST_JALR: begin
                 rd_wdata_o  = op1_i_add_op2_i; // rd = PC + 4
                 rd_waddr_o  = rd_addr_i;
                 reg_wen_o   = 1'b1; 
-                jump_addr_o = base_addr_add_addr_offset; // PC = rs1 + imm
-                jump_en_o   = 1'b1;
+                typej_jump_addr_o = base_addr_add_addr_offset; // PC = rs1 + imm
+                typej_jump_en_o   = 1'b1;
                 // flush_flag_o = 3'b111;
                 // stall_flag_o = 3'b0;
                 mem_wen_o   = 1'b0;
@@ -763,8 +798,8 @@ module ex (
                 rd_wdata_o  = op2_i; 
                 rd_waddr_o  = rd_addr_i;
                 reg_wen_o   = 1'b1; 
-                jump_addr_o = 64'b0; //不跳转 
-                jump_en_o   = 1'b0;
+                typej_jump_addr_o = 64'b0; //不跳转 
+                typej_jump_en_o   = 1'b0;
                 // flush_flag_o = 3'b001;
                 // stall_flag_o = 3'b110;
                 mem_wen_o   = 1'b0;
@@ -783,8 +818,8 @@ module ex (
                 rd_wdata_o  = op1_i_add_op2_i; 
                 rd_waddr_o  = rd_addr_i;
                 reg_wen_o   = 1'b1; 
-                jump_addr_o = 64'b0; //不跳转 
-                jump_en_o   = 1'b0;
+                typej_jump_addr_o = 64'b0; //不跳转 
+                typej_jump_en_o   = 1'b0;
                 // flush_flag_o = 3'b001;
                 // stall_flag_o = 3'b110;
                 mem_wen_o   = 1'b0;
@@ -800,8 +835,8 @@ module ex (
                 csr_wen_o   = 1'b0;      
             end // Add Upper Imm to PC
             default: begin
-                jump_addr_o = 64'b0;
-                jump_en_o   = 1'b0;
+                typej_jump_addr_o = 64'b0;
+                typej_jump_en_o   = 1'b0;
                 // flush_flag_o = 3'b0;// 设置初值，防止出现锁存器
                 // stall_flag_o = 3'b0;
                 rd_wdata_o  = 64'b0; 

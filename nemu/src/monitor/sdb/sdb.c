@@ -16,33 +16,25 @@ void watchpoints_display();
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
-  static char *line_read = NULL;
+    static char *line_read = NULL;
 
-  if (line_read) {
-    free(line_read);
-    line_read = NULL;
-  }
+    if (line_read) {
+      free(line_read);
+      line_read = NULL;
+    }
 
-  line_read = readline("(nemu) ");
+    line_read = readline("(nemu) ");
 
-  if (line_read && *line_read) {
-    add_history(line_read);
-  }
+    if (line_read && *line_read) {
+      add_history(line_read);
+    }
 
-  return line_read;
-}
-
-static int cmd_c(char *args) {
-  cpu_exec(-1);
-  return 0;
-}
-
-
-static int cmd_q(char *args) {
-  return -1;
+    return line_read;
 }
 
 static int cmd_help(char *args);
+static int cmd_c(char *args);
+static int cmd_q(char *args);
 static int cmd_x(char *args);
 static int cmd_si(char *args);
 static int cmd_info(char *args);
@@ -54,21 +46,21 @@ static int cmd_d(char *args); // watchpoint
 
 
 static struct {
-  const char *name;
-  const char *description;
-  int (*handler) (char *);
+    const char *name;
+    const char *description;
+    int (*handler) (char *);
 } cmd_table [] = {
-  { "help", "Display informations about all supported commands", cmd_help },
-  { "c", "Continue the execution of the program", cmd_c },
-  { "q", "Exit NEMU", cmd_q },
+    { "help", "Display informations about all supported commands", cmd_help },
+    { "c", "Continue the execution of the program", cmd_c },
+    { "q", "Exit NEMU", cmd_q },
 
-  /* TODO: Add more commands */
-  {"si", "Execute the program in n steps\n \t-n nsteps", cmd_si },
-  {"info", "print status\n \t-r print register status\n \t -w print watchpoints", cmd_info },
-  {"x", "scan the rom", cmd_x },
-  {"p", "eval the expr", cmd_p },
-  {"w", "define a new watchpoint", cmd_w },
-  {"d", "delete NO.x watchpoint", cmd_d},
+    /* TODO: Add more commands */
+    {"si", "Execute the program in n steps\n \t-n nsteps", cmd_si },
+    {"info", "print status\n \t-r print register status\n \t -w print watchpoints", cmd_info },
+    {"x", "scan the rom", cmd_x },
+    {"p", "eval the expr", cmd_p },
+    {"w", "define a new watchpoint", cmd_w },
+    {"d", "delete NO.x watchpoint", cmd_d},
 };
 
 #define NR_CMD ARRLEN(cmd_table)
@@ -96,25 +88,35 @@ static int cmd_help(char *args) {
   return 0;
 }
 
+
+static int cmd_c(char *args) {
+    cpu_exec(-1);
+    return 0;
+}
+
+static int cmd_q(char *args) {
+    return -1;
+}
+
 static int cmd_x(char *args) {
-  /* extract the first argument */
-  char *arg = strtok(NULL, " ");
-  unsigned int cnt;
-  /* first argument unrecognized */
-  if (arg == NULL || sscanf(arg, "%u", &cnt) != 1)
-    printf("'%s' must be an integer.\n", arg);
-  arg = strtok(NULL, " ");
-  unsigned int addr;
-  /* second argument unrecognized */
-  if (arg == NULL || sscanf(arg, "%x", &addr) != 1)
-    printf("'%s' must be an expression.\n", arg);
-  /* address guest to host */
-  uint8_t *pos = guest_to_host(addr);
-  for (int i = 0; i <= cnt; ++i) {
-    printf("%x: %02x %02x %02x %02x\n", addr, *pos, *(pos + 1), *(pos + 2), *(pos + 3));
-    pos += 4, addr += 4;
-  }
-  return 0;
+    /* extract the first argument */
+    char *arg = strtok(NULL, " ");
+    unsigned int cnt;
+    /* first argument unrecognized */
+    if (arg == NULL || sscanf(arg, "%u", &cnt) != 1)
+      printf("'%s' must be an integer.\n", arg);
+    arg = strtok(NULL, " ");
+    unsigned int addr;
+    /* second argument unrecognized */
+    if (arg == NULL || sscanf(arg, "%x", &addr) != 1)
+      printf("'%s' must be an expression.\n", arg);
+    /* address guest to host */
+    uint8_t *pos = guest_to_host(addr);
+    for (int i = 0; i <= cnt; ++i) {
+      printf("%x: %02x %02x %02x %02x\n", addr, *pos, *(pos + 1), *(pos + 2), *(pos + 3));
+      pos += 4, addr += 4;
+    }
+    return 0;
 }
 
 static int cmd_si(char *args) {
@@ -137,18 +139,18 @@ static int cmd_si(char *args) {
 
 
 static int cmd_info(char *args) {
-  /* extract the first argument */
-  char *arg = strtok(NULL, " ");
-  /* no argument */
-  if (arg == NULL || strlen(arg) != 1)
-    printf("'%s' must be 'r' or 'w'.\n", arg);
-  /* registers */
-  else if (strcmp(arg, "r") == 0)
-    isa_reg_display();
-  /* watchpoints */
-  else if (strcmp(arg, "w") == 0)
-		watchpoints_display();
-  return 0;
+	/* extract the first argument */
+	char *arg = strtok(NULL, " ");
+	/* no argument */
+	if (arg == NULL || strlen(arg) != 1)
+		printf("'%s' must be 'r' or 'w'.\n", arg);
+	/* registers */
+	else if (strcmp(arg, "r") == 0)
+		isa_reg_display();
+	/* watchpoints */
+	else if (strcmp(arg, "w") == 0)
+			watchpoints_display();
+	return 0;
 }
 
 
@@ -159,15 +161,15 @@ static int cmd_confession(char *args) {
 }
 
 static int cmd_p(char *args) {
-  bool success = true;
-  /* calculate expression */
-  uint64_t ret = expr(args, &success);
-  /* check if argument has errors */
-  if (success)
-    printf("%s = %lx(%lu)\n", args, ret, ret);
-  else
-    printf("%s: Syntax Error.\n", args);
-  return 0;
+	bool success = true;
+	/* calculate expression */
+	uint64_t ret = expr(args, &success);
+	/* check if argument has errors */
+	if (success)
+		printf("%s = %lx(%lu)\n", args, ret, ret);
+	else
+		printf("%s: Syntax Error.\n", args);
+	return 0;
 }
 
 
@@ -189,55 +191,54 @@ static int cmd_d(char *args) {
 }
 
 void sdb_set_batch_mode() {
-  is_batch_mode = true;
+	is_batch_mode = true;
 }
 
 void sdb_mainloop() {
-  if (is_batch_mode) {
-    cmd_c(NULL);
-    return;
-  }
+	if (is_batch_mode) {
+		cmd_c(NULL);
+		return;
+	}
 
-  for (char *str; (str = rl_gets()) != NULL; ) {
-    char *str_end = str + strlen(str);
+	for (char *str; (str = rl_gets()) != NULL; ) {
+		char *str_end = str + strlen(str);
 
-    /* extract the first token as the command */
-    char *cmd = strtok(str, " ");
-    if (cmd == NULL) { continue; }
+		/* extract the first token as the command */
+		char *cmd = strtok(str, " ");
+		if (cmd == NULL) { continue; }
 
-    /* treat the remaining string as the arguments,
-     * which may need further parsing
-     */
-    char *args = cmd + strlen(cmd) + 1;
-    if (args >= str_end) {
-      args = NULL;
-    }
+		/* treat the remaining string as the arguments,
+		* which may need further parsing
+		*/
+		char *args = cmd + strlen(cmd) + 1;
+		if (args >= str_end) {
+		args = NULL;
+		}
 
 #ifdef CONFIG_DEVICE
     extern void sdl_clear_event_queue();
     sdl_clear_event_queue();
 #endif
-
-    int i;
-    for (i = 0; i < NR_CMD; i ++) {
-      if (strcmp(cmd, cmd_table[i].name) == 0) {
-        if (cmd_table[i].handler(args) < 0) { return; }
-        break;
-      }
-    }
-    if (i == NR_CMD) { 
-      if (strcmp(cmd, "zxy") == 0) {
-    	cmd_confession(args);
-      }//loveu
-      else { printf("Unknown command '%s'\n", cmd);} 
-    }
-  }
+		int i;
+		for (i = 0; i < NR_CMD; i ++) {
+		if (strcmp(cmd, cmd_table[i].name) == 0) {
+			if (cmd_table[i].handler(args) < 0) { return; }
+			break;
+		}
+		}
+		if (i == NR_CMD) { 
+		if (strcmp(cmd, "zxy") == 0) {
+			cmd_confession(args);
+		}//loveu
+		else { printf("Unknown command '%s'\n", cmd);} 
+		}
+	}
 }
 
 void init_sdb() {
-  /* Compile the regular expressions. */
-  init_regex();
+	/* Compile the regular expressions. */
+	init_regex();
 
-  /* Initialize the watchpoint pool. */
-  init_wp_pool();
+	/* Initialize the watchpoint pool. */
+	init_wp_pool();
 }

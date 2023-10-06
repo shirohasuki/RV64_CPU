@@ -8,8 +8,8 @@
 static int is_batch_mode = true;
 
 void init_regex();
-void init_wp_pool();
 
+void init_wp_pool();
 void watchpoints_add(char *e);
 void watchpoints_del(int id);
 void watchpoints_display();

@@ -55,8 +55,8 @@ static struct {
     { "q   ", "Exit NEMU", cmd_q },
 
     /* TODO: Add more commands */
-    {"si  ", "Execute the program in n steps\n \t\t -n nsteps", cmd_si },
-    {"info", "print status\n \t\t -r print register status\n \t\t  -w print watchpoints", cmd_info },
+    {"si  ", "Execute the program in n steps\n\t\t-n nsteps", cmd_si },
+    {"info", "print status\n\t\t-r print register status\n\t\t-w print watchpoints", cmd_info },
     {"x   ", "scan the rom", cmd_x },
     {"p   ", "eval the expr", cmd_p },
     {"w   ", "define a new watchpoint", cmd_w },

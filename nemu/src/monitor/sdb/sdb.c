@@ -23,7 +23,11 @@ static char* rl_gets() {
 		line_read = NULL;
     }
 
-    line_read = readline("(nemu) ");
+	/* Tips:readline()的用法 
+		readline()的参数是一个字符串，调用函数的时候会在屏幕上输出，这个函数会读取一行输入，然后返回一个指向输入字符串的指针。
+		此处输出提示词(nemu) , 返回之后输入的字符串
+	*/
+    line_read = readline("(nemuohh) "); 
 
     if (line_read && *line_read) {
       	add_history(line_read);

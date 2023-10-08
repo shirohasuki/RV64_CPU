@@ -27,7 +27,7 @@ static char* rl_gets() {
 		readline()的参数是一个字符串，调用函数的时候会在屏幕上输出，这个函数会读取一行输入，然后返回一个指向输入字符串的指针。
 		此处输出提示词(nemu) , 返回之后输入的字符串
 	*/
-    line_read = readline("(nemuohh) "); 
+    line_read = readline("(nemu) "); 
 
     if (line_read && *line_read) {
       	add_history(line_read);
@@ -224,7 +224,6 @@ void sdb_mainloop() {
     extern void sdl_clear_event_queue();
     sdl_clear_event_queue();
 #endif
-
 		int i;
 		for (i = 0; i < NR_CMD; i ++) {
 			if (strcmp(cmd, cmd_table[i].name) == 0) {

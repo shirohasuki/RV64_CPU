@@ -8,7 +8,9 @@ CFLAGS  += -fPIC
 LDFLAGS += -rdynamic -shared -fPIC
 endif
 
+# 存储了当前工作目录的路径
 WORK_DIR  = $(shell pwd)
+# 存储了构建输出的目录，生成的目标文件和可执行文件放在这个目录中。
 BUILD_DIR = $(WORK_DIR)/build
 
 INC_PATH := $(WORK_DIR)/include $(INC_PATH)

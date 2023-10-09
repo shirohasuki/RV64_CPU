@@ -246,11 +246,11 @@
 #include <memory/paddr.h>
 
 enum {
-  TK_NOTYPE = 256,
-  TK_EQ,
+  	TK_NOTYPE = 256,
+  	TK_EQ,
 	TK_NOTEQ,
 	TK_LOGAND,
-  TK_DECNUM,
+  	TK_DECNUM,
 	TK_HEXNUM,
 	TK_REG,
 	TK_NEGATIVE,
@@ -263,18 +263,18 @@ static struct rule {
   const char *regex;
   int token_type;
 } rules[] = {
-  {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // +
-  {"-", '-'},           // -
-  {"\\*", '*'},         // *
-  {"/", '/'},           // /
-  {"\\(", '('},         // (
-  {"\\)", ')'},         // )
+  	{" +", TK_NOTYPE},    // spaces
+  	{"\\+", '+'},         // +
+  	{"-", '-'},           // -
+  	{"\\*", '*'},         // *
+  	{"/", '/'},           // /
+  	{"\\(", '('},         // (
+  	{"\\)", ')'},         // )
 	{"==", TK_EQ},				// ==
 	{"!=", TK_NOTEQ},			// !=
-	{"&&", TK_LOGAND},		// &&
+	{"&&", TK_LOGAND},			// &&
 	{"0x([0-9]+)", TK_HEXNUM},	// 16-based number
-  {"[0-9]+", TK_DECNUM}, 			// 10-based number
+  	{"[0-9]+", TK_DECNUM}, 	    // 10-based number
 	{"\\$\\S+", TK_REG}			// register
 };
 
@@ -286,22 +286,22 @@ static regex_t re[NR_REGEX] = {};
  * Therefore we compile them only once before any usage.
  */
 void init_regex() {
-  int i;
-  char error_msg[128];
-  int ret;
+    int i;
+    char error_msg[128];
+    int ret;
 
-  for (i = 0; i < NR_REGEX; i ++) {
-    ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
-    if (ret != 0) {
-      regerror(ret, &re[i], error_msg, 128);
-      panic("regex compilation failed: %s\n%s", error_msg, rules[i].regex);
+    for (i = 0; i < NR_REGEX; i ++) {
+        ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
+        if (ret != 0) {
+            regerror(ret, &re[i], error_msg, 128);
+            panic("regex compilation failed: %s\n%s", error_msg, rules[i].regex);
+        }
     }
-  }
 }
 
 typedef struct token {
-  int type;
-  char str[32];
+	int type;
+	char str[32];
 } Token;
 
 static Token tokens[65536] __attribute__((used)) = {};

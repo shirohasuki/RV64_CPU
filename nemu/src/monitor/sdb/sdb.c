@@ -108,35 +108,35 @@ static int cmd_x(char *args) {
     char *arg = strtok(NULL, " ");
     unsigned int cnt;
     /* first argument unrecognized */
-    if (arg == NULL || sscanf(arg, "%u", &cnt) != 1)
-      printf("'%s' must be an integer.\n", arg);
+    if (arg == NULL || sscanf(arg, "%u", &cnt) != 1) // 第一个参数记入cnt
+    	printf("'%s' must be an integer.\n", arg);
     arg = strtok(NULL, " ");
     unsigned int addr;
     /* second argument unrecognized */
-    if (arg == NULL || sscanf(arg, "%x", &addr) != 1)
-      printf("'%s' must be an expression.\n", arg);
+    if (arg == NULL || sscanf(arg, "%x", &addr) != 1) // 第二个参数记入addr
+    	printf("'%s' must be an expression.\n", arg);
     /* address guest to host */
-    uint8_t *pos = guest_to_host(addr);
+    uint8_t *pos = guest_to_host(addr); // pos = addr + 基地址
     for (int i = 0; i <= cnt; ++i) {
-      printf("%x: %02x %02x %02x %02x\n", addr, *pos, *(pos + 1), *(pos + 2), *(pos + 3));
-      pos += 4, addr += 4;
+      	printf("%x: %02x %02x %02x %02x\n", addr, *pos, *(pos + 1), *(pos + 2), *(pos + 3));
+      	pos += 4, addr += 4;
     }
     return 0;
 }
 
 static int cmd_si(char *args) {
-    if(args == NULL) {
+    if (args == NULL) {
         cpu_exec(1);
         return 0;
     }
     int step = atoi(strtok(NULL, " "));
-    if(strtok(NULL, " ")!=NULL) {
-        printf("Too many parameters\n");
+    if (strtok(NULL, " ")!=NULL) {
+        printf("Too Many Parameters.\n");
         return 0;
     }
-    if(step <= 0 || step >= 999) {
-        printf("Wrong parameter\n");
-    return 0;
+    if (step <= 0 || step >= 999) {
+        printf("Parameter Out of Range.\n");
+    	return 0;
     }
     cpu_exec(step);
     return 0;

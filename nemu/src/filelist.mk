@@ -1,4 +1,3 @@
-# filelist.mk: 提供最终参与编译的源文件列表
 SRCS-y += src/nemu-main.c
 DIRS-y += src/cpu src/monitor src/utils
 DIRS-$(CONFIG_MODE_SYSTEM) += src/memory

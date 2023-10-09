@@ -1,3 +1,4 @@
+# 指定了默认的目标，当运行make命令时，默认会构建app目标。
 .DEFAULT_GOAL = app
 
 # Add necessary options if the target is a shared library

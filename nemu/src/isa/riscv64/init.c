@@ -12,20 +12,20 @@ static const uint32_t img [] = {
 };
 
 static void restart() {
-  /* Set the initial program counter. */
-  cpu.pc = RESET_VECTOR;
-  
-  /* The zero register is always 0. */
-  cpu.gpr[0] = 0;
+    /* Set the initial program counter. */
+    cpu.pc = RESET_VECTOR;
+    
+    /* The zero register is always 0. */
+    cpu.gpr[0] = 0;
 
-  /* Set the initial mstatus register for interrupt. */
-  cpu.csr[mstatus] = 0xa00001800;
+    /* Set the initial mstatus register for interrupt. */
+    cpu.csr[mstatus] = 0xa00001800;
 }
 
 void init_isa() {
-  /* Load built-in image. */
-  memcpy(guest_to_host(RESET_VECTOR), img, sizeof(img));
+    /* Load built-in image. */
+    memcpy(guest_to_host(RESET_VECTOR), img, sizeof(img)); // 将最初的内置的客户程序img读入到内存中
 
-  /* Initialize this virtual computer system. */
-  restart();
+    /* Initialize this virtual computer system. */
+    restart(); // 初始化寄存器
 }

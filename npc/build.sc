@@ -7,7 +7,7 @@ import mill.scalalib.TestModule.Utest
 import mill.bsp._
 
 object playground extends ScalaModule with ScalafmtModule { m =>
-  override def scalaVersion = "2.11.12"
+  override def scalaVersion = "2.13.8"
   override def scalacOptions = Seq(
     "-language:reflectiveCalls",
     "-deprecation",
@@ -22,7 +22,7 @@ object playground extends ScalaModule with ScalafmtModule { m =>
   override def scalacPluginIvyDeps = Agg(
     ivy"edu.berkeley.cs:::chisel3-plugin:3.5.4",
   )
-  object test extends Tests with Utest {
+  object test extends ScalaTests with Utest {
     override def ivyDeps = m.ivyDeps() ++ Agg(
       ivy"com.lihaoyi::utest:0.7.10",
       ivy"edu.berkeley.cs::chiseltest:0.5.4",

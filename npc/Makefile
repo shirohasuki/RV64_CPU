@@ -42,8 +42,8 @@ $(BIN): ${VSRCS} ${CSRCS}
 
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	# $(BIN)
-	#   @$^
+#	$(BIN)
+#	  @$^
 wave:
 	gtkwave wave.vcd &
 

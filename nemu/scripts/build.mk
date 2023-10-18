@@ -26,7 +26,7 @@ else
 CXX := g++
 endif
 LD := $(CXX)
-INCLUDES = $(addprefix -I, $(INC_PATH))
+INCLUDESL= $(addprefix -I, $(INC_PATH))
 # CFLAGS 包含了编译器选项，例如优化级别、警告选项等。
 CFLAGS  := -O2 -MMD -Wall -Werror $(INCLUDES) $(CFLAGS)
 # LDFLAGS 包含了链接器选项，例如优化级别、链接库选项等。
@@ -35,7 +35,7 @@ LDFLAGS := -O2 $(LDFLAGS)
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o) $(CXXSRC:%.cc=$(OBJ_DIR)/%.o)
 
 # Compilation patterns
-# 两条规则，一个用于编译.c文件，另一个用于编译.cc（C++）文件
+# 两条规则，一个用于编译.c文件，另一个用于编译.cc（C++）文件。生成的可执行文件都在build文件夹下。
 # 0行 定义了目标文件（OBJ_DIR下的以.o为扩展名的文件）和它们对应的源文件类型（.c）。
 # 1行 $<为规则中的第一个依赖文件，即源文件的路径。用于输出一条消息，显示正在编译的源文件的类型和路径。使用@来抑制Make工具默认的命令输出。
 # 2行 用于创建目标文件所在的目录（如果目录不存在）。 $@表示目标文件，$(dir $@) 表示提取目标文件的目录部分。

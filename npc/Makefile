@@ -3,7 +3,7 @@ BUILD_DIR = ./build
 export PATH := $(PATH):$(abspath ./utils)
 
 # ========= verilator ==============
-TOPNAME = tb
+TOPNAME = GCD
 INC_PATH ?= /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/include \
 			/usr/lib/llvm-11/include # for disasm 
 

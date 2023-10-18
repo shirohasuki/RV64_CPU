@@ -1,7 +1,31 @@
-TOPNAME = tb
 BUILD_DIR = ./build
 
 export PATH := $(PATH):$(abspath ./utils)
+
+# ========= verilator ==============
+TOPNAME = tb
+INC_PATH ?= /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/include \
+			/usr/lib/llvm-11/include # for disasm 
+
+VERILATOR = verilator
+VERILATOR_CFLAGS += -MMD --build -cc  --trace \
+				-O3 --x-assign fast --x-initial fast --noassert \
+				-Wno-fatal 
+#  --cc 参数告诉 Verilator 转换为 C++。 Verilator 还支持转换为 SystemC，这可以通过使用 --sc 来完成，但我们暂时不会使用此功能。
+# -Wall - 打开所有 C++ 警告。不是必需的，但在您刚开始时很有用
+# --trace - 启用波形跟踪	
+OBJ_DIR = $(BUILD_DIR)/obj_dir
+BIN = $(OBJ_DIR)/V$(TOPNAME) # 可执行文件在这
+
+# project source
+VSRCS = $(shell find $(abspath ./build/vsrc) -name "*.v")
+CSRCS = $(shell find $(abspath ./src/csrc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
+
+# rules for verilator
+INCFLAGS = $(addprefix -I, $(INC_PATH))
+CFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
+LDFLAGS += -lSDL2 -lSDL2_image "-ldl $(shell llvm-config-11 --cxxflags) -fPIE $(shell llvm-config-11 --libs)"
+#====================================
 
 test:
 	mill -i __.test
@@ -42,8 +66,8 @@ $(BIN): ${VSRCS} ${CSRCS}
 
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-#	$(BIN)
-#	  @$^
+	$(BIN)
+	  @$^
 wave:
 	gtkwave wave.vcd &
 

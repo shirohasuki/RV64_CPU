@@ -23,7 +23,7 @@ CSRCS = $(shell find $(abspath ./src/csrc) -name "*.c" -or -name "*.cc" -or -nam
 
 # rules for verilator
 INCFLAGS = $(addprefix -I, $(INC_PATH))
-CFLAGS += $(INCFLAGS) -DTOP_NAME="\"$(TOPNAME)\""
+CFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
 LDFLAGS += -lSDL2 -lSDL2_image "-ldl $(shell llvm-config-11 --cxxflags) -fPIE $(shell llvm-config-11 --libs)"
 #====================================
 
@@ -53,12 +53,10 @@ checkformat:
 clean:
 	-rm -rf $(BUILD_DIR)
 
-.PHONY: test verilog help compile bsp reformat checkformat clean
-
 $(BIN): ${VSRCS} ${CSRCS} 
 	@rm -rf $(OBJ_DIR)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	verilator $(VERILATOR_CFLAGS) +incdir+./vsrc\
+	verilator $(VERILATOR_CFLAGS) +incdir+$(BUILD_DIR)\
 		--top $(TOPNAME) $^\
 		$(addprefix -CFLAGS , $(CFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
 		--Mdir $(OBJ_DIR) --exe
@@ -70,5 +68,7 @@ sim:
 	  @$^
 wave:
 	gtkwave wave.vcd &
+
+.PHONY: test verilog help compile bsp reformat checkformat clean sim wave
 
 include ../Makefile

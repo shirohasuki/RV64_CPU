@@ -18,7 +18,7 @@ OBJ_DIR = $(BUILD_DIR)/obj_dir
 BIN = $(OBJ_DIR)/V$(TOPNAME) # 可执行文件在这
 
 # project source
-VSRCS = $(shell find $(abspath ./build/vsrc) -name "*.v")
+VSRCS = $(shell find $(abspath ./build) -name "*.v")
 CSRCS = $(shell find $(abspath ./src/csrc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 
 # rules for verilator

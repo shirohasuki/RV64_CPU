@@ -10,8 +10,8 @@
 // #include "verilated_dpi.h"
 // #include "Vtb__Dpi.h"
 // verilator
-// #include "verilated.h"
-// #include "verilated_vcd_c.h"
+#include "verilated.h"
+#include "verilated_vcd_c.h"
 #include "Vtb.h"
 // difftest
 #include <dlfcn.h>

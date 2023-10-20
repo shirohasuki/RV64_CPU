@@ -69,8 +69,9 @@ $(BIN): ${VSRCS} ${CSRCS}
 
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(shell mkdir -p $(BUILD_DIR))
+	
 	$(BIN)
+	$(shell mkdir -p $(BUILD_DIR))
 	  @$^
 
 wave:

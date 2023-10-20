@@ -19,7 +19,7 @@ BIN = $(OBJ_DIR)/V$(TOPNAME) # 可执行文件在这
 
 # project source
 VSRCS = $(shell find $(abspath ./build) -name "*.v")
-CSRCS = $(shell find $(abspath ./test) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
+CSRCS = $(shell find $(abspath ./src/csrc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
 
 # rules for verilator
 INCFLAGS = $(addprefix -I, $(INC_PATH))

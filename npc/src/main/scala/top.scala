@@ -17,6 +17,6 @@ class top extends Module {
     io.out := decoder.io.out
 }
 
-object topMain extends App {
+object tb extends App {
     (new ChiselStage).emitVerilog(new top, args)
 }

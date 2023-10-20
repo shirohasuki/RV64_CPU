@@ -19,13 +19,12 @@ const char *riscv64_csrs[] = {
 //   "mstatus", "mtvec", "mepc", "mcause"
       "mtvec", "mepc", "mstatus", "mcause"
 };
-
+/*
 extern "C" void get_pc(long long int pc) {
     cpu_pc = (uint64_t)pc;
     // printf("cpu_pc: %lx\n", cpu_pc);
     cpu_npc.pc = cpu_pc; // give pc and gprs to CPU status
 }
-
 
 extern "C" void get_gprs(const svOpenArrayHandle r) {
     cpu_gpr = (uint64_t *)(((VerilatedDpiOpenVar*)r) -> datap());
@@ -38,7 +37,7 @@ extern "C" void get_csrs(const svOpenArrayHandle r) {
     // give csrs to CPU status
     for (int i = 0; i < 4; i++) { cpu_npc.csr[i] = cpu_csr[i];}
 }
-
+*/
 
 // 一个输出RTL中通用寄存器的值的示例
 void dump_gpr() {

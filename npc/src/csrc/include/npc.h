@@ -7,8 +7,8 @@
 #include <common.h>
 
 // DPI-C
-#include "verilated_dpi.h"
-#include "Vtb__Dpi.h"
+// #include "verilated_dpi.h"
+// #include "Vtb__Dpi.h"
 // verilator
 #include "verilated.h"
 #include "verilated_vcd_c.h"

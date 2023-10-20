@@ -1,4 +1,4 @@
-BUILD_DIR = ./build
+BUILD_DIR = $(abspath ./build)
 
 export PATH := $(PATH):$(abspath ./utils)
 
@@ -75,10 +75,11 @@ sim:
 # 关于$(BIN)放在前后的对比（sim任务和default任务的不同）
 # default任务中$(BIN)放在default:后，表示依赖于$(BIN),在执行default前会先构建$(BIN)
 # sim任务中$(BIN)放在命令行中，表示普通的指令，即执行该可执行文件，而不会进行构建
+# 所以这个任务，只负责执行，不进行可执行文件的生成
 
 wave:
 	gtkwave dump.vcd &
 
-.PHONY: default test verilog help compile bsp reformat checkformat clean sim wave
+.PHONY: run default test verilog help compile bsp reformat checkformat clean sim wave
 
 include ../Makefile

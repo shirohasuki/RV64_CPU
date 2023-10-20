@@ -26,8 +26,8 @@ INCFLAGS = $(addprefix -I, $(INC_PATH))
 CFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
 LDFLAGS += -lSDL2 -lSDL2_image "-ldl $(shell llvm-config-11 --cxxflags) -fPIE $(shell llvm-config-11 --libs)"
 #====================================
-
-$(shell mkdir -p $(BUILD_DIR))
+default: $(BIN)
+	$(shell mkdir -p $(BUILD_DIR))
 
 test:
 	mill -i __.test

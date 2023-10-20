@@ -27,7 +27,8 @@ CFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
 LDFLAGS += -lSDL2 -lSDL2_image "-ldl $(shell llvm-config-11 --cxxflags) -fPIE $(shell llvm-config-11 --libs)"
 #====================================
 
-all: verilog default sim
+run: verilog default sim
+# 生成verilog代码->构建bin->仿真
 
 default: $(BIN)
 	$(shell mkdir -p $(BUILD_DIR))
@@ -67,9 +68,13 @@ $(BIN): ${VSRCS} ${CSRCS}
 		--Mdir $(OBJ_DIR) --exe
 	make -C ${OBJ_DIR} -f V$(TOPNAME).mk V$(TOPNAME) -j4
 
-sim: $(BIN)
-	 $(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
+sim:
+	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
+	$(BIN) 
 	  @$^
+# 关于$(BIN)放在前后的对比（sim任务和default任务的不同）
+# default任务中$(BIN)放在default:后，表示依赖于$(BIN),在执行default前会先构建$(BIN)
+# sim任务中$(BIN)放在命令行中，表示普通的指令，即执行该可执行文件，而不会进行构建
 
 wave:
 	gtkwave dump.vcd &

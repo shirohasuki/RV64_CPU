@@ -28,7 +28,6 @@ LDFLAGS += -lSDL2 -lSDL2_image "-ldl $(shell llvm-config-11 --cxxflags) -fPIE $(
 #====================================
 
 default: $(BIN)
-	@rm -rf $(BUILD_DIR)
 	$(shell mkdir -p $(BUILD_DIR))
 
 test:

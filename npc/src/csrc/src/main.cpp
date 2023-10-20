@@ -39,17 +39,17 @@ void sim_init() {
     top->trace(tfp, 0);
     tfp->open("dump.vcd");
 
-    top->rst = 0; top->clk = 0; step_and_dump_wave();
-    top->rst = 0; top->clk = 1; step_and_dump_wave();
-    top->rst = 1; top->clk = 0; step_and_dump_wave();   
+    top->reset = 0; top->clock = 0; step_and_dump_wave();
+    top->reset = 0; top->clock = 1; step_and_dump_wave();
+    top->reset = 1; top->clock = 0; step_and_dump_wave();   
 } // 低电平复位
 
 void exec_once() {
 #ifdef CONFIG_NPC_ITRACE 
     itrace_record(cpu_npc.pc);
 #endif
-    top->clk ^= 1; step_and_dump_wave();
-    top->clk ^= 1; step_and_dump_wave();
+    top->clock ^= 1; step_and_dump_wave();
+    top->clock ^= 1; step_and_dump_wave();
     // dump_gpr(); 
 } // 翻转两次走一条指令
 

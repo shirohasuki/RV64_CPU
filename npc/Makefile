@@ -26,8 +26,9 @@ INCFLAGS = $(addprefix -I, $(INC_PATH))
 CFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
 LDFLAGS += -lSDL2 -lSDL2_image "-ldl $(shell llvm-config-11 --cxxflags) -fPIE $(shell llvm-config-11 --libs)"
 #====================================
+
 default: $(BIN)
-	$(shell mkdir -p $(BUILD_DIR))
+	
 
 test:
 	mill -i __.test
@@ -56,6 +57,7 @@ clean:
 	-rm -rf $(BUILD_DIR)
 
 $(BIN): ${VSRCS} ${CSRCS} 
+	$(shell mkdir -p $(BUILD_DIR))
 	@rm -rf $(OBJ_DIR)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	verilator $(VERILATOR_CFLAGS) +incdir+$(BUILD_DIR)\
@@ -68,11 +70,10 @@ sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	$(BIN)
 	  @$^
-	$(shell mkdir -p $(BUILD_DIR))
 
 wave:
 	gtkwave wave.vcd &
 
-.PHONY: test verilog help compile bsp reformat checkformat clean sim wave
+.PHONY: default test verilog help compile bsp reformat checkformat clean sim wave
 
 include ../Makefile

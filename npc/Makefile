@@ -60,7 +60,6 @@ clean:
 
 $(BIN): ${VSRCS} ${CSRCS} 
 	@rm -rf $(OBJ_DIR)
-	$(shell mkdir -p $(BUILD_DIR))
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	verilator $(VERILATOR_CFLAGS) +incdir+$(BUILD_DIR)\
 		--top $(TOPNAME) $^\
@@ -68,9 +67,8 @@ $(BIN): ${VSRCS} ${CSRCS}
 		--Mdir $(OBJ_DIR) --exe
 	make -C ${OBJ_DIR} -f V$(TOPNAME).mk V$(TOPNAME) -j4
 
-sim:
-	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(BIN)
+sim: $(BIN)
+	 $(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	  @$^
 
 wave:

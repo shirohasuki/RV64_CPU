@@ -36,10 +36,10 @@ test:
 verilog:
 	$(call git_commit, "generate verilog")
 	mkdir -p $(BUILD_DIR)
-	mill -i __.test.runMain top.tb -td $(BUILD_DIR)
+	mill -i __.test.runMain tb.tb -td $(BUILD_DIR)
 
 help:
-	mill -i __.test.runMain top.tb --help
+	mill -i __.test.runMain tb.tb --help
 
 compile:
 	mill -i __.compile

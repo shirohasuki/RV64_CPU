@@ -28,7 +28,7 @@ LDFLAGS += -lSDL2 -lSDL2_image "-ldl $(shell llvm-config-11 --cxxflags) -fPIE $(
 #====================================
 
 default: $(BIN)
-	
+	$(shell mkdir -p $(BUILD_DIR))
 
 test:
 	mill -i __.test
@@ -57,7 +57,6 @@ clean:
 	-rm -rf $(BUILD_DIR)
 
 $(BIN): ${VSRCS} ${CSRCS} 
-	$(shell mkdir -p $(BUILD_DIR))
 	@rm -rf $(OBJ_DIR)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	verilator $(VERILATOR_CFLAGS) +incdir+$(BUILD_DIR)\

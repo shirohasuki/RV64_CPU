@@ -1,4 +1,4 @@
-package top
+package tb
 
 import chisel3._
 import chisel3.util._
@@ -6,7 +6,7 @@ import chisel3.stage._
 
 import decoder._
 
-class top extends Module {
+class tb extends Module {
     val io = IO(new Bundle {
         val in = Input(UInt(3.W))
         val out = Output(UInt(8.W))

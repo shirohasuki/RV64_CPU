@@ -5,9 +5,12 @@ import mill.scalalib.scalafmt.ScalafmtModule
 import mill.scalalib.TestModule.Utest
 // support BSP
 import mill.bsp._
+//
+import os.Path
 
 object main extends ScalaModule with ScalafmtModule { m =>
 	override def scalaVersion = "2.13.8"
+	override def millSourcePath = os.pwd
 	override def scalacOptions = Seq(
 		"-language:reflectiveCalls",
 		"-deprecation",

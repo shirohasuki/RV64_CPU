@@ -4,16 +4,16 @@
 #include "Vtb.h"
 #include "Vtb__Syms.h"
 #include "verilated_vcd_c.h"
-#include "verilated_dpi.h"
 
 //============================================================
 // Constructors
 
 Vtb::Vtb(VerilatedContext* _vcontextp__, const char* _vcname__)
     : vlSymsp{new Vtb__Syms(_vcontextp__, _vcname__, this)}
-    , clk{vlSymsp->TOP.clk}
-    , rst{vlSymsp->TOP.rst}
-    , __PVT____024unit{vlSymsp->TOP.__PVT____024unit}
+    , clock{vlSymsp->TOP.clock}
+    , reset{vlSymsp->TOP.reset}
+    , io_in{vlSymsp->TOP.io_in}
+    , io_out{vlSymsp->TOP.io_out}
     , rootp{&(vlSymsp->TOP)}
 {
 }

@@ -9,13 +9,10 @@
 #define VERILATED_VTB_H_  // guard
 
 #include "verilated.h"
-#include "svdpi.h"
 
 class Vtb__Syms;
 class Vtb___024root;
 class VerilatedVcdC;
-class Vtb___024unit;
-
 
 // This class is the main interface to the Verilated model
 class Vtb VL_NOT_FINAL {
@@ -28,13 +25,14 @@ class Vtb VL_NOT_FINAL {
     // PORTS
     // The application code writes and reads these signals to
     // propagate new values into/out from the Verilated model.
-    VL_IN8(&clk,0,0);
-    VL_IN8(&rst,0,0);
+    VL_IN8(&clock,0,0);
+    VL_IN8(&reset,0,0);
+    VL_IN8(&io_in,2,0);
+    VL_OUT8(&io_out,7,0);
 
     // CELLS
     // Public to allow access to /* verilator public */ items.
     // Otherwise the application code can consider these internals.
-    Vtb___024unit* const __PVT____024unit;
 
     // Root instance pointer to allow access to model internals,
     // including inlined /* verilator public_flat_* */ items.

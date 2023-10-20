@@ -18,5 +18,5 @@ class tb extends Module {
 }
 
 object tb extends App {
-    (new ChiselStage).emitVerilog(new top, args)
+    (new ChiselStage).emitVerilog(new tb, args)
 }

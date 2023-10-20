@@ -4,7 +4,7 @@ export PATH := $(PATH):$(abspath ./utils)
 
 # ========= verilator ==============
 TOPNAME = GCD
-INC_PATH ?= /home/shiroha/Code/ysyx/ysyx-workbench/npc/csrc/include \
+INC_PATH ?= /home/shiroha/Code/ysyx/ysyx-workbench/npc/src/csrc/include \
 			/usr/lib/llvm-11/include # for disasm 
 
 VERILATOR = verilator
@@ -66,6 +66,7 @@ sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	$(BIN)
 	  @$^
+
 wave:
 	gtkwave wave.vcd &
 

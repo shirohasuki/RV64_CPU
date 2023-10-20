@@ -28,7 +28,7 @@ LDFLAGS += -lSDL2 -lSDL2_image "-ldl $(shell llvm-config-11 --cxxflags) -fPIE $(
 #====================================
 
 default: $(BIN)
-# @rm -rf $(BUILD_DIR)
+	@rm -rf $(BUILD_DIR)
 	$(shell mkdir -p $(BUILD_DIR))
 
 test:
@@ -72,7 +72,7 @@ sim:
 	  @$^
 
 wave:
-	gtkwave wave.vcd &
+	gtkwave dump.vcd &
 
 .PHONY: default test verilog help compile bsp reformat checkformat clean sim wave
 

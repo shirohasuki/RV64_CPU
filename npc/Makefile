@@ -27,7 +27,7 @@ CFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
 LDFLAGS += -lSDL2 -lSDL2_image "-ldl $(shell llvm-config-11 --cxxflags) -fPIE $(shell llvm-config-11 --libs)"
 #====================================
 
-all: verilog sim
+all: verilog default sim
 
 default: $(BIN)
 	$(shell mkdir -p $(BUILD_DIR))

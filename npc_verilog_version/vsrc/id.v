@@ -35,15 +35,15 @@ module id (
     output reg       csr_wen_o
 );
 
-    wire[6:0]  opcode; // 7byte (6~0)
-    wire[4:0]  rd; // 5byte (11~7)
+    wire[6:0]  opcode;  // 7byte (6~0)
+    wire[4:0]  rd;      // 5byte (11~7)
     wire[2:0]  func3;
     wire[4:0]  rs1;
     wire[4:0]  rs2;
-    wire[11:0]  csr;
+    wire[11:0] csr;
     wire[6:0]  func7;
     wire[11:0] imm;
-    wire[5:0]  shamt; // I形的移位
+    wire[5:0]  shamt;   // I形的移位
 
     wire[63:0] immI = {{52{inst_i[31]}}, inst_i[31:20]}; // 符号位拓展，imm[11]向前拓展为20位
     wire[63:0] immU = {{32{inst_i[31]}}, inst_i[31:12], 12'b0};

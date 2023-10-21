@@ -1,7 +1,5 @@
 package define
 
-import  chisel3.id_ex
-
 object defines {
         // I type inst
     // val INST_TYPE_I = 0010011.U

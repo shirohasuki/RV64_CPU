@@ -42,10 +42,13 @@ class IDU extends Module {
         val id_reg  = Output(new IDU_REG_Output())
     })
 
-    val inst   = Wire(UInt(32.W))
-    val opcode = Wire(UInt(32.W))
-    val func3  = Wire(UInt(3.W))
-    val func7  = Wire(UInt(7.W))
+    val inst     = Wire(UInt(32.W))
+    val opcode   = Wire(UInt(32.W))
+    val func3    = Wire(UInt(3.W))
+    val func7    = Wire(UInt(7.W))
+    val rs1_addr = Wire(UInt(5.W))
+    val rs2_addr = Wire(UInt(5.W))
+    val rd_addr  = Wire(UInt(5.W))
 
     opcode   := inst( 6,  0)
     func3    := inst(14, 12)

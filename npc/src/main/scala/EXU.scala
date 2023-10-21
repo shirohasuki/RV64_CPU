@@ -25,7 +25,7 @@ class EXU_REG_Output extends Bundle {
 
 class EXU extends Module {
     val io = IO(new Bundle {
-        val id_ex  = Input(new IDU_EXU_Output())
+        val id_ex  = Input(new IDU_EXU_Input())
         val ex_reg = Output(new EXU_REG_Output())
     })
 

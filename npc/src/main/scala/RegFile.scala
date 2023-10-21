@@ -24,7 +24,7 @@ class RegFile extends Module {
     val io = IO(new Bundle{
         val id_reg = Input(new IDU_REG_Input())
         val reg_id = Output(new REG_IDU_Output())
-        val ex_reg = Input(new EXU_REG_Output())
+        val ex_reg = Input(new EXU_REG_Input())
     })
 
     // 寄存器组

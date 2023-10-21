@@ -70,7 +70,7 @@ class IDU extends Module {
     //  List(op1_o, op2_o, rs1_addr_o, rs2_addr_o, rd_addr_o, reg_wen, base_addr_o, offset_addr_o)
     var id_ex_list  = ListLookup(func37, List((0.U(64.W)), 0.U(64.W), 0.U(5.W), 0.U(5.W), 0.U(64.W), 0.U(1.W), 0.U(64.W), 0.U(64.W)), Array(
         BitPat("000_0010011") -> List(io.reg_id.rs1_data_reg_id, immI,                      rs1_addr,       0.U,          rd_addr,    1.U,   0.U,   0.U), //addi
-        BitPat("000_0110011") -> List(io.reg_id.rs1_data_reg_id, io.reg_id.rs2_data_reg_id, rs1_addr        rs2_addr,     rd_addr,    1.U,   0.U,   0.U), //add        
+        BitPat("000_0110011") -> List(io.reg_id.rs1_data_reg_id, io.reg_id.rs2_data_reg_id, rs1_addr,       rs2_addr,     rd_addr,    1.U,   0.U,   0.U), //add        
     ))
     io.id_ex.op1_id_ex         := id_ex_list(0)
     io.id_ex.op2_id_ex         := id_ex_list(1)

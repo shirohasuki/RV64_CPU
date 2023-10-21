@@ -16,7 +16,7 @@ class IFU extends Module {
         val pc_if_id    = Output(UInt(64.W))
     })
 
-    pc_if_rom  := pc_pc_if
-    inst_if_id := inst_rom_if
-    pc_if_id   := pc_pc_if
+    io.pc_if_rom  := io.pc_pc_if
+    io.inst_if_id := io.inst_rom_if
+    io.pc_if_id   := io.pc_pc_if
 }

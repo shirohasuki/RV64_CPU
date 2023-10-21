@@ -4,9 +4,13 @@ import chisel3._
 import chisel3.util._
 import chisel3.stage._
 
+import PcReg._
 import IFU._
 import IDU._
 import EXU._
+import ROM._
+import RegFile._
+
 
 class tb extends Module {
     val io = IO(new Bundle {

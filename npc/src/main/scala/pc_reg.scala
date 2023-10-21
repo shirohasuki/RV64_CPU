@@ -1,4 +1,4 @@
-package pc_reg
+package PcReg
 
 import chisel3._
 import chisel3.util._

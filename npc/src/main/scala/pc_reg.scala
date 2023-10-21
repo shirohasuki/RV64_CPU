@@ -10,7 +10,7 @@ class PcReg extends Module {
     })
 
     val pc   = RegInit("h80000000".U(64.W))
-    val snpc = Reg(Uint(64.W))
+    val snpc = Reg(UInt(64.W))
     // val pc   = Reg(Uint(64.W))
     pc   := snpc
     snpc := pc + 4.U 

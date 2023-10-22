@@ -24,7 +24,7 @@ class IDU_EXU_Output extends Bundle {
     val rs1_addr_id_ex    = Output(UInt(5.W))
     val rs2_addr_id_ex    = Output(UInt(5.W))
     val rd_addr_id_ex     = Output(UInt(5.W))
-    val reg_wen_id_ex     = Output(Bool())
+    val reg_wen_id_ex     = Output(UInt(1.W))
     val base_addr_id_ex   = Output(UInt(64.W))
     val offset_addr_id_ex = Output(UInt(64.W))
 }

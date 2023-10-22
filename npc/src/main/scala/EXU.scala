@@ -18,7 +18,7 @@ class IDU_EXU_Input extends Bundle {
 }
 
 class EXU_REG_Output extends Bundle {
-    val reg_wen_id_ex     = Output(Bool())
+    val reg_wen_id_ex     = Output(UInt(1.W))
     val rd_addr_ex_reg    = Output(UInt(64.W))
     val rd_data_ex_reg    = Output(UInt(64.W))
 }

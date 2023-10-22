@@ -26,13 +26,13 @@ class tb extends Module {
     val RegFile = Module(new RegFile())
     val ROM     = Module(new ROM())
 
-    Pc.pc_if   <> IFU.pc_if
-    IFU.if_rom <> ROM.if_rom
-    IFU.if_id  <> IDU.if_id
-    IDU.id_reg <> RegFile.id_reg
+    Pc.pc_if       <> IFU.pc_if
+    IFU.if_rom     <> ROM.if_rom
+    IFU.if_id      <> IDU.if_id
+    IDU.id_reg     <> RegFile.id_reg
     RegFile.reg_id <> IDU.reg_id
-    IDU.id_ex  <> EXU.id_ex
-    EXU.ex_reg <> RegFile.ex_reg
+    IDU.id_ex      <> EXU.id_ex
+    EXU.ex_reg     <> RegFile.ex_reg
 
     loadMemoryFromFile(ROM.mem, "./src/main/scala/inst_data_ADD.txt", MemoryLoadFileType.Binary)
 

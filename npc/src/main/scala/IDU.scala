@@ -21,8 +21,8 @@ class IDU_EXU_Output extends Bundle {
     val pc          = Output(UInt(64.W))
     val op1         = Output(UInt(64.W))
     val op2         = Output(UInt(64.W))
-    val rs1_addr    = Output(UInt(5.W))
-    val rs2_addr    = Output(UInt(5.W))
+    val rs1_raddr    = Output(UInt(5.W))
+    val rs2_raddr    = Output(UInt(5.W))
     val rd_addr     = Output(UInt(5.W))
     val rd_wen     = Output(Bool())
     val base_addr   = Output(UInt(64.W))
@@ -69,13 +69,13 @@ class IDU extends Module {
     val func37 = Cat(func3, func7)
     //  List(op1_o, op2_o, rs1_addr_o, rs2_addr_o, rd_addr_o, rd_wen, base_addr_o, offset_addr_o)
     var id_ex_list  = ListLookup(func37, List(0.U(64.W), 0.U(64.W), 0.U(5.W), 0.U(5.W), 0.U(64.W), false.B, 0.U(64.W), 0.U(64.W)), Array(
-        BitPat("b000_0010011") -> List(reg_id.rs1_data, immI,            rs1_raddr,       0.U,          rd_addr,    1.B,   0.U,   0.U), //addi
-        BitPat("b000_0110011") -> List(reg_id.rs1_data, reg_id.rs2_data, rs1_raddr,       rs2_addr,     rd_addr,    1.B,   0.U,   0.U), //add        
+        BitPat("b000_0010011") -> List(reg_id.rs1_data, immI,            rs1_addr,       0.U,          rd_addr,    1.B,   0.U,   0.U), //addi
+        BitPat("b000_0110011") -> List(reg_id.rs1_data, reg_id.rs2_data, rs1_addr,       rs2_addr,     rd_addr,    1.B,   0.U,   0.U), //add        
     ))
     id_ex.op1         := id_ex_list(0)
     id_ex.op2         := id_ex_list(1)
-    id_ex.rs1_raddr    := id_ex_list(2)
-    id_ex.rs2_raddr    := id_ex_list(3)
+    id_ex.rs1_raddr   := id_ex_list(2)
+    id_ex.rs2_raddr   := id_ex_list(3)
     id_ex.rd_addr     := id_ex_list(4)
     id_ex.rd_wen      := id_ex_list(5)
     id_ex.base_addr   := id_ex_list(6)

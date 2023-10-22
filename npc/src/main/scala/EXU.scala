@@ -12,21 +12,21 @@ class IDU_EXU_Input extends Bundle {
     val rs1_addr_id_ex    = Input(UInt(5.W))
     val rs2_addr_id_ex    = Input(UInt(5.W))
     val rd_addr_id_ex     = Input(UInt(5.W))
-    val reg_wen_id_ex     = Input(UInt(1.W))
+    val reg_wen_id_ex     = Input(Bool())
     val base_addr_id_ex   = Input(UInt(64.W))
     val offset_addr_id_ex = Input(UInt(64.W))
 }
 
 class EXU_REG_Output extends Bundle {
-    val reg_wen_id_ex     = Output(UInt(1.W))
+    val reg_wen_id_ex     = Output(Bool())
     val rd_addr_ex_reg    = Output(UInt(64.W))
     val rd_data_ex_reg    = Output(UInt(64.W))
 }
 
 class EXU extends Module {
     // val io = IO(new Bundle {
-    val id_ex  = Input(new IDU_EXU_Input())
-    val ex_reg = Output(new EXU_REG_Output())
+    val id_ex  = new IDU_EXU_Input()
+    val ex_reg = new EXU_REG_Output()
     // })
 
     // def op1_i_add_op2_i

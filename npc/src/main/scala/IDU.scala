@@ -24,7 +24,7 @@ class IDU_EXU_Output extends Bundle {
     val rs1_addr_id_ex    = Output(UInt(5.W))
     val rs2_addr_id_ex    = Output(UInt(5.W))
     val rd_addr_id_ex     = Output(UInt(5.W))
-    val reg_wen_id_ex     = Output(UInt(1.W))
+    val reg_wen_id_ex     = Output(Bool())
     val base_addr_id_ex   = Output(UInt(64.W))
     val offset_addr_id_ex = Output(UInt(64.W))
 }
@@ -36,10 +36,10 @@ class IDU_REG_Output extends Bundle {
 
 class IDU extends Module {
     // val io = IO(new Bundle {
-    val if_id   = Input(new IFU_IDU_Input())
-    val reg_id  = Input(new REG_IDU_Input())
-    val id_ex   = Output(new IDU_EXU_Output())
-    val id_reg  = Output(new IDU_REG_Output())
+    val if_id   = new IFU_IDU_Input()
+    val reg_id  = new REG_IDU_Input()
+    val id_ex   = new IDU_EXU_Output()
+    val id_reg  = new IDU_REG_Output()
     // })
 
     val inst     = Wire(UInt(32.W))

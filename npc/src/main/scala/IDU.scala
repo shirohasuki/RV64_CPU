@@ -58,7 +58,7 @@ class IDU extends Module {
     rd_addr  := inst(11,  7)
 
     val immI = Cat(Fill(52, inst(31)), inst(31, 20))
-    val immU = Cat(Fill(32, inst(32)), inst(31, 12), Fill(12, 0.U))
+    val immU = Cat(Fill(32, inst(31)), inst(31, 12), Fill(12, 0.U))
     val immS = Cat(Fill(52, inst(31)), inst(31, 25), inst(11, 7))
     val immB = Cat(Fill(52, inst(31)), inst(7), inst(30, 25), inst(11, 8), 0.U(1.W))
     val immJ = Cat(Fill(44, inst(31)), inst(31), inst(19, 12), inst(20), inst(30, 21), Fill(1, 0.U))

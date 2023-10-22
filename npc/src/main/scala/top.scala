@@ -25,11 +25,11 @@ class tb extends Module {
     val ROM     = Module(new ROM())
 
     Pc.pc_if  <> IFU.pc_if
-    IFU.io <> ROM.io
-    IFU.io <> IDU.io
-    IDU.io <> RegFile.io
-    IDU.io <> EXU.io
-    EXU.io <> RegFile.io
+    IFU.if_rom <> ROM.if_rom
+    IFU.if_id <> IDU.if_id
+    IDU.id_reg <> RegFile.id_reg
+    IDU.id_ex <> EXU.id_ex
+    EXU.ex_reg <> RegFile.ex_reg
 }
 
 object tb extends App {

@@ -33,7 +33,7 @@ class EXU extends Module {
 
     val func37 = Cat(id_ex.inst(14, 12), id_ex.inst(31, 25))
     //  List(rd_wen, rs_waddr_o, rs_wdata_o, mem_ren, mem_raddr, mem_wen, mem_wmask, mem_wdata, mem_waddr)
-    var decode_list  = ListLookup(func37, List(false.B, 0.U(64.W), 0.U(64.W), false.B, 0.U(64.W), false.B, 0.U(64.W), 0.U(8.W), 0.U(64.W), 0.U(64.W)), Array(
+    var exce_list  = ListLookup(func37, List(false.B, 0.U(64.W), 0.U(64.W), false.B, 0.U(64.W), false.B, 0.U(64.W), 0.U(8.W), 0.U(64.W), 0.U(64.W)), Array(
         BitPat("b000_0010011") -> List(false.B, id_ex.rd_addr, id_ex.op1 + id_ex.op2, false.B, 0.U, false.B, 0.U, 0.U, 0.U, 0.U), //addi
         BitPat("b000_0110011") -> List(false.B, id_ex.rd_addr, id_ex.op1 + id_ex.op2, false.B, 0.U, false.B, 0.U, 0.U, 0.U, 0.U), //add        
     ))

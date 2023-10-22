@@ -29,7 +29,8 @@ class EXU extends Module {
     val ex_reg = IO(new EXU_REG_Output())
     // })
     
-    val op1_i_add_op2_i =  Reg(id_ex.op1 + id_ex.op2)
+    val op1_i_add_op2_i = Reg(UInt(64.W))
+    op1_i_add_op2_i := id_ex.op1 + id_ex.op2
 
     // def op1_i_add_op2_i
     

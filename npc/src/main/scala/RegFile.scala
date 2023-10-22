@@ -32,11 +32,11 @@ class RegFile extends Module {
 
     
     // 读寄存器的数据
-    io.reg_id.rs1_rdata_reg_id := Mux(io.id_reg.rs1_raddr_id_reg === 0.U, 0.U(64.W), 
-                                    Mux((io.ex_reg.rd_wen_id_reg && (io.ex_reg.rd_waddr_id_reg === io.id_reg.rs1_raddr_id_reg)), io.ex_reg.rd_wdata_id_reg, regs(io.id_reg.rs1_raddr_id_reg)))
-    io.reg_id.rs2_rdata_reg_id := Mux(io.id_reg.rs2_raddr_id_reg === 0.U, 0.U(64.W), 
-                                    Mux((io.ex_reg.rd_wen_id_reg && (io.ex_reg.rd_waddr_id_reg === io.id_reg.rs2_raddr_id_reg)), io.ex_reg.rd_wdata_id_reg, regs(io.id_reg.rs2_raddr_id_reg)))
+    reg_id.rs1_rdata_reg_id := Mux(id_reg.rs1_raddr_id_reg === 0.U, 0.U(64.W), 
+                                    Mux((ex_reg.rd_wen_id_reg && (ex_reg.rd_waddr_id_reg === id_reg.rs1_raddr_id_reg)), ex_reg.rd_wdata_id_reg, regs(id_reg.rs1_raddr_id_reg)))
+    reg_id.rs2_rdata_reg_id := Mux(id_reg.rs2_raddr_id_reg === 0.U, 0.U(64.W), 
+                                    Mux((ex_reg.rd_wen_id_reg && (ex_reg.rd_waddr_id_reg === id_reg.rs2_raddr_id_reg)), ex_reg.rd_wdata_id_reg, regs(id_reg.rs2_raddr_id_reg)))
     // 写寄存器的数据:给出写信号，且rd不为0时写寄存器
-    regs(io.ex_reg.rd_waddr_id_reg) := Mux(io.ex_reg.rd_wen_id_reg && (io.ex_reg.rd_waddr_id_reg =/= 0.U), io.ex_reg.rd_wdata_id_reg, 0.U(64.W))   
+    regs(ex_reg.rd_waddr_id_reg) := Mux(ex_reg.rd_wen_id_reg && (ex_reg.rd_waddr_id_reg =/= 0.U),  ex_reg.rd_wdata_id_reg, 0.U(64.W))   
 }
 

@@ -5,8 +5,8 @@ import chisel3.util._
 import chisel3.stage._
 
 class PcReg extends Module {
-    val io = IO(new Bundle {
-        val pc_pc_if = Output(UInt(64.W))
+    val pc_if = IO(new Bundle {
+        val pc = Output(UInt(64.W))
     })
 
     val pc   = RegInit("h80000000".U(64.W))

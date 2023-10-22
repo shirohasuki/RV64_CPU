@@ -13,9 +13,9 @@ import RegFile._
 
 
 class tb extends Module {
-    val io = IO(new Bundle {
+    // val io = IO(new Bundle {
         
-    })
+    // })
 
     val Pc      = Module(new PcReg())
     val IFU     = Module(new IFU())

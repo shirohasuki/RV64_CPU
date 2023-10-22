@@ -28,7 +28,7 @@ class EXU extends Module {
     val id_ex  = new IDU_EXU_Input()
     val ex_reg = new EXU_REG_Output()
     // })
-
+    
     // def op1_i_add_op2_i
 
     val func37 = Cat(id_ex.inst_id_ex(14, 12), id_ex.inst_id_ex(31, 25))

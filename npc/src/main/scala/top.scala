@@ -30,6 +30,7 @@ class tb extends Module {
     IFU.if_rom <> ROM.if_rom
     IFU.if_id  <> IDU.if_id
     IDU.id_reg <> RegFile.id_reg
+    RegFile.reg_id <> IDU.reg_id
     IDU.id_ex  <> EXU.id_ex
     EXU.ex_reg <> RegFile.ex_reg
 

@@ -34,10 +34,7 @@ class tb extends Module {
     IDU.id_ex      <> EXU.id_ex
     EXU.ex_reg     <> RegFile.ex_reg
 
-    loadMemoryFromFile(ROM.mem, "./src/main/scala/inst_data_ADD.txt", MemoryLoadFileType.Binary)
-
-        val regs = Reg(Vec(32, UInt(64.W)))    
-    regs := RegFile.regs
+    loadMemoryFromFile(ROM.mem, "./src/main/scala/inst_data_ADD.txt", MemoryLoadFileType.Binary);
 }
 
 object tb extends App {

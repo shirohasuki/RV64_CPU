@@ -17,14 +17,12 @@ module regs (
 	input wire       reg_wen,
     input reg[63:0]  inst_addr_i,
 
-    output wire[63:0] a7_o
+    // output wire[63:0] a7_o
     // r:read, w:write
 );
 
     reg[63:0] regs[0:31]; // 32个64位宽
     reg[63:0] pc_reg  = inst_addr_i;
-
-
 
     always @(*) begin
         if (rst == 1'b0) 
@@ -89,7 +87,7 @@ module regs (
     //     a7_o = tmp;
     // end
 
-    assign a7_o = regs[17];
+//    assign a7_o = regs[17];
 
 endmodule 
 

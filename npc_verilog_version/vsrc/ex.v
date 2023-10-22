@@ -105,9 +105,9 @@ module ex (
     assign op1_i_rem_op2_i_unsigned         = op1_i % op2_i;
     assign op1_i_div_op2_i                  = $signed(op1_i) / $signed(op2_i);          // 除
     assign op1_i_div_op2_i_unsigned         = op1_i / op2_i;                            // 除
-    assign op1_i_shift_left_op2_i_unsigned  = op1_i << op2_i[5:0];                           // 逻辑左移 sll
-    assign op1_i_shift_right_op2_i_unsigned = op1_i >> op2_i[5:0];                           // 逻辑右移 srl
-    assign op1_i_shift_right_op2_i_signed   = $signed(op1_i) >>> op2_i[5:0];                 // 算术右移 sra                            
+    assign op1_i_shift_left_op2_i_unsigned  = op1_i << op2_i[5:0];                      // 逻辑左移 sll
+    assign op1_i_shift_right_op2_i_unsigned = op1_i >> op2_i[5:0];                      // 逻辑右移 srl
+    assign op1_i_shift_right_op2_i_signed   = $signed(op1_i) >>> op2_i[5:0];            // 算术右移 sra                            
     assign base_addr_add_addr_offset        = base_addr_i + offset_addr_i;              // 计算地址单元
     assign op1_i_equal_op2_i                = (op1_i == op2_i)? 1'b1 : 1'b0;
     assign op1_i_less_op2_i_unsigned        = (op1_i < op2_i)? 1'b1 : 1'b0;

@@ -16,8 +16,7 @@ import RegFile._
 
 class tb extends Module {
     // val io = IO(new Vec {
-    val regs = Reg(Vec(32, UInt(64.W)))    
-    regs := RegFile.regs
+
     // })
 
     val Pc      = Module(new PcReg())
@@ -37,6 +36,8 @@ class tb extends Module {
 
     loadMemoryFromFile(ROM.mem, "./src/main/scala/inst_data_ADD.txt", MemoryLoadFileType.Binary)
 
+        val regs = Reg(Vec(32, UInt(64.W)))    
+    regs := RegFile.regs
 }
 
 object tb extends App {

@@ -12,8 +12,8 @@ class IFU_IDU_Input extends Bundle {
 }
 
 class REG_IDU_Input extends Bundle {
-    val rs1_data   = Input(UInt(64.W))
-    val rs2_data   = Input(UInt(64.W))
+    val rs1_rdata   = Input(UInt(64.W))
+    val rs2_rdata   = Input(UInt(64.W))
 }
 
 class IDU_EXU_Output extends Bundle {
@@ -70,8 +70,8 @@ class IDU extends Module {
     val func37 = Cat(func3, func7)
     //  List(op1_o, op2_o, rs1_addr_o, rs2_addr_o, rd_addr_o, rd_wen, base_addr_o, offset_addr_o)
     var decode_list  = ListLookup(func37, List(0.U(64.W), 0.U(64.W), 0.U(5.W), 0.U(5.W), 0.U(64.W), false.B, 0.U(64.W), 0.U(64.W)), Array(
-        BitPat("b000_0010011") -> List(reg_id.rs1_data, immI,            rs1_addr,       0.U,          rd_addr,    1.B,   0.U,   0.U), //addi
-        BitPat("b000_0110011") -> List(reg_id.rs1_data, reg_id.rs2_data, rs1_addr,       rs2_addr,     rd_addr,    1.B,   0.U,   0.U), //add        
+        BitPat("b000_0010011") -> List(reg_id.rs1_rdata, immI,             rs1_addr,       0.U,          rd_addr,    1.B,   0.U,   0.U), //addi
+        BitPat("b000_0110011") -> List(reg_id.rs1_rdata, reg_id.rs2_rdata, rs1_addr,       rs2_addr,     rd_addr,    1.B,   0.U,   0.U), //add        
     ))
     id_ex.op1         := decode_list(0)
     id_ex.op2         := decode_list(1)

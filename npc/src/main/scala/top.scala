@@ -24,12 +24,12 @@ class tb extends Module {
     val RegFile = Module(new RegFile())
     val ROM     = Module(new ROM())
 
-     IFU.io        <>      Pc.io   
-     ROM.io        <>      IFU.io  
-     IDU.io        <>      IFU.io  
-     RegFile.io    <>      IDU.io  
-     EXU.io        <>      IDU.io  
-     RegFile.io    <>      EXU.io  
+    Pc.io.pc_pc_if  <> IFU.io.pc_pc_if
+    IFU.io <> ROM.io
+    IFU.io <> IDU.io
+    IDU.io <> RegFile.io
+    IDU.io <> EXU.io
+    EXU.io <> RegFile.io
 }
 
 object tb extends App {

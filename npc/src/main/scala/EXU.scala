@@ -29,13 +29,15 @@ class EXU extends Module {
     val ex_reg = IO(new EXU_REG_Output())
     // })
     
-    // def op1_i_add_op2_i
+    reg op1_i_add_op2_i =  id_ex.op1 + id_ex.op2
 
+    // def op1_i_add_op2_i
+    
     val func37 = Cat(id_ex.inst(14, 12), id_ex.inst(31, 25))
     //  List(rd_wen, rd_waddr_o, rd_wdata_o, mem_ren, mem_raddr, mem_wen, mem_wmask, mem_wdata, mem_waddr)
     var exce_list  = ListLookup(func37, List(false.B, 0.U(64.W), 0.U(64.W), false.B, 0.U(64.W), false.B, 0.U(64.W), 0.U(8.W), 0.U(64.W), 0.U(64.W)), Array(
-        BitPat("b000_0010011") -> List(true.B, id_ex.rd_addr, id_ex.op1 + id_ex.op2, false.B, 0.U, false.B, 0.U, 0.U, 0.U, 0.U), //addi
-        BitPat("b000_0110011") -> List(true.B, id_ex.rd_addr, id_ex.op1 + id_ex.op2, false.B, 0.U, false.B, 0.U, 0.U, 0.U, 0.U), //add        
+        BitPat("b000_0010011") -> List(true.B, id_ex.rd_addr, op1_i_add_op2_i, false.B, 0.U, false.B, 0.U, 0.U, 0.U, 0.U), //addi
+        BitPat("b000_0110011") -> List(true.B, id_ex.rd_addr, op1_i_add_op2_i, false.B, 0.U, false.B, 0.U, 0.U, 0.U, 0.U), //add        
     ))
     ex_reg.rd_wen   := exce_list(0)
     ex_reg.rd_waddr := exce_list(1)

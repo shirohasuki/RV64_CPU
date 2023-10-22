@@ -15,8 +15,9 @@ import RegFile._
 
 
 class tb extends Module {
-    // val io = IO(new Bundle {
-        
+    // val io = IO(new Vec {
+    val regs = Reg(Vec(32, UInt(64.W)))    
+    reg := RegFile.regs
     // })
 
     val Pc      = Module(new PcReg())

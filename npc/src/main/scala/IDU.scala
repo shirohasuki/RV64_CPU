@@ -64,6 +64,9 @@ class IDU extends Module {
     val immB = Cat(Fill(52, inst(31)), inst(7), inst(30, 25), inst(11, 8), 0.U(1.W))
     val immJ = Cat(Fill(44, inst(31)), inst(31), inst(19, 12), inst(20), inst(30, 21), Fill(1, 0.U))
 
+
+    reg_id.rs1_data := 0.U
+
     // IDU to EXU & reg
     id_ex.inst := if_id.inst
     id_ex.pc   := if_id.pc  

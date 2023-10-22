@@ -29,7 +29,6 @@ class RegFile extends Module {
 
     // 寄存器组
     val regs = Reg(Vec(32, UInt(64.W)))
-
     
     // 读寄存器的数据
     reg_id.rs1_rdata := Mux(id_reg.rs1_raddr === 0.U, 0.U(64.W), 

@@ -30,8 +30,8 @@ class IDU_EXU_Output extends Bundle {
 }
 
 class IDU_REG_Output extends Bundle {
-    val rs1_addr = Output(UInt(5.W))
-    val rs2_addr = Output(UInt(5.W))
+    val rs1_raddr = Output(UInt(5.W))
+    val rs2_raddr = Output(UInt(5.W))
 }
 
 class IDU extends Module {

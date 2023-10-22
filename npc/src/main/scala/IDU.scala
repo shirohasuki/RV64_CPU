@@ -50,6 +50,7 @@ class IDU extends Module {
     val rs2_addr = Wire(UInt(5.W))
     val rd_addr  = Wire(UInt(5.W))
 
+    inst     := id_ex.inst
     opcode   := inst( 6,  0)
     func3    := inst(14, 12)
     func7    := inst(31, 25)

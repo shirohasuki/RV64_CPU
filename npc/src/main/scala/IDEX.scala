@@ -16,7 +16,7 @@ class IDEX_Input extends Bundle {
 
 class IDEX extends Module {  
     val id_idex = IO(new IDEX_Input())
-    val idex_ex = IO(new Flipped(new IDEX_Input()))
+    val idex_ex = IO(Flipped(new IDEX_Input()))
 
     def dff_set(flush_flag_i: UInt, stall_flag_i: UInt, DataWidth: UInt, default: UInt, data_i: UInt): UInt = {
         val data_o = RegInit(default)

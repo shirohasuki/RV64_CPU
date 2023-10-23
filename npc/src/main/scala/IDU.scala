@@ -4,7 +4,7 @@ import chisel3._
 import chisel3.util._
 import chisel3.stage._
 
-import define.defines._
+import define.MACRO._
 
 class IFID_IDU_Input extends Bundle {
     val inst = Input(UInt(32.W))

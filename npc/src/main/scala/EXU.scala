@@ -4,6 +4,8 @@ import chisel3._
 import chisel3.util._
 import chisel3.stage._
 
+import define.MACRO._
+
 class IDEX_EXU_Input extends Bundle {
     val inst        = Input(UInt(32.W))
     val pc          = Input(UInt(64.W))

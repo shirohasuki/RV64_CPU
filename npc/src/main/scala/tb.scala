@@ -36,8 +36,8 @@ class tb extends Module {
     IFID.ifid_id   <> IDU.ifid_id
     IDU.id_reg     <> RegFile.id_reg
     RegFile.reg_id <> IDU.reg_id
-    IDU.id_ex      <> IDED.idex_ex
-    IDEX.idex_ex   <> EXU.id_ex
+    IDU.id_idex      <> IDED.id_idex
+    IDEX.idex_ex   <> EXU.idex_ex
     EXU.ex_reg     <> RegFile.ex_reg
 
     loadMemoryFromFile(ROM.mem, "./src/main/scala/inst_data_ADD.txt", MemoryLoadFileType.Binary);

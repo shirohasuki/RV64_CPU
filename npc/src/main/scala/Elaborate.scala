@@ -1,6 +1,6 @@
 import circt.stage._
 
-import tb
+import tb._
 
 object Elaborate extends App {
     def top = new tb()

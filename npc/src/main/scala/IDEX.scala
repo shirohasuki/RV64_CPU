@@ -25,7 +25,7 @@ class IDEX extends Module {
         data_o
     }
 
-    idex_ex.inst        := dff_set(0.U, 0.U, 32.U,  "h00000013".U, id_idex.inst       )
+    idex_ex.inst        := dff_set(0.U, 0.U, 32.U,  "h00000013".U(64.W), id_idex.inst       )
     idex_ex.pc          := dff_set(0.U, 0.U, 64.U,  0.U,           id_idex.pc         )
     idex_ex.op1         := dff_set(0.U, 0.U, 64.U,  0.U,           id_idex.op1        )
     idex_ex.op2         := dff_set(0.U, 0.U, 64.U,  0.U,           id_idex.op2        )

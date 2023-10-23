@@ -1,6 +1,16 @@
 package define
 
-object defines {
+
+object function {
+    def dff_set(flush_flag_i: UInt, stall_flag_i: UInt, DataWidth: UInt, default: UInt, data_i: UInt): UInt = {
+        val data_o = RegInit(default)
+        data_o := Mux(flush_flag_i === 1.U, default, 
+                    Mux(stall_flag_i === 1.U, data_o, data_i))
+        data_o
+    }
+} 
+
+object MACRO {
         // I type inst
     // val INST_TYPE_I = 0010011.U
     // val INST_ADDI   = 000.U

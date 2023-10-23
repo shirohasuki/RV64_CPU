@@ -33,12 +33,10 @@ class IDU_REG_Output extends Bundle {
 }
 
 class IDU extends Module {
-    // // val io = IO(new Bundle {
     val ifid_id = IO(new IFID_IDU_Input())
     val reg_id  = IO(new REG_IDU_Input())
     val id_idex = IO(new IDU_IDEX_Output())
     val id_reg  = IO(new IDU_REG_Output())
-    // // })
 
     val inst     = Wire(UInt(32.W))
     val opcode   = Wire(UInt(32.W))

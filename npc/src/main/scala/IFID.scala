@@ -13,9 +13,11 @@ class IFID_Input extends Bundle {
 
 class IFID extends Module {  
     val if_ifid = IO(new IFID_Input())
-    // val ifid_id = IO(new Flipped(new IFID_Input()))
+    val ifid_id = IO(Flipped(new IFID_Input()))
 
-    val ifid_id = IO(new Bundle{Flipped(new IFID_Input())})
+    // val ifid_id = IO(new Bundle {
+        // val ifid_id = Flipped(new FetchDecodeIO())
+    // })
 
     def dff_set(flush_flag_i: UInt, stall_flag_i: UInt, DataWidth: UInt, default: UInt, data_i: UInt): UInt = {
         val data_o = RegInit(default)

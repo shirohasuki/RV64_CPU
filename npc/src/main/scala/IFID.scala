@@ -26,6 +26,6 @@ class IFID extends Module {
         data_o
     }
 
-    ifid_id.inst := dff_set(0.U, 0.U, 32.U, "h00000013".U, if_ifid.inst)
-    ifid_id.pc   := dff_set(0.U, 0.U, 64.U, 0.U, if_ifid.inst)
+    ifid_id.inst := dff_set(0.U, 0.U, 32.U, "h00000013".U(32.W), if_ifid.inst)
+    ifid_id.pc   := dff_set(0.U, 0.U, 64.U, 0.U(64.W), if_ifid.inst)
 }

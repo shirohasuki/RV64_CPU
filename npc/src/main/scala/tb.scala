@@ -36,7 +36,7 @@ class tb extends Module {
     IFID.ifid_id   <> IDU.ifid_id
     IDU.id_reg     <> RegFile.id_reg
     RegFile.reg_id <> IDU.reg_id
-    IDU.id_idex      <> IDED.id_idex
+    IDU.id_idex    <> IDEX.id_idex
     IDEX.idex_ex   <> EXU.idex_ex
     EXU.ex_reg     <> RegFile.ex_reg
 

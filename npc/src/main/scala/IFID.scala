@@ -1,7 +1,7 @@
 package IFID
 
 import chisel3._
-
+import chisel3.util._
 
 // def dff_set(flush_flag_i: UInt(1.W), stall_flag_i: UInt(1.W), DataWidth: UInt(6.W), default: UInt(DataWidth.W), data_i: UInt(DataWidth.W)): UInt = {
 

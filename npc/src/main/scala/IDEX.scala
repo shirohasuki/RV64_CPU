@@ -3,12 +3,7 @@ package IDEX
 import chisel3._
 
 
-def dff_set(flush_flag_i: UInt, stall_flag_i: UInt, DataWidth: UInt, default: UInt, data_i: UInt): UInt = {
-    val data_o = RegInit(default.UInt(width = DataWidth.getWidth))
-    data_o := Mux(flush_flag_i === 1.U, default, 
-                  Mux(stall_flag_i === 1.U, data_o, data_i))
-    data_o
-}
+
 
 class IDEX_Input extends Bundle {
     val inst        = Output(UInt(32.W))
@@ -24,6 +19,13 @@ class IDEX_Input extends Bundle {
 class IFU extends Module {  
     val id_idex = IO(new IDEX_Input())
     val idex_ex = IO(new Flipped(new IDEX_Input()))
+
+    def dff_set(flush_flag_i: UInt, stall_flag_i: UInt, DataWidth: UInt, default: UInt, data_i: UInt): UInt = {
+        val data_o = RegInit(default.UInt(width = DataWidth.getWidth))
+        data_o := Mux(flush_flag_i === 1.U, default, 
+                    Mux(stall_flag_i === 1.U, data_o, data_i))
+        data_o
+    }
 
     idex_ex.inst        := dff_set(0.U, 0.U, 6.U,  "h00000013".U, id_idex.inst       )
     idex_ex.pc          := dff_set(0.U, 0.U, 5.U,  0.U,           id_idex.pc         )

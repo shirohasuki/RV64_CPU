@@ -16,7 +16,7 @@ class IDEX_Input extends Bundle {
     val offset_addr = Output(UInt(64.W))
 }
 
-class IFU extends Module {  
+class IDEX extends Module {  
     val id_idex = IO(new IDEX_Input())
     val idex_ex = IO(new Flipped(new IDEX_Input()))
 

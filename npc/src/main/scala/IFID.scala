@@ -11,7 +11,7 @@ class IFID_Input extends Bundle {
     val pc    = Input(UInt(64.W))
 }
 
-class IFU extends Module {  
+class IFID extends Module {  
     val if_ifid = IO(new IFID_Input())
     val ifid_id = IO(new Flipped(new IFID_Input()))
 

@@ -4,14 +4,14 @@ import chisel3._
 
 
 class IDEX_Input extends Bundle {
-    val inst        = Output(UInt(32.W))
-    val pc          = Output(UInt(64.W))
-    val op1         = Output(UInt(64.W))
-    val op2         = Output(UInt(64.W))
-    val rd_addr     = Output(UInt(5.W))
-    val rd_wen      = Output(Bool())
-    val base_addr   = Output(UInt(64.W))
-    val offset_addr = Output(UInt(64.W))
+    val inst        = Input(UInt(32.W))
+    val pc          = Input(UInt(64.W))
+    val op1         = Input(UInt(64.W))
+    val op2         = Input(UInt(64.W))
+    val rd_addr     = Input(UInt(5.W))
+    val rd_wen      = Input(Bool())
+    val base_addr   = Input(UInt(64.W))
+    val offset_addr = Input(UInt(64.W))
 }
 
 class IDEX extends Module {  

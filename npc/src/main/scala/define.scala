@@ -1,5 +1,6 @@
 package define
 
+import chisel3._
 
 object function {
     def dff_set(flush_flag_i: UInt, stall_flag_i: UInt, DataWidth: UInt, default: UInt, data_i: UInt): UInt = {

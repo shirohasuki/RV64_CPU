@@ -9,6 +9,9 @@ class PcReg extends Module {
         val pc_if = new Bundle {
             val pc = Output(UInt(64.W))
         }
+        val pc_tb = new Bundle {
+            val pc = Output(UInt(64.W))
+        }
     })
 
     val pc   = RegInit("h80000000".U(64.W))

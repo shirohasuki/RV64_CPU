@@ -19,7 +19,7 @@ import RegFile._
 
 class tb extends Module {
     val io = IO(new Bundle {
-        // val regs = 
+        val pc_test = Input(UInt(64.W))
     })
 
     val Pc      = Module(new PcReg())
@@ -32,6 +32,7 @@ class tb extends Module {
     val RegFile = Module(new RegFile())
     val ROM     = Module(new ROM())
 
+    Pc.io.pc_tb       <> io
     Pc.io.pc_if       <> IFU.io.pc_if
     IFU.io.if_rom     <> ROM.io.if_rom
     IFU.io.if_ifid    <> IFID.io.if_ifid

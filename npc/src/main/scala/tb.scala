@@ -51,6 +51,6 @@ class tb extends Module {
 }
 
 object toVerilog extends App {
-    (new ChiselStage).emitVerilog(new tb(), args)
+    (new ChiselStage).emitVerilog(new tb, args)
     // println(getVerilogString(new tb()))
 }

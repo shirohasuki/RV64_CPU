@@ -63,8 +63,8 @@ class IDU extends Module {
     val immJ = Cat(Fill(44, inst(31)), inst(31), inst(19, 12), inst(20), inst(30, 21), Fill(1, 0.U))
         
     // IDU to EXU & reg
-    id_idex.inst := io.ifid_id.inst
-    id_idex.pc   := io.ifid_id.pc  
+    io.id_idex.inst := io.ifid_id.inst
+    io.id_idex.pc   := io.ifid_id.pc  
     val func37 = Cat(func3, func7)
     //  List(op1_o, op2_o, rs1_addr_o, rs2_addr_o, rd_addr_o, rd_wen, base_addr_o, offset_addr_o)
     var decode_list  = ListLookup(func37, List(0.U(64.W), 0.U(64.W), 0.U(5.W), 0.U(5.W), 0.U(64.W), false.B, 0.U(64.W), 0.U(64.W)), Array(

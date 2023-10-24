@@ -37,8 +37,8 @@ class EXU extends Module {
     val func37 = Cat(io.idex_ex.inst(14, 12), io.idex_ex.inst(31, 25))
     //  List(rd_wen, rd_waddr_o, rd_wdata_o, mem_ren, mem_raddr, mem_wen, mem_wmask, mem_wdata, mem_waddr)
     var exce_list  = ListLookup(func37, List(false.B, 0.U(64.W), 0.U(64.W), false.B, 0.U(64.W), false.B, 0.U(64.W), 0.U(8.W), 0.U(64.W), 0.U(64.W)), Array(
-        BitPat("b000_0010011") -> List(true.B, io.idex_ex.rd_addr, io.op1_i_add_op2_i, false.B, 0.U, false.B, 0.U, 0.U, 0.U, 0.U), //addi
-        BitPat("b000_0110011") -> List(true.B, io.idex_ex.rd_addr, io.op1_i_add_op2_i, false.B, 0.U, false.B, 0.U, 0.U, 0.U, 0.U), //add        
+        BitPat("b000_0010011") -> List(true.B, io.idex_ex.rd_addr, op1_i_add_op2_i, false.B, 0.U, false.B, 0.U, 0.U, 0.U, 0.U), //addi
+        BitPat("b000_0110011") -> List(true.B, io.idex_ex.rd_addr, op1_i_add_op2_i, false.B, 0.U, false.B, 0.U, 0.U, 0.U, 0.U), //add        
     ))
     io.ex_reg.rd_wen   := exce_list(0)
     io.ex_reg.rd_waddr := exce_list(1)

@@ -21,21 +21,21 @@ class EXU_REG_Input extends Bundle {
 }
 
 class RegFile extends Module {
-    val io = IO(new Bundle{
-        val id_reg = new IDU_REG_Input()
-        val reg_id = new REG_IDU_Output()
-        val ex_reg = new EXU_REG_Input()
-    })
+    // val io = IO(new Bundle{
+    val id_reg = IO(new IDU_REG_Input())
+    val reg_id = IO(new REG_IDU_Output())
+    val ex_reg = IO(new EXU_REG_Input())
+    // })
 
     // 寄存器组
     val regs = Reg(Vec(32, UInt(64.W)))
     
     // 读寄存器的数据
-    io.reg_id.rs1_rdata := Mux(io.id_reg.rs1_raddr === 0.U, 0.U(64.W), 
-                                    Mux((io.ex_reg.rd_wen && (io.ex_reg.rd_waddr === io.id_reg.rs1_raddr)), io.ex_reg.rd_wdata, regs(io.id_reg.rs1_raddr)))
-    io.reg_id.rs2_rdata := Mux(io.id_reg.rs2_raddr === 0.U, 0.U(64.W), 
-                                    Mux((io.ex_reg.rd_wen && (io.ex_reg.rd_waddr === io.id_reg.rs2_raddr)), io.ex_reg.rd_wdata, regs(io.id_reg.rs2_raddr)))
+    reg_id.rs1_rdata := Mux(id_reg.rs1_raddr === 0.U, 0.U(64.W), 
+                                    Mux((ex_reg.rd_wen && (ex_reg.rd_waddr === id_reg.rs1_raddr)), ex_reg.rd_wdata, regs(id_reg.rs1_raddr)))
+    reg_id.rs2_rdata := Mux(id_reg.rs2_raddr === 0.U, 0.U(64.W), 
+                                    Mux((ex_reg.rd_wen && (ex_reg.rd_waddr === id_reg.rs2_raddr)), ex_reg.rd_wdata, regs(id_reg.rs2_raddr)))
     // 写寄存器的数据:给出写信号，且rd不为0时写寄存器
-    regs(io.ex_reg.rd_waddr) := Mux(io.ex_reg.rd_wen && (io.ex_reg.rd_waddr =/= 0.U), io.ex_reg.rd_wdata, 0.U(64.W))   
+    regs(ex_reg.rd_waddr) := Mux(ex_reg.rd_wen && (ex_reg.rd_waddr =/= 0.U),  ex_reg.rd_wdata, 0.U(64.W))   
 }
 

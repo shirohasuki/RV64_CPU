@@ -18,11 +18,9 @@ import RegFile._
 
 
 class tb extends Module {
-    // val io = IO(new Bundle {
-    //     val pc_test = Input(UInt(64.W))
-    // })
+    // val io = IO(new Vec {
 
-    val pc_test = Wire(UInt(64.W))
+    // })
 
     val Pc      = Module(new PcReg())
     val IFU     = Module(new IFU())
@@ -34,25 +32,21 @@ class tb extends Module {
     val RegFile = Module(new RegFile())
     val ROM     = Module(new ROM())
 
-    pc_test := Pc.io.pc_tb.pc 
+    Pc.pc_if       <> IFU.pc_if
+    IFU.if_rom     <> ROM.if_rom
+    IFU.if_ifid    <> IFID.if_ifid
+    IFID.ifid_id   <> IDU.ifid_id
+    IDU.id_reg     <> RegFile.id_reg
+    RegFile.reg_id <> IDU.reg_id
+    IDU.id_idex    <> IDEX.id_idex
+    IDEX.idex_ex   <> EXU.idex_ex
+    CTRL.io.ctrl_ifid <> IFID.ctrl_ifid
+    CTRL.io.ctrl_idex <> IDEX.ctrl_idex
+    EXU.ex_reg     <> RegFile.ex_reg
 
-    Pc.io.pc_if       <> IFU.io.pc_if
-    IFU.io.if_rom     <> ROM.io.if_rom
-    IFU.io.if_ifid    <> IFID.io.if_ifid
-    IFID.io.ifid_id   <> IDU.io.ifid_id
-    IDU.io.id_reg     <> RegFile.io.id_reg
-    RegFile.io.reg_id <> IDU.io.reg_id
-    IDU.io.id_idex    <> IDEX.io.id_idex
-    IDEX.io.idex_ex   <> EXU.io.idex_ex
-    CTRL.io.ctrl_ifid <> IFID.io.ctrl_ifid
-    CTRL.io.ctrl_idex <> IDEX.io.ctrl_idex
-    EXU.io.ex_reg     <> RegFile.io.ex_reg
-
-    // loadMemoryFromFile(ROM.mem, "./src/main/scala/inst_data_ADD.txt", MemoryLoadFileType.Binary);
+    loadMemoryFromFile(ROM.mem, "./src/main/scala/inst_data_ADD.txt", MemoryLoadFileType.Binary);
 }
 
-
-object toVerilog extends App {
+object tb extends App {
     (new ChiselStage).emitVerilog(new tb, args)
-    // println(getVerilogString(new tb()))
 }

@@ -18,9 +18,9 @@ import RegFile._
 
 
 class tb extends Module {
-    // val io = IO(new Bundle {
-    //     val regs = 
-    // })
+    val io = IO(new Bundle {
+        // val regs = 
+    })
 
     val Pc      = Module(new PcReg())
     val IFU     = Module(new IFU())
@@ -49,5 +49,5 @@ class tb extends Module {
 
 object main extends App {
     (new ChiselStage).emitVerilog(new tb, args)
-    println(getVerilogString(new tb()))
+    // println(getVerilogString(new tb()))
 }

@@ -32,7 +32,7 @@ class tb extends Module {
     val RegFile = Module(new RegFile())
     val ROM     = Module(new ROM())
 
-    Pc.io.pc_tb       <> io
+    io.pc_test := Pc.io.pc_tb.pc 
     Pc.io.pc_if       <> IFU.io.pc_if
     IFU.io.if_rom     <> ROM.io.if_rom
     IFU.io.if_ifid    <> IFID.io.if_ifid

@@ -5,8 +5,8 @@ import define.function._
 
 
 class Ctrl_Input extends Bundle {
-    val flush_flag  = Input(Bool())
-    val stall_flag  = Input(Bool())
+    val ifid_flush_en  = Input(Bool())
+    val ifid_stall_en  = Input(Bool())
 }
 
 class IFID_Input extends Bundle {
@@ -19,6 +19,6 @@ class IFID extends Module {
     val ifid_id   = IO(Flipped(new IFID_Input()))
     val ctrl_ifid = IO(new Ctrl_Input())
 
-    ifid_id.inst := dff_set(ctrl_ifid.flush_flag, ctrl_ifid.stall_flag, 32.U, "h00000013".U(32.W), if_ifid.inst)
-    ifid_id.pc   := dff_set(ctrl_ifid.flush_flag, ctrl_ifid.stall_flag, 64.U, 0.U(64.W), if_ifid.inst)
+    ifid_id.inst := dff_set(ctrl_ifid.ifid_flush_en, ctrl_ifid.ifid_stall_en, 32.U, "h00000013".U(32.W), if_ifid.inst)
+    ifid_id.pc   := dff_set(ctrl_ifid.ifid_flush_en, ctrl_ifid.ifid_stall_en, 64.U, 0.U(64.W), if_ifid.inst)
 }

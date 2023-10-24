@@ -6,7 +6,7 @@ import chisel3.stage._
 
 class IFU extends Module {
     val pc_if = IO(new Bundle {
-        val pc    = Input(UInt(64.W))
+        val pc   = Input(UInt(64.W))
     })
 
     val if_rom = IO(new Bundle {
@@ -14,12 +14,12 @@ class IFU extends Module {
         val pc   = Output(UInt(64.W))
     })
 
-    val if_id = IO(new Bundle {
+    val if_ifid = IO(new Bundle {
         val inst  = Output(UInt(32.W))
         val pc    = Output(UInt(64.W))
     })
 
-    if_rom.pc  := pc_if.pc
-    if_id.inst := if_rom.inst
-    if_id.pc   := pc_if.pc
+    if_rom.pc    := pc_if.pc
+    if_ifid.inst := if_rom.inst
+    if_ifid.pc   := pc_if.pc
 }

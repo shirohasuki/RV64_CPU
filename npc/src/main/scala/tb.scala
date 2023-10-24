@@ -44,10 +44,10 @@ class tb extends Module {
     CTRL.io.ctrl_idex <> IDEX.io.ctrl_idex
     EXU.io.ex_reg     <> RegFile.io.ex_reg
 
-    loadMemoryFromFile(ROM.mem, "./src/main/scala/inst_data_ADD.txt", MemoryLoadFileType.Binary);
+    // loadMemoryFromFile(ROM.mem, "./src/main/scala/inst_data_ADD.txt", MemoryLoadFileType.Binary);
 }
 
-object main extends App {
+object toVerilog extends App {
     (new ChiselStage).emitVerilog(new tb, args)
     // println(getVerilogString(new tb()))
 }

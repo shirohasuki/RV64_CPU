@@ -12,6 +12,7 @@ import IFID._
 import IDU._
 import IDEX._
 import EXU._
+import CTRL._
 import ROM._
 import RegFile._
 
@@ -27,6 +28,7 @@ class tb extends Module {
     val IDU     = Module(new IDU())
     val IDEX    = Module(new IDEX())
     val EXU     = Module(new EXU())
+    val CTRL    = Module(new CRTL())
     val RegFile = Module(new RegFile())
     val ROM     = Module(new ROM())
 
@@ -38,6 +40,8 @@ class tb extends Module {
     RegFile.reg_id <> IDU.reg_id
     IDU.id_idex    <> IDEX.id_idex
     IDEX.idex_ex   <> EXU.idex_ex
+    CTRL.ctrl_ifid <> IFID.ctrl_ifid
+    CTRL.ctrl_idex <> IDEX.ctrl_idex
     EXU.ex_reg     <> RegFile.ex_reg
 
     loadMemoryFromFile(ROM.mem, "./src/main/scala/inst_data_ADD.txt", MemoryLoadFileType.Binary);

@@ -18,9 +18,9 @@ import RegFile._
 
 
 class tb extends Module {
-    // val io = IO(new Bundle {
-    //     val pc_test = Input(UInt(64.W))
-    // })
+    val io = IO(new Bundle {
+        val pc_test = Input(UInt(64.W))
+    })
 
     val pc_test = Wire(UInt(64.W))
 
@@ -51,26 +51,7 @@ class tb extends Module {
 }
 
 
- 
-class FullAdder extends Module {
-  val io = IO(new Bundle {
-    val a = Input(UInt(1.W))
-    val b = Input(UInt(1.W))
-    val cin = Input(UInt(1.W))
-    val s = Output(UInt(1.W))
-    val cout = Output(UInt(1.W))  
-  })
- 
-  io.s := io.a ^ io.b ^ io.cin
-  io.cout := (io.a & io.b) | ((io.a | io.b) & io.cin)
+object toVerilog extends App {
+    (new ChiselStage).emitVerilog(new tb, args)
+    // println(getVerilogString(new tb()))
 }
-
-
-object FullAdderGen extends App {
-  chisel3.Driver.execute(args, () => new FullAdder)
-}
-
-// object toVerilog extends App {
-//     (new ChiselStage).emitVerilog(new tb, args)
-//     // println(getVerilogString(new tb()))
-// }

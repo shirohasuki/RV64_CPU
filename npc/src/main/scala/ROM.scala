@@ -5,9 +5,11 @@ import chisel3.util._
 import chisel3.stage._
 
 class ROM extends Module {
-    val if_rom = IO(new Bundle {
-        val pc   = Input(UInt(64.W))
-        val inst = Output(UInt(32.W))
+    val io = IO(new Bundle {
+        val if_rom = IO(new Bundle {
+            val pc   = Input(UInt(64.W))
+            val inst = Output(UInt(32.W))
+        })
     })
     
     // val mem = SyncReadMem(1024, UInt(32.W))

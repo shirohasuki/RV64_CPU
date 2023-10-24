@@ -65,8 +65,8 @@ class Ctrl extends Module {
         // val bypass_ctrl  = IO(new Bypass_CTRL_Input()  )
 
         // val ctrl_pc      = IO(new CTRL_PC_Output()     )
-        val ctrl_ifid    = IO(new CTRL_IFID_Output()   )
-        val ctrl_idex    = IO(new CTRL_IDEX_Output()   )
+        val ctrl_ifid    = (new CTRL_IFID_Output()   )
+        val ctrl_idex    = (new CTRL_IDEX_Output()   )
         // val ctrl_idclint = IO(new CTRL_IDClint_Output())
         // val ctrl_exmem   = IO(new CTRL_EXMEM_Output()  )
         // val ctrl_memwb   = IO(new CTRL_MEMWB_Output()  )

@@ -18,8 +18,8 @@ import RegFile._
 
 
 class tb extends Module {
-    // val io = IO(new Vec {
-
+    // val io = IO(new Bundle {
+    //     val regs = 
     // })
 
     val Pc      = Module(new PcReg())
@@ -47,6 +47,7 @@ class tb extends Module {
     loadMemoryFromFile(ROM.mem, "./src/main/scala/inst_data_ADD.txt", MemoryLoadFileType.Binary);
 }
 
-object tb extends App {
+object main extends App {
     (new ChiselStage).emitVerilog(new tb, args)
+    println(getVerilogString(new tb()))
 }

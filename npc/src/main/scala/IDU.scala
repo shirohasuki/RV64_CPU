@@ -68,8 +68,8 @@ class IDU extends Module {
     val func37 = Cat(func3, func7)
     //  List(op1_o, op2_o, rs1_addr_o, rs2_addr_o, rd_addr_o, rd_wen, base_addr_o, offset_addr_o)
     var decode_list  = ListLookup(func37, List(0.U(64.W), 0.U(64.W), 0.U(5.W), 0.U(5.W), 0.U(64.W), false.B, 0.U(64.W), 0.U(64.W)), Array(
-        BitPat("b000_0010011") -> List(io.reg_id.rs1_rdata, io.immI,             io.rs1_addr,       0.U,          io.rd_addr,    1.B,   0.U,   0.U), //addi
-        BitPat("b000_0110011") -> List(io.reg_id.rs1_rdata, io.reg_id.rs2_rdata, io.rs1_addr,       io.rs2_addr,     io.rd_addr,    1.B,   0.U,   0.U), //add        
+        BitPat("b000_0010011") -> List(io.reg_id.rs1_rdata, immI,                rs1_addr,       0.U,          rd_addr,    1.B,   0.U,   0.U), //addi
+        BitPat("b000_0110011") -> List(io.reg_id.rs1_rdata, io.reg_id.rs2_rdata, rs1_addr,       rs2_addr,     rd_addr,    1.B,   0.U,   0.U), //add        
     ))
     io.id_idex.op1         := decode_list(0)
     io.id_idex.op2         := decode_list(1)

@@ -19,5 +19,6 @@ class PcReg extends Module {
     snpc := pc + 4.U 
     
     io.pc_if.pc   := snpc
+    io.pc_tb.pc   := snpc
 
 }

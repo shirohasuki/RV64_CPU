@@ -50,7 +50,27 @@ class tb extends Module {
     // loadMemoryFromFile(ROM.mem, "./src/main/scala/inst_data_ADD.txt", MemoryLoadFileType.Binary);
 }
 
-object toVerilog extends App {
-    (new ChiselStage).emitVerilog(new tb, args)
-    // println(getVerilogString(new tb()))
+
+ 
+class FullAdder extends Module {
+  val io = IO(new Bundle {
+    val a = Input(UInt(1.W))
+    val b = Input(UInt(1.W))
+    val cin = Input(UInt(1.W))
+    val s = Output(UInt(1.W))
+    val cout = Output(UInt(1.W))  
+  })
+ 
+  io.s := io.a ^ io.b ^ io.cin
+  io.cout := (io.a & io.b) | ((io.a | io.b) & io.cin)
 }
+
+
+object FullAdderGen extends App {
+  chisel3.Driver.execute(args, () => new FullAdder)
+}
+
+// object toVerilog extends App {
+//     (new ChiselStage).emitVerilog(new tb, args)
+//     // println(getVerilogString(new tb()))
+// }

@@ -18,9 +18,11 @@ import RegFile._
 
 
 class tb extends Module {
-    val io = IO(new Bundle {
-        val pc_test = Input(UInt(64.W))
-    })
+    // val io = IO(new Bundle {
+    //     val pc_test = Input(UInt(64.W))
+    // })
+
+    val pc_test = Wire(UInt(64.W))
 
     val Pc      = Module(new PcReg())
     val IFU     = Module(new IFU())

@@ -28,7 +28,7 @@ class tb extends Module {
     val IDU     = Module(new IDU())
     val IDEX    = Module(new IDEX())
     val EXU     = Module(new EXU())
-    val CTRL    = Module(new CRTL())
+    val CTRL    = Module(new CTRL())
     val RegFile = Module(new RegFile())
     val ROM     = Module(new ROM())
 

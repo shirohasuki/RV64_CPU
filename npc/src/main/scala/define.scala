@@ -13,7 +13,7 @@ object function {
 
 object MACRO {
         // I type inst
-    val INST_TYPE_I = b0010011.U
+    val INST_TYPE_I = "b0010011".U
     val INST_ADDI   = b000.U
     val INST_SLTI   = b010.U
     val INST_SLTIU  = b011.U

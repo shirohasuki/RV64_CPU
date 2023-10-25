@@ -175,8 +175,8 @@ class EXU extends Module {
     ))
 
     // ex to exmem 
-    ex_exmem.inst := exmem_ex.inst
-    ex_exmem.pc   := exmem_ex.pc
+    ex_exmem.inst := idex_ex.inst
+    ex_exmem.pc   := idex_ex.pc
 
     ex_exmem.rd_wen   := exce_list(0)
     ex_exmem.rd_waddr := exce_list(1)

@@ -130,11 +130,11 @@ class EXU extends Module {
                                                                            List(Rd_Write, rd_addr, compress_shift_right_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W))))),
         INST_TYPE_R_M   -> ListLookup(idex_ex.func3, default_exce_list, Array(
                             INST_ADD_SUB_MUL-> Mux(idex_ex.func7(5) === 1.U, List(Rd_Write, rd_addr, sub(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)), // sub
-                                                  (idex_ex.func7(0) === 1.U, List(Rd_Write, rd_addr, mul(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)), // mul
-                                                                              List(Rd_Write, rd_addr, add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)))), // add 
+                                               Mux(idex_ex.func7(0) === 1.U, List(Rd_Write, rd_addr, mul(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)), // mul
+                                                                             List(Rd_Write, rd_addr, add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)))), // add 
                             INST_SLT        -> List(Rd_Write, rd_addr,        less_signed(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
                             INST_SLTU       -> List(Rd_Write, rd_addr,      less_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
-                            INST_XOR_DIV    -> Mux(idex_ex.func7(0) === 1.U, List(Rd_Write, rd_addr, div(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W))), // div
+                            INST_XOR_DIV    -> Mux(idex_ex.func7(0) === 1.U, List(Rd_Write, rd_addr, div(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)), // div
                                                                               List(Rd_Write, rd_addr, xor(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W))),  // xor
                             INST_OR_REM     -> Mux(idex_ex.func7(0) === 1.U, List(Rd_Write, rd_addr, rem(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W))),  // rem
                                                                               List(Rd_Write, rd_addr,  or(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),    // or
@@ -143,7 +143,7 @@ class EXU extends Module {
                             INST_SLL        -> List(Rd_Write, rd_addr,shift_left_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W))
                             INST_SR_DIVU    -> Mux(idex_ex.func7(5) === 1.U, List(Rd_Write, rd_addr,    shift_right_signed(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),  // SRA 算术右移
                                                Mux(idex_ex.func7(0) === 1.U, List(Rd_Write, rd_addr,          div_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),  // divu 
-                                                                              List(Rd_Write, rd_addr, shift_right_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W))))),  // SRL 逻辑右移
+                                                                              List(Rd_Write, rd_addr, shift_right_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)))))),  // SRL 逻辑右移
         INST_TYPE_R_M_W -> ListLookup(idex_ex.func3, default_exce_list, Array(
                             INST_ADDW_SUBW_MULW -> Mux(idex_ex.func7(5) === 1.U, List(Rd_Write, rd_addr, compress_sub(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)), // sub
                                                    Mux(idex_ex.func7(0) === 1.U, List(Rd_Write, rd_addr, compress_mul(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),  // mul
@@ -154,7 +154,7 @@ class EXU extends Module {
                             INST_REMUW      -> List(Rd_Write, rd_addr, compress_rem_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
                             INST_SRW_DIVUW  -> Mux(idex_ex.func7(5) === 1.U, List(Rd_Write, rd_addr,    compress_shift_right_signed(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),  // SRAW 算术右移
                                                Mux(idex_ex.func7(0) === 1.U, List(Rd_Write, rd_addr,          compress_div_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),  // divuw  
-                                                                              List(Rd_Write, rd_addr,  compress_shift_right_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)))))),  // SRLW 逻辑右移 
+                                                                             List(Rd_Write, rd_addr,  compress_shift_right_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)))))),  // SRLW 逻辑右移 
         INST_TYPE_B     -> ListLookup(idex_ex.func3, default_exce_list, Array(
                             INST_BNE        -> List(NORd_Write, 0.U(64.W), 0.U(64.W), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W),         ~equal(op1, op2), add(base_addr, offset_addr)),
                             INST_BEQ        -> List(NORd_Write, 0.U(64.W), 0.U(64.W), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W),          equal(op1, op2), add(base_addr, offset_addr)),

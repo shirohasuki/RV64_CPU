@@ -85,16 +85,16 @@ class Ctrl extends Module {
 
     //  List(pc_stall_en, if_id_stall_en, id_ex_stall_en, ex_mem_stall_en, mem_wb_stall_en)
     var stall_list  = ListLookup(event_code_OH, List(false.B, false.B, false.B, false.B, false.B), Array(
-        "b0100".U -> List(true.B, true.B, false.B, mem_ctrl.mem_inst_isload,  false.B), // load_inst   
-        "b0010".U -> List(true.B, true.B, false.B, mem_ctrl.mem_inst_isstore, false.B), // store_inst         
-        "b0001".U -> List(true.B, true.B, false.B, false.B, false.B)                   // load_data_hit      
+        2.U -> List(true.B, true.B, false.B, mem_ctrl.mem_inst_isload,  false.B), // load_inst   
+        1.U -> List(true.B, true.B, false.B, mem_ctrl.mem_inst_isstore, false.B), // store_inst         
+        0.U -> List(true.B, true.B, false.B, false.B, false.B)                   // load_data_hit      
     ))
 
         //  List(pc_flush_en, if_id_flush_en, id_ex_flush_en, ex_mem_flush_en, mem_wb_flush_en)
     var flush_list  = ListLookup(event_code_OH, List(false.B, false.B, false.B, false.B, false.B), Array(
-        "b1000".U -> List(false.B, true.B,  true.B, false.B, false.B), // jump
-        "b0100".U -> List(false.B, false.B, true.B, false.B, false.B), // load_inst          
-        "b0010".U -> List(false.B, false.B, true.B, false.B, false.B), // store_inst          
-        "b0001".U -> List(false.B, false.B, true.B, false.B, false.B) // load_data_hit 
+        3.U -> List(false.B, true.B,  true.B, false.B, false.B), // jump
+        2.U -> List(false.B, false.B, true.B, false.B, false.B), // load_inst          
+        1.U -> List(false.B, false.B, true.B, false.B, false.B), // store_inst          
+        0.U -> List(false.B, false.B, true.B, false.B, false.B) // load_data_hit 
     ))
 }

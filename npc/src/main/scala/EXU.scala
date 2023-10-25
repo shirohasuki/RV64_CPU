@@ -156,11 +156,11 @@ class EXU extends Module {
                                                 "b0100000".U   ->  List(Rd_Write, rd_addr, compress_sub(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)), // sub
                                                 "b0000001".U   ->  List(Rd_Write, rd_addr, compress_mul(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),  // mul
                                                 "b0000000".U   ->  List(Rd_Write, rd_addr, compress_add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)))),  // add
-                            INST_DIVW       -> List(Rd_Write, rd_addr,          compress_div(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
-                            INST_SLLW       -> List(Rd_Write, rd_addr,   shift_left_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
-                            INST_REMW       -> List(Rd_Write, rd_addr,          compress_rem(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
-                            INST_REMUW      -> List(Rd_Write, rd_addr, compress_rem_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
-                            INST_SRW_DIVUW  -> ListLookup(idex_ex.func7, default_exce_list, Array(
+                            INST_DIVW           -> List(Rd_Write, rd_addr,          compress_div(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
+                            INST_SLLW           -> List(Rd_Write, rd_addr,   shift_left_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
+                            INST_REMW           -> List(Rd_Write, rd_addr,          compress_rem(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
+                            INST_REMUW          -> List(Rd_Write, rd_addr, compress_rem_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
+                            INST_SRW_DIVUW      -> ListLookup(idex_ex.func7, default_exce_list, Array(
                                                "b0100000".U   ->  List(Rd_Write, rd_addr,    compress_shift_right_signed(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),  // SRAW 算术右移
                                                "b0000001".U   ->  List(Rd_Write, rd_addr,          compress_div_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),  // divuw  
                                                "b0000000".U   ->  List(Rd_Write, rd_addr,  compress_shift_right_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)))))),  // SRLW 逻辑右移 
@@ -206,8 +206,8 @@ class EXU extends Module {
     ex_redirect.rd_wdata := exce_list(2)
     
     // ex to ctrl 
-    ex_ctrl.ex_inst_isload  = exce_list(3)
-    ex_ctrl.ex_inst_isstore = exce_list(5)
-    ex_ctrl.typej_jump_en   = exce_list(9)
-    ex_ctrl.typej_jump_addr = exce_list(10)
+    ex_ctrl.ex_inst_isload  := exce_list(3)
+    ex_ctrl.ex_inst_isstore := exce_list(5)
+    ex_ctrl.typej_jump_en   := exce_list(9)
+    ex_ctrl.typej_jump_addr := exce_list(10)
 }

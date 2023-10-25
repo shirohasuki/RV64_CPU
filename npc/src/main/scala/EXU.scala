@@ -127,7 +127,7 @@ class EXU extends Module {
                             INST_ADDIW      -> List(Rd_Write, rd_addr,                compress_add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
                             INST_SLLIW      -> List(Rd_Write, rd_addr,compress_shift_left_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
                             INST_SRIW       -> Mux(idex_ex.func7(5) === 1.U, List(Rd_Write, rd_addr, compress_shift_right_signed(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)), 
-                                                                            List(Rd_Write, rd_addr, compress_shift_right_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W))))
+                                                                            List(Rd_Write, rd_addr, compress_shift_right_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)))))
         INST_TYPE_R_M   -> ListLookup(idex_ex.func3, default_exce_list, Array(
                             INST_ADD_SUB_MUL-> Mux(idex_ex.func7(5) === 1.U, List(Rd_Write, rd_addr, sub(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)), // sub
                                                   (idex_ex.func7(0) === 1.U, List(Rd_Write, rd_addr, mul(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)), // mul
@@ -172,7 +172,7 @@ class EXU extends Module {
         INST_JAL_OP, INST_JALR_OP -> List(Rd_Write, rd_addr, add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W),  0.U(64.W), 0.U(64.W), TypeJ_Jump, add(base_addr, offset_addr))
         INST_LUI_OP     -> List(Rd_Write, rd_addr,           op2, NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W),  0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W))
         INST_AUIPC_OP   -> List(Rd_Write, rd_addr, add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W),  0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W))
-    )))
+    ))
 
     // ex to exmem 
     ex_exmem.inst := idex_ex.inst

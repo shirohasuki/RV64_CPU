@@ -71,9 +71,9 @@ class EXU extends Module {
     def rem_unsigned              (op1: UInt, op2: UInt): UInt = op1 % op2
     def div                       (op1: UInt, op2: UInt): UInt = (op1.asSInt / op2.asSInt).asUInt
     def div_unsigned              (op1: UInt, op2: UInt): UInt = op1 / op2
-    def shift_left_unsigned       (op1: UInt, op2: UInt, shamt_width: UInt): UInt = op1 << op2(shamt_width-1, 0)
-    def shift_right_unsigned      (op1: UInt, op2: UInt, shamt_width: UInt): UInt = op1 >> op2(shamt_width-1, 0)
-    def shift_right_signed        (op1: UInt, op2: UInt, shamt_width: UInt): UInt = (op1.asSInt >> op2(shamt_width, 0)).asUInt
+    def shift_left_unsigned       (op1: UInt, op2: UInt): UInt = op1 << op2(5, 0)
+    def shift_right_unsigned      (op1: UInt, op2: UInt): UInt = op1 >> op2(5, 0)
+    def shift_right_signed        (op1: UInt, op2: UInt): UInt = (op1.asSInt >> op2(5, 0)).asUInt
     def equal                     (op1: UInt, op2: UInt): UInt = op1 === op2
     def less_signed               (op1: UInt, op2: UInt): UInt = op1 < op2
     def less_unsigned             (op1: UInt, op2: UInt): UInt = op1.asSInt < op2.asSInt
@@ -91,9 +91,9 @@ class EXU extends Module {
     def compress_rem_unsigned         (op1: UInt, op2: UInt): UInt =  SEXT(           rem_unsigned(op1(31, 0), op2(31, 0)))
     def compress_div                  (op1: UInt, op2: UInt): UInt =  SEXT(                    div(op1(31, 0), op2(31, 0)))
     def compress_div_unsigned         (op1: UInt, op2: UInt): UInt =  SEXT(           div_unsigned(op1(31, 0), op2(31, 0)))
-    def compress_shift_left_unsigned  (op1: UInt, op2: UInt): UInt =  SEXT( shift_left_unsigned(op1(31, 0), op2(31, 0), 5.U))
-    def compress_shift_right_unsigned (op1: UInt, op2: UInt): UInt =  SEXT(shift_right_unsigned(op1(31, 0), op2(31, 0), 5.U))
-    def compress_shift_right_signed   (op1: UInt, op2: UInt): UInt =  SEXT(  shift_right_signed(op1(31, 0), op2(31, 0), 5.U))
+    def compress_shift_left_unsigned  (op1: UInt, op2: UInt): UInt =  SEXT(                        op1(31, 0) << op2(4, 0))
+    def compress_shift_right_unsigned (op1: UInt, op2: UInt): UInt =  SEXT(                        op1(31, 0) >> op2(4, 0))
+    def compress_shift_right_signed   (op1: UInt, op2: UInt): UInt =  SEXT(        (op1(31, 0).asSInt >> op2(4, 0)).asUInt)
 
     val op1         = idex_ex.op1
     val op2         = idex_ex.op2

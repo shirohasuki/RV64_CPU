@@ -71,9 +71,9 @@ class EXU extends Module {
     def rem_unsigned              (op1: UInt, op2: UInt): UInt = op1 % op2
     def div                       (op1: UInt, op2: UInt): UInt = (op1.asSInt / op2.asSInt).asUInt
     def div_unsigned              (op1: UInt, op2: UInt): UInt = op1 / op2
-    def shift_left_unsigned       (op1: UInt, op2: UInt, shamt_width: UInt): UInt = op1 << op2(UInt(shamt_width)-1.U, 0.U)
-    def shift_right_unsigned      (op1: UInt, op2: UInt, shamt_width: UInt): UInt = op1 >> op2(UInt(shamt_width)-1.U, 0.U)
-    def shift_right_signed        (op1: UInt, op2: UInt, shamt_width: UInt): UInt = (op1.asSInt >> op2(UInt(shamt_width)-1.U, 0.U)).asUInt
+    def shift_left_unsigned       (op1: UInt, op2: UInt, shamt_width: UInt): UInt = op1 << op2(shamt_width-1, 0)
+    def shift_right_unsigned      (op1: UInt, op2: UInt, shamt_width: UInt): UInt = op1 >> op2(shamt_width-1, 0)
+    def shift_right_signed        (op1: UInt, op2: UInt, shamt_width: UInt): UInt = (op1.asSInt >> op2(shamt_width, 0)).asUInt
     def equal                     (op1: UInt, op2: UInt): UInt = op1 === op2
     def less_signed               (op1: UInt, op2: UInt): UInt = op1 < op2
     def less_unsigned             (op1: UInt, op2: UInt): UInt = op1.asSInt < op2.asSInt
@@ -172,7 +172,7 @@ class EXU extends Module {
         INST_JAL_OP, INST_JALR_OP -> List(Rd_Write, rd_addr, add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W),  0.U(64.W), 0.U(64.W), TypeJ_Jump, add(base_addr, offset_addr))
         INST_LUI_OP     -> List(Rd_Write, rd_addr,           op2, NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W),  0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W))
         INST_AUIPC_OP   -> List(Rd_Write, rd_addr, add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W),  0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W))
-    ))
+    )
 
     // ex to exmem 
     ex_exmem.inst := idex_ex.inst

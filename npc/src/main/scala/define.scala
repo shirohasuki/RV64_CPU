@@ -3,120 +3,119 @@ package define
 import chisel3._
 
 object function {
-    def dff_set(flush_flag_i: UInt, stall_flag_i: UInt, DataWidth: UInt, default: UInt, data_i: UInt): UInt = {
-        val data_o = RegInit(default)
-        data_o := Mux(flush_flag_i === 1.U, default, 
-                    Mux(stall_flag_i === 1.U, data_o, data_i))
+    def dff_set(flush_flag: UInt, stall_flag: UInt, DataWidth: UInt, data_default: UInt, data_i: UInt): UInt = {
+        val data_o = RegInit(data_default)
+        data_o := Mux(flush_flag === 1.U, data_default, 
+                    Mux(stall_flag === 1.U, data_o, data_i))
         data_o
     }
 } 
 
 object MACRO {
         // I type inst
-    // val INST_TYPE_I = 0010011.U
-    // val INST_ADDI   = 000.U
-    // val INST_SLTI   = 010.U
-    // val INST_SLTIU  = 011.U
-    // val INST_XORI   = 100.U
-    // val INST_ORI    = 110.U
-    // val INST_ANDI   = 111.U
-    // val INST_SLLI   = 001.U
-    // val INST_SRI    = 101.U
-    //     // 结果截断系列
-    // val INST_TYPE_I_W = 0011011.U
-    // val INST_ADDIW    = 000.U
-    // // val INST_SLTIW   010.U
-    // // val INST_SLTIUW  011.U
-    // // val INST_XORIW   100.U
-    // // val INST_ORIW    110.U
-    // // val INST_ANDIW   111.U
-    // val INST_SLLIW    = 001.U
-    // val INST_SRIW     = 101.U
+    val INST_TYPE_I = b0010011.U
+    val INST_ADDI   = b000.U
+    val INST_SLTI   = b010.U
+    val INST_SLTIU  = b011.U
+    val INST_XORI   = b100.U
+    val INST_ORI    = b110.U
+    val INST_ANDI   = b111.U
+    val INST_SLLI   = b001.U
+    val INST_SRI    = b101.U
+       // 结果截断系列
+    val INST_TYPE_I_W = b0011011.U
+    val INST_ADDIW    = b000.U
+    // val INST_SLTIW   010.U
+    // val INST_SLTIUW  011.U
+    // val INST_XORIW   100.U
+    // val INST_ORIW    110.U
+    // val INST_ANDIW   111.U
+    val INST_SLLIW    = b001.U
+    val INST_SRIW     = b101.U
 
-    // // // L type inst
-    // // val INST_TYPE_L 7'b0000011
-    // // val INST_LB     3'b000
-    // // val INST_LH     3'b001
-    // // val INST_LW     3'b010
-    // // val INST_LD     3'b011
-    // // val INST_LBU    3'b100
-    // // val INST_LHU    3'b101
-    // // val INST_LWU    3'b110
+    // L type inst
+    val INST_TYPE_L = b0000011.U
+    val INST_LB     = b000.U
+    val INST_LH     = b001.U
+    val INST_LW     = b010.U
+    val INST_LD     = b011.U
+    val INST_LBU    = b100.U
+    val INST_LHU    = b101.U
+    val INST_LWU    = b110.U
 
-    // // // S type inst
-    // // val INST_TYPE_S 7'b0100011
-    // // val INST_SB     3'b000
-    // // val INST_SH     3'b001
-    // // val INST_SW     3'b010
-    // // val INST_SD     3'b011
+    // S type inst
+    val INST_TYPE_S = b0100011.U
+    val INST_SB     = b000.U
+    val INST_SH     = b001.U
+    val INST_SW     = b010.U
+    val INST_SD     = b011.U
 
 
     // // =============================================
-    // // R and M type inst
-    // val INST_TYPE_R_M    = 0110011.U
-    // val INST_ADD_SUB_MUL = 000.U
-    // val INST_XOR_DIV     = 100.U
-    // val INST_SR_DIVU     = 101.U
-    // val INST_OR_REM      = 110.U
-    // val INST_AND_REMU    = 111.U
+    // R and M type inst
+    val INST_TYPE_R_M    = b0110011.U
+    val INST_ADD_SUB_MUL = b000.U
+    val INST_XOR_DIV     = b100.U
+    val INST_SR_DIVU     = b101.U
+    val INST_OR_REM      = b110.U
+    val INST_AND_REMU    = b111.U
 
     // // R type inst
-    // val INST_TYPE_R_FUN7 = 0000000.U
-    // val INST_ADD_SUB     = 000.U
-    // val INST_SLL         = 001.U
-    // val INST_SLT         = 010.U
-    // val INST_SLTU        = 011.U
-    // val INST_XOR         = 100.U
-    // val INST_SR          = 101.U
-    // val INST_OR          = 110.U
-    // val INST_AND         = 111.U
+    val INST_TYPE_R_FUN7 = b0000000.U
+    val INST_ADD_SUB     = b000.U
+    val INST_SLL         = b001.U
+    val INST_SLT         = b010.U
+    val INST_SLTU        = b011.U
+    val INST_XOR         = b100.U
+    val INST_SR          = b101.U
+    val INST_OR          = b110.U
+    val INST_AND         = b111.U
 
-    // val INST_TYPE_M_FUN7 7'b0000001
-    // // M type inst
-    // val INST_MUL    3'b000
+    val INST_TYPE_M_FUN7 = b0000001.U
+    // M type inst
+    val INST_MUL   = b000.U
     // // val INST_MULH   3'b001
     // // val INST_MULHSU 3'b010
     // // val INST_MULHU  3'b011
-    // val INST_DIV    3'b100
-    // val INST_DIVU   3'b101
-    // val INST_REM    3'b110 
-    // val INST_REMU   3'b111 
+    val INST_DIV   = b100.U
+    val INST_DIVU  = b101.U
+    val INST_REM   = b110.U 
+    val INST_REMU  = b111.U 
 
     // // =============================================
     // // 结果截断系列
-    // val INST_TYPE_R_M_W 7'b0111011
-    // val INST_ADDW_SUBW_MULW 3'b000
-    // val INST_SLLW           3'b001
-    // // val INST_SLT         3'b010
-    // // val INST_SLTU        3'b011
-    // // val INST_XOR         3'b100
-    // val INST_SRW_DIVUW      3'b101
-    // val INST_REMW           3'b110 // 无orw
-    // val INST_REMUW          3'b111 
-    // val INST_DIVW           3'b100
+    val INST_TYPE_R_M_W  = b0111011.U
+    val INST_ADDW_SUBW_MULW = b000.U
+    val INST_SLLW           = b001.U
+    // val INST_SLT         3'b010
+    // val INST_SLTU        3'b011
+    // val INST_XOR         3'b100
+    val INST_SRW_DIVUW      = b101.U
+    val INST_REMW           = b110.U // 无orw
+    val INST_REMUW          = b111.U 
+    val INST_DIVW           = b100.U
 
     // // J type inst
-    // val INST_JAL    7'b1101111
-    // val INST_JALR   7'b1100111
+    val INST_JAL_OP   =  b1101111.U
+    val INST_JALR_OP  =  b1100111.U
 
-    // val INST_LUI    7'b0110111
-    // val INST_AUIPC  7'b0010111
-    // val INST_NOP    32'h00000013
-    // val INST_NOP_OP 7'b0000001
+    val INST_LUI_OP   =  b0110111.U
+    val INST_AUIPC_OP =  b0010111.U
+    val INST_NOP      = "h00000013".U(32.W)
+    val INST_NOP_OP   = b0000001.U
     // val INST_MRET   32'h30200073
     // val INST_RET    32'h00008067
 
-    // // J type inst
-    // val INST_TYPE_B 7'b1100011
-    // val INST_BEQ    3'b000
-    // val INST_BNE    3'b001
-    // val INST_BLT    3'b100
-    // val INST_BGE    3'b101
-    // val INST_BLTU   3'b110
-    // val INST_BGEU   3'b111
+    // B type inst
+    val INST_TYPE_B = b1100011.U
+    val INST_BEQ    = b000.U
+    val INST_BNE    = b001.U
+    val INST_BLT    = b100.U
+    val INST_BGE    = b101.U
+    val INST_BLTU   = b110.U
+    val INST_BGEU   = b111.U
 
-
-    // // ============== intr  ===============
+    // ============== intr  ===============
     // val INST_FENCE  7'b0001111
     // val INST_ECALL  32'h73
     // val INST_EBREAK 32'h00100073

@@ -4,17 +4,18 @@ import chisel3._
 import chisel3.util._
 
 
-class IDU_REG_Input extends Bundle {
+class Redirect_REG_Input extends Bundle {
     val rs1_raddr = Input(UInt(5.W))
     val rs2_raddr = Input(UInt(5.W))
 }
 
-class REG_IDU_Output extends Bundle {
+class REG_Redirect_Output extends Bundle {
     val rs1_rdata = Output(UInt(32.W))
     val rs2_rdata = Output(UInt(32.W))
 }
 
-class EXU_REG_Input extends Bundle {
+class WBU_REG_Input extends Bundle {
+    val pc       = Input(UInt(64.W))
     val rd_waddr = Input(UInt(5.W))
     val rd_wdata = Input(UInt(64.W))
     val rd_wen   = Input(Bool())
@@ -22,9 +23,9 @@ class EXU_REG_Input extends Bundle {
 
 class RegFile extends Module {
     // val io = IO(new Bundle{
-    val id_reg = IO(new IDU_REG_Input())
-    val reg_id = IO(new REG_IDU_Output())
-    val ex_reg = IO(new EXU_REG_Input())
+    val redirect_reg = IO(new Redirect_REG_Input())
+    val reg_redirect = IO(new REG_Redirect_Output())
+    val wb_reg       = IO(new WBU_REG_Input())
     // })
 
     // 寄存器组

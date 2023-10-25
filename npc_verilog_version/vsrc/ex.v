@@ -366,7 +366,7 @@ module ex (
                             reg_wen_o  = 1'b1;
                     end 
                     `INST_SR_DIVU: begin 
-                        if (func7 == 7'b010000) begin // SRA 算术右移
+                        if (func7 == 7'b0100000) begin // SRA 算术右移
                             // rd_wdata_o = ((op1_i_shift_right_op2_i) & SRA_mask) | ({32{op1_i[31]}} & (~SRA_mask));
                             rd_wdata_o = op1_i_shift_right_op2_i_signed;
                             rd_waddr_o = rd_addr_i;
@@ -829,7 +829,7 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o    = 1'b0; 
-                isstore_o    = 1'b0;
+                isstore_o   = 1'b0;
                 csr_waddr_o = 12'b0;
                 csr_data_o  = 64'b0;
                 csr_wen_o   = 1'b0;      
@@ -849,7 +849,7 @@ module ex (
                 mem_ren_o   = 1'b0;
                 mem_raddr_o = 64'b0;
                 isload_o    = 1'b0; 
-                isstore_o    = 1'b0; 
+                isstore_o   = 1'b0; 
                 csr_waddr_o = 12'b0;
                 csr_data_o  = 64'b0;
                 csr_wen_o   = 1'b0;     

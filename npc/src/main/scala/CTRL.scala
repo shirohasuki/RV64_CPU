@@ -61,7 +61,7 @@ class Ctrl extends Module {
     val ex_ctrl       = IO(new EXU_CTRL_Input()     )
     // val clint_ctrl   = IO(new CLINT_CTRL_Input()   )
     val mem_ctrl      = IO(new MEM_CTRL_Input()     )
-    val redirect_ctrl = IO(new Bundle{ val rs_id_ex_hit_o = Input(Bool())})
+    val redirect_ctrl = IO(new Bundle{ val rs_id_ex_hit = Input(Bool())})
 
     val ctrl_pc       = IO(new CTRL_PC_Output()     )
     val ctrl_ifid     = (new CTRL_IFID_Output()     )
@@ -71,7 +71,7 @@ class Ctrl extends Module {
     val ctrl_memwb    = IO(new CTRL_MEMWB_Output()  )
 
 
-    val jump          = ex_ctrl.typej_jump_en   || ex_ctrl.intr_jump_en
+    val jump          = ex_ctrl.typej_jump_en   // || ex_ctrl.intr_jump_en
     // val load_inst     = ex_ctrl.ex_inst_isload  || mem_ctrl.mem_inst_isload
     // val store_inst    = ex_ctrl.ex_inst_isstore || mem_ctrl.mem_inst_isstore
     val load_data_hit = redirect_ctrl.rs_id_ex_hit && ex_ctrl.ex_inst_isload

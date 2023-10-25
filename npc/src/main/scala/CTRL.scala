@@ -72,8 +72,8 @@ class Ctrl extends Module {
 
 
     val jump          = ex_ctrl.typej_jump_en   // || ex_ctrl.intr_jump_en
-    // val load_inst     = ex_ctrl.ex_inst_isload  || mem_ctrl.mem_inst_isload
-    // val store_inst    = ex_ctrl.ex_inst_isstore || mem_ctrl.mem_inst_isstore
+    val load_inst     = ex_ctrl.ex_inst_isload  || mem_ctrl.mem_inst_isload
+    val store_inst    = ex_ctrl.ex_inst_isstore || mem_ctrl.mem_inst_isstore
     val load_data_hit = redirect_ctrl.rs_id_ex_hit && ex_ctrl.ex_inst_isload
 
     ctrl_pc.jump_addr := ex_ctrl.typej_jump_addr //| io.clint_ctrl.intr_jump_addr

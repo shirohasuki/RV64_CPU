@@ -121,8 +121,7 @@ class EXU extends Module {
                             INST_ORI        -> List(Rd_Write, rd_addr,                    or(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
                             INST_AND        -> List(Rd_Write, rd_addr,                   and(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
                             INST_SLLI       -> List(Rd_Write, rd_addr,   shift_left_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
-                            INST_SRI        -> Mux(idex_ex.func7(5) === 1.U, List(Rd_Write, rd_addr, shift_right_signed(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)), 
-                                                                           List(Rd_Write, rd_addr, shift_right_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W))))),
+                            INST_SRI        -> Mux(idex_ex.func7(5) === 1.U, 1.U, 2.U))),
         INST_TYPE_I_W   -> ListLookup(idex_ex.func3, default_exce_list, Array(
                             INST_ADDIW      -> List(Rd_Write, rd_addr,                compress_add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
                             INST_SLLIW      -> List(Rd_Write, rd_addr,compress_shift_left_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),

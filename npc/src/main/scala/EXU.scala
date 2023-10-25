@@ -91,9 +91,9 @@ class EXU extends Module {
     def compress_rem_unsigned         (op1: UInt, op2: UInt): UInt =  SEXT(           rem_unsigned(op1(31, 0), op2(31, 0)))
     def compress_div                  (op1: UInt, op2: UInt): UInt =  SEXT(                    div(op1(31, 0), op2(31, 0)))
     def compress_div_unsigned         (op1: UInt, op2: UInt): UInt =  SEXT(           div_unsigned(op1(31, 0), op2(31, 0)))
-    def compress_shift_left_unsigned  (op1: UInt, op2: UInt): UInt =  SEXT( shift_left_unsigned(op1(31, 0), op2(31, 0), 5))
-    def compress_shift_right_unsigned (op1: UInt, op2: UInt): UInt =  SEXT(shift_right_unsigned(op1(31, 0), op2(31, 0), 5))
-    def compress_shift_right_signed   (op1: UInt, op2: UInt): UInt =  SEXT(  shift_right_signed(op1(31, 0), op2(31, 0), 5))
+    def compress_shift_left_unsigned  (op1: UInt, op2: UInt): UInt =  SEXT( shift_left_unsigned(op1(31, 0), op2(31, 0), 5.U))
+    def compress_shift_right_unsigned (op1: UInt, op2: UInt): UInt =  SEXT(shift_right_unsigned(op1(31, 0), op2(31, 0), 5.U))
+    def compress_shift_right_signed   (op1: UInt, op2: UInt): UInt =  SEXT(  shift_right_signed(op1(31, 0), op2(31, 0), 5.U))
 
     val op1         = idex_ex.op1
     val op2         = idex_ex.op2

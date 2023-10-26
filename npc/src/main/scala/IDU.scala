@@ -76,38 +76,20 @@ class IDU extends Module {
     //  List(op1_o, op2_o, rs1_addr_o, rs2_addr_o, rd_addr_o, rd_wen, base_addr_o, offset_addr_o)
     val default_decode_list = List(0.U(64.W), 0.U(64.W), 0.U(5.W), 0.U(5.W), 0.U(64.W), false.B, 0.U(64.W), 0.U(64.W))
     val decode_list  = ListLookup(opcode, default_decode_list, Array(
-        INST_TYPE_I     -> ListLookup(func3, default_decode_list, Array(
-                            INST_ADDI   -> List(redirect_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U), 
-                            INST_SLTI-> List(redirect_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U), 
-                            INST_SLTIU-> List(redirect_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U),
-                            INST_XORI-> List(redirect_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U), 
-                            INST_ORI-> List(redirect_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U), 
-                            INST_ANDI -> List(redirect_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U), 
-                            INST_SLLI                                               -> List(redirect_id.rs1_rdata, Cat(Fill(58, 0.U), shamt), rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U),
-                            INST_SRI                                              -> List(redirect_id.rs1_rdata, Cat(Fill(58, 0.U), shamt), rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U))),
-        INST_TYPE_I_W   -> ListLookup(func3, default_decode_list, Array(
-                            INST_ADDIW                                                       -> List(redirect_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U),  
-                            INST_SLLIW                                          -> List(redirect_id.rs1_rdata, Cat(Fill(58, 0.U), shamt), rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U),
-                            INST_SRIW                                            -> List(redirect_id.rs1_rdata, Cat(Fill(58, 0.U), shamt), rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U))),
-        INST_TYPE_R_M   -> ListLookup(func3, default_decode_list, Array(
-                            INST_ADD_SUB_MUL, INST_SLT, INST_SLTU, INST_XOR_DIV, INST_OR_REM, INST_AND_REMU -> List(redirect_id.rs1_rdata, redirect_id.rs2_rdata, rs1_addr, rs2_addr, rd_addr, true.B, 0.U, 0.U),  
-                            INST_SLL     -> List(redirect_id.rs1_rdata, Cat(Fill(58, 0.U), redirect_id.rs2_rdata(5, 0)), rs1_addr, rs2_addr, rd_addr, true.B, 0.U, 0.U),
-                            INST_SR_DIVU -> ListLookup(func7, default_decode_list, Array( 
-                                BitPat("b??????1") -> List(redirect_id.rs1_rdata, Cat(Fill(58, 0.U), redirect_id.rs2_rdata(5, 0)), rs1_addr, rs2_addr, rd_addr, true.B, 0.U, 0.U), 
-                                BitPat("b??????0") -> List(redirect_id.rs1_rdata, redirect_id.rs2_rdata, rs1_addr, rs2_addr, rd_addr, true.B, 0.U, 0.U))))),
-        INST_TYPE_R_M_W -> ListLookup(func3, default_decode_list, Array(
-                            INST_ADDW_SUBW_MULW, INST_DIVW, INST_SLLW, INST_REMW, INST_REMUW, INST_SRW_DIVUW -> List(redirect_id.rs1_rdata, redirect_id.rs2_rdata, rs1_addr, rs2_addr, rd_addr, true.B, 0.U, 0.U))),
-        INST_TYPE_B     -> ListLookup(func3, default_decode_list, Array(
-                            INST_BNE, INST_BEQ, INST_BLT, INST_BLTU, INST_BGE, INST_BGEU -> List(redirect_id.rs1_rdata, redirect_id.rs2_rdata, rs1_addr, rs2_addr, 0.U, false.B, ifid_id.pc, immB))),
-        INST_TYPE_L     -> ListLookup(func3, default_decode_list, Array(
-                            INST_LB, INST_LH, INST_LW, INST_LD, INST_LBU, INST_LHU, INST_LWU -> List(redirect_id.rs1_rdata, immL, rs1_addr, rs2_addr, rd_addr, true.B, redirect_id.rs1_rdata, immL))),
-        INST_TYPE_S     -> ListLookup(func3, default_decode_list, Array(
-                            INST_SB, INST_SH, INST_SW, INST_SD -> List(0.U, redirect_id.rs2_rdata, rs1_addr, rs2_addr, 0.U, false.B, redirect_id.rs1_rdata, immS))),
+        INST_TYPE_I     -> List(redirect_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U), 
+        INST_TYPE_I_W   -> List(redirect_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U),  
+        INST_TYPE_R_M   -> List(redirect_id.rs1_rdata, redirect_id.rs2_rdata, rs1_addr, rs2_addr, rd_addr, true.B, 0.U, 0.U), 
+        INST_TYPE_R_M_W -> List(redirect_id.rs1_rdata, redirect_id.rs2_rdata, rs1_addr, rs2_addr, rd_addr, true.B, 0.U, 0.U),
+        INST_TYPE_B     -> List(redirect_id.rs1_rdata, redirect_id.rs2_rdata, rs1_addr, rs2_addr, 0.U, false.B, ifid_id.pc, immB),
+        INST_TYPE_L     -> List(redirect_id.rs1_rdata, immL, rs1_addr, rs2_addr, rd_addr, true.B, redirect_id.rs1_rdata, immL),
+        INST_TYPE_S     -> List(0.U, redirect_id.rs2_rdata, rs1_addr, rs2_addr, 0.U, false.B, redirect_id.rs1_rdata, immS),
         INST_JAL_OP     -> List(ifid_id.pc, 4.U,  0.U,      0.U, rd_addr, true.B, ifid_id.pc,            immJ),
         INST_JALR_OP    -> List(ifid_id.pc, 4.U,  rs1_addr, 0.U, rd_addr, true.B, redirect_id.rs1_rdata, immI),
         INST_LUI_OP     -> List(0.U,        immU, 0.U,      0.U, rd_addr, true.B, 0.U,                   0.U ),
         INST_AUIPC_OP   -> List(ifid_id.pc, immU, 0.U,      0.U, rd_addr, true.B, 0.U,                   immU)
     ))
+
+    // 为了降低复杂度，ID阶段SLL, SR相关的 op2 我全部直接使用了rs2的data，并没有只取低5/6位，需要EX截断截取，注意注意!
 
     id_idex.op1             := decode_list(0)
     id_idex.op2             := decode_list(1)

@@ -63,7 +63,7 @@ class Redirect extends Module {
     val rs2_id_mem_hit = (id_redirect.rs2_raddr === mem_redirect.rd_waddr) && mem_redirect.rd_wen && (id_redirect.rs2_raddr =/= 0.U)
     val rs2_id_wb_hit  = (id_redirect.rs2_raddr === wb_redirect.rd_waddr)  && wb_redirect.rd_wen  && (id_redirect.rs2_raddr =/= 0.U)
 
-    redirect_ctrl.rs_id_ex_hit_o := rs1_id_ex_hit || rs2_id_ex_hit
+    redirect_ctrl.rs_id_ex_hit := rs1_id_ex_hit || rs2_id_ex_hit
 
     // rs1_addr_i数据冲突 reg_redirect.rs1_rdata为默认值
     redirect_id.rs1_rdata := MuxCase(reg_redirect.rs1_rdata, Array(

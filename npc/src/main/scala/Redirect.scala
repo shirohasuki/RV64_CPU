@@ -71,14 +71,14 @@ class Redirect extends Module {
         rs1_id_ex_hit   ->  ex_redirect.rd_wdata,
         rs1_id_mem_hit  ->  mem_redirect.rd_wdata,
         rs1_id_wb_hit   ->  wb_redirect.rd_wdata
-    ))
+    ).toIndexedSeq)
 
     // rs2_addr_i数据冲突 reg_redirect.rs2_rdata为默认值
     redirect_id.rs2_rdata := MuxCase(reg_redirect.rs2_rdata, Array(
         rs2_id_ex_hit   -> ex_redirect.rd_wdata,
         rs2_id_mem_hit  -> mem_redirect.rd_wdata,
         rs2_id_wb_hit   -> wb_redirect.rd_wdata
-    ))
+    ).toIndexedSeq)
 }
 
 

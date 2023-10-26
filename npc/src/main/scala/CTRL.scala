@@ -84,14 +84,14 @@ class Ctrl extends Module {
     val event_code_OH = PriorityEncoder(event_code)
 
     //  List(pc_stall_en, if_id_stall_en, id_ex_stall_en, ex_mem_stall_en, mem_wb_stall_en)
-    var stall_list  = MuxLookup(event_code_OH, List(false.B, false.B, false.B, false.B, false.B), Array(
+    val stall_list  = MuxLookup(event_code_OH, List(false.B, false.B, false.B, false.B, false.B), Array(
         1.U -> List(true.B, true.B, false.B, mem_ctrl.mem_inst_isload,  false.B), // load_inst   
         2.U -> List(true.B, true.B, false.B, mem_ctrl.mem_inst_isstore, false.B), // store_inst         
         3.U -> List(true.B, true.B, false.B, false.B, false.B)                   // load_data_hit      
     ))
 
         //  List(pc_flush_en, if_id_flush_en, id_ex_flush_en, ex_mem_flush_en, mem_wb_flush_en)
-    var flush_list  = MuxLookup(event_code_OH, List(false.B, false.B, false.B, false.B, false.B), Array(
+    val flush_list  = MuxLookup(event_code_OH, List(false.B, false.B, false.B, false.B, false.B), Array(
         0.U -> List(false.B, true.B,  true.B, false.B, false.B), // jump
         1.U -> List(false.B, false.B, true.B, false.B, false.B), // load_inst          
         2.U -> List(false.B, false.B, true.B, false.B, false.B), // store_inst          

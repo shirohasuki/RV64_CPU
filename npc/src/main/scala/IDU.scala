@@ -85,8 +85,9 @@ class IDU extends Module {
         INST_TYPE_R_M   -> ListLookup(func3, default_decode_list, Array(
                             INST_ADD_SUB_MUL, INST_SLT, INST_SLTU, INST_XOR_DIV, INST_OR_REM, INST_AND_REMU -> List(redirect_id.rs1_rdata, redirect_id.rs2_rdata, rs1_addr, rs2_addr, rd_addr, true.B, 0.U, 0.U),  
                             INST_SLL     -> List(redirect_id.rs1_rdata, Cat(Fill(58, 0.U), redirect_id.rs2_rdata(5, 0)), rs1_addr, rs2_addr, rd_addr, true.B, 0.U, 0.U),
-                            INST_SR_DIVU -> Mux(func7 === INST_TYPE_R_FUN7, List(redirect_id.rs1_rdata, Cat(Fill(58, 0.U), redirect_id.rs2_rdata(5, 0)), rs1_addr, rs2_addr, rd_addr, true.B, 0.U, 0.U), 
-                                                                  List(redirect_id.rs1_rdata, redirect_id.rs2_rdata, rs1_addr, rs2_addr, rd_addr, true.B, 0.U, 0.U))))
+                            INST_SR_DIVU -> ListLookup(func7, default_decode_list, Array( 
+                                BitPat("b0000001") -> List(redirect_id.rs1_rdata, Cat(Fill(58, 0.U), redirect_id.rs2_rdata(5, 0)), rs1_addr, rs2_addr, rd_addr, true.B, 0.U, 0.U), 
+                                BitPat("b0000000") -> List(redirect_id.rs1_rdata, redirect_id.rs2_rdata, rs1_addr, rs2_addr, rd_addr, true.B, 0.U, 0.U)))))
         INST_TYPE_R_M_W -> ListLookup(func3, default_decode_list, Array(
                             INST_ADDW_SUBW_MULW, INST_DIVW, INST_SLLW, INST_REMW, INST_REMUW, INST_SRW_DIVUW -> List(redirect_id.rs1_rdata, redirect_id.rs2_rdata, rs1_addr, rs2_addr, rd_addr, true.B, 0.U, 0.U)))
         INST_TYPE_B     -> ListLookup(func3, default_decode_list, Array(

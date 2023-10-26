@@ -91,9 +91,9 @@ class Ctrl extends Module {
 
         //  List(pc_flush_en, if_id_flush_en, id_ex_flush_en, ex_mem_flush_en, mem_wb_flush_en)
     val flush_list  = ListLookup(event_code, List(false.B, false.B, false.B, false.B, false.B), Array(
-        BitPat("b00") -> List(false.B, true.B,  true.B, false.B, false.B), // jump
-        BitPat("b01") -> List(false.B, false.B, true.B, false.B, false.B), // load_inst          
-        BitPat("b10") -> List(false.B, false.B, true.B, false.B, false.B), // store_inst          
-        BitPat("b11") -> List(false.B, false.B, true.B, false.B, false.B) // load_data_hit 
+        BitPat(0.U) -> List(false.B, true.B,  true.B, false.B, false.B), // jump
+        BitPat(1.U) -> List(false.B, false.B, true.B, false.B, false.B), // load_inst          
+        BitPat(2.U) -> List(false.B, false.B, true.B, false.B, false.B), // store_inst          
+        BitPat(3.U) -> List(false.B, false.B, true.B, false.B, false.B) // load_data_hit 
     ))
 }

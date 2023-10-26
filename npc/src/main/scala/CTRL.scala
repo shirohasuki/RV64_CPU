@@ -85,9 +85,9 @@ class Ctrl extends Module {
 
     //  List(pc_stall_en, if_id_stall_en, id_ex_stall_en, ex_mem_stall_en, mem_wb_stall_en)
     val stall_list  = ListLookup(event_code_idx, List(false.B, false.B, false.B, false.B, false.B), Array(
-        1.U -> List(true.B, true.B, false.B, mem_ctrl.mem_inst_isload,  false.B).asInstanceOf[List[Any]], // load_inst   
-        2.U -> List(true.B, true.B, false.B, mem_ctrl.mem_inst_isstore, false.B).asInstanceOf[List[Any]], // store_inst         
-        3.U -> List(true.B, true.B, false.B, false.B, false.B).asInstanceOf[List[Any]]                   // load_data_hit      
+        BitPat("b0010") -> List(true.B, true.B, false.B, mem_ctrl.mem_inst_isload,  false.B), // load_inst   
+        BitPat("b0100") -> List(true.B, true.B, false.B, mem_ctrl.mem_inst_isstore, false.B), // store_inst         
+        BitPat("b1000") -> List(true.B, true.B, false.B, false.B, false.B)                   // load_data_hit      
     ))
 
         //  List(pc_flush_en, if_id_flush_en, id_ex_flush_en, ex_mem_flush_en, mem_wb_flush_en)

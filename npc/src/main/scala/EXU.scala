@@ -209,5 +209,8 @@ class EXU extends Module {
     ex_ctrl.ex_inst_isload  := exce_list(3)
     ex_ctrl.ex_inst_isstore := exce_list(5)
     ex_ctrl.typej_jump_en   := exce_list(9)
+    
+    printf("jump = %d", ex_ctrl.typej_jump_en)
+    
     ex_ctrl.typej_jump_addr := exce_list(10)
 }

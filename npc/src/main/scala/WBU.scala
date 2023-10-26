@@ -20,6 +20,6 @@ class WBU extends Module {
     val wb_reg      = IO(Flipped(new MEMWB_WB_Input()))
     val wb_redirect = IO(new WBU_Redirect_Output())
 
-    wb_reg <> exmem_wb
+    wb_reg <> memwb_wb
 }
 

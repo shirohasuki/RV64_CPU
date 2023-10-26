@@ -64,8 +64,8 @@ class Ctrl extends Module {
     val redirect_ctrl = IO(new Bundle{ val rs_id_ex_hit = Input(Bool())})
 
     val ctrl_pc       = IO(new CTRL_PC_Output()     )
-    val ctrl_ifid     = (new CTRL_IFID_Output()     )
-    val ctrl_idex     = (new CTRL_IDEX_Output()     )
+    val ctrl_ifid     = IO(new CTRL_IFID_Output()     )
+    val ctrl_idex     = IO(new CTRL_IDEX_Output()     )
     // val ctrl_idclint = IO(new CTRL_IDClint_Output())
     val ctrl_exmem    = IO(new CTRL_EXMEM_Output()  )
     val ctrl_memwb    = IO(new CTRL_MEMWB_Output()  )

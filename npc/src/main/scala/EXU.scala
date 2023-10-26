@@ -178,7 +178,8 @@ class EXU extends Module {
                             INST_SH         -> List(NORd_Write, 0.U(64.W), 0.U(64.W), MEM_Read, add(base_addr, offset_addr), MEM_Write, "b00000011".U, Cat(Fill(48, 0.U), op2(15, 0)), add(base_addr, offset_addr), NOTypeJ_Jump, 0.U(64.W)), 
                             INST_SW         -> List(NORd_Write, 0.U(64.W), 0.U(64.W), MEM_Read, add(base_addr, offset_addr), MEM_Write, "b00001111".U, Cat(Fill(32, 0.U), op2(31, 0)), add(base_addr, offset_addr), NOTypeJ_Jump, 0.U(64.W)), 
                             INST_SD         -> List(NORd_Write, 0.U(64.W), 0.U(64.W), MEM_Read, add(base_addr, offset_addr), MEM_Write, "b11111111".U, op2, add(base_addr, offset_addr), NOTypeJ_Jump, 0.U(64.W)))),         
-        INST_JAL_OP, INST_JALR_OP -> List(Rd_Write, rd_addr, add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W),  0.U(64.W), 0.U(64.W), TypeJ_Jump, add(base_addr, offset_addr)),
+        INST_JAL_OP     -> List(Rd_Write, rd_addr, add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W),  0.U(64.W), 0.U(64.W), TypeJ_Jump, add(base_addr, offset_addr)),
+        INST_JALR_OP    -> List(Rd_Write, rd_addr, add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W),  0.U(64.W), 0.U(64.W), TypeJ_Jump, add(base_addr, offset_addr)),
         INST_LUI_OP     -> List(Rd_Write, rd_addr,           op2, NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W),  0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
         INST_AUIPC_OP   -> List(Rd_Write, rd_addr, add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W),  0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W))
     ))

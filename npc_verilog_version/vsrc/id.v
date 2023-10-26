@@ -7,7 +7,7 @@ module id (
 	input wire[31:0] inst_i,
 	input wire[63:0] inst_addr_i,
 		
-	// from regs
+	// from rename
 	input wire[63:0] rs1_data_i,
 	input wire[63:0] rs2_data_i,
     // to regs 
@@ -25,9 +25,9 @@ module id (
 	output reg[63:0] op1_o,	
 	output reg[63:0] op2_o,
 	output reg[4:0]  rd_addr_o,	
-	output reg 		 reg_wen, // 回写的使能
+	output reg 		 reg_wen,       // 回写的使能
 
-    output reg[63:0] base_addr_o, // 基地址
+    output reg[63:0] base_addr_o,   // 基地址
     output reg[63:0] offset_addr_o, // 偏移地址
 
     // output reg[63:0] csr_data_o,
@@ -171,7 +171,7 @@ module id (
                             rd_addr_o = rd;
                             reg_wen = 1'b1; // 要回写 
                         end
-                        if (func7 == `INST_TYPE_M_FUN7) begin //DIVU
+                        if (func7 == `INST_TYPE_M_FUN7) begin // DIVU
                             rs1_addr_o = rs1;
                             rs2_addr_o = rs2;
                             op1_o = rs1_data_i;

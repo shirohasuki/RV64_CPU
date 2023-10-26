@@ -5,8 +5,6 @@ module soc (
     input  wire rst 
 );
 
-
-
     // flush 
     wire[2:0]                axi_core_stall_flag_o;
     wire[2:0]                axi_core_flush_flag_o;

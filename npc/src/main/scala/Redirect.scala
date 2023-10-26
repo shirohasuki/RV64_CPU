@@ -68,9 +68,9 @@ class Redirect extends Module {
 
     // rs1_addr_i数据冲突 reg_redirect.rs1_rdata为默认值
     redirect_id.rs1_rdata := MuxCase(reg_redirect.rs1_rdata, Array(
-        (rs1_id_ex_hit === 1.U)  ->  ex_redirect.rd_wdata,
-        (rs1_id_mem_hit === 1.U) ->  mem_redirect.rd_wdata,
-        (rs1_id_wb_hit  === 1.U)  ->  wb_redirect.rd_wdata
+        rs1_id_ex_hit   ->  ex_redirect.rd_wdata,
+        rs1_id_mem_hit  ->  mem_redirect.rd_wdata,
+        rs1_id_wb_hit   ->  wb_redirect.rd_wdata
     ))
 
     // rs2_addr_i数据冲突 reg_redirect.rs2_rdata为默认值

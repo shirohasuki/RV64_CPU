@@ -75,12 +75,13 @@ class Ctrl extends Module {
     val load_inst     = ex_ctrl.ex_inst_isload  || mem_ctrl.mem_inst_isload
     val store_inst    = ex_ctrl.ex_inst_isstore || mem_ctrl.mem_inst_isstore
     val load_data_hit = redirect_ctrl.rs_id_ex_hit && ex_ctrl.ex_inst_isload
+    val NOEVENT       = ~(jump | load_inst | store_inst | load_data_hit)
 
     ctrl_pc.jump_addr := ex_ctrl.typej_jump_addr //| io.clint_ctrl.intr_jump_addr
     ctrl_pc.jump_en   := jump
 
     // 给事件进行优先编码
-    val event_code = PriorityEncoder(Seq(jump, load_inst, store_inst, load_data_hit, true.B)) // 从低到高输出第一个有1的位数 4->NOEVENT
+    val event_code = PriorityEncoder(Seq(jump, load_inst, store_inst, load_data_hit, NOEVENT)) // 从低到高输出第一个有1的位数 4->NOEVENT
 
     //  List(pc_stall_en, if_id_stall_en, id_ex_stall_en, ex_mem_stall_en, mem_wb_stall_en)
     val stall_list  = ListLookup(event_code, List(false.B, false.B, false.B, false.B, false.B), Array(

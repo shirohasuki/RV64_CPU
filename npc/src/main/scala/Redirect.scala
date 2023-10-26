@@ -68,16 +68,17 @@ class Redirect extends Module {
     redirect_ctrl.rs_id_ex_hit := rs1_id_ex_hit || rs2_id_ex_hit
 
     // rs1_addr_i数据冲突 reg_redirect.rs1_rdata为默认值
-    redirect_id.rs1_rdata := MuxCase(reg_redirect.rs1_rdata, ArraySeq.unsafeWrapArray(Array(
+    redirect_id.rs1_rdata := MuxCase(reg_redirect.rs1_rdata, Array(
         rs1_id_ex_hit  ->  ex_redirect.rd_wdata,
         rs1_id_mem_hit ->  mem_redirect.rd_wdata,
         rs1_id_wb_hit  ->  wb_redirect.rd_wdata
-    )))
+    ).mapValues(ArraySeq.unsafeWrapArray))
 
     // rs2_addr_i数据冲突 reg_redirect.rs2_rdata为默认值
-    redirect_id.rs2_rdata := MuxCase(reg_redirect.rs2_rdata, ArraySeq.unsafeWrapArray(Array(
+    redirect_id.rs2_rdata := MuxCase(reg_redirect.rs2_rdata, Array(
         rs2_id_ex_hit   -> ex_redirect.rd_wdata,
         rs2_id_mem_hit  -> mem_redirect.rd_wdata,
         rs2_id_wb_hit   -> wb_redirect.rd_wdata
-    )))
+    ).mapValues(ArraySeq.unsafeWrapArray))
 }
+

@@ -62,7 +62,7 @@ object MACRO {
     val INST_AND_REMU    = BitPat("b111")
 
     // // R type inst
-    val INST_TYPE_R_FUN7 = BitPat("b0000000")
+    val INST_TYPE_R_FUN7 = "b0000000".U
     val INST_ADD_SUB     = BitPat("b000")
     val INST_SLL         = BitPat("b001")
     val INST_SLT         = BitPat("b010")
@@ -72,7 +72,7 @@ object MACRO {
     val INST_OR          = BitPat("b110")
     val INST_AND         = BitPat("b111")
 
-    val INST_TYPE_M_FUN7 = BitPat("b0000001")
+    val INST_TYPE_M_FUN7 = "b0000001".U
     // M type inst
     val INST_MUL   = BitPat("b000")
     // // val INST_MULH   3'b001

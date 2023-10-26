@@ -52,8 +52,8 @@ class CTRL_EXMEM_Output extends Bundle {
 }
 
 class CTRL_MEMWB_Output extends Bundle {
-    val mem_wb_stall_en = Output(Bool())
-    val mem_wb_flush_en = Output(Bool())
+    val memwb_stall_en = Output(Bool())
+    val memwb_flush_en = Output(Bool())
 }
 
 

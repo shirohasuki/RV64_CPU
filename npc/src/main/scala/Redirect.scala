@@ -50,7 +50,7 @@ class Redirect extends Module {
     val reg_redirect  = IO(new Reg_Redirect_Input())
     val redirect_reg  = IO(new Redirect_Reg_Output())
     val redirect_id   = IO(new Redirect_IDU_Output())
-    val redirect_ctrl = IO(new Bundle{ val rs_id_ex_hit_o = Output(Bool())})
+    val redirect_ctrl = IO(new Bundle{ val rs_id_ex_hit = Output(Bool())})
 
     redirect_reg <> id_redirect
 

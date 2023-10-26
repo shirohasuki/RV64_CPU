@@ -76,12 +76,7 @@ class IDU extends Module {
     val default_decode_list = List(0.U(64.W), 0.U(64.W), 0.U(5.W), 0.U(5.W), 0.U(64.W), false.B, 0.U(64.W), 0.U(64.W))
     val decode_list  = ListLookup(opcode, default_decode_list, Array(
         INST_TYPE_I     -> ListLookup(func3, default_decode_list, Array(
-                            INST_ADDI-> List(redirect_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U), 
-                            INST_SLTI-> List(redirect_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U), 
-                            INST_SLTIU-> List(redirect_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U), 
-                            INST_XORI-> List(redirect_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U), 
-                            INST_ORI-> List(redirect_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U), 
-                            INST_ANDI -> List(redirect_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U), 
+                            INST_ADDI, INST_SLTI, INST_SLTIU, INST_XORI, INST_ORI, INST_ANDI -> List(redirect_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U), 
                             INST_SLLI, INST_SRI                                              -> List(redirect_id.rs1_rdata, Cat(Fill(58, 0.U), shamt), rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U)))
         INST_TYPE_I_W   -> ListLookup(func3, default_decode_list, Array(
                             INST_ADDIW                                                       -> List(redirect_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U),  

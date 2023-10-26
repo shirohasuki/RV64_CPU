@@ -12,6 +12,11 @@ import IFID._
 import IDU._
 import IDEX._
 import EXU._
+import EXMEM._
+import MEM._
+import MEMWB._
+import WBU._
+import Redirect._
 import CTRL._
 import ROM._
 import RegFile._

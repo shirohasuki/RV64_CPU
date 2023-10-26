@@ -81,7 +81,7 @@ class Ctrl extends Module {
 
     // 给事件进行优先编码
     val event_code = RegInit(0.U(2.W)) 
-    event_code := PriorityEncoder(VecInit(jump, load_inst, store_inst, load_data_hit)) // 从低到高输出第一个有1的位数
+    event_code := PriorityEncoder(VecInit(load_inst, store_inst, load_data_hit,jump)) // 从低到高输出第一个有1的位数
 
     //  List(pc_stall_en, if_id_stall_en, id_ex_stall_en, ex_mem_stall_en, mem_wb_stall_en)
     val stall_list  = ListLookup(event_code, List(false.B, false.B, false.B, false.B, false.B), Array(

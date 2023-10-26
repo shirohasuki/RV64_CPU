@@ -81,10 +81,10 @@ class Ctrl extends Module {
 
     // 给事件进行优先编码
     val event_code = VecInit(jump, load_inst, store_inst, load_data_hit)
-    val event_code_idx = PriorityEncoder(event_code)
+    val event_code_idx = (PriorityEncoder(event_code)).asSInt
 
     //  List(pc_stall_en, if_id_stall_en, id_ex_stall_en, ex_mem_stall_en, mem_wb_stall_en)
-    val stall_list  = MuxLookup(event_code_idx.S, List(false.B, false.B, false.B, false.B, false.B), Array(
+    val stall_list  = MuxLookup(event_code_idx, List(false.B, false.B, false.B, false.B, false.B), Array(
         1.U -> List(true.B, true.B, false.B, mem_ctrl.mem_inst_isload,  false.B), // load_inst   
         2.U -> List(true.B, true.B, false.B, mem_ctrl.mem_inst_isstore, false.B), // store_inst         
         3.U -> List(true.B, true.B, false.B, false.B, false.B)                   // load_data_hit      

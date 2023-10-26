@@ -92,7 +92,8 @@ class IDU extends Module {
                             INST_BNE, INST_BEQ, INST_BLT, INST_BLTU, INST_BGE, INST_BGEU -> List(redirect_id.rs1_rdata, redirect_id.rs2_rdata, rs1_addr, rs2_addr, 0.U, false.B, ifid_id.pc, immB)))
         INST_TYPE_L     -> ListLookup(func3, default_decode_list, Array(
                             INST_LB, INST_LH, INST_LW, INST_LD, INST_LBU, INST_LHU, INST_LWU -> List(redirect_id.rs1_rdata, immL, rs1_addr, rs2_addr, rd_addr, true.B, redirect_id.rs1_rdata, immL)))
-        INST_TYPE_S,    -> List(0.U, redirect_id.rs2_rdata, rs1_addr, rs2_addr, 0.U, false.B, redirect_id.rs1_rdata, immS)
+        INST_TYPE_S     -> ListLookup(func3, default_decode_list, Array(
+                            INST_SB, INST_SH, INST_SW, INST_SD -> List(0.U, redirect_id.rs2_rdata, rs1_addr, rs2_addr, 0.U, false.B, redirect_id.rs1_rdata, immS)))
         INST_JAL_OP     -> List(ifid_id.pc, 4.U,  0.U,      0.U, rd_addr, true.B, ifid_id.pc,            immJ)
         INST_JALR_OP    -> List(ifid_id.pc, 4.U,  rs1_addr, 0.U, rd_addr, true.B, redirect_id.rs1_rdata, immI)
         INST_LUI_OP     -> List(0.U,        immU, 0.U,      0.U, rd_addr, true.B, 0.U,                   0.U )

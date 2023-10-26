@@ -80,13 +80,13 @@ class Ctrl extends Module {
     ctrl_pc.jump_en   := jump
 
     // 给事件进行优先编码
-    val event_code = PriorityEncoder(VecInit(jump, load_inst, store_inst, load_data_hit)) // 
+    val event_code = PriorityEncoder(VecInit(jump, load_inst, store_inst, load_data_hit)) // 从低到高输出第一个有1的位数
 
     //  List(pc_stall_en, if_id_stall_en, id_ex_stall_en, ex_mem_stall_en, mem_wb_stall_en)
     val stall_list  = ListLookup(event_code, List(false.B, false.B, false.B, false.B, false.B), Array(
-        BitPat(1) -> List(true.B, true.B, false.B, mem_ctrl.mem_inst_isload,  false.B), // load_inst   
-        BitPat(2) -> List(true.B, true.B, false.B, mem_ctrl.mem_inst_isstore, false.B), // store_inst         
-        BitPat(3) -> List(true.B, true.B, false.B, false.B, false.B)                   // load_data_hit      
+        BitPat(1.U) -> List(true.B, true.B, false.B, mem_ctrl.mem_inst_isload,  false.B), // load_inst   
+        BitPat(2.U) -> List(true.B, true.B, false.B, mem_ctrl.mem_inst_isstore, false.B), // store_inst         
+        BitPat(3.U) -> List(true.B, true.B, false.B, false.B, false.B)                   // load_data_hit      
     ))
 
         //  List(pc_flush_en, if_id_flush_en, id_ex_flush_en, ex_mem_flush_en, mem_wb_flush_en)

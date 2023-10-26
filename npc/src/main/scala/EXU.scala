@@ -67,9 +67,9 @@ class EXU extends Module {
     def and                       (op1: UInt, op2: UInt): UInt = op1 & op2
     def xor                       (op1: UInt, op2: UInt): UInt = op1 ^ op2
     def or                        (op1: UInt, op2: UInt): UInt = op1 | op2
-    def rem                       (op1: UInt, op2: UInt): UInt = (op1.asSInt % op2.asSInt).asUInt
+    def rem                       (op1: UInt, op2: UInt): UInt = (op1 % op2.asSInt).asUInt
     def rem_unsigned              (op1: UInt, op2: UInt): UInt = op1 % op2
-    def div                       (op1: UInt, op2: UInt): UInt = (op1.asSInt / op2.asSInt).asUInt
+    def div                       (op1: UInt, op2: UInt): UInt = (op1 / op2.asSInt).asUInt
     def div_unsigned              (op1: UInt, op2: UInt): UInt = op1 / op2
     def shift_left_unsigned       (op1: UInt, op2: UInt): UInt = op1 << op2(5, 0)
     def shift_right_unsigned      (op1: UInt, op2: UInt): UInt = op1 >> op2(5, 0)

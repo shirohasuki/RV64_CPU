@@ -58,7 +58,7 @@ class Redirect extends Module {
     val rs1_id_ex_hit  = (id_redirect.rs1_raddr === ex_redirect.rd_waddr)  && ex_redirect.rd_wen  && (id_redirect.rs1_raddr =/= 0.U)
     val rs1_id_mem_hit = (id_redirect.rs1_raddr === mem_redirect.rd_waddr) && mem_redirect.rd_wen && (id_redirect.rs1_raddr =/= 0.U)
     val rs1_id_wb_hit  = (id_redirect.rs1_raddr === wb_redirect.rd_waddr)  && wb_redirect.rd_wen  && (id_redirect.rs1_raddr =/= 0.U)
-r
+
     val rs2_id_ex_hit  = (id_redirect.rs2_raddr === ex_redirect.rd_waddr)  && ex_redirect.rd_wen  && (id_redirect.rs2_raddr =/= 0.U)
     val rs2_id_mem_hit = (id_redirect.rs2_raddr === mem_redirect.rd_waddr) && mem_redirect.rd_wen && (id_redirect.rs2_raddr =/= 0.U)
     val rs2_id_wb_hit  = (id_redirect.rs2_raddr === wb_redirect.rd_waddr)  && wb_redirect.rd_wen  && (id_redirect.rs2_raddr =/= 0.U)

@@ -5,7 +5,7 @@ import chisel3.util._
 
 object function {
     def dff_set(flush_flag: UInt, stall_flag: UInt, DataWidth: UInt, data_default: UInt, data_i: UInt): UInt = {
-        val data_o = RegInit(data_i)
+        val data_o = RegInit(data_default)
         data_o := Mux(flush_flag === 1.U, data_default, 
                     Mux(stall_flag === 1.U, data_o, data_i))
         data_o

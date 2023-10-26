@@ -102,6 +102,7 @@ class Ctrl extends Module {
         BitPat(1.U) -> List(false.B, false.B, true.B, false.B, false.B), // load_inst          
         BitPat(2.U) -> List(false.B, false.B, true.B, false.B, false.B), // store_inst          
         BitPat(3.U) -> List(false.B, false.B, true.B, false.B, false.B) // load_data_hit 
+        BitPat(4.U) -> List(false.B, false.B, false.B, false.B, false.B) // load_data_hit 
     ))
 
     ctrl_pc.pc_flush_en         := flush_list(0)

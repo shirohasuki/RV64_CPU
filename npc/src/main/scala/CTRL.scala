@@ -47,8 +47,8 @@ class CTRL_IDEX_Output extends Bundle {
 // }
 
 class CTRL_EXMEM_Output extends Bundle {
-    val ex_mem_stall_en = Output(Bool())
-    val ex_mem_flush_en = Output(Bool())
+    val exmem_stall_en = Output(Bool())
+    val exmem_flush_en = Output(Bool())
 }
 
 class CTRL_MEMWB_Output extends Bundle {

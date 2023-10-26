@@ -49,12 +49,12 @@ class MEM extends Module {
     mem_ctrl.mem_inst_isload    :=  exmem_mem.ex_inst_isload
     mem_ctrl.mem_inst_isstore   :=  exmem_mem.ex_inst_isstore
 
-    mem_memwb.pc       := memwb_mem.pc
-    mem_memwb.rd_wdata := memwb_mem.rd_wdata
-    mem_memwb.rd_waddr := memwb_mem.rd_waddr   
-    mem_memwb.rd_wen   := memwb_mem.rd_wen  
+    mem_memwb.pc       := exmem_mem.pc
+    mem_memwb.rd_wdata := exmem_mem.rd_wdata
+    mem_memwb.rd_waddr := exmem_mem.rd_waddr   
+    mem_memwb.rd_wen   := exmem_mem.rd_wen  
 
-    mem_redirect.rd_wdata := memwb_mem.rd_wdata
-    mem_redirect.rd_waddr := memwb_mem.rd_waddr   
-    mem_redirect.rd_wen   := memwb_mem.rd_wen  
+    mem_redirect.rd_wdata := exmem_mem.rd_wdata
+    mem_redirect.rd_waddr := exmem_mem.rd_waddr   
+    mem_redirect.rd_wen   := exmem_mem.rd_wen  
 }

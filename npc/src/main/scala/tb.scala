@@ -57,7 +57,7 @@ class tb extends Module {
     IDEX.idex_ex    <> EXU.idex_ex
     
     EXU.ex_exmem    <> EXMEM.ex_exmem
-    EXMEM.exmem_ex  <> MEM.exmem_ex
+    EXMEM.exmem_mem <> MEM.exmem_mem
     
     MEM.mem_memwb   <> MEMWB.mem_memwb
     MEMWB.memwb_wb  <> WBU.memwb_wb

@@ -21,6 +21,11 @@ class EXMEM_MEM_Input extends Bundle {
     val rd_wen          = Input(Bool())
 }
 
+class MEM_CTRL_Output extends Bundle {
+    val mem_inst_isload  = Output(Bool())
+    val mem_inst_isstore = Output(Bool())
+}
+
 class MEM_MEMWB_Output extends Bundle {
     val pc              = Output(UInt(64.W))
     val rd_wdata        = Output(UInt(64.W))
@@ -36,9 +41,13 @@ class MEM_Redirect_Output extends Bundle {
 
 
 class MEM extends Module {
-    val memwb_mem    = IO(new EXMEM_MEM_Input())
+    val exmem_mem    = IO(new EXMEM_MEM_Input())
+    val mem_ctrl     = IO(new MEM_CTRL_Output())
     val mem_memwb    = IO(new MEM_MEMWB_Output())
     val mem_redirect = IO(new MEM_Redirect_Output())
+
+    mem_ctrl.mem_inst_isload    :=  exmem_mem.ex_inst_isload
+    mem_ctrl.mem_inst_isstore   :=  exmem_mem.ex_inst_isstore
 
     mem_memwb.pc       := memwb_mem.pc
     mem_memwb.rd_wdata := memwb_mem.rd_wdata

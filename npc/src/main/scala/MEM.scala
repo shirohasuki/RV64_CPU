@@ -36,7 +36,7 @@ class MEM_Redirect_Output extends Bundle {
 
 
 class MEM extends Module {
-    val exmem_mem    = IO(new EXMEM_MEM_Input())
+    val memwb_mem    = IO(new EXMEM_MEM_Input())
     val mem_memwb    = IO(new MEM_MEMWB_Output())
     val mem_redirect = IO(new MEM_Redirect_Output())
 

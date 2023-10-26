@@ -89,6 +89,12 @@ class Ctrl extends Module {
         BitPat(3.U) -> List(true.B, true.B, false.B, false.B, false.B)                   // load_data_hit      
     ))
 
+    ctrl_pc.pc_stall_en         := stall_list(0)
+    ctrl_ifid.ifid_stall_en     := stall_list(1)
+    ctrl_idex.idex_stall_en     := stall_list(2)
+    ctrl_exmem.exmem_stall_en   := stall_list(3)
+    ctrl_memwb.memwb_stall_en   := stall_list(4)
+
         //  List(pc_flush_en, if_id_flush_en, id_ex_flush_en, ex_mem_flush_en, mem_wb_flush_en)
     val flush_list  = ListLookup(event_code, List(false.B, false.B, false.B, false.B, false.B), Array(
         BitPat(0.U) -> List(false.B, true.B,  true.B, false.B, false.B), // jump
@@ -96,4 +102,10 @@ class Ctrl extends Module {
         BitPat(2.U) -> List(false.B, false.B, true.B, false.B, false.B), // store_inst          
         BitPat(3.U) -> List(false.B, false.B, true.B, false.B, false.B) // load_data_hit 
     ))
+
+    ctrl_pc.pc_flush_en         := flush_list(0)
+    ctrl_ifid.ifid_flush_en     := flush_list(1)
+    ctrl_idex.idex_flush_en     := flush_list(2)
+    ctrl_exmem.exmem_flush_en   := flush_list(3)
+    ctrl_memwb.memwb_flush_en   := flush_list(4)
 }

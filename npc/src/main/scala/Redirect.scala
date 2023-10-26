@@ -26,6 +26,11 @@ class WBU_Redirect_Input extends Bundle {
     val rd_wdata       = Input(UInt(64.W))
 }
 
+class Reg_Redirect_Input extends Bundle {
+    val rs1_rdata = Input(UInt(64.W))
+    val rs2_rdata = Input(UInt(64.W))
+}
+
 class Redirect_Reg_Output extends Bundle {
     val rs1_raddr = Output(UInt(5.W))
     val rs2_raddr = Output(UInt(5.W))

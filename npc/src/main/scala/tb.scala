@@ -73,7 +73,7 @@ class tb extends Module {
     CTRL.ctrl_memwb <> MEMWB.ctrl_memwb  
 
 
-    // loadMemoryFromFile(ROM.mem, "./src/main/scala/inst_data_ADD.txt", MemoryLoadFileType.Binary);
+    loadMemoryFromFile(ROM.mem, "./src/main/scala/inst_data_ADD.txt", MemoryLoadFileType.Binary);
 }
 
 object tb extends App {

@@ -21,5 +21,8 @@ class WBU extends Module {
     val wb_redirect = IO(new WBU_Redirect_Output())
 
     wb_reg <> memwb_wb
+    wb_redirect.rd_wen   := memwb_wb.rd_wdata             
+    wb_redirect.rd_waddr := memwb_wb.rd_waddr     
+    wb_redirect.rd_wdata := memwb_wb.rd_wen               
 }
 

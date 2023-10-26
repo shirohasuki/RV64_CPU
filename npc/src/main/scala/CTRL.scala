@@ -81,20 +81,20 @@ class Ctrl extends Module {
 
     // 给事件进行优先编码
     val event_code = VecInit(jump, load_inst, store_inst, load_data_hit)
-    val event_code_idx = PriorityEncoder(event_code)
+    val event_code_OH = PriorityEncoder_OH(event_code)
 
     //  List(pc_stall_en, if_id_stall_en, id_ex_stall_en, ex_mem_stall_en, mem_wb_stall_en)
-    val stall_list  = ListLookup(event_code_idx, List(false.B, false.B, false.B, false.B, false.B), Array(
+    val stall_list  = ListLookup(event_code_OH, List(false.B, false.B, false.B, false.B, false.B), Array(
         BitPat("b0010") -> List(true.B, true.B, false.B, mem_ctrl.mem_inst_isload,  false.B), // load_inst   
         BitPat("b0100") -> List(true.B, true.B, false.B, mem_ctrl.mem_inst_isstore, false.B), // store_inst         
         BitPat("b1000") -> List(true.B, true.B, false.B, false.B, false.B)                   // load_data_hit      
     ))
 
         //  List(pc_flush_en, if_id_flush_en, id_ex_flush_en, ex_mem_flush_en, mem_wb_flush_en)
-    val flush_list  = MuxLookup(event_code_idx, List(false.B, false.B, false.B, false.B, false.B), Array(
-        0.U -> List(false.B, true.B,  true.B, false.B, false.B), // jump
-        1.U -> List(false.B, false.B, true.B, false.B, false.B), // load_inst          
-        2.U -> List(false.B, false.B, true.B, false.B, false.B), // store_inst          
-        3.U -> List(false.B, false.B, true.B, false.B, false.B) // load_data_hit 
+    val flush_list  = ListLookup(event_code_OH, List(false.B, false.B, false.B, false.B, false.B), Array(
+        BitPat("b0001") -> List(false.B, true.B,  true.B, false.B, false.B), // jump
+        BitPat("b0010") -> List(false.B, false.B, true.B, false.B, false.B), // load_inst          
+        BitPat("b0100") -> List(false.B, false.B, true.B, false.B, false.B), // store_inst          
+        BitPat("b1000") -> List(false.B, false.B, true.B, false.B, false.B) // load_data_hit 
     ))
 }

@@ -39,7 +39,7 @@ test:
 verilog:
 	$(call git_commit, "generate verilog")
 	mkdir -p $(BUILD_DIR)
-	mill -i __.test.runMain Elaborate -td $(BUILD_DIR) 
+	mill -i __.test.runMain Elaborate -td $(BUILD_DIR) -X mverilog
 # -X mverilog 生成verilog取消优化
 
 help:

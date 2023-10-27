@@ -41,7 +41,7 @@ class getGprs extends BlackBox with HasBlackBoxInline {
     |   input [63:0] gprs_29,
     |   input [63:0] gprs_30,
     |   input [63:0] gprs_31
-    |)
+    |);
     |   wire [63:0] gprs[32];
     |   assign gprs[0] = gprs_0;
     |   assign gprs[1] = gprs_1;
@@ -94,7 +94,7 @@ class getPc extends BlackBox with HasBlackBoxInline {
     |import "DPI-C" function void get_pc(input longint pc);
     |module getPc (
     |   input [63:0] pc, 
-    |)
+    |);
     |   always @(posedge clk)begin
     |       get_gprs(pc)
     |   end

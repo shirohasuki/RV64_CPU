@@ -78,8 +78,8 @@ int main() {
     IFDEF(CONFIG_NPC_DIFFTEST, init_difftest("/home/shiroha/Code/ysyx/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size););
 
     while (sim_time < MAX_SIM_TIME) {
-        dump_gpr(); // 打印通用寄存器
-        dump_csr(); // 打印异常寄存器
+        // dump_gpr(); // 打印通用寄存器
+        // dump_csr(); // 打印异常寄存器
         exec_once();
         IFDEF(CONFIG_NPC_DEVICE, device_update());
         IFDEF(CONFIG_NPC_MTRACE, print_mtrace());

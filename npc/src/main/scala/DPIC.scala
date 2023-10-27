@@ -108,7 +108,7 @@ class getPc extends BlackBox with HasBlackBoxInline {
 
 class ebreak extends BlackBox with HasBlackBoxInline {
     val io = IO(new Bundle{
-        val inst  = Input(UInt(64.W)) 
+        val inst  = Input(UInt(32.W)) 
     })
     setInline("ebreak.v",
     """

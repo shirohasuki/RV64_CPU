@@ -89,7 +89,7 @@ class getGprs extends BlackBox with HasBlackBoxInline {
 class getPc extends BlackBox with HasBlackBoxInline {
     val io = IO(new Bundle{
         val pc  = Input(UInt(64.W))
-        // val clk = Input(Clock()) 
+        val clk = Input(Clock()) 
     })
     setInline("getPc.v",
     """
@@ -98,9 +98,9 @@ class getPc extends BlackBox with HasBlackBoxInline {
     |   input clk,  
     |   input [63:0] pc
     |);
-    |   always @(*) begin
+    |   always @(posedge clk) begin
     |       get_pc(pc);
-    |       //$display("%x", pc);
+    |       $display("%x", pc);
     |   end
     |
     |endmodule

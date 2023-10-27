@@ -3,7 +3,7 @@ package tb
 import chisel3._
 import chisel3.util._
 import chisel3.stage._
-import chisel3.util.experimental.loadMemoryFromFile
+import chisel3.util.experimental.loadMemoryFromFileInline
 import firrtl.annotations.MemoryLoadFileType
 
 import PcReg._
@@ -73,7 +73,7 @@ class tb extends Module {
     CTRL.ctrl_memwb <> MEMWB.ctrl_memwb  
 
 
-    loadMemoryFromFileInline(ROM.mem, "./src/main/scala/inst_data_ADD.txt", MemoryLoadFile.Binary);
+    loadMemoryFromFileInline(ROM.mem, "./src/main/scala/inst_data_ADD.txt", MemoryLoadFileType.Binary);
 }
 
 object tb extends App {

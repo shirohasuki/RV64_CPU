@@ -49,7 +49,7 @@ int check_regs_npc(CPU_state cpu_nemu, CPU_state cpu_npc) {
         return 0;
     }
     for (int i = 0; i < 32; i++) {
-        Printf("[difftest] nemu_gpr[%2d]=%16lx, npc_gpr[%2d]=%16lx\n", GREEN, i, cpu_nemu.gpr[i], i, cpu_npc.gpr[i]);
+        // Printf("[difftest] nemu_gpr[%2d]=%16lx, npc_gpr[%2d]=%16lx\n", GREEN, i, cpu_nemu.gpr[i], i, cpu_npc.gpr[i]);
         if (cpu_npc.gpr[i] != cpu_nemu.gpr[i]) {
             Printf("Missing match gpr[%d], nemu_val=%lx, npc_val=%lx\n", RED, i, cpu_nemu.gpr[i], cpu_npc.gpr[i]);
             return 0;

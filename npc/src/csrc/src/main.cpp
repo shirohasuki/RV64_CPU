@@ -72,7 +72,7 @@ int main() {
     IFDEF(CONFIG_NPC_ITRACE, init_disasm("riscv64-pc-linux-gnu")); 
 
 #ifdef CONFIG_NPC_DIFFTEST
-    while (cpu_npc.pc != MEM_BASE) { exec_once(); } // pc先走三拍到EXU
+    while (cpu_npc.pc != 0) { exec_once(); } // pc先走三拍到EXU
 #endif
 
     IFDEF(CONFIG_NPC_DIFFTEST, init_difftest("/home/shiroha/Code/ysyx/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size););

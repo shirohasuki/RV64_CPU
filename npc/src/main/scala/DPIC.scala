@@ -3,6 +3,8 @@ package DPIC
 import chisel3._
 import chisel3.util._
 
+import define.MACRO._
+
 class getGprs extends BlackBox with HasBlackBoxInline {
     val io = IO(new Bundle{val gprs = Input(Vec(32, UInt(64.W)))})
     setInline("getGprs.v",
@@ -98,6 +100,26 @@ class getPc extends BlackBox with HasBlackBoxInline {
     |);
     |   always @(posedge clk) begin
     |       get_pc(pc);
+    |   end
+    |
+    |endmodule
+    """.stripMargin)
+}
+
+class ebreak extends BlackBox with HasBlackBoxInline {
+    val io = IO(new Bundle{
+        val inst  = Input(UInt(64.W)) 
+    })
+    setInline("ebreak.v",
+    """
+    |import "DPI-C" function void ebreak();
+    |module ebreak (
+    |   input [63:0] inst
+    |);
+    |   always @(*) begin
+    |       if (inst == INST_EBREAK) begin
+    |            ebreak();
+    |       end
     |   end
     |
     |endmodule

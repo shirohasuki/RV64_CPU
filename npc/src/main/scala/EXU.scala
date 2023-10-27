@@ -6,6 +6,7 @@ import chisel3.stage._
 
 import define.MACRO._
 import DPIC.getPc
+import DPIC.ebreak
 
 class IDEX_EXU_Input extends Bundle {
     val inst        = Input(UInt(32.W))
@@ -110,6 +111,10 @@ class EXU extends Module {
     val   NOMEM_Read = false.B
     val   TypeJ_Jump = true.B
     val NOTypeJ_Jump = false.B
+
+    // DPI-C Ebreak
+    val DPIC_ebreak = Module(new ebreak())
+    DPIC_ebreak.io.inst := idex_ex.inst; 
 
     //                      List(rd_wen,  rd_waddr, rd_wdata,    mem_ren,    mem_raddr,  mem_wen,    mem_wmask,  mem_wdata, mem_waddr, typej_jump_en, typej_jump_addr)
     val default_exce_list = List(NORd_Write, 0.U(5.W), 0.U(64.W), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W),  0.U(64.W), 0.U(64.W), NOTypeJ_Jump,  0.U(64.W))
@@ -216,4 +221,5 @@ class EXU extends Module {
     // DPI-C get_pc
     val DPIC_getPc = Module(new getPc())
     DPIC_getPc.io.pc := idex_ex.pc
+
 }

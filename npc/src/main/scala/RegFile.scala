@@ -3,7 +3,7 @@ package RegFile
 import chisel3._
 import chisel3.util._
 
-import DPIC.DPIC_getGprs
+import DPIC.getGprs
 
 class Redirect_REG_Input extends Bundle {
     val rs1_raddr = Input(UInt(5.W))
@@ -42,7 +42,7 @@ class RegFile extends Module {
 
 
     // DPI-C 获取GPRs
-    val getGprs = Module(new DPIC_getGprs())
-    getGprs.io.gprs := regs
+    val DPIC_getGprs = Module(new getGprs())
+    DPIC_getGprs.io.gprs := regs
 }
 

@@ -5,7 +5,7 @@ import chisel3.util._
 import chisel3.stage._
 
 import define.MACRO._
-import DPIC.DPIC_getPc
+import DPIC.getPc
 
 class IDEX_EXU_Input extends Bundle {
     val inst        = Input(UInt(32.W))
@@ -214,6 +214,6 @@ class EXU extends Module {
 
 
     // DPI-C get_pc
-    val getPc = Module(new DPIC_getPc())
-    getPc.io.pc := idex_ex.pc
+    val DPIC_getPc = Module(new getPc())
+    DPIC_getPc.io.pc := idex_ex.pc
 }

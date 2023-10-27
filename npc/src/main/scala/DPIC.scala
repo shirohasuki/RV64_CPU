@@ -114,7 +114,7 @@ class ebreak extends BlackBox with HasBlackBoxInline {
     """
     |import "DPI-C" function void ebreak();
     |module ebreak (
-    |   input [63:0] inst
+    |   input [31:0] inst
     |);
     |   always @(*) begin
     |       if (inst == 32'h00100073) begin

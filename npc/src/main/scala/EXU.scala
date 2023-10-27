@@ -215,5 +215,5 @@ class EXU extends Module {
 
     // DPI-C get_pc
     val getPc = (new DPIC_getPc())
-    getPc.io.pc = idex_ex.pc
+    getPc.io.pc := idex_ex.pc
 }

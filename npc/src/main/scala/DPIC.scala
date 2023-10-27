@@ -100,7 +100,7 @@ class getPc extends BlackBox with HasBlackBoxInline {
     |);
     |   always @(*) begin
     |       get_pc(pc);
-    |       $display("%x", pc);
+    |       //$display("%x", pc);
     |   end
     |
     |endmodule

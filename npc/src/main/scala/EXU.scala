@@ -5,6 +5,7 @@ import chisel3.util._
 import chisel3.stage._
 
 import define.MACRO._
+import DPIC.DPIC_getPc
 
 class IDEX_EXU_Input extends Bundle {
     val inst        = Input(UInt(32.W))
@@ -201,13 +202,18 @@ class EXU extends Module {
     ex_exmem.ex_inst_isstore := exce_list(5)
 
     // ex to redirect
-    ex_redirect.rd_wen   := exce_list(0)
-    ex_redirect.rd_waddr := exce_list(1)
-    ex_redirect.rd_wdata := exce_list(2)
+    ex_redirect.rd_wen       := exce_list(0)
+    ex_redirect.rd_waddr     := exce_list(1)
+    ex_redirect.rd_wdata     := exce_list(2)
     
     // ex to ctrl 
-    ex_ctrl.ex_inst_isload  := exce_list(3)
-    ex_ctrl.ex_inst_isstore := exce_list(5)
-    ex_ctrl.typej_jump_en   := exce_list(9)
-    ex_ctrl.typej_jump_addr := exce_list(10)
+    ex_ctrl.ex_inst_isload   := exce_list(3)
+    ex_ctrl.ex_inst_isstore  := exce_list(5)
+    ex_ctrl.typej_jump_en    := exce_list(9)
+    ex_ctrl.typej_jump_addr  := exce_list(10)
+
+
+    // DPI-C get_pc
+    val getPc = (new DPIC_getPc())
+    getPc.io.pc = idex_ex.pc
 }

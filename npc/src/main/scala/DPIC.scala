@@ -96,7 +96,7 @@ class DPIC_getPc extends BlackBox with HasBlackBoxInline {
     |   input [63:0] pc, 
     |);
     |   always @(posedge clk) begin
-    |       get_gprs(pc);
+    |       get_pc(pc);
     |   end
     |
     |endmodule

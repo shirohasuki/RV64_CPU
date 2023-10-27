@@ -22,7 +22,7 @@ const char *riscv64_csrs[] = {
 
 extern "C" void get_pc(long long int pc) {
     cpu_pc = (uint64_t)pc;
-    // printf("cpu_pc: %lx\n", cpu_pc);
+    printf("cpu_pc: %lx\n", cpu_pc);
     cpu_npc.pc = cpu_pc; // give pc and gprs to CPU status
 }
 

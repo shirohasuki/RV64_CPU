@@ -2,8 +2,8 @@
 #include <utils/macro.h>
 #include <utils/debug.h>
 
-#define MAX_SIM_TIME 40
-// #define MAX_SIM_TIME 15000000// 最大仿真周期，中途读取到ebreak自动退出
+// #define MAX_SIM_TIME 40
+#define MAX_SIM_TIME 15000000// 最大仿真周期，中途读取到ebreak自动退出
 // #define MAX_SIM_TIME 150000000000// 最大仿真周期，中途读取到ebreak自动退出
 vluint64_t sim_time = 0;
 

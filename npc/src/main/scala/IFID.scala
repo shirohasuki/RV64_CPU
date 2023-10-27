@@ -19,6 +19,6 @@ class IFID extends Module {
     val ifid_id   = IO(Flipped(new IFID_Input()))
     val ctrl_ifid = IO(new Ctrl_Input())
 
-    ifid_id.inst := dff_set(ctrl_ifid.ifid_flush_en, ctrl_ifid.ifid_stall_en, 32.U, INST_NOP, if_ifid.inst)
-    ifid_id.pc   := dff_set(ctrl_ifid.ifid_flush_en, ctrl_ifid.ifid_stall_en, 64.U, 0.U(64.W), if_ifid.inst)
+    ifid_id.inst := dff_set(ctrl_ifid.ifid_flush_en, ctrl_ifid.ifid_stall_en, 32.U, INST_NOP,  if_ifid.inst)
+    ifid_id.pc   := dff_set(ctrl_ifid.ifid_flush_en, ctrl_ifid.ifid_stall_en, 64.U, 0.U(64.W), if_ifid.pc  )
 }

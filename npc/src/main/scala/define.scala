@@ -12,6 +12,10 @@ object function {
     }
 } 
 
+// object DPI_C {
+
+// }
+
 object MACRO {
         // I type inst
     val INST_TYPE_I = BitPat("b0010011")
@@ -119,7 +123,7 @@ object MACRO {
     // ============== intr  ===============
     // val INST_FENCE  7'b0001111
     // val INST_ECALL  32'h73
-    // val INST_EBREAK 32'h00100073
+    val INST_EBREAK  = "h00100073".U(32.W)
     // val INST_MRET   32'h30200073
 
     // val INST_TYPE_INTR 7'b1110011

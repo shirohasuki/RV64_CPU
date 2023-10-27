@@ -3,7 +3,7 @@ package tb
 import chisel3._
 import chisel3.util._
 import chisel3.stage._
-import chisel3.util.experimental.loadMemoryFromFile
+import chisel3.util.experimental.loadMemoryFromFileInline
 import firrtl.annotations.MemoryLoadFileType
 
 import PcReg._
@@ -73,7 +73,8 @@ class tb extends Module {
     CTRL.ctrl_memwb <> MEMWB.ctrl_memwb  
 
 
-    // loadMemoryFromFile(ROM.mem, "./src/main/scala/inst_data_ADD.txt", MemoryLoadFileType.Binary);
+    loadMemoryFromFileInline(ROM.mem, "./image.hex", MemoryLoadFileType.Hex); 
+    // loadMemoryFromFile只会在chiseltest的时候生成readmemb
 }
 
 object tb extends App {

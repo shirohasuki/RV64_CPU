@@ -5,6 +5,8 @@ import chisel3.util._
 import chisel3.stage._
 
 import define.MACRO._
+import DPIC.getPc
+import DPIC.ebreak
 
 class IDEX_EXU_Input extends Bundle {
     val inst        = Input(UInt(32.W))
@@ -110,6 +112,10 @@ class EXU extends Module {
     val   TypeJ_Jump = true.B
     val NOTypeJ_Jump = false.B
 
+    // DPI-C Ebreak
+    val DPIC_ebreak = Module(new ebreak())
+    DPIC_ebreak.io.inst := idex_ex.inst; 
+
     //                      List(rd_wen,  rd_waddr, rd_wdata,    mem_ren,    mem_raddr,  mem_wen,    mem_wmask,  mem_wdata, mem_waddr, typej_jump_en, typej_jump_addr)
     val default_exce_list = List(NORd_Write, 0.U(5.W), 0.U(64.W), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W),  0.U(64.W), 0.U(64.W), NOTypeJ_Jump,  0.U(64.W))
     val exce_list  = ListLookup(idex_ex.opcode, default_exce_list, Array(
@@ -201,13 +207,19 @@ class EXU extends Module {
     ex_exmem.ex_inst_isstore := exce_list(5)
 
     // ex to redirect
-    ex_redirect.rd_wen   := exce_list(0)
-    ex_redirect.rd_waddr := exce_list(1)
-    ex_redirect.rd_wdata := exce_list(2)
+    ex_redirect.rd_wen       := exce_list(0)
+    ex_redirect.rd_waddr     := exce_list(1)
+    ex_redirect.rd_wdata     := exce_list(2)
     
     // ex to ctrl 
-    ex_ctrl.ex_inst_isload  := exce_list(3)
-    ex_ctrl.ex_inst_isstore := exce_list(5)
-    ex_ctrl.typej_jump_en   := exce_list(9)
-    ex_ctrl.typej_jump_addr := exce_list(10)
+    ex_ctrl.ex_inst_isload   := exce_list(3)
+    ex_ctrl.ex_inst_isstore  := exce_list(5)
+    ex_ctrl.typej_jump_en    := exce_list(9)
+    ex_ctrl.typej_jump_addr  := exce_list(10)
+
+
+    // DPI-C get_pc
+    val DPIC_getPc = Module(new getPc())
+    DPIC_getPc.io.pc := idex_ex.pc
+
 }

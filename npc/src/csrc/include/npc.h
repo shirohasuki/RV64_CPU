@@ -7,8 +7,8 @@
 #include <common.h>
 
 // DPI-C
-// #include "verilated_dpi.h"
-// #include "Vtb__Dpi.h"
+#include "verilated_dpi.h"
+#include "Vtb__Dpi.h"
 // verilator
 #include "verilated.h"
 #include "verilated_vcd_c.h"
@@ -23,10 +23,10 @@
 // typedef word_t vaddr_t;
 
 // ============== 调试选项 ============= //
-// #define CONFIG_NPC_ITRACE 1
-// #define CONFIG_NPC_GPRTRACE 1
+#define CONFIG_NPC_ITRACE 1
+#define CONFIG_NPC_GPRTRACE 1
 // #define CONFIG_NPC_IFTRACE 1
-// #define CONFIG_NPC_DIFFTEST 1
+#define CONFIG_NPC_DIFFTEST 1
 // #define CONFIG_NPC_MTRACE 1
 // #define CONFIG_NPC_DTRACE 1
 // #define CONFIG_NPC_ETRACE 1

@@ -27,7 +27,7 @@ image: $(IMAGE).elf
 
 run: image
 	@echo '======================= copy .bin -> .hex start ================================='
-	@echo 'Copy image[$(IMAGE).bin] -> $(NPC_HOME)/image.bin' 
+	@echo 'Copy $(IMAGE).bin -> $(NPC_HOME)/image.bin' 
 	cp $(IMAGE).bin $(NPC_HOME)/image.bin
 	hexdump -v -e'/4 "%08x\n"'  $(NPC_HOME)/image.bin  > $(NPC_HOME)/image.hex
 #先把bin文件粘贴到npc目录下，后将bin文件转化为HEX文件

@@ -12,6 +12,10 @@ object function {
     }
 } 
 
+// object DPI_C {
+
+// }
+
 object MACRO {
         // I type inst
     val INST_TYPE_I = BitPat("b0010011")

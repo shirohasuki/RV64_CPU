@@ -3,6 +3,7 @@ package RegFile
 import chisel3._
 import chisel3.util._
 
+import DPIC.getGprs
 
 class Redirect_REG_Input extends Bundle {
     val rs1_raddr = Input(UInt(5.W))
@@ -38,5 +39,10 @@ class RegFile extends Module {
                                     Mux((wb_reg.rd_wen && (wb_reg.rd_waddr === redirect_reg.rs2_raddr)), wb_reg.rd_wdata, regs(redirect_reg.rs2_raddr)))
     // 写寄存器的数据:给出写信号，且rd不为0时写寄存器
     regs(wb_reg.rd_waddr) := Mux(wb_reg.rd_wen && (wb_reg.rd_waddr =/= 0.U),  wb_reg.rd_wdata, 0.U(64.W))   
+
+
+    // DPI-C 获取GPRs
+    val DPIC_getGprs = Module(new getGprs())
+    DPIC_getGprs.gpr_reg.gprs := regs
 }
 

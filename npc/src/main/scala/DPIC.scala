@@ -76,8 +76,8 @@ class getGprs extends BlackBox with HasBlackBoxInline {
     |   assign gprs[30] = gprs_30;
     |   assign gprs[31] = gprs_31;
     |
-    |   always @(*)begin
-    |       get_gprs(gprs)
+    |   always @(*) begin
+    |       get_gprs(gprs);
     |   end
     |
     |endmoudule
@@ -95,8 +95,8 @@ class getPc extends BlackBox with HasBlackBoxInline {
     |module getPc (
     |   input [63:0] pc, 
     |);
-    |   always @(posedge clk)begin
-    |       get_gprs(pc)
+    |   always @(posedge clk) begin
+    |       get_gprs(pc);
     |   end
     |
     |endmoudule

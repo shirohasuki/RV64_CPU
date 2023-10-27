@@ -80,7 +80,7 @@ class getGprs extends BlackBox with HasBlackBoxInline {
     |       get_gprs(gprs);
     |   end
     |
-    |endmoudule
+    |endmodule
     """.stripMargin)
 }
 
@@ -99,6 +99,6 @@ class getPc extends BlackBox with HasBlackBoxInline {
     |       get_gprs(pc);
     |   end
     |
-    |endmoudule
+    |endmodule
     """.stripMargin)
 }

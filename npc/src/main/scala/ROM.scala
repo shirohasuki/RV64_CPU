@@ -14,5 +14,5 @@ class ROM extends Module {
     // mem("h80000000".U) := "00000010011000000000110110010011".U // I ADDI
     // mem("h80000004".U) := "00000011011000000000111000010011".U // I ADDI
     // mem("h80000008".U) := "00000001110011011000111010110011".U // R ADD
-    if_rom.inst := Mux(if_rom.pc(2) === 0.U, mem.read(if_rom.pc >> 2)(31, 0), mem.read(if_rom.pc >> 2)(63, 32))
+    if_rom.inst := Mux(if_rom.pc(3) === 0.U, mem.read(if_rom.pc >> 3)(31, 0), mem.read(if_rom.pc >> 3)(63, 32))
 }

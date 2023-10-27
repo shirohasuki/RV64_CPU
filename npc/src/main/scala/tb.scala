@@ -73,7 +73,7 @@ class tb extends Module {
     CTRL.ctrl_memwb <> MEMWB.ctrl_memwb  
 
 
-    loadMemoryFromFileInline(ROM.mem, "./src/main/scala/inst_data_ADD.txt", MemoryLoadFileType.Binary); 
+    loadMemoryFromFileInline(ROM.mem, "./image.hex", MemoryLoadFileType.Hex); 
     // loadMemoryFromFile只会在chiseltest的时候生成readmemb
 }
 

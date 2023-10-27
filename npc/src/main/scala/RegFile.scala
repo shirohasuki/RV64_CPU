@@ -42,7 +42,7 @@ class RegFile extends Module {
 
 
     // DPI-C 获取GPRs
-    val DPIC_getGprs = Module(new getGprs())
+    val DPIC_getGprs = Module(new DPIC_getGprs())
     DPIC_getGprs.io.gprs := regs
 }
 

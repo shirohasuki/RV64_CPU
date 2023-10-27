@@ -3,7 +3,7 @@ package DPIC
 import chisel3._
 import chisel3.util._
 
-class getGprs extends BlackBox with HasBlackBoxInline {
+class DPIC_getGprs extends BlackBox with HasBlackBoxInline {
     val io = IO(new Bundle{val gprs = Input(Vec(32, UInt(64.W)))})
     setInline("getGprs.v",
     """
@@ -84,7 +84,7 @@ class getGprs extends BlackBox with HasBlackBoxInline {
     """.stripMargin)
 }
 
-class getPc extends BlackBox with HasBlackBoxInline {
+class DPIC_getPc extends BlackBox with HasBlackBoxInline {
     val io = IO(new Bundle{
         val pc  = Input(UInt(64.W))
         val clk = Input(Clock()) 

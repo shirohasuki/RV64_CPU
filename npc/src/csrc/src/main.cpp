@@ -14,8 +14,8 @@ static Vtb* top;
 
 ll img_size = 0;
 
-// CPU_state cpu_npc;  // DUT
-// CPU_state cpu_nemu; // REF
+CPU_state cpu_npc;  // DUT
+CPU_state cpu_nemu; // REF
 
 NPCState npc_state;
 

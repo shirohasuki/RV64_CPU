@@ -6,6 +6,9 @@
 
 static int is_batch_mode = false;
 
+
+extern CPU_state cpu_npc;  // DUT
+
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
     static char *line_read = NULL;
@@ -48,8 +51,7 @@ static struct {
 
 #define NR_CMD ARRLEN(cmd_table)
 
-CPU_state cpu_npc;  // DUT
-CPU_state cpu_nemu; // REF
+
 
 static int sdb_exec_once(int step) {
     while(step--) {

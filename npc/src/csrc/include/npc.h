@@ -43,8 +43,8 @@ typedef struct {
     word_t csr[4];      
 } CPU_state;
 
-// extern CPU_state cpu_npc;
-// extern CPU_state cpu_nemu;
+extern CPU_state cpu_npc;
+extern CPU_state cpu_nemu;
 
 void npc_exit(int status);
 

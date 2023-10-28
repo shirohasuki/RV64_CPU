@@ -3,8 +3,6 @@
 #include "npc.h"
 
 
-extern CPU_state cpu_npc;
-
 static int is_batch_mode = false;
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
@@ -16,7 +14,7 @@ static char* rl_gets() {
     }
 	/* Tips:readline()的用法 
 		readline()的参数是一个字符串，调用函数的时候会在屏幕上输出，这个函数会读取一行输入，然后返回一个指向输入字符串的指针。
-		此处输出提示词(nemu) , 返回之后输入的字符串
+		此处输出提示词(npc) , 返回之后输入的字符串
 	*/
     line_read = readline("(npc) "); 
 
@@ -61,6 +59,7 @@ static int sdb_exec_once(int step) {
         difftest_exec_once();
 #endif
     }
+    return 0;
 }
 
 static int cmd_help(char *args) {

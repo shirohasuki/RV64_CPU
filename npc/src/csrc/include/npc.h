@@ -15,6 +15,9 @@
 #include "Vtb.h"
 // difftest
 #include <dlfcn.h>
+// MACRO
+// #include <utils/macro.h>
+// #include <utils/debug.h>
 
 // ================ Typedef ===============
 // typedef long long ll;
@@ -82,7 +85,7 @@ void dump_csr(); // 打印异常寄存器
 // #define BLUE(a) COLOR(a, 34)
 
 // ============= Difftest ==============
-#ifdef CONFIG_NPC_DIFFTEST
+// #ifdef CONFIG_NPC_DIFFTEST
 
 void init_difftest(const char *ref_so_file, ll img_size);
 void difftest_exec_once();
@@ -103,7 +106,14 @@ extern void (*ref_difftest_init)();
 extern int diff_skip_ref_flag;
 
 
-#endif
+// #endif
+
+// ============== npc runs ============= //
+void npc_exec_once();
+
+// ============== monitor and sdb======= // 
+void init_monitor();
+void sdb_mainloop();
 
 // ============== DEVICE =============== //
 void init_device();

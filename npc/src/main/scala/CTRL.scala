@@ -102,7 +102,7 @@ class Ctrl extends Module {
         BitPat(0.U) -> List(false.B, true.B,  true.B, false.B, false.B),    // jump
         BitPat(1.U) -> List(false.B, false.B, true.B, false.B, false.B),    // load_inst          
         BitPat(2.U) -> List(false.B, false.B, true.B, false.B, false.B),    // store_inst          
-        BitPat(3.U) -> List(false.B, false.B, true.B, false.B, false.B)    // load_data_hit 
+        BitPat(3.U) -> List(false.B, false.B, true.B, false.B, false.B)     // load_data_hit 
 
     ))
 

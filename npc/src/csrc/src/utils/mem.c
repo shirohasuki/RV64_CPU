@@ -140,7 +140,7 @@ long load_image(char const *img_file) {
         return 4096; // built-in image size
     }
     FILE *fp = fopen(img_file, "rb");
-    assert(fp);
+    Assert(fp, "Can not open '%s'", img_file);
 
     fseek(fp, 0, SEEK_END);  // fseek:把与fp有关的文件位置指针放到一个指定位置 // fseek(fp, 0, SEEK_END)文件指针定位到文件末尾，偏移0个字节
     static long img_size = ftell(fp);    // ftell:返回文件大小

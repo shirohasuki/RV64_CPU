@@ -67,9 +67,9 @@ int main() {
     sim_init();
 
 
-    IFDEF(CONFIG_NPC_DEVICE, init_device());  // 初始化外设
+    // IFDEF(CONFIG_NPC_DEVICE, init_device());  // 初始化外设
 
-    IFDEF(CONFIG_NPC_ITRACE, init_disasm("riscv64-pc-linux-gnu")); 
+    // IFDEF(CONFIG_NPC_ITRACE, init_disasm("riscv64-pc-linux-gnu")); 
 
 #ifdef CONFIG_NPC_DIFFTEST
     while (cpu_npc.pc != MEM_BASE) { 
@@ -83,8 +83,8 @@ int main() {
         // dump_gpr(); // 打印通用寄存器
         // dump_csr(); // 打印异常寄存器
         exec_once();
-        IFDEF(CONFIG_NPC_DEVICE, device_update());
-        IFDEF(CONFIG_NPC_MTRACE, print_mtrace());
+        // IFDEF(CONFIG_NPC_DEVICE, device_update());
+        // IFDEF(CONFIG_NPC_MTRACE, print_mtrace());
 #ifdef CONFIG_NPC_DIFFTEST
         while (cpu_npc.pc == 0x0) {
             exec_once();   

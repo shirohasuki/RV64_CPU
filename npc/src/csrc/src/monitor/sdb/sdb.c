@@ -28,7 +28,7 @@ static char* rl_gets() {
 static int cmd_help(char *args);
 static int cmd_c(char *args);
 static int cmd_q(char *args);
-static int cmd_x(char *args);
+// static int cmd_x(char *args);
 static int cmd_si(char *args);
 static int cmd_info(char *args);
 
@@ -99,26 +99,26 @@ static int cmd_q(char *args) {
     return -1;
 }
 
-static int cmd_x(char *args) {
-    /* extract the first argument */
-    char *arg = strtok(NULL, " ");
-    unsigned int cnt;
-    /* first argument unrecognized */
-    if (arg == NULL || sscanf(arg, "%u", &cnt) != 1) // 第一个参数记入cnt
-    	printf("'%s' must be an integer.\n", arg);
-    arg = strtok(NULL, " ");
-    unsigned int addr;
-    /* second argument unrecognized */
-    if (arg == NULL || sscanf(arg, "%x", &addr) != 1) // 第二个参数记入addr
-    	printf("'%s' must be an expression.\n", arg);
-    /* address guest to host */
-    uint8_t *pos = guest_to_host(addr); // pos = addr + 基地址
-    for (int i = 0; i <= cnt; ++i) {
-      	printf("%x: %02x %02x %02x %02x\n", addr, *pos, *(pos + 1), *(pos + 2), *(pos + 3));
-      	pos += 4, addr += 4;
-    }
-    return 0;
-}
+// static int cmd_x(char *args) {
+//     /* extract the first argument */
+//     char *arg = strtok(NULL, " ");
+//     unsigned int cnt;
+//     /* first argument unrecognized */
+//     if (arg == NULL || sscanf(arg, "%u", &cnt) != 1) // 第一个参数记入cnt
+//     	printf("'%s' must be an integer.\n", arg);
+//     arg = strtok(NULL, " ");
+//     unsigned int addr;
+//     /* second argument unrecognized */
+//     if (arg == NULL || sscanf(arg, "%x", &addr) != 1) // 第二个参数记入addr
+//     	printf("'%s' must be an expression.\n", arg);
+//     /* address guest to host */
+//     uint8_t *pos = guest_to_host(addr); // pos = addr + 基地址
+//     for (int i = 0; i <= cnt; ++i) {
+//       	printf("%x: %02x %02x %02x %02x\n", addr, *pos, *(pos + 1), *(pos + 2), *(pos + 3));
+//       	pos += 4, addr += 4;
+//     }
+//     return 0;
+// }
 
 static int cmd_si(char *args) {
     if (args == NULL) {

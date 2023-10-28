@@ -47,6 +47,9 @@ static struct {
 
 #define NR_CMD ARRLEN(cmd_table)
 
+CPU_state cpu_npc;  // DUT
+CPU_state cpu_nemu; // REF
+
 static int sdb_exec_once(int step) {
     while(step--) {
         // dump_gpr(); // 打印通用寄存器

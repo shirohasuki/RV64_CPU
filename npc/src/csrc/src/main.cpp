@@ -69,7 +69,7 @@ int main() {
 
     // IFDEF(CONFIG_NPC_DEVICE, init_device());  // 初始化外设
 
-    // IFDEF(CONFIG_NPC_ITRACE, init_disasm("riscv64-pc-linux-gnu")); 
+    IFDEF(CONFIG_NPC_ITRACE, init_disasm("riscv64-pc-linux-gnu")); 
 
 #ifdef CONFIG_NPC_DIFFTEST
     while (cpu_npc.pc != MEM_BASE) { 

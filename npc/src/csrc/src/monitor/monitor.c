@@ -17,6 +17,7 @@ static void welcome() {
 }
 
 static void init_log(const char *log_file) {
+	FILE *log_fp = NULL;
 	log_fp = stdout;
 	if (log_file != NULL) {
 		FILE *fp = fopen(log_file, "w");

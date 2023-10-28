@@ -152,17 +152,17 @@ void sdb_set_batch_mode() {
 
 void sdb_mainloop() {
 // #ifdef CONFIG_NPC_DIFFTEST
-    while (cpu_npc.pc != MEM_BASE) { 
-        // printf("%ld\n", cpu_npc.pc); 
-        npc_exec_once(); 
-    } // pc先走三拍到EXU
+    // while (cpu_npc.pc != MEM_BASE) { 
+    //     // printf("%ld\n", cpu_npc.pc); 
+    //     npc_exec_once(); 
+    // } // pc先走三拍到EXU
 // #endif
 	if (is_batch_mode) {
 		cmd_c(NULL);
 		return;
 	}
 
-	for (char *str; (str = rl_gets()) != NULL; ) { // rl_gets读取（nemu）开始命令行
+	for (char *str; (str = rl_gets()) != NULL; ) { // rl_gets读取（npc）开始命令行
 		char *str_end = str + strlen(str);
 
 		char *cmd = strtok(str, " ");  // strtok: 分解字符串为一组字符串

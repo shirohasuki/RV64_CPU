@@ -8,12 +8,10 @@ static int is_batch_mode = false;
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
     static char *line_read = NULL;
-
     if (line_read) {
 		free(line_read);
 		line_read = NULL;
     }
-
 	/* Tips:readline()的用法 
 		readline()的参数是一个字符串，调用函数的时候会在屏幕上输出，这个函数会读取一行输入，然后返回一个指向输入字符串的指针。
 		此处输出提示词(nemu) , 返回之后输入的字符串
@@ -34,8 +32,6 @@ static int cmd_x(char *args);
 static int cmd_si(char *args);
 static int cmd_info(char *args);
 
-
-
 static struct {
     const char *name;
     const char *description;
@@ -50,6 +46,20 @@ static struct {
 };
 
 #define NR_CMD ARRLEN(cmd_table)
+
+static int sdb_exec_once(int step) {
+    while(step--) {
+        // dump_gpr(); // 打印通用寄存器
+        // dump_csr(); // 打印异常寄存器
+        npc_exec_once();
+#ifdef CONFIG_NPC_DIFFTEST
+        while (cpu_npc.pc == 0x0) {
+            npc_exec_once();   
+        } // EX被冲刷以后，pc再走几拍
+        difftest_exec_once();
+#endif
+    }
+}
 
 static int cmd_help(char *args) {
 	/* extract the first argument */
@@ -76,8 +86,12 @@ static int cmd_help(char *args) {
 }
 
 
+
 static int cmd_c(char *args) {
-    cpu_exec(-1);
+    // while (sim_time < MAX_SIM_TIME) {
+
+    // }
+    while(1) {sdb_exec_once(1);}
     return 0;
 }
 
@@ -108,11 +122,11 @@ static int cmd_x(char *args) {
 
 static int cmd_si(char *args) {
     if (args == NULL) {
-        cpu_exec(1);
+        sdb_exec_once(1);
         return 0;
     }
     int step = atoi(strtok(NULL, " "));
-    if (strtok(NULL, " ")!=NULL) {
+    if (strtok(NULL, " ") != NULL) {
         printf("Too Many Parameters.\n");
         return 0;
     }
@@ -120,61 +134,22 @@ static int cmd_si(char *args) {
         printf("Parameter Out of Range.\n");
     	return 0;
     }
-    cpu_exec(step);
+    sdb_exec_once(step);
     return 0;
 }
 
-
-static int cmd_info(char *args) {
-	/* extract the first argument */
-	char *arg = strtok(NULL, " ");
-	/* no argument */
-	if (arg == NULL || strlen(arg) != 1)
-		printf("'%s' must be 'r' or 'w'.\n", arg);
-	/* registers */
-	else if (strcmp(arg, "r") == 0)
-		isa_reg_display();
-	/* watchpoints */
-	else if (strcmp(arg, "w") == 0)
-			watchpoints_display();
-	return 0;
-}
-
-static int cmd_p(char *args) {
-	bool success = true;
-	/* calculate expression */
-	uint64_t ret = expr(args, &success);
-	/* check if argument has errors */
-	if (success)
-		printf("%s = %lx(%lu)\n", args, ret, ret);
-	else
-		printf("%s: Syntax Error.\n", args);
-	return 0;
-}
-
-
-static int cmd_w(char *args) {
-	watchpoints_add(args);
-    return 0;
-}
-
-
-static int cmd_d(char *args) {
-	/* extract the first argument */
-	char *arg = strtok(NULL, " ");
-	unsigned id;
-	if (arg == NULL || sscanf(arg, "%u", &id) != 1)
-		printf("'%s' must be an integer.\n", arg);
-	/* free watchpoint */
-	watchpoints_del(id);
-    return 0;
-}
 
 void sdb_set_batch_mode() {
 	is_batch_mode = true;
 }
 
 void sdb_mainloop() {
+// #ifdef CONFIG_NPC_DIFFTEST
+    while (cpu_npc.pc != MEM_BASE) { 
+        // printf("%ld\n", cpu_npc.pc); 
+        npc_exec_once(); 
+    } // pc先走三拍到EXU
+// #endif
 	if (is_batch_mode) {
 		cmd_c(NULL);
 		return;
@@ -183,13 +158,9 @@ void sdb_mainloop() {
 	for (char *str; (str = rl_gets()) != NULL; ) { // rl_gets读取（nemu）开始命令行
 		char *str_end = str + strlen(str);
 
-		/* extract the first token as the command */
 		char *cmd = strtok(str, " ");  // strtok: 分解字符串为一组字符串
 		if (cmd == NULL) { continue; }
 
-		/* treat the remaining string as the arguments,
-		* which may need further parsing
-		*/
 		char *args = cmd + strlen(cmd) + 1;
 			if (args >= str_end) {
 			args = NULL;

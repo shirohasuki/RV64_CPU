@@ -45,7 +45,7 @@ void sim_init() {
     top->reset = 0; top->clock = 0; step_and_dump_wave();   
 } // 低电平复位
 
-void exec_once() {
+void npc_exec_once() {
 #ifdef CONFIG_NPC_ITRACE 
     itrace_record(cpu_npc.pc);
 #endif
@@ -65,24 +65,27 @@ int main() {
 
     init_monitor();
 
-#ifdef CONFIG_NPC_DIFFTEST
-    while (cpu_npc.pc != MEM_BASE) { 
-        // printf("%ld\n", cpu_npc.pc); 
-        exec_once(); } // pc先走三拍到EXU
-#endif
+    sdb_mainloop();
+
+// #ifdef CONFIG_NPC_DIFFTEST
+//     while (cpu_npc.pc != MEM_BASE) { 
+//         // printf("%ld\n", cpu_npc.pc); 
+//         npc_exec_once(); 
+//     } // pc先走三拍到EXU
+// #endif
 
 
-    while (sim_time < MAX_SIM_TIME) {
-        // dump_gpr(); // 打印通用寄存器
-        // dump_csr(); // 打印异常寄存器
-        exec_once();
-#ifdef CONFIG_NPC_DIFFTEST
-        while (cpu_npc.pc == 0x0) {
-            exec_once();   
-        } // EX被冲刷以后，pc再走几拍
-        difftest_exec_once();
-#endif
-    }
+//     while (sim_time < MAX_SIM_TIME) {
+//         // dump_gpr(); // 打印通用寄存器
+//         // dump_csr(); // 打印异常寄存器
+//         npc_exec_once();
+// #ifdef CONFIG_NPC_DIFFTEST
+//         while (cpu_npc.pc == 0x0) {
+//             npc_exec_once();   
+//         } // EX被冲刷以后，pc再走几拍
+//         difftest_exec_once();
+// #endif
+//     }
 
     sim_exit();
 } 

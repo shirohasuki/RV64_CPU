@@ -35,5 +35,5 @@ void init_monitor() {
 	long img_size = load_image("/home/shiroha/Code/ysyx/ysyx-workbench/npc/image.bin");
 	IFDEF(CONFIG_NPC_DIFFTEST, init_difftest("/home/shiroha/Code/ysyx/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size););
 	welcome();
-	sdb_mainloop();
+	// sdb_mainloop();
 }

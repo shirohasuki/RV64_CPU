@@ -108,6 +108,9 @@ extern int diff_skip_ref_flag;
 
 #endif
 
+// ============== npc runs ============= //
+void npc_exec_once();
+
 // ============== monitor and sdb======= // 
 void init_monitor();
 void sdb_mainloop();

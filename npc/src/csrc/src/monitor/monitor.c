@@ -29,13 +29,10 @@ static void init_log(const char *log_file) {
 
 void init_monitor() {
 	init_log("./monitor_log.txt");
-	// #ifdef CONFIG_FTRACE
 	// 	init_elf(elf_file);
-	// #endif
 	IFDEF(CONFIG_NPC_DEVICE, init_device());
 	IFDEF(CONFIG_NPC_ITRACE, init_disasm("riscv64-pc-linux-gnu")); 
-	long img_size = load_image();
-    img_size = load_image("/home/shiroha/Code/ysyx/ysyx-workbench/npc/image.bin");
+	long img_size = load_image("/home/shiroha/Code/ysyx/ysyx-workbench/npc/image.bin");
 	IFDEF(CONFIG_NPC_DIFFTEST, init_difftest("/home/shiroha/Code/ysyx/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size););
 	// init_sdb();
 	welcome();

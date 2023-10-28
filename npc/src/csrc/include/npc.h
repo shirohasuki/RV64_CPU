@@ -106,7 +106,7 @@ extern int diff_skip_ref_flag;
 #endif
 
 // ============== monitor and sdb======= // 
-void init_monitor(int argc, char *argv[]);
+void init_monitor();
 
 // ============== DEVICE =============== //
 void init_device();

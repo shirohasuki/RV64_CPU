@@ -26,7 +26,7 @@ static void init_log(const char *log_file) {
 	Log("Log is written to %s", log_file ? log_file : "stdout");
 }
 
-void init_monitor(int argc, char *argv[]) {
+void init_monitor() {
 	init_log("./monitor_log.txt");
 	// #ifdef CONFIG_FTRACE
 	// 	init_elf(elf_file);

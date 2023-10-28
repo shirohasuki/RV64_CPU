@@ -1,6 +1,6 @@
 #include "npc.h"
 #include <utils/macro.h>
-
+#include <utils/debug.h>
 
 static void welcome() {
 	Log("ITrace: %s\t", MUXDEF(CONFIG_NPC_ITRACE, ASNI_FMT("ON", ASNI_FG_GREEN), ASNI_FMT("OFF", ASNI_FG_RED)));
@@ -33,7 +33,7 @@ void init_monitor() {
 	// #endif
 	IFDEF(CONFIG_NPC_DEVICE, init_device());
 	IFDEF(CONFIG_NPC_ITRACE, init_disasm("riscv64-pc-linux-gnu")); 
-	long img_size = load_img();
+	long img_size = load_image();
     img_size = load_image("/home/shiroha/Code/ysyx/ysyx-workbench/npc/image.bin");
 	IFDEF(CONFIG_NPC_DIFFTEST, init_difftest("/home/shiroha/Code/ysyx/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size););
 	// init_sdb();

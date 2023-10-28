@@ -61,15 +61,9 @@ void sim_exit() {
 
 
 int main() {
-    
-    img_size = load_image("/home/shiroha/Code/ysyx/ysyx-workbench/npc/image.bin");
-    
     sim_init();
 
-
-    // IFDEF(CONFIG_NPC_DEVICE, init_device());  // 初始化外设
-
-    IFDEF(CONFIG_NPC_ITRACE, init_disasm("riscv64-pc-linux-gnu")); 
+    init_monitor();
 
 #ifdef CONFIG_NPC_DIFFTEST
     while (cpu_npc.pc != MEM_BASE) { 
@@ -77,14 +71,11 @@ int main() {
         exec_once(); } // pc先走三拍到EXU
 #endif
 
-    IFDEF(CONFIG_NPC_DIFFTEST, init_difftest("/home/shiroha/Code/ysyx/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size););
 
     while (sim_time < MAX_SIM_TIME) {
         // dump_gpr(); // 打印通用寄存器
         // dump_csr(); // 打印异常寄存器
         exec_once();
-        // IFDEF(CONFIG_NPC_DEVICE, device_update());
-        // IFDEF(CONFIG_NPC_MTRACE, print_mtrace());
 #ifdef CONFIG_NPC_DIFFTEST
         while (cpu_npc.pc == 0x0) {
             exec_once();   

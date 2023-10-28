@@ -15,6 +15,9 @@
 #include "Vtb.h"
 // difftest
 #include <dlfcn.h>
+// MACRO
+#include <utils/macro.h>
+#include <utils/debug.h>
 
 // ================ Typedef ===============
 // typedef long long ll;

@@ -12,7 +12,7 @@ static void welcome() {
 	printf(ASNI_FMT("ETrace: %s\t\n", ASNI_FG_BLUE), MUXDEF(CONFIG_NPC_ETRACE, ASNI_FMT("ON", ASNI_FG_GREEN), ASNI_FMT("OFF", ASNI_FG_RED)));
 
   	Log("Build time: %s, %s", __TIME__, __DATE__);
-  	printf("Welcome to %s-NPC!\n", ASNI_FMT(str(__GUEST_ISA__), ASNI_FG_YELLOW ASNI_BG_RED));
+  	printf("Welcome to %s!\n", ASNI_FMT(str("NPC"), ASNI_FG_YELLOW ASNI_BG_RED));
   	printf("For help, type \"help\"\n");
 }
 

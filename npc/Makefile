@@ -24,7 +24,7 @@ CSRCS = $(shell find $(abspath ./src/csrc) -name "*.c" -or -name "*.cc" -or -nam
 # rules for verilator
 INCFLAGS = $(addprefix -I, $(INC_PATH))
 CFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
-LDFLAGS += -lSDL2 -lSDL2_image "-ldl $(shell llvm-config-11 --cxxflags) -fPIE $(shell llvm-config-11 --libs)"
+LDFLAGS += -lSDL2 -lSDL2_image "-ldl $(shell llvm-config-11 --cxxflags) -fPIE $(shell llvm-config-11 --libs)" -lreadline
 #====================================
 
 run: verilog default sim

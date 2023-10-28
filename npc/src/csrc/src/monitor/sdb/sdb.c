@@ -1,7 +1,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "npc.h"
-
+#include <utils/macro.h>
+#include <utils/debug.h>
 
 static int is_batch_mode = false;
 

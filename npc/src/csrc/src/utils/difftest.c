@@ -4,7 +4,7 @@
 extern CPU_state cpu_npc;
 extern CPU_state cpu_nemu;
 
-
+extern int npc_step;
 //=====================Difftest=========================
 // NEMU是REF，NPC是DUT
 
@@ -64,6 +64,7 @@ int check_regs_npc(CPU_state cpu_nemu, CPU_state cpu_npc) {
         }
     }
     // // printf(GREEN("[difftest] nemu_pc=%lx, npc_pc=%lx\n"), cpu_nemu.pc, cpu_npc.pc);
+
     return 1;
 }
 

@@ -22,6 +22,8 @@ NPCState npc_state;
 // bool diff_skip_ref_flag = false;
 int diff_skip_ref_flag = 0;
 
+int npc_step; // 记录npc一共走了多少步，出错时抛出，方便单步调试到周围 
+
 
 //================ SIM FUNCTION =====================//
 void step_and_dump_wave() {
@@ -52,6 +54,7 @@ void npc_exec_once() {
     top->clock ^= 1; step_and_dump_wave();
     top->clock ^= 1; step_and_dump_wave();
     // dump_gpr(); 
+    npc_step++;
 } // 翻转两次走一条指令
 
 void sim_exit() {

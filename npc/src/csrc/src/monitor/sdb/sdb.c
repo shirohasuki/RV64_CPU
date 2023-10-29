@@ -9,6 +9,8 @@ static int is_batch_mode = false;
 extern CPU_state cpu_npc;  // DUT
 extern CPU_state cpu_nemu; // REF
 
+
+
 static char* rl_gets() {
     static char *line_read = NULL;
     if (line_read) {
@@ -51,11 +53,10 @@ static struct {
 #define NR_CMD ARRLEN(cmd_table)
 
 
-
 static int sdb_exec_once(int step) {
     while(step--) {
 		// printf("npc.pc = %lx\n", cpu_npc.pc); 
-		printf("nemu.pc = %lx\n", cpu_nemu.pc); 
+		// printf("nemu.pc = %lx\n", cpu_nemu.pc); 
         // dump_gpr(); // 打印通用寄存器
         // dump_csr(); // 打印异常寄存器
         npc_exec_once();

@@ -59,7 +59,6 @@ static int sdb_exec_once(int step) {
         // dump_gpr(); // 打印通用寄存器
         // dump_csr(); // 打印异常寄存器
         npc_exec_once();
-		printf("nemu.pc = %lx\n", cpu_nemu.pc); 
 #ifdef CONFIG_NPC_DIFFTEST
         while (cpu_npc.pc == 0x0) {
             npc_exec_once();   
@@ -152,12 +151,6 @@ void sdb_set_batch_mode() {
 }
 
 void sdb_mainloop() {
-#ifdef CONFIG_NPC_DIFFTEST
-    while (cpu_npc.pc != MEM_BASE) { 
-        // printf("%ld\n", cpu_npc.pc); 
-        npc_exec_once(); 
-    } // pc先走三拍到EXU
-#endif
 	if (is_batch_mode) {
 		cmd_c(NULL);
 		return;

@@ -111,6 +111,7 @@ extern int diff_skip_ref_flag;
 
 // ============== npc runs ============= //
 void npc_exec_once();
+void sim_exit(); // 在异常跳出时记录波形结束
 
 // ============== monitor and sdb======= // 
 void init_monitor();
@@ -119,6 +120,7 @@ void sdb_mainloop();
 // ============== DEVICE =============== //
 void init_device();
 void device_update();
+
 
 // // ============== DEVICE MAP ===============
 // #define DEVICE_BASE 0xa0000000

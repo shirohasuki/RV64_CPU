@@ -60,6 +60,7 @@ void npc_exec_once() {
 void sim_exit() {
     step_and_dump_wave();
     tfp->close();
+    printf("The wave data has been saved to the dump.vcd\n");
 }
 
 void init_npc() {

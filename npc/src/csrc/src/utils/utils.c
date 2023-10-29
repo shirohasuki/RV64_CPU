@@ -65,8 +65,10 @@ void npc_exit(int status) {
         IFDEF(CONFIG_NPC_ITRACE, itrace_output());
         IFDEF(CONFIG_NPC_MTRACE, print_mtrace());
         IFDEF(CONFIG_NPC_GPRTRACE, dump_gpr());
-        printf(ASNI_FMT("NPC meets error at step ", ASNI_FG_BLUE));
-        printf(ASNI_FMT("%d\n", ASNI_FG_GREEN ASNI_BG_RED), npc_step);
+        // printf(ASNI_FMT("NPC meets error at step ", ASNI_FG_BLUE));
+        // printf(ASNI_FMT("%d\n", ASNI_FG_GREEN ASNI_BG_RED), npc_step);
+	    printf(ASNI_FMT("NPC meets error at step %d\n", ASNI_FG_BLUE), ASNI_FMT(str(itoa(npc_step)), ASNI_FG_GREEN ASNI_BG_RED));
+        
         // IFDEF(CONFIG_NPC_GPRTRACE, dump_csr());
         printf(ASNI_FMT("[Sim Result]: HIT BAD TRAP\n", ASNI_FG_RED));
     }

@@ -55,7 +55,7 @@ static struct {
 
 static int sdb_exec_once(int step) {
     while(step--) {
-		printf("%ld\n", cpu_npc.pc); 
+		printf("%lx\n", cpu_npc.pc); 
         // dump_gpr(); // 打印通用寄存器
         // dump_csr(); // 打印异常寄存器
         npc_exec_once();

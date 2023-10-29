@@ -95,10 +95,10 @@ class getPc extends BlackBox with HasBlackBoxInline {
     """
     |import "DPI-C" function void get_pc(input longint pc);
     |module getPc (
-    |   //input clk,  
+    |   input clk,  
     |   input [63:0] pc
     |);
-    |   always @(*) begin
+    |   always @(posedge clk) begin
     |       get_pc(pc);
     |       //$display("%x", pc);
     |   end

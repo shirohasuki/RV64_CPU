@@ -4,7 +4,7 @@
 extern CPU_state cpu_npc;
 extern CPU_state cpu_nemu;
 
-extern int npc_step;
+
 //=====================Difftest=========================
 // NEMU是REF，NPC是DUT
 

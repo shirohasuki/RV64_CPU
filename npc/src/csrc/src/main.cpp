@@ -74,25 +74,5 @@ int main() {
 
     sdb_mainloop();
 
-// #ifdef CONFIG_NPC_DIFFTEST
-//     while (cpu_npc.pc != MEM_BASE) { 
-//         // printf("%ld\n", cpu_npc.pc); 
-//         npc_exec_once(); 
-//     } // pc先走三拍到EXU
-// #endif
-
-
-//     while (sim_time < MAX_SIM_TIME) {
-//         // dump_gpr(); // 打印通用寄存器
-//         // dump_csr(); // 打印异常寄存器
-//         npc_exec_once();
-// #ifdef CONFIG_NPC_DIFFTEST
-//         while (cpu_npc.pc == 0x0) {
-//             npc_exec_once();   
-//         } // EX被冲刷以后，pc再走几拍
-//         difftest_exec_once();
-// #endif
-//     }
-
     sim_exit();
 } 

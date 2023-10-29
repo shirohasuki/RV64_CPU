@@ -47,7 +47,7 @@ typedef struct {
 // extern CPU_state cpu_nemu;
 
 void npc_exit(int status);
-void init_npc(); // 启动后打三拍到EXU
+void init_npc(); // npc启动后打三拍到EXU
 
 // =============== Memory ===============
 #define MEM_BASE           0x80000000

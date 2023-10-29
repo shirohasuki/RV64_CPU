@@ -44,7 +44,7 @@ static struct {
     { "help", "Display informations about all supported commands", cmd_help },
     { "c", "Continue the execution of the program", cmd_c },
     { "q", "Exit NEMU", cmd_q },
-    {"si", "Execute the program in n steps\n\t\t-n nsteps", cmd_si }
+    {"si", "Execute the program in n steps\n\t\t-n nsteps(1~9999)", cmd_si }
     // {"info", "print status\n\t\t-r print register status\n\t\t-w print watchpoints", cmd_info },
     // {"x", "scan the rom", cmd_x }
 };
@@ -138,7 +138,7 @@ static int cmd_si(char *args) {
         printf("Too Many Parameters.\n");
         return 0;
     }
-    if (step <= 0 || step >= 999) {
+    if (step <= 0 || step >= 10000) {
         printf("Parameter Out of Range.\n");
     	return 0;
     }

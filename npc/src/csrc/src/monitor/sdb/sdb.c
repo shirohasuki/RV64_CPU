@@ -59,6 +59,7 @@ static int sdb_exec_once(int step) {
         // dump_gpr(); // 打印通用寄存器
         // dump_csr(); // 打印异常寄存器
         npc_exec_once();
+		printf("nemu.pc = %lx\n", cpu_nemu.pc); 
 #ifdef CONFIG_NPC_DIFFTEST
         while (cpu_npc.pc == 0x0) {
             npc_exec_once();   

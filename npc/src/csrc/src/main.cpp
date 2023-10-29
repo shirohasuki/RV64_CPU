@@ -42,7 +42,7 @@ void sim_init() {
 
     top->reset = 0; top->clock = 0; step_and_dump_wave();
     top->reset = 1; top->clock = 1; step_and_dump_wave();
-    top->reset = 1; top->clock = 0; step_and_dump_wave();   
+    top->reset = 0; top->clock = 0; step_and_dump_wave();   
 } // 低电平复位
 
 void npc_exec_once() {

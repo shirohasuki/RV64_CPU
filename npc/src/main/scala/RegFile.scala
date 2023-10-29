@@ -4,6 +4,7 @@ import chisel3._
 import chisel3.util._
 
 import DPIC.getGprs
+import DPIC.getPc
 
 class Redirect_REG_Input extends Bundle {
     val rs1_raddr = Input(UInt(5.W))
@@ -44,5 +45,10 @@ class RegFile extends Module {
     // DPI-C 获取GPRs
     val DPIC_getGprs = Module(new getGprs())
     DPIC_getGprs.io.gprs := regs
+    
+    // DPI-C 获取Pc
+    val DPIC_getPc = Module(new getPc())
+    DPIC_getPc.io.pc  := wb_reg.pc
+    // DPIC_getPc.io.clk := clock
 }
 

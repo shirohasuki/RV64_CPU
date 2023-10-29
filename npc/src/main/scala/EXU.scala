@@ -218,9 +218,8 @@ class EXU extends Module {
     ex_ctrl.typej_jump_addr  := exce_list(10)
 
 
-    // DPI-C get_pc
-    val DPIC_getPc = Module(new getPc())
-    DPIC_getPc.io.pc  := idex_ex.pc
-    // printf("pc = %d\n",idex_ex.pc);
-    DPIC_getPc.io.clk := clock
+    // DPI-C get_pc 迁移到regfile监视了
+//     val DPIC_getPc = Module(new getPc())
+//     DPIC_getPc.io.pc  := idex_ex.pc
+//     DPIC_getPc.io.clk := clock
 }

@@ -30,7 +30,7 @@ static void init_log(const char *log_file) {
 }
 
 
-static void init_npc() {
+void init_npc() {
     while (cpu_npc.pc != MEM_BASE) { 
         // printf("%ld\n", cpu_npc.pc); 
         npc_exec_once(); 

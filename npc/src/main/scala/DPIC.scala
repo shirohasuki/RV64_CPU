@@ -98,7 +98,7 @@ class getPc extends BlackBox with HasBlackBoxInline {
     |   //input clk,  
     |   input [63:0] pc
     |);
-    |   always @(posedge clk) begin
+    |   always @(*) begin
     |       get_pc(pc);
     |       //$display("%x", pc);
     |   end

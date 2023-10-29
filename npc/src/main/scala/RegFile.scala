@@ -49,6 +49,6 @@ class RegFile extends Module {
     // DPI-C 获取Pc
     val DPIC_getPc = Module(new getPc())
     DPIC_getPc.io.pc  := wb_reg.pc
-    DPIC_getPc.io.clk := clock
+    // DPIC_getPc.io.clk := clock
 }
 

@@ -46,9 +46,9 @@ void sim_init() {
 } // 低电平复位
 
 void npc_exec_once() {
-// #ifdef CONFIG_NPC_ITRACE 
-//     itrace_record(cpu_npc.pc);
-// #endif
+#ifdef CONFIG_NPC_ITRACE 
+    itrace_record(cpu_npc.pc);
+#endif
     top->clock ^= 1; step_and_dump_wave();
     top->clock ^= 1; step_and_dump_wave();
     // dump_gpr(); 

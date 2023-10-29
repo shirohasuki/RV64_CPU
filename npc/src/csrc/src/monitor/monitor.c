@@ -2,7 +2,6 @@
 #include <utils/macro.h>
 #include <utils/debug.h>
 
-extern CPU_state cpu_npc
 
 static void welcome() {
 	printf(ASNI_FMT("ITrace: %s\t", ASNI_FG_BLUE), MUXDEF(CONFIG_NPC_ITRACE, ASNI_FMT("ON", ASNI_FG_GREEN), ASNI_FMT("OFF", ASNI_FG_RED)));
@@ -29,13 +28,6 @@ static void init_log(const char *log_file) {
 	Log("Log is written to %s", log_file ? log_file : "stdout");
 }
 
-
-void init_npc() {
-    while (cpu_npc.pc != MEM_BASE) { 
-        // printf("%ld\n", cpu_npc.pc); 
-        npc_exec_once(); 
-    } // pc先走三拍到EXU
-}
 
 void init_monitor() {
 	init_log("./monitor_log.txt");

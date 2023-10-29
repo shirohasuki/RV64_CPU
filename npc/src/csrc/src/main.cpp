@@ -59,6 +59,13 @@ void sim_exit() {
     tfp->close();
 }
 
+void init_npc() {
+    while (cpu_npc.pc != MEM_BASE) { 
+        // printf("%ld\n", cpu_npc.pc); 
+        npc_exec_once(); 
+    } // pc先走三拍到EXU
+}
+
 
 int main() {
     sim_init();

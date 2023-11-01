@@ -1,5 +1,7 @@
 package AXI4
 
+import chisel3._
+
 class MCIF_AXI4_R extends Bundle{
     // AR channel
     val AXI_ARID    = Input(UInt(2.W))

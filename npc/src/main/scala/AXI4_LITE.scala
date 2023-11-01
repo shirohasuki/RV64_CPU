@@ -72,13 +72,13 @@ class AXI4_LITE extends Module {
     rdata   := Mux(mem_axi_r.AXI_RVALID, mem_axi_r.AXI_RDATA, 
                     Mux(rd_complete, 0.U, rdata)) 
 
-    val ar_hs   = RegInit(false.Bool())
-    val rd_hs   = RegInit(false.Bool())
+    val ar_hs   = RegInit(false.B)
+    val rd_hs   = RegInit(false.B)
     ar_hs   :=  mcif_axi.AXI_ARVALID & mem_axi_r.AXI_ARREADY 
     rd_hs   :=  mcif_axi.AXI_RREADY  & mem_axi_r.AXI_RVALID
     
-    val ar_complete = RegInit(false.Bool())
-    val rd_complete = RegInit(false.Bool())
+    val ar_complete = RegInit(false.B)
+    val rd_complete = RegInit(false.B)
     ar_complete := ar_hs
     rd_complete := rd_hs
 
@@ -110,16 +110,16 @@ class AXI4_LITE extends Module {
     wstrb   := Mux(mem_axi_w.AXI_WVALID, mem_axi_w.AXI_WSTRB, 
                     Mux(wr_complete, 0.U, wdtrb)) 
 
-    val aw_hs   = RegInit(false.Bool())
-    val wr_hs   = RegInit(false.Bool())
-    val b_hs    = RegInit(false.Bool())
+    val aw_hs   = RegInit(false.B)
+    val wr_hs   = RegInit(false.B)
+    val b_hs    = RegInit(false.B)
     aw_hs   :=  mcif_axi_w.AXI_AWVALID & mem_axi_w.AXI_AWREADY 
     wr_hs   :=  mcif_axi_w.AXI_WVALID  & mem_axi_w.AXI_WREADY
     b_hs    :=  mcif_axi_w.AXI_BREADY  & mem_axi_w.AXI_BVALID
 
-    val ar_complete = RegInit(false.Bool())
-    val rd_complete = RegInit(false.Bool())
-    val b_complete  = RegInit(false.Bool())
+    val ar_complete = RegInit(false.B)
+    val rd_complete = RegInit(false.B)
+    val b_complete  = RegInit(false.B)
     aw_complete := aw_hs
     wr_complete := wr_hs
     b_complete  := b_hs

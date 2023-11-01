@@ -1,60 +1,80 @@
 package MEM
 
 import chisel3._
+import chisel3.util._
+import chisel3.stage._
 
-class EXMEM_MEM_Input extends Bundle {
-    // mem use
-    val inst            = Input(UInt(32.W))
-    val pc              = Input(UInt(64.W))
-    val mem_ren         = Input(Bool())
-    val mem_raddr       = Input(UInt(64.W))
-    val mem_wen         = Input(Bool())
-    val mem_waddr       = Input(UInt(64.W))
-    val mem_wdata       = Input(UInt(64.W))
-    val mem_wmask       = Input(UInt(8.W))
-    val ex_inst_isload  = Input(Bool())
-    val ex_inst_isstore = Input(Bool())
-
-    // wb use
-    val rd_wdata        = Input(UInt(64.W))
-    val rd_waddr        = Input(UInt(64.W))
-    val rd_wen          = Input(Bool())
+class MEM_AXI4_R extends Bundle{
+    // AR channel
+    val AXI_ARVALID = Input(Bool())
+    val AXI_ARID    = Input(UInt(2.W))
+    val AXI_RADDR   = Input(UInt(64.W))
+    val AXI_ARREADY = Output(Bool())
+    // Rd channel
+    val AXI_RID     = Output(UInt(2.W))
+    val AXI_RDATA   = Output(UInt(64.W))
+    val AXI_RVALID  = Output(Bool())
 }
 
-class MEM_CTRL_Output extends Bundle {
-    val mem_inst_isload  = Output(Bool())
-    val mem_inst_isstore = Output(Bool())
-}
+class MEM_AXI4_W extends Bundle{
+    val AXI_AWVALID = Input(Bool())
+    val	AXI_AWID    = Input(UInt(2.W))
+    val AXI_AWADDR  = Input(UInt(32.W))
 
-class MEM_MEMWB_Output extends Bundle {
-    val pc              = Output(UInt(64.W))
-    val rd_wdata        = Output(UInt(64.W))
-    val rd_waddr        = Output(UInt(64.W))
-    val rd_wen          = Output(Bool())
-}
+    val AXI_WVALID  = Input(Bool())
+    val AXI_WDATA   = Input(UInt(64.W))
+    val AXI_WSTRB   = Input(UInt(8.W))
 
-class MEM_Redirect_Output extends Bundle {
-    val rd_wen         = Output(Bool())
-    val rd_waddr       = Output(UInt(64.W))
-    val rd_wdata       = Output(UInt(64.W))
-}
+    val AXI_AWREADY = Output(Bool())
+    val AXI_WREADY  = Output(Bool())
 
+    // val AXI_BID     = Output(UInt(2.W))
+    val AXI_BVALID  = Output(Bool())
+    val AXI_BREADY  = Input(Bool())
+    val AXI_BRESP   = Output(Bool())
+}
 
 class MEM extends Module {
-    val exmem_mem    = IO(new EXMEM_MEM_Input())
-    val mem_ctrl     = IO(new MEM_CTRL_Output())
-    val mem_memwb    = IO(new MEM_MEMWB_Output())
-    val mem_redirect = IO(new MEM_Redirect_Output())
+    val mem_axi_r = IO(new MEM_AXI4_R())
+    
+    val mem = SyncReadMem(4096, UInt(64.W))
+    // ============= READ ================ //
+    val ren   = RegInit(false.Bool())
+    val raddr = RegInit(0.UInt(64.W))
+    val rid   = RegInit(0.UInt(2.W))
 
-    mem_ctrl.mem_inst_isload    :=  exmem_mem.ex_inst_isload
-    mem_ctrl.mem_inst_isstore   :=  exmem_mem.ex_inst_isstore
+    ren     :=  mem_rd.AXI_ARVALID
+    raddr   :=  mem_rd.AXI_RADDR
+    rid     :=  mem_rd.AXI_ARID
 
-    mem_memwb.pc       := exmem_mem.pc
-    mem_memwb.rd_wdata := exmem_mem.rd_wdata
-    mem_memwb.rd_waddr := exmem_mem.rd_waddr   
-    mem_memwb.rd_wen   := exmem_mem.rd_wen  
+    mem_rd.AXI_ARREADY  := 1.U 
+    mem_rd.AXI_RID      := rid 
+    mem_rd.AXI_RVALID   := ren 
+    mem_rd.AXI_RDATA    := Mux(ren, mem.read(raddr >> 3), 0.U)
+    // mem_rd.AXI_RDATA    := Mux(raddr(2) === 0.U, mem.read(raddr >> 3)(31, 0), mem.read(raddr >> 3)(63, 32))
 
-    mem_redirect.rd_wdata := exmem_mem.rd_wdata
-    mem_redirect.rd_waddr := exmem_mem.rd_waddr   
-    mem_redirect.rd_wen   := exmem_mem.rd_wen  
+    // ============= WRITE =============== // 
+    val mem_axi_w = IO(new MEM_AXI4_W())
+
+    val wen   = RegInit(false.Bool())
+    val waddr = RegInit(0.UInt(64.W))
+    val wid   = RegInit(0.UInt(2.W))
+    val wmask = RegInit(0.UInt(64.W))
+    val wdata = RegInit(0.UInt(64.W))
+
+    wen     :=  mem_wr.AXI_AWVALID
+    waddr   :=  mem_wr.AXI_AWADDR
+    wid     :=  mem_wr.AXI_AWID
+    wmask   :=  mem_wr.AXI_WSTRB
+    wdata   :=  mem_wr.AXI_WDATA
+
+    when (wen) { 
+        mem.write(waddr >> 3, wdata, wmask) 
+    }
+
+    mem_rd.AXI_AWREADY  := 1.U
+    mem_rd.AXI_WREADY   := 1.U
+    mem_rd.AXI_BID      := wid
+    mem_rd.AXI_BVALID   := Mux(wen, 1.U, 0.U)
+    mem_rd.AXI_BRESP    := Mux(wen, 1.U, 0.U)
 }

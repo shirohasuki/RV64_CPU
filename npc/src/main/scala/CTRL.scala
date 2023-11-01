@@ -50,20 +50,15 @@ class CTRL_EXWB_Output extends Bundle {
     val exwb_stall_en = Output(Bool())
     val exwb_flush_en = Output(Bool())
 }
-    val mcif_ctrl = IO(new Bundle{ 
-        val axi_busy_start = Output(Bool())
-        val axi_busy_end   = Output(Bool())
-    })
-    
 
 class Ctrl extends Module {
     val ex_ctrl       = IO(new EXU_CTRL_Input()     )
     // val clint_ctrl   = IO(new CLINT_CTRL_Input()   )
     val mem_ctrl      = IO(new MEM_CTRL_Input()     )
-    val redirect_ctrl = IO(new Bundle{ val rs_id_ex_hit = Input(Bool())})
-    val mcif_ctrl     = IO(new Bundle{     
-        val axi_busy_start = Output(Bool())
-        val axi_busy_end   = Output(Bool())
+    val redirect_ctrl = IO(new Bundle { val rs_id_ex_hit = Input(Bool())})
+    val mcif_ctrl     = IO(new Bundle {     
+        val axi_busy_start = Input(Bool())
+        val axi_busy_end   = Input(Bool())
     })
 
     val ctrl_pc       = IO(new CTRL_PC_Output()     )
@@ -76,8 +71,8 @@ class Ctrl extends Module {
     
     val axi_busy        = RegInit(0.UInt(1.W))      // Reg
     val axi_busy_start  = mcif_ctrl.axi_busy_start  // wire 一个寄存器加一根线保证全覆盖
-    axi_busy := Mux(axi_busy_start, 1.U, 
-                    Mux(axi_busy_end, 0.U, axi_busy))
+    axi_busy := Mux(mcif_ctrl.axi_busy_start, 1.U, 
+                    Mux(mcif_ctrl.axi_busy_end, 0.U, axi_busy))
     
     val load_data_hit   = redirect_ctrl.rs_id_ex_hit && ex_ctrl.ex_inst_isload
     // val NOEVENT       = ~(jump | load_inst | store_inst | load_data_hit)

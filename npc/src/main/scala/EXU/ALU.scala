@@ -46,7 +46,7 @@ class ALU_LSU_Output extends Bundle {
     val mem_waddr       = Output(UInt(64.W))
 }
 
-class EXU extends Module {
+class ALU extends Module {
     val ex_al = IO(new EXU_ALU_Input())
     val al_ex = IO(new ALU_EXU_Output())
     val al_ls = IO(new ALU_LSU_Output())

@@ -62,15 +62,7 @@ class AXI4_LITE extends Module {
     val mcif_axi_r  = IO(new MCIF_AXI4_R())
     val mem_axi_r   = IO(new MEM_AXI4_R())
     
-    val raddr   = RegInit(0.UInt(64.W))
-    val rid     = RegInit(0.UInt(64.W))
-    val rdata   = RegInit(0.UInt(64.W))
-    raddr   := Mux(mcif_axi_r.AXI_ARVALID, mcif_axi_r.AXI_ARADDR, 
-                    Mux(ar_complete, 0.U, raddr)) 
-    rid     := Mux(mem_axi_r.AXI_RVALID, mem_axi_r.AXI_RID, 
-                    Mux(rd_complete, 0.U, rid)) 
-    rdata   := Mux(mem_axi_r.AXI_RVALID, mem_axi_r.AXI_RDATA, 
-                    Mux(rd_complete, 0.U, rdata)) 
+
 
     val ar_hs   = RegInit(false.Bool())
     val rd_hs   = RegInit(false.Bool())
@@ -81,6 +73,16 @@ class AXI4_LITE extends Module {
     val rd_complete = RegInit(false.Bool())
     ar_complete := ar_hs
     rd_complete := rd_hs
+
+    val raddr   = RegInit(0.UInt(64.W))
+    val rid     = RegInit(0.UInt(64.W))
+    val rdata   = RegInit(0.UInt(64.W))
+    raddr   := Mux(mcif_axi_r.AXI_ARVALID, mcif_axi_r.AXI_ARADDR, 
+                    Mux(ar_complete, 0.U, raddr)) 
+    rid     := Mux(mem_axi_r.AXI_RVALID, mem_axi_r.AXI_RID, 
+                    Mux(rd_complete, 0.U, rid)) 
+    rdata   := Mux(mem_axi_r.AXI_RVALID, mem_axi_r.AXI_RDATA, 
+                    Mux(rd_complete, 0.U, rdata)) 
 
     // to mem 
     mem_axi_r.AXI_ARVALID := mcif_axi_r.AXI_ARVALID

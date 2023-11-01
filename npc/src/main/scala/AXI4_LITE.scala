@@ -12,6 +12,7 @@ class MCIF_AXI4_R extends Bundle{
     val AXI_RDATA   = Output(UInt(64.W))
     val AXI_RVALID  = Output(Bool())
     val AXI_RREADY  = Input(Bool())
+    val AXI_RLAST   = Output(Bool())
 }
 
 class MCIF_AXI4_W extends Bundle {
@@ -36,7 +37,6 @@ class MEM_AXI4_R extends Bundle{
     val AXI_RID     = Input(UInt(2.W))
     val AXI_RDATA   = Input(UInt(64.W))
     val AXI_RVALID  = Input(Bool())
-    val AXI_RLAST   = Output(Bool())
 }
 
 class MEM_AXI4_W extends Bundle{

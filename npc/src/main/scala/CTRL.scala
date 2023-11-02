@@ -54,7 +54,7 @@ class CTRL_EXWB_Output extends Bundle {
 class Ctrl extends Module {
     val ex_ctrl       = IO(new EXU_CTRL_Input()     )
     // val clint_ctrl   = IO(new CLINT_CTRL_Input()   )
-    val mem_ctrl      = IO(new MEM_CTRL_Input()     )
+    // val mem_ctrl      = IO(new MEM_CTRL_Input()     )
     val redirect_ctrl = IO(new Bundle { val rs_id_ex_hit = Input(Bool())})
     val mcif_ctrl     = IO(new Bundle {     
         val axi_busy_start = Input(Bool())
@@ -69,7 +69,7 @@ class Ctrl extends Module {
 
     val jump            = ex_ctrl.typej_jump_en   // || ex_ctrl.intr_jump_en
     
-    val axi_busy        = RegInit(0.UInt(1.W))      // Reg
+    val axi_busy        = RegInit(0.U(1.W))      // Reg
     val axi_busy_start  = mcif_ctrl.axi_busy_start  // wire 一个寄存器加一根线保证全覆盖
     axi_busy := Mux(mcif_ctrl.axi_busy_start, 1.U, 
                     Mux(mcif_ctrl.axi_busy_end, 0.U, axi_busy))

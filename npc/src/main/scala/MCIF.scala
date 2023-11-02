@@ -81,8 +81,8 @@ class MCIF extends Module {
     val mcif_axi_r = IO(new MCIF_AXI4_R())
     val mcif_axi_w = IO(new MCIF_AXI4_W())
 
-    mcif_axi_r <> MCIF_R.axi_r
-    mcif_axi_w <> MCIF_W.axi_w
+    mcif_axi_r <> MCIF_R.mcif_axi_r
+    mcif_axi_w <> MCIF_W.mcif_axi_w
 
     mcif_ctrl.store_load_busy_start := ifu_mcif.mem_ren | lsu_mcif.mem_ren | lsu_mcif.mem_wen
     mcif_ctrl.store_load_busy_end   := mcif_axi_r.AXI_RLAST | mcif_axi_r.AXI_BRESP

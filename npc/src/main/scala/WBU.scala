@@ -16,8 +16,8 @@ class WBU_Redirect_Output extends Bundle {
 }
 
 class WBU extends Module {
-    val exwb_wb    = IO(new MEMWB_WB_Input())
-    val wb_reg      = IO(Flipped(new MEMWB_WB_Input()))
+    val exwb_wb    = IO(new EXWB_WB_Input())
+    val wb_reg      = IO(Flipped(new EXWB_WB_Input()))
     val wb_redirect = IO(new WBU_Redirect_Output())
 
     wb_reg <> memwb_wb

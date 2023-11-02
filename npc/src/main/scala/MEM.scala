@@ -66,7 +66,7 @@ class MEM extends Module {
     wen     :=  mem_axi_w.AXI_AWVALID
     waddr   :=  mem_axi_w.AXI_AWADDR
     wid     :=  mem_axi_w.AXI_AWID
-    wmask   :=  mem_axi_w.AXI_WSTRB
+    wmask   :=  mem_axi_w.AXI_WSTRB.asType(Seq(Bool()))
     wdata   :=  mem_axi_w.AXI_WDATA
 
     when (wen) { 

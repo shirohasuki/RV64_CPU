@@ -3,7 +3,7 @@ package MEM
 import chisel3._
 import chisel3.util._
 import chisel3.stage._
-import chisel3.core.Data
+import chisel3.Data
 
 class MEM_AXI4_R extends Bundle{
     // AR channel

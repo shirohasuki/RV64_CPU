@@ -117,7 +117,7 @@ class AXI4_LITE extends Module {
     wr_hs   :=  mcif_axi_w.AXI_WVALID  & mem_axi_w.AXI_WREADY
     b_hs    :=  mcif_axi_w.AXI_BREADY  & mem_axi_w.AXI_BVALID
 
-    val ar_complete = RegInit(false.B)
+    val aw_complete = RegInit(false.B)
     val wr_complete = RegInit(false.B)
     val b_complete  = RegInit(false.B)
     aw_complete := aw_hs

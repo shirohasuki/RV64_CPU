@@ -10,9 +10,9 @@ import IFU._
 import IFID._
 import IDU._
 import IDEX._
-import EXU._
+import EXU.EXU._
 import EXLS._
-import LSU._
+import EXU.LSU._
 import EXWB._
 import WBU._
 import MCIF._

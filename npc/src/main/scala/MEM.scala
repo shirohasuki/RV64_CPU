@@ -40,8 +40,8 @@ class MEM extends Module {
     val mem = SyncReadMem(4096, UInt(64.W))
     // ============= READ ================ //
     val ren   = RegInit(false.B)
-    val raddr = RegInit(0.UInt(64.W))
-    val rid   = RegInit(0.UInt(2.W))
+    val raddr = RegInit(0.U(64.W))
+    val rid   = RegInit(0.U(2.W))
 
     ren     :=  mem_rd.AXI_ARVALID
     raddr   :=  mem_rd.AXI_RADDR
@@ -57,10 +57,10 @@ class MEM extends Module {
     val mem_axi_w = IO(new MEM_AXI4_W())
 
     val wen   = RegInit(false.Bool())
-    val waddr = RegInit(0.UInt(64.W))
-    val wid   = RegInit(0.UInt(2.W))
-    val wmask = RegInit(0.UInt(64.W))
-    val wdata = RegInit(0.UInt(64.W))
+    val waddr = RegInit(0.U(64.W))
+    val wid   = RegInit(0.U(2.W))
+    val wmask = RegInit(0.U(64.W))
+    val wdata = RegInit(0.U(64.W))
 
     wen     :=  mem_wr.AXI_AWVALID
     waddr   :=  mem_wr.AXI_AWADDR

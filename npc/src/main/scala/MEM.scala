@@ -39,7 +39,7 @@ class MEM extends Module {
     
     val mem = SyncReadMem(4096, UInt(64.W))
     // ============= READ ================ //
-    val ren   = RegInit(false.Bool())
+    val ren   = RegInit(false.B)
     val raddr = RegInit(0.UInt(64.W))
     val rid   = RegInit(0.UInt(2.W))
 

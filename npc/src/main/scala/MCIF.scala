@@ -170,6 +170,6 @@ class MCIF_W extends Module {
 
     // ================== B channel
     mcif_axi_w.AXI_BREADY := 1.U
-    val bresp = RegInit(false.Bool())
+    val bresp = RegInit(false.B)
     bresp := mcif_axi_w.AXI_BRESP
 }

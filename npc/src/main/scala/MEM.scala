@@ -70,7 +70,7 @@ class MEM extends Module {
     wdata   :=  mem_axi_w.AXI_WDATA
 
     when (wen) { 
-        mem.write((waddr >> 3).asUInt(), wdata, wmask) 
+        mem.write(waddr >> 3, wdata, wmask) 
     }
 
     mem_axi_w.AXI_AWREADY  := 1.U

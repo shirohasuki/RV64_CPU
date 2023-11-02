@@ -73,20 +73,20 @@ class EXU extends Module {
     // ALU.al_ex   <>  al_ex
 
     val LSU = Module(new LSU())
-    // ALU.al_ls   <>  LSU.al_ls
-    LSU.ls_ex   <>  ls_ex
+    ALU.al_ls   <>  LSU.al_ls
+    // LSU.ls_ex   <>  ls_ex
 
     // ex to exwb 
     ex_exwb.pc          := idex_ex.pc
-    ex_exwb.rd_wen      := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, ls_ex.rd_wen  , ALU.al_ex.rd_wen  )
-    ex_exwb.rd_waddr    := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, ls_ex.rd_waddr, ALU.al_ex.rd_waddr)
-    ex_exwb.rd_wdata    := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, ls_ex.rd_wdata, ALU.al_ex.rd_wdata)
+    ex_exwb.rd_wen      := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, LSU.ls_ex.rd_wen  , ALU.al_ex.rd_wen  )
+    ex_exwb.rd_waddr    := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, LSU.ls_ex.rd_waddr, ALU.al_ex.rd_waddr)
+    ex_exwb.rd_wdata    := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, LSU.ls_ex.rd_wdata, ALU.al_ex.rd_wdata)
 
 
     // ex to redirect
-    ex_redirect.rd_wen      := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, ls_ex.rd_wen,   ALU.al_ex.rd_wen)
-    ex_redirect.rd_waddr    := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, ls_ex.rd_waddr, ALU.al_ex.rd_waddr)
-    ex_redirect.rd_wdata    := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, ls_ex.rd_wdata, ALU.al_ex.rd_wdata)
+    ex_redirect.rd_wen      := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, LSU.ls_ex.rd_wen,   ALU.al_ex.rd_wen)
+    ex_redirect.rd_waddr    := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, LSU.ls_ex.rd_waddr, ALU.al_ex.rd_waddr)
+    ex_redirect.rd_wdata    := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, LSU.ls_ex.rd_wdata, ALU.al_ex.rd_wdata)
     
     // ex to ctrl 
     ex_ctrl.inst_isload      := ALU.al_ex.inst_isload

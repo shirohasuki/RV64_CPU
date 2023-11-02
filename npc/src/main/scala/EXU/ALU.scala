@@ -7,7 +7,6 @@ import chisel3.stage._
 import define.MACRO._
 import define.function._
 
-import EXU.LSU._
 import DPIC.ebreak
 
 class EXU_ALU_Input extends Bundle {
@@ -35,25 +34,22 @@ class ALU_EXU_Output extends Bundle {
 }
 
 class ALU_LSU_Output extends Bundle {
-    val func3           = Input(UInt(3.W))
-    val inst_isload     = Input(Bool())
-    val inst_isstore    = Input(Bool())
-    val rd_waddr        = Input(UInt(5.W))
-    val mem_ren         = Input(Bool())
-    val mem_raddr       = Input(UInt(64.W))
-    val mem_wen         = Input(Bool())
-    val mem_wmask       = Input(Vec(8, Bool()))
-    val mem_wdata       = Input(UInt(64.W))
-    val mem_waddr       = Input(UInt(64.W))
+    val func3           = Output(UInt(3.W))
+    val inst_isload     = Output(Bool())
+    val inst_isstore    = Output(Bool())
+    val rd_waddr        = Output(UInt(5.W))
+    val mem_ren         = Output(Bool())
+    val mem_raddr       = Output(UInt(64.W))
+    val mem_wen         = Output(Bool())
+    val mem_wmask       = Output(Vec(8, Bool()))
+    val mem_wdata       = Output(UInt(64.W))
+    val mem_waddr       = Output(UInt(64.W))
 }
 
 class ALU extends Module {
     val ex_al = IO(new EXU_ALU_Input())
     val al_ex = IO(new ALU_EXU_Output())
     val al_ls = IO(new ALU_LSU_Output())
-
-    val LSU = Module(new LSU())
-    al_ls   <>  LSU.al_ls
 
     // 定义各种op
     def add                       (op1: UInt, op2: UInt): UInt = op1 +& op2

@@ -109,8 +109,8 @@ class MCIF_R_Input extends Bundle { val raddr  = Input(UInt(64.W))}
 class MCIF_R_Output extends Bundle { val rdata = Output(UInt(64.W))}
 
 class MCIF_R extends Module {
-    val req0  = IO(Decoupled(new MCIF_R_Input()).flip)       
-    val req1  = IO(Decoupled(new MCIF_R_Input()).flip)       
+    val req0  = IO(Flipped(Decoupled(new MCIF_R_Input())))       
+    val req1  = IO(Flipped(Decoupled(new MCIF_R_Input())))       
     
     val resp0  = IO(Decoupled(new MCIF_R_Output()))  
     val resp1  = IO(Decoupled(new MCIF_R_Output()))
@@ -151,7 +151,7 @@ class MCIF_W_Input extends Bundle {
 }
 
 class MCIF_W extends Module {
-    val req0   = IO(Decoupled(new MCIF_W_Input).flip)       
+    val req0   = IO(Flipped(Decoupled(new MCIF_W_Input)))       
 
     val mcif_axi_w = IO(new MCIF_AXI4_W())
 

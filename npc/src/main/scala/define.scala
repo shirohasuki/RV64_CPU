@@ -13,7 +13,7 @@ object function {
 
     // 这两个都是用在64位的，要拓展得改
     def SEXT (short: UInt): UInt = Cat(Fill(32, short), short(31, 0))
-    def ZEXT (short: UInt): UInt = Cat(Fill(32,     0), short(31, 0)) // zero extension 瞎取的名字，向前补0
+    def ZEXT (short: UInt): UInt = Cat(Fill(32,   0.U), short(31, 0)) // zero extension 瞎取的名字，向前补0
 } 
 
 // object DPI_C {

@@ -3,6 +3,7 @@ package MEM
 import chisel3._
 import chisel3.util._
 import chisel3.stage._
+import chisel3.core.Data
 
 class MEM_AXI4_R extends Bundle{
     // AR channel
@@ -66,7 +67,7 @@ class MEM extends Module {
     wen     :=  mem_axi_w.AXI_AWVALID
     waddr   :=  mem_axi_w.AXI_AWADDR
     wid     :=  mem_axi_w.AXI_AWID
-    wmask   :=  mem_axi_w.AXI_WSTRB.asTypeof(Seq(Bool()))
+    wmask   :=  mem_axi_w.AXI_WSTRB.asType(Seq(Bool()))
     wdata   :=  mem_axi_w.AXI_WDATA
 
     when (wen) { 

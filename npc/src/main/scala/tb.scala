@@ -14,10 +14,6 @@ class tb extends Module {
     val CORE        = Module(new CORE())
     val AXI4_LITE   = Module(new AXI4_LITE())
     val MEM         = Module(new MEM())
-
-    val CORE      = Module(new CORE())
-    val AXI4_LITE = Module(new AXI4_LITE())
-    val MEM       = Module(new MEM())
     
     CORE.core_axi.axi_r <> AXI4_LITE.mcif_axi_r
     CORE.core_axi.axi_w <> AXI4_LITE.mcif_axi_w

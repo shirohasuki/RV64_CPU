@@ -73,15 +73,15 @@ class LSU extends Module {
     ls_ex.rd_wen   := ls_ex.inst_isload
 
     // to redirect
-    ls_redirect.rd_wdata := exls_ls.rd_wdata
-    ls_redirect.rd_waddr := exls_ls.rd_waddr   
-    ls_redirect.rd_wen   := exls_ls.rd_wen  
+    ls_redirect.rd_wdata := al_ls.rd_wdata
+    ls_redirect.rd_waddr := al_ls.rd_waddr   
+    ls_redirect.rd_wen   := al_ls.rd_wen  
     
     // to mcif
-    ls_mcif.ren     := exls_ls.ren
-    ls_mcif.raddr   := exls_ls.raddr
-    ls_mcif.wen     := exls_ls.wen
-    ls_mcif.waddr   := exls_ls.waddr
-    ls_mcif.wdata   := exls_ls.wdata
-    ls_mcif.wmask   := exls_ls.wmask
+    ls_mcif.ren     := al_ls.ren
+    ls_mcif.raddr   := al_ls.raddr
+    ls_mcif.wen     := al_ls.wen
+    ls_mcif.waddr   := al_ls.waddr
+    ls_mcif.wdata   := al_ls.wdata
+    ls_mcif.wmask   := al_ls.wmask
 }

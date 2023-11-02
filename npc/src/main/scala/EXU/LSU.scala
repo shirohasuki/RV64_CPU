@@ -73,9 +73,9 @@ class LSU extends Module {
     ls_ex.rd_wen   := al_ls.inst_isload
 
     // to redirect
-    ls_redirect.rd_wdata := al_ls.rd_wdata
-    ls_redirect.rd_waddr := al_ls.rd_waddr   
-    ls_redirect.rd_wen   := al_ls.rd_wen  
+    ls_redirect.rd_wdata := ls_ex.rd_wdata
+    ls_redirect.rd_waddr := ls_ex.rd_waddr   
+    ls_redirect.rd_wen   := ls_ex.rd_wen  
     
     // to mcif
     ls_mcif.ren     := al_ls.mem_ren

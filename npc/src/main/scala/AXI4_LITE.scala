@@ -21,7 +21,7 @@ class MCIF_AXI4_W extends Bundle {
     val AXI_AWVALID = Input(Bool())
 
     val AXI_WDATA   = Input(UInt(64.W))
-    val AXI_WSTRB   = Input(UInt(8.W))
+    val AXI_WSTRB   = Input(Vec(8, Bool()))
     val AXI_WVALID  = Input(Bool())
     
     val AXI_BRESP   = Output(UInt(2.W))
@@ -46,7 +46,7 @@ class MEM_AXI4_W extends Bundle{
 
     val AXI_WVALID  = Output(Bool())
     val AXI_WDATA   = Output(UInt(64.W))
-    val AXI_WSTRB   = Output(UInt(8.W))
+    val AXI_WSTRB   = Output(Vec(8, Bool()))
 
     val AXI_AWREADY = Input(Bool())
     val AXI_WREADY  = Input(Bool())

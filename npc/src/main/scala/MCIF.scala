@@ -19,7 +19,7 @@ class LSU_MCIF extends Bundle{
     val mem_wen    = Input(Bool())
     val mem_waddr  = Input(UInt(64.W))
     val mem_wdata  = Input(UInt(64.W))
-    val mem_wmask  = Input(UInt(64.W))
+    val mem_wmask  = Input(Vec(8, Bool()))
 }
 
 // ========== IO on the right(from/to AXI4(device)) ============ //
@@ -42,7 +42,7 @@ class MCIF_AXI4_W extends Bundle {
     val AXI_AWVALID = Output(Bool())
 
     val AXI_WDATA   = Output(UInt(64.W))
-    val AXI_WSTRB   = Output(UInt(8.W))
+    val AXI_WSTRB   = Output(Vec(8, Bool()))
     val AXI_WVALID  = Output(Bool())
     
     val AXI_BRESP   = Input(UInt(1.W))
@@ -118,7 +118,7 @@ class MCIF_R extends Module {
     val M_RID = UInt(2.W) // Master:IFU:0 MEM:1
     // val S_RID = UInt(2.W) // Slave: MEM
 
-    val req_array     = Vec(req0.raddr, req1.raddr)
+    val req_array     = Vec(req0.bits.raddr, req1.bits.raddr)
     val raddr         = Flipped(Decoupled(UInt(64.W)))
     
     val Arb1 = Module(new Arbiter(UInt(64.W), 2))  // 2 to 1 Priority Arbiter

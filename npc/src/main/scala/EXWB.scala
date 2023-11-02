@@ -5,8 +5,8 @@ import define.function._
 import define.MACRO._
 
 class Ctrl_Input extends Bundle {
-    val lswb_flush_en  = Input(Bool())
-    val lswb_stall_en  = Input(Bool())
+    val exwb_flush_en  = Input(Bool())
+    val exwb_stall_en  = Input(Bool())
 }
 
 class EXU_WBU_Input extends Bundle {

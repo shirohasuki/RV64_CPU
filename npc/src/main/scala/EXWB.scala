@@ -1,4 +1,4 @@
-package LSUWB
+package EXWB
 
 import chisel3._
 import define.function._

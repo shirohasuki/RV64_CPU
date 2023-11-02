@@ -74,8 +74,8 @@ class AXI4_LITE extends Module {
 
     val ar_hs   = RegInit(false.B)
     val rd_hs   = RegInit(false.B)
-    ar_hs   :=  mcif_axi.AXI_ARVALID & mem_axi_r.AXI_ARREADY 
-    rd_hs   :=  mcif_axi.AXI_RREADY  & mem_axi_r.AXI_RVALID
+    ar_hs   :=  mcif_axi_r.AXI_ARVALID & mem_axi_r.AXI_ARREADY 
+    rd_hs   :=  mcif_axi_r.AXI_RREADY  & mem_axi_r.AXI_RVALID
     
     val ar_complete = RegInit(false.B)
     val rd_complete = RegInit(false.B)

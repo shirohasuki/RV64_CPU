@@ -1,4 +1,4 @@
-package EXU
+package EXU.EXU
 
 import chisel3._
 import chisel3.util._

@@ -1,4 +1,4 @@
-package EXU
+package EXU.LSU
 
 import chisel3._
 import define.MACRO._

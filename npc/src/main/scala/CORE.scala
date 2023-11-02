@@ -73,7 +73,7 @@ class CORE extends Module {
     
     IDU.id_redirect         <> Redirect.id_redirect 
     EXU.ex_redirect         <> Redirect.ex_redirect 
-    LSU.ls_redirect         <> Redirect.ls_redirect
+    // LSU.ls_redirect         <> Redirect.ls_redirect
     WBU.wb_redirect         <> Redirect.wb_redirect 
     RegFile.reg_redirect    <> Redirect.reg_redirect
     Redirect.redirect_reg   <> RegFile.redirect_reg

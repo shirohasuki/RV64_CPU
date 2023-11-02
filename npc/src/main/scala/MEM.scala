@@ -59,13 +59,14 @@ class MEM extends Module {
     val wen   = RegInit(false.B)
     val waddr = RegInit(0.U(64.W))
     val wid   = RegInit(0.U(2.W))
-    val wmask = RegInit(0.U(64.W))
+    val wmask = RegInit(0.U(8.W))
     val wdata = RegInit(0.U(64.W))
 
     wen     :=  mem_axi_w.AXI_AWVALID
     waddr   :=  mem_axi_w.AXI_AWADDR
     wid     :=  mem_axi_w.AXI_AWID
-    wmask   :=  mem_axi_w.AXI_WSTRB
+    // wmask   :=  mem_axi_w.AXI_WSTRB
+    wmask = (0 until 8).map(i => wmask(i).asBool()) // Assuming wmask is 8 bits
     wdata   :=  mem_axi_w.AXI_WDATA
 
     when (wen) { 

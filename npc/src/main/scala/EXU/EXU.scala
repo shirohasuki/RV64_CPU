@@ -69,7 +69,7 @@ class EXU extends Module {
     val ex_redirect = IO(new EXU_Redirect_Output())
     
     val ALU = Module(new ALU())
-    Flipped(idex_ex) <> ALU.ex_alu
+    Flipped(idex_ex) <> ALU.ex_al
     ALU.al_ex   <>  al_ex
 
     val LSU = Module(new LSU())

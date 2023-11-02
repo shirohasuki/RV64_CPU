@@ -74,8 +74,8 @@ class Ctrl extends Module {
     axi_busy := Mux(mcif_ctrl.axi_busy_start, 1.U, 
                     Mux(mcif_ctrl.axi_busy_end, 0.U, axi_busy))
     
-    val load_data_hit   = redirect_ctrl.rs_id_ex_hit && ex_ctrl.ex_inst_isload
-    val NOEVENT       = ~(jump | axi_busy | axi_busy_start | load_data_hit)
+    val load_data_hit   = redirect_ctrl.rs_id_ex_hit && ex_ctrl.inst_isload
+    val NOEVENT         = ~(jump | axi_busy | axi_busy_start | load_data_hit)
 
     ctrl_pc.jump_addr := ex_ctrl.typej_jump_addr //| io.clint_ctrl.intr_jump_addr
     ctrl_pc.jump_en   := jump

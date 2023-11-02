@@ -66,7 +66,7 @@ class MEM extends Module {
     waddr   :=  mem_axi_w.AXI_AWADDR
     wid     :=  mem_axi_w.AXI_AWID
     // wmask   :=  mem_axi_w.AXI_WSTRB
-    wmask = (0 until 8).map(i => wmask(i).asBool()) // Assuming wmask is 8 bits
+    wmask := (0 until 8).map(i => wmask(i).asBool()) 
     wdata   :=  mem_axi_w.AXI_WDATA
 
     when (wen) { 

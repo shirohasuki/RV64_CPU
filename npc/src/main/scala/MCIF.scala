@@ -85,7 +85,7 @@ class MCIF extends Module {
     mcif_axi_w <> MCIF_W.mcif_axi_w
 
     mcif_ctrl.axi_busy_start := if_mcif.mem_ren | ls_mcif.mem_ren | ls_mcif.mem_wen
-    mcif_ctrl.axi_busy_end   := mcif_axi_r.AXI_RLAST | mcif_axi_r.AXI_BRESP
+    mcif_ctrl.axi_busy_end   := mcif_axi_r.AXI_RLAST | mcif_axi_w.AXI_BRESP
 }
 
 
@@ -155,7 +155,7 @@ class MCIF_W extends Module {
 
     val mcif_axi_w = IO(new MCIF_AXI4_W())
 
-    val M_WID = U(2.W) 
+    val M_WID = UInt(2.W) 
     M_WID := 1.U
     
     //  ================= AW channel

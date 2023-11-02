@@ -6,16 +6,16 @@ import define.MACRO._
 import define.function._
 
 class ALU_LSU_Input extends Bundle {
-    val func3           = Output(UInt(3.W))
-    val inst_isload     = Output(Bool())
-    val inst_isstore    = Output(Bool())
-    val rd_waddr        = Output(UInt(5.W))
-    val mem_ren         = Output(Bool())
-    val mem_raddr       = Output(UInt(64.W))
-    val mem_wen         = Output(Bool())
-    val mem_wmask       = Output(Vec(8, Bool()))
-    val mem_wdata       = Output(UInt(64.W))
-    val mem_waddr       = Output(UInt(64.W))
+    val func3           = Input(UInt(3.W))
+    val inst_isload     = Input(Bool())
+    val inst_isstore    = Input(Bool())
+    val rd_waddr        = Input(UInt(5.W))
+    val mem_ren         = Input(Bool())
+    val mem_raddr       = Input(UInt(64.W))
+    val mem_wen         = Input(Bool())
+    val mem_wmask       = Input(Vec(8, Bool()))
+    val mem_wdata       = Input(UInt(64.W))
+    val mem_waddr       = Input(UInt(64.W))
 }
 
 // class LSU_CTRL_Output extends Bundle {

@@ -22,6 +22,20 @@ class IDEX_EXU_Input extends Bundle {
     val func7       = Input(UInt(7.W))
 }
 
+class IDEX_EXU_Output extends Bundle {
+    val inst        = Output(UInt(32.W))
+    val pc          = Output(UInt(64.W))
+    val op1         = Output(UInt(64.W))
+    val op2         = Output(UInt(64.W))
+    val rd_addr     = Output(UInt(5.W))
+    val rd_wen      = Output(Bool())
+    val base_addr   = Output(UInt(64.W))
+    val offset_addr = Output(UInt(64.W))
+    val opcode      = Output(UInt(7.W))
+    val func3       = Output(UInt(3.W))
+    val func7       = Output(UInt(7.W))
+}
+
 class ALU_EXU_Input extends Bundle {
     val rd_wen          = Input(Bool()) 
     val rd_waddr        = Input(UInt(5.W))
@@ -60,7 +74,7 @@ class EXU_Redirect_Output extends Bundle {
 
 class EXU extends Module {
     val idex_ex     = IO(new IDEX_EXU_Input())
-    val ex_al       = IO(Flipped(new IDEX_EXU_Input()))  // flip之后直接给alu
+    val ex_al       = IO(Flipped(new IDEX_EXU_Output()))  // flip之后直接给alu
     val al_ex       = IO(new ALU_EXU_Input())
     val ls_ex       = IO(new LSU_EXU_Input())
     val ex_exwb     = IO(new EXU_EXWB_Output())

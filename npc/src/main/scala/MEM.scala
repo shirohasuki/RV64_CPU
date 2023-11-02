@@ -43,15 +43,15 @@ class MEM extends Module {
     val raddr = RegInit(0.U(64.W))
     val rid   = RegInit(0.U(2.W))
 
-    ren     :=  mem_rd.AXI_ARVALID
-    raddr   :=  mem_rd.AXI_RADDR
-    rid     :=  mem_rd.AXI_ARID
+    ren     :=  mem_axi_r.AXI_ARVALID
+    raddr   :=  mem_axi_r.AXI_RADDR
+    rid     :=  mem_axi_r.AXI_ARID
 
-    mem_rd.AXI_ARREADY  := 1.U 
-    mem_rd.AXI_RID      := rid 
-    mem_rd.AXI_RVALID   := ren 
-    mem_rd.AXI_RDATA    := Mux(ren, mem.read(raddr >> 3), 0.U)
-    // mem_rd.AXI_RDATA    := Mux(raddr(2) === 0.U, mem.read(raddr >> 3)(31, 0), mem.read(raddr >> 3)(63, 32))
+    mem_axi_r.AXI_ARREADY  := 1.U 
+    mem_axi_r.AXI_RID      := rid 
+    mem_axi_r.AXI_RVALID   := ren 
+    mem_axi_r.AXI_RDATA    := Mux(ren, mem.read(raddr >> 3), 0.U)
+    // mem_axi_r.AXI_RDATA    := Mux(raddr(2) === 0.U, mem.read(raddr >> 3)(31, 0), mem.read(raddr >> 3)(63, 32))
 
     // ============= WRITE =============== // 
     val mem_axi_w = IO(new MEM_AXI4_W())
@@ -62,19 +62,19 @@ class MEM extends Module {
     val wmask = RegInit(0.U(64.W))
     val wdata = RegInit(0.U(64.W))
 
-    wen     :=  mem_wr.AXI_AWVALID
-    waddr   :=  mem_wr.AXI_AWADDR
-    wid     :=  mem_wr.AXI_AWID
-    wmask   :=  mem_wr.AXI_WSTRB
-    wdata   :=  mem_wr.AXI_WDATA
+    wen     :=  mem_axi_w.AXI_AWVALID
+    waddr   :=  mem_axi_w.AXI_AWADDR
+    wid     :=  mem_axi_w.AXI_AWID
+    wmask   :=  mem_axi_w.AXI_WSTRB
+    wdata   :=  mem_axi_w.AXI_WDATA
 
     when (wen) { 
         mem.write(waddr >> 3, wdata, wmask) 
     }
 
-    mem_rd.AXI_AWREADY  := 1.U
-    mem_rd.AXI_WREADY   := 1.U
-    mem_rd.AXI_BID      := wid
-    mem_rd.AXI_BVALID   := Mux(wen, 1.U, 0.U)
-    mem_rd.AXI_BRESP    := Mux(wen, 1.U, 0.U)
+    mem_axi_w.AXI_AWREADY  := 1.U
+    mem_axi_w.AXI_WREADY   := 1.U
+    mem_axi_w.AXI_BID      := wid
+    mem_axi_w.AXI_BVALID   := Mux(wen, 1.U, 0.U)
+    mem_axi_w.AXI_BRESP    := Mux(wen, 1.U, 0.U)
 }

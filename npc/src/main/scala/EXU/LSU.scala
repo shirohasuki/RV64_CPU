@@ -59,7 +59,7 @@ class LSU extends Module {
     rd_wdata := Mux(ls_ex.inst_isload, ls_mcif.rdata, 0.U)
 
     // to ex
-    ls_ex.rd_wdata := MuxCase(func3, Seq(
+    ls_ex.rd_wdata := MuxCase(al_ls.func3, Seq(
         INST_LB   ->  SEXT(rd_wdata(7, 0))
         INST_LH   ->  SEXT(rd_wdata(15, 0))
         INST_LW   ->  SEXT(rd_wdata(31, 0))

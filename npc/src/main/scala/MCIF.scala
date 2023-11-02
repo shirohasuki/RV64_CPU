@@ -84,8 +84,8 @@ class MCIF extends Module {
     mcif_axi_r <> MCIF_R.mcif_axi_r
     mcif_axi_w <> MCIF_W.mcif_axi_w
 
-    mcif_ctrl.store_load_busy_start := if_mcif.mem_ren | ls_mcif.mem_ren | ls_mcif.mem_wen
-    mcif_ctrl.store_load_busy_end   := mcif_axi_r.AXI_RLAST | mcif_axi_r.AXI_BRESP
+    mcif_ctrl.axi_busy_start := if_mcif.mem_ren | ls_mcif.mem_ren | ls_mcif.mem_wen
+    mcif_ctrl.axi_busy_end   := mcif_axi_r.AXI_RLAST | mcif_axi_r.AXI_BRESP
 }
 
 
@@ -117,8 +117,8 @@ class MCIF_R extends Module {
 
     val mcif_axi_r = IO(new MCIF_AXI4_R())
 
-    val M_RID = U(2.W) // Master:IFU:0 MEM:1
-    // val S_RID = U(2.W) // Slave: MEM
+    val M_RID = UInt(2.W) // Master:IFU:0 MEM:1
+    // val S_RID = UInt(2.W) // Slave: MEM
 
     val req_array     = Vec(req0.bits.raddr, req1.bits.raddr)
     val raddr         = Flipped(Decoupled(UInt(64.W)))

@@ -84,7 +84,7 @@ class MCIF extends Module {
     mcif_axi_r <> MCIF_R.mcif_axi_r
     mcif_axi_w <> MCIF_W.mcif_axi_w
 
-    mcif_ctrl.store_load_busy_start := ifu_mcif.mem_ren | lsu_mcif.mem_ren | lsu_mcif.mem_wen
+    mcif_ctrl.store_load_busy_start := if_mcif.mem_ren | ls_mcif.mem_ren | ls_mcif.mem_wen
     mcif_ctrl.store_load_busy_end   := mcif_axi_r.AXI_RLAST | mcif_axi_r.AXI_BRESP
 }
 
@@ -115,7 +115,7 @@ class MCIF_R extends Module {
     val resp0  = IO(Decoupled(new MCIF_R_Output()))  
     val resp1  = IO(Decoupled(new MCIF_R_Output()))
 
-    val axi_r = IO(new MCIF_AXI4_R())
+    val mcif_axi_r = IO(new MCIF_AXI4_R())
 
     val M_RID = U(2.W) // Master:IFU:0 MEM:1
     // val S_RID = U(2.W) // Slave: MEM
@@ -130,16 +130,16 @@ class MCIF_R extends Module {
         raddr.ready := raddr.valid  // 只要收到valid, 立马ready上 
     
     //  ================= AR channel
-    axi_r.AXI_ARVALID  := Mux(raddr.valid === 1.U, true.B, false.B) // M->S
-    axi_r.AXI_ARADDR   := raddr.bits & raddr.valid     // M->S    
-    axi_r.AXI_ARID     := M_RID 
+    mcif_axi_r.AXI_ARVALID  := Mux(raddr.valid === 1.U, true.B, false.B) // M->S
+    mcif_axi_r.AXI_ARADDR   := raddr.bits & raddr.valid     // M->S    
+    mcif_axi_r.AXI_ARID     := M_RID 
 
     //  ================= R channel
-    axi_r.AXI_RREADY := 1.U // 暂时先一直拉高   // M->S
+    mcif_axi_r.AXI_RREADY := 1.U // 暂时先一直拉高   // M->S
 
     when(mcif_axi.AXI_RVALID) {
-        resp0.bits.rdata := Mux(axi_r.AXI_RID === 0.U, axi_r.AXI_RDATA, 0.U)
-        resp1.bits.rdata := Mux(axi_r.AXI_RID === 1.U, axi_r.AXI_RDATA, 0.U)
+        resp0.bits.rdata := Mux(mcif_axi_r.AXI_RID === 0.U, mcif_axi_r.AXI_RDATA, 0.U)
+        resp1.bits.rdata := Mux(mcif_axi_r.AXI_RID === 1.U, mcif_axi_r.AXI_RDATA, 0.U)
     }   // S->M
 }
 

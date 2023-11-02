@@ -60,10 +60,8 @@ class EXU_Redirect_Output extends Bundle {
 
 class EXU extends Module {
     val idex_ex     = IO(new IDEX_EXU_Input())
-
     val al_ex       = IO(new ALU_EXU_Input())
     val ls_ex       = IO(new LSU_EXU_Input())
-
     val ex_exwb     = IO(new EXU_EXWB_Output())
     val ex_ctrl     = IO(new EXU_CTRL_Output())
     val ex_redirect = IO(new EXU_Redirect_Output())

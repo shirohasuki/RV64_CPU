@@ -38,6 +38,7 @@ class MEM extends Module {
     val mem_axi_r = IO(new MEM_AXI4_R())
     
     val mem = SyncReadMem(4096, Vec(8, UInt(8.W))) // 8个8字节=64
+
     // ============= READ ================ //
     val ren   = RegInit(false.B)
     val raddr = RegInit(0.U(64.W))
@@ -50,8 +51,15 @@ class MEM extends Module {
     mem_axi_r.AXI_ARREADY  := 1.U 
     mem_axi_r.AXI_RID      := rid 
     mem_axi_r.AXI_RVALID   := ren 
-    mem_axi_r.AXI_RDATA    := Mux(ren, mem.read(raddr >> 3), 0.U)
-    // mem_axi_r.AXI_RDATA    := Mux(raddr(2) === 0.U, mem.read(raddr >> 3)(31, 0), mem.read(raddr >> 3)(63, 32))
+    // mem_axi_r.AXI_RDATA    := Mux(ren, mem.read(raddr >> 3), 0.U)
+    when (ren) {
+        rdata_vec := mem.read(raddr)
+    }
+
+    for(i <- 0 until 8) { 
+        mem_axi_r.AXI_RDATA := Cat(rdata_vec(7), rdata_vec(6), rdata_vec(5), rdata_vec(4),
+            rdata_vec(3), rdata_vec(2), rdata_vec(1), rdata_vec(0))
+    }
 
     // ============= WRITE =============== // 
     val mem_axi_w = IO(new MEM_AXI4_W())
@@ -61,19 +69,18 @@ class MEM extends Module {
     val wid   = RegInit(0.U(2.W))
     // val wmask = RegInit(0.U(8.W))
     val wmask = Vec(4, Bool())
-    val wdata = RegInit(0.U(64.W))
+    // val wdata = RegInit(0.U(64.W))
+    val wdata_vec = Vec(8, UInt(8.W))
 
     wen     :=  mem_axi_w.AXI_AWVALID
     waddr   :=  mem_axi_w.AXI_AWADDR
     wid     :=  mem_axi_w.AXI_AWID
     wmask   :=  mem_axi_w.AXI_WSTRB
-    wdata   :=  mem_axi_w.AXI_WDATA
-
-    // val wmask_seq = wmask.asBools
+    for(i <- 0 until 8) { wdata_vec(i) := mem_axi_w.AXI_WDATA(8*i+7, 8*i)}
+    // wdata   :=  mem_axi_w.AXI_WDATA
 
     when (wen) { 
         mem.write(waddr >> 3, wdata, wmask)
-        // 重载方法要求写掩码为Seq[bool]
     }
 
     mem_axi_w.AXI_AWREADY  := 1.U

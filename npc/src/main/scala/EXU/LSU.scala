@@ -56,7 +56,7 @@ class LSU extends Module {
     val ls_mcif     = IO(new LSU_MCIF())
 
     
-    val rd_wdata = RegInit(0.UInt(64.W))
+    val rd_wdata = RegInit(0.U(64.W))
     rd_wdata := Mux(al_ls.inst_isload, ls_mcif.rdata, 0.U)
 
     // to ex

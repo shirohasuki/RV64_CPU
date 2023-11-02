@@ -44,13 +44,13 @@ object MACRO {
 
     // L type inst
     val INST_TYPE_L = BitPat("b0000011")
-    val INST_LB     = ("b000".U)
-    val INST_LH     = ("b001".U)
-    val INST_LW     = ("b010".U)
-    val INST_LD     = ("b011".U)
-    val INST_LBU    = ("b100".U)
-    val INST_LHU    = ("b101".U)
-    val INST_LWU    = ("b110".U)
+    val INST_LB     = "b000".U
+    val INST_LH     = "b001".U
+    val INST_LW     = "b010".U
+    val INST_LD     = "b011".U
+    val INST_LBU    = "b100".U
+    val INST_LHU    = "b101".U
+    val INST_LWU    = "b110".U
 
     // S type inst
     val INST_TYPE_S = BitPat("b0100011")

@@ -84,9 +84,9 @@ class EXU extends Module {
 
 
     // ex to redirect
-    ex_redirect.rd_wen      := Mux(al_ex.inst_isload | al_ex.inst_isstore, ls_ex.rd_wen, al_ex,rd_wen)
-    ex_redirect.rd_waddr    := Mux(al_ex.inst_isload | al_ex.inst_isstore, ls_ex.rd_waddr, al_ex,rd_waddr)
-    ex_redirect.rd_wdata    := Mux(al_ex.inst_isload | al_ex.inst_isstore, ls_ex.rd_wdata, al_ex,rd_wdata)
+    ex_redirect.rd_wen      := Mux(al_ex.inst_isload | al_ex.inst_isstore, ls_ex.rd_wen, al_ex.rd_wen)
+    ex_redirect.rd_waddr    := Mux(al_ex.inst_isload | al_ex.inst_isstore, ls_ex.rd_waddr, al_ex.rd_waddr)
+    ex_redirect.rd_wdata    := Mux(al_ex.inst_isload | al_ex.inst_isstore, ls_ex.rd_wdata, al_ex.rd_wdata)
     
     // ex to ctrl 
     ex_ctrl.inst_isload      := al_ex.inst_isload

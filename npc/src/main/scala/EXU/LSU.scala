@@ -13,7 +13,7 @@ class ALU_LSU_Input extends Bundle {
     val mem_ren         = Input(Bool())
     val mem_raddr       = Input(UInt(64.W))
     val mem_wen         = Input(Bool())
-    val mem_wmask       = Input(Vec(8, Bool()))
+    val mem_wmask       = Input(UInt(8.W))
     val mem_wdata       = Input(UInt(64.W))
     val mem_waddr       = Input(UInt(64.W))
 }
@@ -43,7 +43,7 @@ class LSU_MCIF extends Bundle{
     val wen    = Output(Bool())
     val waddr  = Output(UInt(64.W))
     val wdata  = Output(UInt(64.W))
-    val wmask  = Output(Vec(8, Bool()))
+    val wmask  = Output(UInt(8.W))
 }
 
 

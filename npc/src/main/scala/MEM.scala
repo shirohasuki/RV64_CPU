@@ -60,7 +60,7 @@ class MEM extends Module {
     val waddr = RegInit(0.U(64.W))
     val wid   = RegInit(0.U(2.W))
     // val wmask = RegInit(0.U(8.W))
-    val wmask = Vec(8, Bool())
+    val wmask = RegInit(0.U(8.W))
     val wdata = RegInit(0.U(64.W))
 
     wen     :=  mem_axi_w.AXI_AWVALID
@@ -70,7 +70,7 @@ class MEM extends Module {
     wdata   :=  mem_axi_w.AXI_WDATA
 
     when (wen) { 
-        mem.write(waddr >> 3, wdata, wmask.asUInt()) 
+        mem.write(waddr >> 3, wdata, wmask) 
     }
 
     mem_axi_w.AXI_AWREADY  := 1.U

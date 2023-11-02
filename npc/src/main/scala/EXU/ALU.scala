@@ -41,7 +41,7 @@ class ALU_LSU_Output extends Bundle {
     val mem_ren         = Output(Bool())
     val mem_raddr       = Output(UInt(64.W))
     val mem_wen         = Output(Bool())
-    val mem_wmask       = Output(Vec(8, Bool()))
+    val mem_wmask       = Output(UInt(8.W))
     val mem_wdata       = Output(UInt(64.W))
     val mem_waddr       = Output(UInt(64.W))
 }

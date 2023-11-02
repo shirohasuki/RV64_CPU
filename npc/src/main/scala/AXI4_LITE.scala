@@ -46,7 +46,7 @@ class MEM_AXI4_W extends Bundle{
 
     val AXI_WVALID  = Output(Bool())
     val AXI_WDATA   = Output(UInt(64.W))
-    val AXI_WSTRB   = Output(Vec(8, Bool()))
+    val AXI_WSTRB   = Output((0.U(8.W)))
 
     val AXI_AWREADY = Input(Bool())
     val AXI_WREADY  = Input(Bool())

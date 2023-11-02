@@ -11,7 +11,6 @@ import IFID._
 import IDU._
 import IDEX._
 import EXU.EXU._
-import EXLS._
 import EXU.LSU._
 import EXWB._
 import WBU._
@@ -58,7 +57,6 @@ class CORE extends Module {
     val IDU      = Module(new IDU())
     val IDEX     = Module(new IDEX())
     val EXU      = Module(new EXU())
-    val EXLS     = Module(new EXLS())
     val LSU      = Module(new LSU())
     val EXWB     = Module(new EXWB())
     val WBU      = Module(new WBU())
@@ -100,6 +98,5 @@ class CORE extends Module {
     CTRL.ctrl_pc    <> Pc.ctrl_pc
     CTRL.ctrl_ifid  <> IFID.ctrl_ifid
     CTRL.ctrl_idex  <> IDEX.ctrl_idex        
-    CTRL.ctrl_exls  <> EXLS.ctrl_exls  
     CTRL.ctrl_lswb  <> LSWB.ctrl_lswb  
 }

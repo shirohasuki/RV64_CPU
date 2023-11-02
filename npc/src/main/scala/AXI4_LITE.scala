@@ -103,7 +103,7 @@ class AXI4_LITE extends Module {
     val wstrb   = RegInit(0.U(8.W))
     waddr   := Mux(mcif_axi_w.AXI_AWVALID, mcif_axi_w.AXI_AWADDR, 
                     Mux(aw_complete, 0.U, waddr)) 
-    wid     := Mux(mem_axi_w.AXI_WVALID, mem_axi_w.AXI_WID, 
+    wid     := Mux(mem_axi_w.AXI_WVALID, mem_axi_w.AXI_AWID, 
                     Mux(wr_complete, 0.U, wid)) 
     wdata   := Mux(mem_axi_w.AXI_WVALID, mem_axi_w.AXI_WDATA, 
                     Mux(wr_complete, 0.U, wdata)) 

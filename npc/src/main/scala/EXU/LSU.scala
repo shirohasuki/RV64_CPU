@@ -1,6 +1,7 @@
 package EXU.LSU
 
 import chisel3._
+import chisel3.util._
 import define.MACRO._
 import define.function._
 

@@ -46,8 +46,8 @@ class EXU_EXWB_Output extends Bundle {
 }
 
 class EXU_CTRL_Output extends Bundle {
-    val ex_inst_isload  = Output(Bool())
-    val ex_inst_isstore = Output(Bool())
+    val inst_isload  = Output(Bool())
+    val inst_isstore = Output(Bool())
     val typej_jump_en   = Output(Bool())
     val typej_jump_addr = Output(UInt(64.W))
 }

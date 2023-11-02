@@ -75,7 +75,7 @@ class Ctrl extends Module {
                     Mux(mcif_ctrl.axi_busy_end, 0.U, axi_busy))
     
     val load_data_hit   = redirect_ctrl.rs_id_ex_hit && ex_ctrl.ex_inst_isload
-    // val NOEVENT       = ~(jump | load_inst | store_inst | load_data_hit)
+    val NOEVENT       = ~(jump | axi_busy | axi_busy_start | load_data_hit)
 
     ctrl_pc.jump_addr := ex_ctrl.typej_jump_addr //| io.clint_ctrl.intr_jump_addr
     ctrl_pc.jump_en   := jump
@@ -85,8 +85,8 @@ class Ctrl extends Module {
 
     //  List(pc_stall_en, if_id_stall_en, id_ex_stall_en, ex_wb_stall_en)
     val stall_list  = ListLookup(event_code, List(false.B, false.B, false.B, false.B), Array(
-        BitPat(2.U) -> List(true.B, true.B, false.B,  false.B),   // axi_busy       
-        BitPat(3.U) -> List(true.B, true.B, false.B, false.B)    // load_data_hit      
+        BitPat(2.U) -> List(true.B, true.B, false.B,  false.B),     // axi_busy       
+        BitPat(3.U) -> List(true.B, true.B, false.B, false.B)       // load_data_hit      
     ))
 
     ctrl_pc.pc_stall_en         := stall_list(0)

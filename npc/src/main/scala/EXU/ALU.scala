@@ -194,7 +194,7 @@ class ALU extends Module {
     al_ls.mem_ren       :=  exce_list(3)
     al_ls.mem_raddr     :=  exce_list(4)
     al_ls.mem_wen       :=  exce_list(5)
-    for(i <- 0 util 8) {al_ls.mem_wmask(i) := exce_list(6)(i+1, i)}
+    for(i <- 0 until 8) {al_ls.mem_wmask(i) := exce_list(6)(i+1, i)}
         
     al_ls.mem_wdata     :=  exce_list(7)
     al_ls.mem_waddr     :=  exce_list(8)

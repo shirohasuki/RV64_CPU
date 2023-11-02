@@ -22,6 +22,12 @@ class ALU_LSU_Input extends Bundle {
 //     val ls_inst_isstore = Output(Bool())
 // }
 
+class LSU_EXU_Output extends Bundle {
+    val rd_wen          = Output(Bool()) 
+    val rd_waddr        = Output(UInt(5.W))
+    val rd_wdata        = Output(UInt(64.W))
+}
+
 class LSU_Redirect_Output extends Bundle {
     val rd_wen         = Output(Bool())
     val rd_waddr       = Output(UInt(64.W))
@@ -44,7 +50,7 @@ class LSU extends Module {
     val al_ls       = IO(new ALU_LSU_Input())
     // val ls_ctrl     = IO(new LSU_CTRL_Output())
     val ls_redirect = IO(new LSU_Redirect_Output())
-    val ls_ex       = IO(new LSU_ALU_Output())
+    val ls_ex       = IO(new LSU_EXU_Output())
     
     val ls_mcif     = IO(new LSU_MCIF())
 

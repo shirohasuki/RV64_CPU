@@ -19,7 +19,7 @@ class EXU_WBU_Input extends Bundle {
 class EXWB extends Module {  
     val ex_exwb  = IO(new EXU_WBU_Input())
     val exwb_wb   = IO(Flipped(new EXU_WBU_Input()))
-    val ctrl_lswb = IO(new Ctrl_Input())
+    val ctrl_exwb = IO(new Ctrl_Input())
 
     exwb_wb.pc       := dff_set(ctrl_lswb.lswb_flush_en, ctrl_lswb.lswb_stall_en, 64.U, 0.U(64.W), ex_exwb.pc      )
     exwb_wb.rd_wdata := dff_set(ctrl_lswb.lswb_flush_en, ctrl_lswb.lswb_stall_en, 64.U, 0.U(64.W), ex_exwb.rd_wdata)

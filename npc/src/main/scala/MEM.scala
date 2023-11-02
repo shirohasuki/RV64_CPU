@@ -56,7 +56,7 @@ class MEM extends Module {
     // ============= WRITE =============== // 
     val mem_axi_w = IO(new MEM_AXI4_W())
 
-    val wen   = RegInit(false.Bool())
+    val wen   = RegInit(false.B)
     val waddr = RegInit(0.U(64.W))
     val wid   = RegInit(0.U(2.W))
     val wmask = RegInit(0.U(64.W))

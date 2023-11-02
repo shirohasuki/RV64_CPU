@@ -22,7 +22,7 @@ class IDEX_EXU_Input extends Bundle {
     val func7       = Input(UInt(7.W))
 }
 
-class ALU_EXU_Output extends Bundle {
+class EXU_ALU_Output extends Bundle {
     val inst        = Output(UInt(32.W))
     val pc          = Output(UInt(64.W))
     val op1         = Output(UInt(64.W))

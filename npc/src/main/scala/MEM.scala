@@ -69,8 +69,10 @@ class MEM extends Module {
     wmask   :=  mem_axi_w.AXI_WSTRB
     wdata   :=  mem_axi_w.AXI_WDATA
 
+    val wmask_seq = wmask.asBools
+
     when (wen) { 
-        mem.write(waddr >> 3, wdata, wmask.asBools) 
+        mem.write(waddr >> 3, wdata, wmask) 
         // 重载方法要求写掩码为Seq[bool]
     }
 

@@ -98,5 +98,5 @@ class CORE extends Module {
     CTRL.ctrl_pc    <> Pc.ctrl_pc
     CTRL.ctrl_ifid  <> IFID.ctrl_ifid
     CTRL.ctrl_idex  <> IDEX.ctrl_idex        
-    CTRL.ctrl_lswb  <> LSWB.ctrl_lswb  
+    CTRL.ctrl_exwb  <> LSWB.ctrl_exwb  
 }

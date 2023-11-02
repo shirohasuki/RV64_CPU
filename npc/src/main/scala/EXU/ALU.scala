@@ -7,6 +7,7 @@ import chisel3.stage._
 import define.MACRO._
 import define.function._
 
+import EXU.LSU._
 import DPIC.ebreak
 
 class EXU_ALU_Input extends Bundle {
@@ -50,6 +51,9 @@ class ALU extends Module {
     val ex_al = IO(new EXU_ALU_Input())
     val al_ex = IO(new ALU_EXU_Output())
     val al_ls = IO(new ALU_LSU_Output())
+
+    val LSU = Module(new LSU())
+    al_ls   <>  LSU.al_ls
 
     // 定义各种op
     def add                       (op1: UInt, op2: UInt): UInt = op1 +& op2

@@ -73,7 +73,7 @@ class EXU extends Module {
     // ALU.al_ex   <>  al_ex
 
     val LSU = Module(new LSU())
-    ALU.al_ls   <>  LSU.al_ls
+    // ALU.al_ls   <>  LSU.al_ls
     LSU.ls_ex   <>  ls_ex
 
     // ex to exwb 

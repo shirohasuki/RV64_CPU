@@ -43,7 +43,7 @@ class LSU_MCIF extends Bundle{
     val wen    = Output(Bool())
     val waddr  = Output(UInt(64.W))
     val wdata  = Output(UInt(64.W))
-    val wmask  = Output(UInt(8.W))
+    val wmask  = Output(Vec(8, Bool()))
 }
 
 

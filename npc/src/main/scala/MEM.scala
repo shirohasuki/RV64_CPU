@@ -23,7 +23,7 @@ class MEM_AXI4_W extends Bundle{
 
     val AXI_WVALID  = Input(Bool())
     val AXI_WDATA   = Input(UInt(64.W))
-    val AXI_WSTRB   = Input(UInt(8.W))
+    val AXI_WSTRB   = Input(Vec(4, Bool()))
 
     val AXI_AWREADY = Output(Bool())
     val AXI_WREADY  = Output(Bool())
@@ -37,7 +37,7 @@ class MEM_AXI4_W extends Bundle{
 class MEM extends Module {
     val mem_axi_r = IO(new MEM_AXI4_R())
     
-    val mem = SyncReadMem(4096, UInt(64.W))
+    val mem = SyncReadMem(4096, Vec(8, UInt(8.W))) // 8个8字节=64
     // ============= READ ================ //
     val ren   = RegInit(false.B)
     val raddr = RegInit(0.U(64.W))
@@ -60,7 +60,7 @@ class MEM extends Module {
     val waddr = RegInit(0.U(64.W))
     val wid   = RegInit(0.U(2.W))
     // val wmask = RegInit(0.U(8.W))
-    val wmask = RegInit(0.U(8.W))
+    val wmask = Vec(4, Bool())
     val wdata = RegInit(0.U(64.W))
 
     wen     :=  mem_axi_w.AXI_AWVALID
@@ -72,7 +72,7 @@ class MEM extends Module {
     // val wmask_seq = wmask.asBools
 
     when (wen) { 
-        mem.write(waddr >> 3, wdata, wmask.asTypeOf(Seq(Bool())))
+        mem.write(waddr >> 3, wdata, wmask)
         // 重载方法要求写掩码为Seq[bool]
     }
 

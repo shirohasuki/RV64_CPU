@@ -4,8 +4,8 @@ import chisel3._
 import chisel3.util._
 import chisel3.stage._
 
-import ALU._
-import LSU._
+import EXU.ALU._
+import EXU.LSU._
 
 
 class IDEX_EXU_Input extends Bundle {

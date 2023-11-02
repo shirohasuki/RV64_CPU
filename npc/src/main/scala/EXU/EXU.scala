@@ -59,7 +59,8 @@ class EXU_Redirect_Output extends Bundle {
 }
 
 class EXU extends Module {
-    val idex_ex     = IO(new IDEX_EXU_Input())
+    // val idex_ex     = IO(new IDEX_EXU_Input())
+    val idex_ex     = IO(Flipped(new IDEX_EXU_Input()))  // flilpped 以后直接输出给alu
     val al_ex       = IO(new ALU_EXU_Input())
     val ls_ex       = IO(new LSU_EXU_Input())
     val ex_exwb     = IO(new EXU_EXWB_Output())
@@ -67,7 +68,7 @@ class EXU extends Module {
     val ex_redirect = IO(new EXU_Redirect_Output())
     
     val ALU = Module(new ALU())
-    (idex_ex).flip <> ALU.ex_al
+    idex_ex     <> ALU.ex_al
     ALU.al_ex   <>  al_ex
 
     val LSU = Module(new LSU())

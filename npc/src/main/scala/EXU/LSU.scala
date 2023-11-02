@@ -61,13 +61,13 @@ class LSU extends Module {
 
     // to ex
     ls_ex.rd_wdata := MuxCase(0.U, Seq(
-        INST_LB   ->  SEXT(rd_wdata(7, 0)),
-        INST_LH   ->  SEXT(rd_wdata(15, 0)),
-        INST_LW   ->  SEXT(rd_wdata(31, 0)),
-        INST_LD   ->  SEXT(rd_wdata),
-        INST_LBU  ->  ZEXT(rd_wdata(7, 0)),
-        INST_LHU  ->  ZEXT(rd_wdata(15, 0)),
-        INST_LWU  ->  ZEXT(rd_wdata(31, 0))
+        al_ls === INST_LB   ->  SEXT(rd_wdata(7, 0)),
+        al_ls === INST_LH   ->  SEXT(rd_wdata(15, 0)),
+        al_ls === INST_LW   ->  SEXT(rd_wdata(31, 0)),
+        al_ls === INST_LD   ->  SEXT(rd_wdata),
+        al_ls === INST_LBU  ->  ZEXT(rd_wdata(7, 0)),
+        al_ls === INST_LHU  ->  ZEXT(rd_wdata(15, 0)),
+        al_ls === INST_LWU  ->  ZEXT(rd_wdata(31, 0))
     ))// load
     ls_ex.rd_waddr := al_ls.rd_waddr   
     ls_ex.rd_wen   := al_ls.inst_isload

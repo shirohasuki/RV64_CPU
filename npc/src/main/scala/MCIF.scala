@@ -6,20 +6,20 @@ import chisel3.util._
 
 // ============== IO on the left(from/to core) =================== //
 class IFU_MCIF extends Bundle{
-    val ren    = Input(Bool())
-    val raddr  = Input(UInt(64.W))
-    val rdata  = Output(UInt(64.W))
+    val mem_ren    = Input(Bool())
+    val mem_raddr  = Input(UInt(64.W))
+    val mem_rdata  = Output(UInt(64.W))
 }
 
 class LSU_MCIF extends Bundle{
-    val ren    = Input(Bool())
-    val raddr  = Input(UInt(64.W))
-    val rdata  = Output(UInt(64.W))
+    val mem_ren    = Input(Bool())
+    val mem_raddr  = Input(UInt(64.W))
+    val mem_rdata  = Output(UInt(64.W))
 
-    val wen    = Input(Bool())
-    val waddr  = Input(UInt(64.W))
-    val wdata  = Input(UInt(64.W))
-    val wmask  = Input(UInt(64.W))
+    val mem_wen    = Input(Bool())
+    val mem_waddr  = Input(UInt(64.W))
+    val mem_wdata  = Input(UInt(64.W))
+    val mem_wmask  = Input(UInt(64.W))
 }
 
 // ========== IO on the right(from/to AXI4(device)) ============ //
@@ -61,21 +61,21 @@ class MCIF extends Module {
     val ls_mcif = IO(new LSU_MCIF())
 
     val MCIF_R    = Module(new MCIF_R())
-        MCIF_R.req0.valid := ifu_mcif.ren
-        MCIF_R.req0.bits  := ifu_mcif.raddr
-        MCIF_R.req1.valid := lsu_mcif.ren
-        MCIF_R.req1.bits  := lsu_mcif.raddr
+        MCIF_R.req0.valid := ifu_mcif.mem_ren
+        MCIF_R.req0.bits  := ifu_mcif.mem_raddr
+        MCIF_R.req1.valid := lsu_mcif.mem_ren
+        MCIF_R.req1.bits  := lsu_mcif.mem_raddr
 
         MCIF_R.resp0.ready := 1.U
-        ifu_mcif.rdata := MCIF_R.resp0.bits
+        ifu_mcif.mem_rdata := MCIF_R.resp0.bits
         MCIF_R.resp1.ready := 1.U
-        lsu_mcif.rdata := MCIF_R.resp1.bits
+        lsu_mcif.mem_rdata := MCIF_R.resp1.bits
 
     val MCIF_W    = Module(new MCIF_W())
-        MCIF_R.req0.valid       := lsu_mcif.wen
-        MCIF_R.req0.bits.waddr  := lsu_mcif.waddr
-        MCIF_R.req0.bits.wdata  := lsu_mcif.wdata
-        MCIF_R.req0.bits.wstrb  := lsu_mcif.wmask
+        MCIF_R.req0.valid       := lsu_mcif.mem_wen
+        MCIF_R.req0.bits.waddr  := lsu_mcif.mem_waddr
+        MCIF_R.req0.bits.wdata  := lsu_mcif.mem_wdata
+        MCIF_R.req0.bits.wstrb  := lsu_mcif.mem_wmask
 
     //  IO on the right(from/to AXI4(device))
     val mcif_axi_r = IO(new MCIF_AXI4_R())
@@ -84,7 +84,7 @@ class MCIF extends Module {
     mcif_axi_r <> MCIF_R.axi_r
     mcif_axi_w <> MCIF_W.axi_w
 
-    mcif_ctrl.store_load_busy_start := ifu_mcif.ren | lsu_mcif.ren | lsu_mcif.wen
+    mcif_ctrl.store_load_busy_start := ifu_mcif.mem_ren | lsu_mcif.mem_ren | lsu_mcif.mem_wen
     mcif_ctrl.store_load_busy_end   := mcif_axi_r.AXI_RLAST | mcif_axi_r.AXI_BRESP
 }
 

@@ -88,8 +88,6 @@ class MCIF extends Module {
     mcif_ctrl.axi_busy_end   := mcif_axi_r.AXI_RLAST | mcif_axi_w.AXI_BRESP
 }
 
-
-
 // ========== some instance =========================== // 
 class hs_pipe extends Module { // hand shake pipe
     val io = IO(new Bundle {
@@ -160,7 +158,7 @@ class MCIF_W extends Module {
     
     //  ================= AW channel
     mcif_axi_w.AXI_AWVALID  := Mux(req0.valid === 1.U, true.B, false.B) // M->S
-    mcif_axi_w.AXI_AWADDR   := req0.bits.waddr & req0.pd0.valid         // M->S    
+    mcif_axi_w.AXI_AWADDR   := req0.bits.waddr & req0.valid         // M->S    
     mcif_axi_w.AXI_AWID     := M_WID 
 
     //  ================= WR channel

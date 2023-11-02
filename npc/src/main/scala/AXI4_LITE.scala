@@ -1,4 +1,4 @@
-package AXI4
+package AXI4_LITE
 
 import chisel3._
 

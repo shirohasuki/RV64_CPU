@@ -57,7 +57,7 @@ class LSU extends Module {
 
     
     val rd_wdata = RegInit(0.UInt(64.W))
-    rd_wdata := Mux(ls_ex.inst_isload, ls_mcif.rdata, 0.U)
+    rd_wdata := Mux(al_ls.inst_isload, ls_mcif.rdata, 0.U)
 
     // to ex
     ls_ex.rd_wdata := MuxCase(al_ls.func3, Seq(
@@ -70,7 +70,7 @@ class LSU extends Module {
         INST_LWU  ->  ZEXT(rd_wdata(31, 0))
     ))// load
     ls_ex.rd_waddr := al_ls.rd_waddr   
-    ls_ex.rd_wen   := ls_ex.inst_isload
+    ls_ex.rd_wen   := al_ls.inst_isload
 
     // to redirect
     ls_redirect.rd_wdata := al_ls.rd_wdata

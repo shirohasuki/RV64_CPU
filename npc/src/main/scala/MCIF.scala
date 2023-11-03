@@ -109,10 +109,6 @@ class MCIF_R_Output extends Bundle { val rdata = Output(UInt(64.W))}
 class MCIF_R extends Module {
     val req0  = IO(Flipped(Decoupled(UInt(64.W))))
     val req1  = IO(Flipped(Decoupled(UInt(64.W))))
-
-    // val req0  = IO(Flipped(Decoupled(new Bundle { val raddr = Output(UInt(64.W))})))       
-    // val req1  = IO(Flipped(Decoupled(new Bundle { val raddr = Output(UInt(64.W))}))) 
-
     // val req0  = IO(Flipped(Decoupled(new MCIF_R_Input())))       
     // val req1  = IO(Flipped(Decoupled(new MCIF_R_Input())))       
 
@@ -121,13 +117,10 @@ class MCIF_R extends Module {
 
     val mcif_axi_r = IO(new MCIF_AXI4_R())
 
-    val M_RID = UInt(2.W) // Master:IFU:0 MEM:1
+    val M_RID   = WireInit(0.U(2.W)) // Master:IFU:0 MEM:1
     // val S_RID = UInt(2.W) // Slave: MEM
 
-    // val req_array = IO(Vec(2, Decoupled(new UInt(64.W))))
-    // req_array(0)    <> req0
-    // req_array(1)    <> req1
-    val raddr       = Wire(Flipped(Decoupled(UInt(64.W))))
+    val raddr   = Wire(Flipped(Decoupled(UInt(64.W))))
     
     val Arb1 = Module(new Arbiter(UInt(64.W), 2))  // 2 to 1 Priority Arbiter
         Arb1.io.in(0) <> req0

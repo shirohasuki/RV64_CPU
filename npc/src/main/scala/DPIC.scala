@@ -107,6 +107,32 @@ class getPc extends BlackBox with HasBlackBoxInline {
     """.stripMargin)
 }
 
+class mtrace extends BlackBox with HasBlackBoxInline {
+    val io = IO(new Bundle{
+        val ren  = Input(Bool())
+        val wen  = Input(Bool())
+        val addr  = Input(UInt(64.W))
+        val data  = Input(UInt(64.W))
+        val mask  = Input(UInt(8.W))
+    })
+    setInline("mtrace.v",
+    """
+    |import "DPI-C" function void mtrace_record(bit ren, bit wen, longint addr, longint data, byte mask);
+    |module mtrace (
+    |   input ren,  
+    |   input wen,  
+    |   input [63:0] addr,
+    |   input [63:0] data,
+    |   input [7:0] mask
+    |);
+    |   always @(*) begin
+    |       mtrace_record(ren, wen, addr, data, mask);
+    |   end
+    |
+    |endmodule
+    """.stripMargin)
+}
+
 class ebreak extends BlackBox with HasBlackBoxInline {
     val io = IO(new Bundle{
         val inst  = Input(UInt(32.W)) 

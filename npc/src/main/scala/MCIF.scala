@@ -52,7 +52,7 @@ class MCIF_AXI4_W extends Bundle {
 // ====================== 连线 ================================ // 
 class MCIF extends Module {
     val mcif_ctrl = IO(new Bundle{ 
-        val inst_fetch_busy = Output(Bool())
+        // val inst_fetch_busy = Output(Bool())
         val load_store_busy = Output(Bool())
         val axi_busy_end   = Output(Bool())
     }) 
@@ -82,13 +82,11 @@ class MCIF extends Module {
         MCIF_W.req0.bits.wdata  := ls_mcif.mem_wdata
         MCIF_W.req0.bits.wstrb  := ls_mcif.mem_wmask
 
-
-
     mcif_axi_r <> MCIF_R.mcif_axi_r
     mcif_axi_w <> MCIF_W.mcif_axi_w
 
-    mcif_ctrl.inst_fetch_busy := if_mcif.mem_ren
-    mcif_ctrl.load_store_busy := ls_mcif.mem_ren | ls_mcif.mem_wen
+    // mcif_ctrl.inst_fetch_busy := if_mcif.mem_ren// & ~mcif_axi_r.AXI_RLAST
+    mcif_ctrl.load_store_busy := ls_mcif.mem_ren | ls_mcif.mem_wen //& ~mcif_axi_w.AXI_BRESP
     mcif_ctrl.axi_busy_end    := mcif_axi_r.AXI_RLAST | mcif_axi_w.AXI_BRESP
 }
 

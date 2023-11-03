@@ -9,7 +9,7 @@ static int is_batch_mode = false;
 extern CPU_state cpu_npc;  // DUT
 extern CPU_state cpu_nemu; // REF
 
-
+extern int nemu_step;
 
 static char* rl_gets() {
     static char *line_read = NULL;
@@ -45,13 +45,20 @@ static struct {
     { "help", "Display informations about all supported commands", cmd_help },
     { "c", "Continue the execution of the program", cmd_c },
     { "q", "Exit NEMU", cmd_q },
-    {"si", "Execute the program in n steps\n\t\t-n nsteps(1~10000)", cmd_si }
-    // {"info", "print status\n\t\t-r print register status\n\t\t-w print watchpoints", cmd_info },
+    {"si", "Execute the program in n steps\n\t\t-n nsteps(1~10000)", cmd_si },
+    {"info", "print status -r print register status", cmd_info }
     // {"x", "scan the rom", cmd_x }
 };
 
 #define NR_CMD ARRLEN(cmd_table)
 
+
+#ifdef CONFIG_NPC_ITRACE
+#define SIZE_RINGBUF 16 // iringbuf环形里单次存储指令条数目
+#define LEN_RINGBUF 256 // 单个buff可存放最大长度
+extern  int ringptr;
+extern  char ringbuf[SIZE_RINGBUF][LEN_RINGBUF];
+#endif
 
 static int sdb_exec_once(int step) {
     while(step--) {
@@ -60,11 +67,16 @@ static int sdb_exec_once(int step) {
         // dump_gpr(); // 打印通用寄存器
         // dump_csr(); // 打印异常寄存器
         npc_exec_once();
+#ifdef CONFIG_NPC_ITRACE
+		printf("%s\n", ringbuf[ringptr]);
+#endif
+
 #ifdef CONFIG_NPC_DIFFTEST
         while (cpu_npc.pc == 0x0) {
             npc_exec_once();   
         } // EX被冲刷以后，pc再走几拍
         difftest_exec_once();
+		nemu_step++;
 #endif
     }
     return 0;
@@ -107,30 +119,22 @@ static int cmd_q(char *args) {
     return -1;
 }
 
-// static int cmd_x(char *args) {
-//     /* extract the first argument */
-//     char *arg = strtok(NULL, " ");
-//     unsigned int cnt;
-//     /* first argument unrecognized */
-//     if (arg == NULL || sscanf(arg, "%u", &cnt) != 1) // 第一个参数记入cnt
-//     	printf("'%s' must be an integer.\n", arg);
-//     arg = strtok(NULL, " ");
-//     unsigned int addr;
-//     /* second argument unrecognized */
-//     if (arg == NULL || sscanf(arg, "%x", &addr) != 1) // 第二个参数记入addr
-//     	printf("'%s' must be an expression.\n", arg);
-//     /* address guest to host */
-//     uint8_t *pos = guest_to_host(addr); // pos = addr + 基地址
-//     for (int i = 0; i <= cnt; ++i) {
-//       	printf("%x: %02x %02x %02x %02x\n", addr, *pos, *(pos + 1), *(pos + 2), *(pos + 3));
-//       	pos += 4, addr += 4;
-//     }
-//     return 0;
-// }
+static int cmd_info(char *args) {
+	/* extract the first argument */
+	char *arg = strtok(NULL, " ");
+	/* no argument */
+	if (arg == NULL || strlen(arg) != 1)
+		printf("'%s' must be 'r' \n", arg);
+	/* registers */
+	else if (strcmp(arg, "r") == 0)
+		dump_gpr();
+	return 0;
+}
 
 static int cmd_si(char *args) {
     if (args == NULL) {
         sdb_exec_once(1);
+		dump_gpr();
         return 0;
     }
     int step = atoi(strtok(NULL, " "));
@@ -143,6 +147,7 @@ static int cmd_si(char *args) {
     	return 0;
     }
     sdb_exec_once(step);
+	dump_gpr();
     return 0;
 }
 

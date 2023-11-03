@@ -67,6 +67,7 @@ void init_npc() {
     while (cpu_npc.pc != MEM_BASE) { 
         // printf("%ld\n", cpu_npc.pc); 
         npc_exec_once(); 
+        npc_step--;
     } // pc先走拍到第一条指令执行结束
 }
 

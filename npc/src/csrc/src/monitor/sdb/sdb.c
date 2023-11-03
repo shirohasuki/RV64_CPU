@@ -9,7 +9,7 @@ static int is_batch_mode = false;
 extern CPU_state cpu_npc;  // DUT
 extern CPU_state cpu_nemu; // REF
 
-
+extern int nemu_step;
 
 static char* rl_gets() {
     static char *line_read = NULL;
@@ -65,6 +65,7 @@ static int sdb_exec_once(int step) {
             npc_exec_once();   
         } // EX被冲刷以后，pc再走几拍
         difftest_exec_once();
+		nemu_step++;
 #endif
     }
     return 0;

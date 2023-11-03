@@ -102,7 +102,7 @@ class hs_pipe extends Module { // hand shake pipe
 } // 没用上，先在这放着
 
 // ====================== MCIF_R ================================ // 
-// class MCIF_R_Input extends Bundle { val raddr  = Input(UInt(64.W))}
+class MCIF_R_Input extends Bundle { val raddr  = Input(UInt(64.W))}
 
 class MCIF_R_Output extends Bundle { val rdata = Output(UInt(64.W))}
 
@@ -118,13 +118,14 @@ class MCIF_R extends Module {
     val M_RID = UInt(2.W) // Master:IFU:0 MEM:1
     // val S_RID = UInt(2.W) // Slave: MEM
 
-    val req_array = IO(Vec(2, Decoupled(new UInt(64.W))))
-    req_array(0) <> req0
-    req_array(1) <> req1
+    // val req_array = IO(Vec(2, Decoupled(new UInt(64.W))))
+    // req_array(0)    <> req0
+    // req_array(1)    <> req1
     val raddr       = Flipped(Decoupled(UInt(64.W)))
     
     val Arb1 = Module(new Arbiter(UInt(64.W), 2))  // 2 to 1 Priority Arbiter
-        Arb1.io.in  <> req_array
+        Arb1.io.in(0) := req0
+        Arb1.io.in(1) := req1
         raddr       <> Arb1.io.out
         M_RID       := Arb1.io.chosen
         raddr.ready := raddr.valid  // 只要收到valid, 立马ready上 

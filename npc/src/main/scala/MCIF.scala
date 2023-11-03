@@ -112,8 +112,8 @@ class MCIF_R extends Module {
     // val req0  = IO(Flipped(Decoupled(new MCIF_R_Input())))       
     // val req1  = IO(Flipped(Decoupled(new MCIF_R_Input())))       
 
-    val resp0  = IO(Decoupled(new MCIF_R_Output()))  
-    val resp1  = IO(Decoupled(new MCIF_R_Output()))
+    val resp0  = IO(Decoupled(UInt(64.W)))  
+    val resp1  = IO(Decoupled(UInt(64.W)))
 
     val mcif_axi_r = IO(new MCIF_AXI4_R())
 

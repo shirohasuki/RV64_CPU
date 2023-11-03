@@ -30,7 +30,7 @@ class CORE_AXI4_R extends Bundle{
     val AXI_RDATA   = Output(UInt(64.W))
     val AXI_RVALID  = Output(Bool())
     val AXI_RREADY  = Input(Bool())
-    val AXI_RLAST   = Input(Bool())
+    val AXI_RLAST   = Output(Bool())
 }
 
 class CORE_AXI4_W extends Bundle {

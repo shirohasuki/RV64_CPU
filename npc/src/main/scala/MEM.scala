@@ -44,7 +44,7 @@ class MEM extends Module {
     val ren   = RegInit(false.B)
     val raddr = RegInit(0.U(64.W))
     val rid   = RegInit(0.U(2.W))
-    val rdata_vec = Reg(Vec(8, UInt(8.W)))
+    // val rdata_vec = Reg(Vec(8, UInt(8.W)))
 
     ren     :=  mem_axi_r.AXI_ARVALID
     raddr   :=  mem_axi_r.AXI_ARADDR
@@ -54,7 +54,7 @@ class MEM extends Module {
     mem_axi_r.AXI_RID      := rid 
     mem_axi_r.AXI_RVALID   := ren 
     mem_axi_r.AXI_RDATA    := Mux(ren, mem.read(raddr >> 3), 0.U)
-    printf("raddr=%lx\n",raddr>>3);
+    printf("raddr=%x\n",raddr>>3);
     // when (ren) {
     //     rdata_vec := mem.read(raddr)
     // }

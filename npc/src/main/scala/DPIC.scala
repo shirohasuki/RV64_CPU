@@ -120,7 +120,7 @@ class mtrace extends BlackBox with HasBlackBoxInline {
     |   input wen,  
     |   input [63:0] addr,
     |   input [63:0] data,
-    |   input [7:0] addr
+    |   input [7:0] mask
     |);
     |   always @(*) begin
     |       mtrace_record(ren, wen, addr, data, mask);

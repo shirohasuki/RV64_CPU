@@ -20,6 +20,19 @@ import CTRL._
 import RegFile._
 
 
+// class CORE_AXI4_R extends Bundle{
+//     // AR channel
+//     val AXI_ARID    = Output(UInt(2.W))
+//     val AXI_ARADDR  = Output(UInt(32.W))
+//     val AXI_ARVALID = Output(Bool())
+//     // Rd channel
+//     val AXI_RID     = Input(UInt(2.W))
+//     val AXI_RDATA   = Input(UInt(64.W))
+//     val AXI_RVALID  = Input(Bool())
+//     val AXI_RREADY  = Output(Bool())
+//     val AXI_RLAST   = Input(Bool())
+// }
+
 class CORE_AXI4_R extends Bundle{
     // AR channel
     val AXI_ARID    = Output(UInt(2.W))
@@ -30,7 +43,7 @@ class CORE_AXI4_R extends Bundle{
     val AXI_RDATA   = Input(UInt(64.W))
     val AXI_RVALID  = Input(Bool())
     val AXI_RREADY  = Output(Bool())
-    val AXI_RLAST   = Input(Bool())
+    val AXI_RLAST   = Output(Bool())
 }
 
 class CORE_AXI4_W extends Bundle {
@@ -42,9 +55,22 @@ class CORE_AXI4_W extends Bundle {
     val AXI_WSTRB   = Output(Vec(8, Bool()))
     val AXI_WVALID  = Output(Bool())
     
-    val AXI_BRESP   = Input(UInt(2.W))
+    val AXI_BRESP   = Input(UInt(1.W))
     val AXI_BREADY  = Output(Bool())
 }
+
+// class CORE_AXI4_W extends Bundle {
+//     val AXI_AWID    = Output(UInt(2.W))
+//     val AXI_AWADDR  = Output(UInt(32.W))
+//     val AXI_AWVALID = Output(Bool())
+
+//     val AXI_WDATA   = Output(UInt(64.W))
+//     val AXI_WSTRB   = Output(Vec(8, Bool()))
+//     val AXI_WVALID  = Output(Bool())
+    
+//     val AXI_BRESP   = Input(UInt(2.W))
+//     val AXI_BREADY  = Output(Bool())
+// }
 
 class CORE extends Module {
     val core_axi_r = IO(new CORE_AXI4_R())
@@ -88,8 +114,8 @@ class CORE extends Module {
     EXWB.exwb_wb    <> WBU.exwb_wb
     WBU.wb_reg      <> RegFile.wb_reg
 
-    MCIF.mem_axi_r <> core_axi_r
-    MCIF.mem_axi_w <> core_axi_w
+    MCIF.mcif_axi_r <> core_axi_r
+    MCIF.mcif_axi_w <> core_axi_w
     
     EXU.ex_ctrl     <> CTRL.ex_ctrl
     // LSU.ls_ctrl     <> CTRL.ls_ctrl

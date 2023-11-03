@@ -30,6 +30,7 @@ class MCIF_AXI4_R extends Bundle{
     val AXI_RDATA   = Input(UInt(64.W))
     val AXI_RVALID  = Input(Bool())
     val AXI_RREADY  = Output(Bool())
+    val AXI_RLAST   = Input(Bool())
 }
 
 class MCIF_AXI4_W extends Bundle {

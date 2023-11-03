@@ -109,8 +109,11 @@ class getPc extends BlackBox with HasBlackBoxInline {
 
 class mtrace extends BlackBox with HasBlackBoxInline {
     val io = IO(new Bundle{
-        val pc  = Input(UInt(64.W))
-        
+        val ren  = Input(Bool())
+        val wen  = Input(Bool())
+        val addr  = Input(UInt(64.W))
+        val data  = Input(UInt(64.W))
+        val mask  = Input(UInt(8.W))
     })
     setInline("mtrace.v",
     """

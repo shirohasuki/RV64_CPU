@@ -26,7 +26,7 @@ class LSU_MCIF extends Bundle{
 class MCIF_AXI4_R extends Bundle{
     // AR channel
     val AXI_ARID    = Output(UInt(2.W))
-    val AXI_ARADDR  = Output(UInt(32.W))
+    val AXI_ARADDR  = Output(UInt(64.W))
     val AXI_ARVALID = Output(Bool())
     // Rd channel
     val AXI_RID     = Input(UInt(2.W))
@@ -131,7 +131,7 @@ class MCIF_R extends Module {
     
     //  ================= AR channel
     mcif_axi_r.AXI_ARVALID  := Mux(raddr.valid === 1.U, true.B, false.B) // M->S
-    mcif_axi_r.AXI_ARADDR   := raddr.bits & raddr.valid     // M->S    
+    mcif_axi_r.AXI_ARADDR   := raddr.bits //& raddr.valid     // M->S    
     mcif_axi_r.AXI_ARID     := M_RID 
 
     //  ================= R channel

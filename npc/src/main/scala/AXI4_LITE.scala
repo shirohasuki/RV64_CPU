@@ -32,7 +32,7 @@ class MEM_AXI4_R extends Bundle{
     // AR channel
     val AXI_ARVALID = Output(Bool())
     val AXI_ARID    = Output(UInt(2.W))
-    val AXI_RADDR   = Output(Bool())
+    val AXI_ARADDR   = Output(Bool())
     val AXI_ARREADY = Input(Bool())
     // Rd channel
     val AXI_RID     = Input(UInt(2.W))

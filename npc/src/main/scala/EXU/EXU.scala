@@ -32,11 +32,11 @@ class ALU_EXU_Input extends Bundle {
     val typej_jump_addr = Input(UInt(64.W))
 }
 
-class LSU_EXU_Input extends Bundle {
-    val rd_wen          = Input(Bool()) 
-    val rd_waddr        = Input(UInt(5.W))
-    val rd_wdata        = Input(UInt(64.W))
-}
+// class LSU_EXU_Input extends Bundle {
+//     val rd_wen          = Input(Bool()) 
+//     val rd_waddr        = Input(UInt(5.W))
+//     val rd_wdata        = Input(UInt(64.W))
+// }
 
 class EXU_EXWB_Output extends Bundle {
     val pc        = Output(UInt(64.W))
@@ -75,7 +75,7 @@ class EXU extends Module {
     // val ex_al       = IO(Flipped(new IDEX_EXU_Input()))  // flip之后直接给alu
     // val ex_al       = IO(new EXU_ALU_Output())  
     // val al_ex       = IO(new ALU_EXU_Input())
-    val ls_ex       = IO(new LSU_EXU_Input())
+    // val ls_ex       = IO(new LSU_EXU_Input())
     val ex_mcif     = IO(new EXU_MCIF())
     val ex_exwb     = IO(new EXU_EXWB_Output())
     val ex_ctrl     = IO(new EXU_CTRL_Output())

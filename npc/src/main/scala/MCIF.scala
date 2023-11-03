@@ -147,8 +147,7 @@ class MCIF_R extends Module {
         resp1.valid := 0.U
         resp0.bits  := 0.U
         resp1.bits  := 0.U
-    }   
-    // S->M
+    }   // S->M
 }
 
 // ====================== MCIF_W ================================ // 
@@ -166,7 +165,8 @@ class MCIF_W extends Module {
     val M_WID = WireInit(0.U(2.W)) 
     M_WID := 1.U
     
-    
+    req0.ready := 1.U
+
     //  ================= AW channel
     mcif_axi_w.AXI_AWVALID  := Mux(req0.valid === 1.U, true.B, false.B) // M->S
     mcif_axi_w.AXI_AWADDR   := req0.bits.waddr & req0.valid             // M->S    

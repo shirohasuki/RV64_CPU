@@ -119,8 +119,8 @@ class MCIF_R extends Module {
     // val S_RID = UInt(2.W) // Slave: MEM
 
     val req_array   = Vec(2, Flipped(Decoupled(UInt(64.W))))
-    req_array(0)    :=  req0
-    req_array(1)    :=  req1
+    req_array(0)    :=  Wire(req0)
+    req_array(1)    :=  Wire(req1)
     val raddr       = Flipped(Decoupled(UInt(64.W)))
     
     val Arb1 = Module(new Arbiter(UInt(64.W), 2))  // 2 to 1 Priority Arbiter

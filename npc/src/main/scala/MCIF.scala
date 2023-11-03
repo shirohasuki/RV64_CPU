@@ -160,13 +160,13 @@ class MCIF_W extends Module {
     
     //  ================= AW channel
     mcif_axi_w.AXI_AWVALID  := Mux(req0.valid === 1.U, true.B, false.B) // M->S
-    mcif_axi_w.AXI_AWADDR   := req0.bits.waddr & req0.valid         // M->S    
+    mcif_axi_w.AXI_AWADDR   := req0.bits.waddr & req0.valid             // M->S    
     mcif_axi_w.AXI_AWID     := M_WID 
 
     //  ================= WR channel
-    mcif_axi_w.AXI_WVALID := Mux(req0.valid === 1.U, true.B, false.B)  // M->S
-    mcif_axi_w.AXI_WDATA  := req0.bits.wdata & req0.valid          // M->S
-    mcif_axi_w.AXI_WSTRB  := req0.bits.wstrb & req0.valid          // M->S
+    mcif_axi_w.AXI_WVALID := Mux(req0.valid === 1.U, true.B, false.B)   // M->S
+    mcif_axi_w.AXI_WDATA  := req0.bits.wdata & req0.valid               // M->S
+    mcif_axi_w.AXI_WSTRB  := req0.bits.wstrb & req0.valid               // M->S
 
     // ================== B channel
     mcif_axi_w.AXI_BREADY := 1.U

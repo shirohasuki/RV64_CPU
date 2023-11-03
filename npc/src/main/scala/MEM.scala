@@ -4,7 +4,7 @@ import chisel3._
 import chisel3.util._
 import chisel3.stage._
 
-import  DPIC.mtrace_record
+import  DPIC.mtrace
 
 class MEM_AXI4_R extends Bundle{
     // AR channel
@@ -127,7 +127,7 @@ class MEM extends Module {
                                     Mux(wen, wdata, 0.U(64.W)))
         DPIC_mtrace.io.mask  := Cat(wmask(7), wmask(6), wmask(5), wmask(4), wmask(3), wmask(2), wmask(1), wmask(0))
     
-    // val DPIC_mtrace_write = Module(new mtrace_record())
+    // val DPIC_mtrace_write = Module(new mtrace())
     //     DPIC_mtrace.io.ren   
     //     DPIC_mtrace.io.wen   :=
     //     DPIC_mtrace.io.addr  

@@ -67,9 +67,9 @@ class MCIF extends Module {
         MCIF_R.req1.bits  := ls_mcif.mem_raddr
 
         MCIF_R.resp0.ready := 1.U
-        if_mcif.mem_rdata := MCIF_R.resp0.bits
+        if_mcif.mem_rdata := Mux(MCIF_R.resp0.valid, MCIF_R.resp0.bits, 0.U)
         MCIF_R.resp1.ready := 1.U
-        ls_mcif.mem_rdata := MCIF_R.resp1.bits
+        ls_mcif.mem_rdata := Mux(MCIF_R.resp1.valid, MCIF_R.resp1.bits, 0.U)
 
     val MCIF_W    = Module(new MCIF_W())
         MCIF_W.req0.valid       := ls_mcif.mem_wen

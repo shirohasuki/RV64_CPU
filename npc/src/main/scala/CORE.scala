@@ -22,9 +22,9 @@ import RegFile._
 
 class CORE_AXI4_R extends Bundle{
     // AR channel
-    val AXI_ARID    = Input(UInt(2.W))
-    val AXI_ARADDR  = Input(UInt(32.W))
-    val AXI_ARVALID = Input(Bool())
+    val AXI_ARID    = Output(UInt(2.W))
+    val AXI_ARADDR  = Output(UInt(32.W))
+    val AXI_ARVALID = Output(Bool())
     // Rd channel
     val AXI_RID     = Input(UInt(2.W))
     val AXI_RDATA   = Input(UInt(64.W))

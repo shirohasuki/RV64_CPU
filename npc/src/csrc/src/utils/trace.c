@@ -41,7 +41,6 @@ void itrace_output() {
 
 
 //=====================MTRACE=========================
-#ifdef CONFIG_NPC_MTRACE
 char mtrace_buf[SIZE_MTRACEBUF][100] = {0};
 int mtrace_count = 0;
 
@@ -71,4 +70,4 @@ void print_mtrace() {
 	// } // 这个buff里没东西时候会一直空输出
     puts("====================================");
 }
-#endif
+

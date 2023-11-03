@@ -70,21 +70,21 @@ class Ctrl extends Module {
 
     val jump            = ex_ctrl.typej_jump_en   // || ex_ctrl.intr_jump_en
     
-    val inst_fetch_busy = mcif_ctrl.inst_fetch_busy & mcif_ctrl.axi_busy_end
-    val load_store_busy = mcif_ctrl.load_store_busy & mcif_ctrl.axi_busy_end
+    val inst_fetch_busy = mcif_ctrl.inst_fetch_busy //& mcif_ctrl.axi_busy_end
+    val load_store_busy = mcif_ctrl.load_store_busy //& mcif_ctrl.axi_busy_end
     val axi_busy        = RegInit(0.U(1.W))      // Reg
-    axi_busy  := (inst_fetch_busy | load_store_busy) & mcif_ctrl.axi_busy_end // wire 一个寄存器加一根线保证全覆盖
+    // axi_busy  := (inst_fetch_busy | load_store_busy) & mcif_ctrl.axi_busy_end // wire 一个寄存器加一根线保证全覆盖
     // axi_busy := Mux(mcif_ctrl.axi_busy_start, 1.U, 
     //                 Mux(mcif_ctrl.axi_busy_end, 0.U, axi_busy))
     
     val load_data_hit   = redirect_ctrl.rs_id_ex_hit && ex_ctrl.inst_isload
-    val NOEVENT         = ~(jump | inst_fetch_busy & axi_busy | load_store_busy & axi_busy | load_data_hit)
+    val NOEVENT         = ~(jump | inst_fetch_busy  | load_store_busy | load_data_hit)
 
     ctrl_pc.jump_addr := ex_ctrl.typej_jump_addr //| io.clint_ctrl.intr_jump_addr
     ctrl_pc.jump_en   := jump
 
     // 给事件进行优先编码
-    val event_code = PriorityEncoder(Cat(load_data_hit, inst_fetch_busy & axi_busy, load_store_busy & axi_busy, jump, NOEVENT)) // 从低到高输出第一个有1的位数 0->NOEVENT
+    val event_code = PriorityEncoder(Cat(load_data_hit, inst_fetch_busy, load_store_busy, jump, NOEVENT)) // 从低到高输出第一个有1的位数 0->NOEVENT
 
     //  List(pc_stall_en, if_id_stall_en, id_ex_stall_en, ex_wb_stall_en)
     val stall_list  = ListLookup(event_code, List(false.B, false.B, false.B, false.B), Array(

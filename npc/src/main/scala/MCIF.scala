@@ -87,8 +87,8 @@ class MCIF extends Module {
     mcif_axi_r <> MCIF_R.mcif_axi_r
     mcif_axi_w <> MCIF_W.mcif_axi_w
 
-    mcif_ctrl.inst_fetch_busy := if_mcif.mem_ren
-    mcif_ctrl.load_store_busy := ls_mcif.mem_ren | ls_mcif.mem_wen
+    mcif_ctrl.inst_fetch_busy := if_mcif.mem_ren & ~mcif_axi_r.AXI_RLAST
+    mcif_ctrl.load_store_busy := ls_mcif.mem_ren | ls_mcif.mem_wen & ~mcif_axi_w.AXI_BRESP
     mcif_ctrl.axi_busy_end    := mcif_axi_r.AXI_RLAST | mcif_axi_w.AXI_BRESP
 }
 

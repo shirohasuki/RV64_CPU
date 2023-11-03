@@ -120,7 +120,7 @@ class MCIF_R extends Module {
     val M_RID   = WireInit(0.U(2.W)) // Master:IFU:0 MEM:1
     // val S_RID = UInt(2.W) // Slave: MEM
 
-    val raddr   = WireInit(0.Flipped(Decoupled(UInt(64.W))))
+    val raddr   = WireInit(Flipped(Decoupled(0.U(64.W))))
     
     val Arb1 = Module(new Arbiter(UInt(64.W), 2))  // 2 to 1 Priority Arbiter
         Arb1.io.in(0) <> req0

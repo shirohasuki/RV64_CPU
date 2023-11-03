@@ -107,8 +107,11 @@ class MCIF_R_Input extends Bundle { val raddr  = Input(UInt(64.W))}
 class MCIF_R_Output extends Bundle { val rdata = Output(UInt(64.W))}
 
 class MCIF_R extends Module {
-    val req0  = IO(Flipped(Decoupled(new Bundle { val raddr = Output(UInt(64.W))})))       
-    val req1  = IO(Flipped(Decoupled(new Bundle { val raddr = Output(UInt(64.W))}))) 
+    val req0  = IO(Flipped(Decoupled(UInt(64.W))))
+    val req1  = IO(Flipped(Decoupled(UInt(64.W))))
+
+    // val req0  = IO(Flipped(Decoupled(new Bundle { val raddr = Output(UInt(64.W))})))       
+    // val req1  = IO(Flipped(Decoupled(new Bundle { val raddr = Output(UInt(64.W))}))) 
 
     // val req0  = IO(Flipped(Decoupled(new MCIF_R_Input())))       
     // val req1  = IO(Flipped(Decoupled(new MCIF_R_Input())))       
@@ -126,7 +129,7 @@ class MCIF_R extends Module {
     // req_array(1)    <> req1
     val raddr       = Flipped(Decoupled(UInt(64.W)))
     
-    val Arb1 = Module(new Arbiter(new MCIF_R_Input, 2))  // 2 to 1 Priority Arbiter
+    val Arb1 = Module(new Arbiter(UInt(64.W), 2))  // 2 to 1 Priority Arbiter
         Arb1.io.in(0) <> req0
         Arb1.io.in(1) <> req1
         raddr       <> Arb1.io.out

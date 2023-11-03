@@ -22,28 +22,28 @@ import RegFile._
 
 class MCIF_AXI4_R extends Bundle{
     // AR channel
-    val AXI_ARID    = Output(UInt(2.W))
-    val AXI_ARADDR  = Output(UInt(32.W))
-    val AXI_ARVALID = Output(Bool())
+    val AXI_ARID    = Input(UInt(2.W))
+    val AXI_ARADDR  = Input(UInt(32.W))
+    val AXI_ARVALID = Input(Bool())
     // Rd channel
-    val AXI_RID     = Input(UInt(2.W))
-    val AXI_RDATA   = Input(UInt(64.W))
-    val AXI_RVALID  = Input(Bool())
-    val AXI_RREADY  = Output(Bool())
-    val AXI_RLAST   = Input(Bool())
+    val AXI_RID     = Output(UInt(2.W))
+    val AXI_RDATA   = Output(UInt(64.W))
+    val AXI_RVALID  = Output(Bool())
+    val AXI_RREADY  = Input(Bool())
+    val AXI_RLAST   = Output(Bool())
 }
 
 class MCIF_AXI4_W extends Bundle {
-    val AXI_AWID    = Output(UInt(2.W))
-    val AXI_AWADDR  = Output(UInt(32.W))
-    val AXI_AWVALID = Output(Bool())
+    val AXI_AWID    = Input(UInt(2.W))
+    val AXI_AWADDR  = Input(UInt(32.W))
+    val AXI_AWVALID = Input(Bool())
 
-    val AXI_WDATA   = Output(UInt(64.W))
-    val AXI_WSTRB   = Output(Vec(8, Bool()))
-    val AXI_WVALID  = Output(Bool())
+    val AXI_WDATA   = Input(UInt(64.W))
+    val AXI_WSTRB   = Input(Vec(8, Bool()))
+    val AXI_WVALID  = Input(Bool())
     
-    val AXI_BRESP   = Input(UInt(2.W))
-    val AXI_BREADY  = Output(Bool())
+    val AXI_BRESP   = Output(UInt(2.W))
+    val AXI_BREADY  = Input(Bool())
 }
 
 class CORE extends Module {

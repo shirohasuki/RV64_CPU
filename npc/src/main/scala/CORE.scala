@@ -83,7 +83,7 @@ class CORE extends Module {
     IDEX.idex_ex    <> EXU.idex_ex
     
     EXU.ex_exwb     <> EXWB.ex_exwb
-    EXU.ls_mcif     <> MCIF.ls_mcif
+    EXU.ex_mcif     <> MCIF.ls_mcif
     EXWB.exwb_wb    <> WBU.exwb_wb
     WBU.wb_reg      <> RegFile.wb_reg
 

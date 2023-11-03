@@ -123,6 +123,7 @@ static int cmd_info(char *args) {
 static int cmd_si(char *args) {
     if (args == NULL) {
         sdb_exec_once(1);
+		dump_gpr();
         return 0;
     }
     int step = atoi(strtok(NULL, " "));

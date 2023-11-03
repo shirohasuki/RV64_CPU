@@ -73,8 +73,8 @@ class CORE_AXI4_W extends Bundle {
 // }
 
 class CORE extends Module {
-    val core_axi_r = IO(new CORE_AXI4_R())
-    val core_axi_w = IO(new CORE_AXI4_W())
+    val core_axi_r = IO(new Flipped(CORE_AXI4_R()))
+    val core_axi_w = IO(new Flipped(CORE_AXI4_W()))
 
     
     val Pc       = Module(new PcReg())

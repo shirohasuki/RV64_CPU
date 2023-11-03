@@ -56,7 +56,7 @@ class CORE extends Module {
     val IDU      = Module(new IDU())
     val IDEX     = Module(new IDEX())
     val EXU      = Module(new EXU())
-    val LSU      = Module(new LSU())
+    // val LSU      = Module(new LSU())
     val EXWB     = Module(new EXWB())
     val WBU      = Module(new WBU())
     val MCIF     = Module(new MCIF())

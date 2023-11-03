@@ -70,8 +70,8 @@ class Ctrl extends Module {
 
     val jump            = ex_ctrl.typej_jump_en   // || ex_ctrl.intr_jump_en
     
-    val inst_fetch_busy = mcif_ctrl.inst_fetch_busy |mcif_ctrl.axi_busy_end
-    val load_store_busy = mcif_ctrl.load_store_busy |mcif_ctrl.axi_busy_end
+    val inst_fetch_busy = mcif_ctrl.inst_fetch_busy & mcif_ctrl.axi_busy_end
+    val load_store_busy = mcif_ctrl.load_store_busy & mcif_ctrl.axi_busy_end
     // val axi_busy        = RegInit(0.U(1.W))      // Reg
     // val axi_busy_start  = mcif_ctrl.axi_busy_start  // wire 一个寄存器加一根线保证全覆盖
     // axi_busy := Mux(mcif_ctrl.axi_busy_start, 1.U, 

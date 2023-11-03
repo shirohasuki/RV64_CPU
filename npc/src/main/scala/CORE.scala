@@ -20,19 +20,6 @@ import CTRL._
 import RegFile._
 
 
-// class CORE_AXI4_R extends Bundle{
-//     // AR channel
-//     val AXI_ARID    = Output(UInt(2.W))
-//     val AXI_ARADDR  = Output(UInt(32.W))
-//     val AXI_ARVALID = Output(Bool())
-//     // Rd channel
-//     val AXI_RID     = Input(UInt(2.W))
-//     val AXI_RDATA   = Input(UInt(64.W))
-//     val AXI_RVALID  = Input(Bool())
-//     val AXI_RREADY  = Output(Bool())
-//     val AXI_RLAST   = Input(Bool())
-// }
-
 class CORE_AXI4_R extends Bundle{
     // AR channel
     val AXI_ARID    = Input(UInt(2.W))
@@ -59,18 +46,6 @@ class CORE_AXI4_W extends Bundle {
     val AXI_BREADY  = Input(Bool())
 }
 
-// class CORE_AXI4_W extends Bundle {
-//     val AXI_AWID    = Output(UInt(2.W))
-//     val AXI_AWADDR  = Output(UInt(32.W))
-//     val AXI_AWVALID = Output(Bool())
-
-//     val AXI_WDATA   = Output(UInt(64.W))
-//     val AXI_WSTRB   = Output(Vec(8, Bool()))
-//     val AXI_WVALID  = Output(Bool())
-    
-//     val AXI_BRESP   = Input(UInt(2.W))
-//     val AXI_BREADY  = Output(Bool())
-// }
 
 class CORE extends Module {
     val core_axi_r = IO(new CORE_AXI4_R())

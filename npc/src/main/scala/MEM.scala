@@ -54,7 +54,7 @@ class MEM extends Module {
     mem_axi_r.AXI_RID      := rid 
     mem_axi_r.AXI_RVALID   := ren 
     mem_axi_r.AXI_RDATA    := Mux(ren, mem.read(raddr >> 3), 0.U)
-    printf("raddr=%x\n",raddr>>3);
+    // printf("raddr=%x\n",raddr>>3);
     // when (ren) {
     //     rdata_vec := mem.read(raddr)
     // }
@@ -73,13 +73,13 @@ class MEM extends Module {
     // val wmask = RegInit(0.U(8.W))
     val wmask = Reg(Vec(8, Bool()))
     // val wdata = RegInit(0.U(64.W))
-    val wdata_vec = Wire(Vec(8, UInt(8.W)))
+    // val wdata_vec = Wire(Vec(8, UInt(8.W)))
 
     wen     :=  mem_axi_w.AXI_AWVALID
     waddr   :=  mem_axi_w.AXI_AWADDR
     wid     :=  mem_axi_w.AXI_AWID
     wmask   :=  mem_axi_w.AXI_WSTRB
-    for(i <- 0 until 8) { wdata_vec(i) := mem_axi_w.AXI_WDATA(8*i+7, 8*i)}
+    // for(i <- 0 until 8) { wdata_vec(i) := mem_axi_w.AXI_WDATA(8*i+7, 8*i)}
     // wdata   :=  mem_axi_w.AXI_WDATA
 
     // when (wen) { 

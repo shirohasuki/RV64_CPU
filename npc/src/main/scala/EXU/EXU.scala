@@ -58,12 +58,25 @@ class EXU_Redirect_Output extends Bundle {
     val rd_wdata       = Output(UInt(64.W))
 }
 
+class EXU_MCIF extends Bundle{
+    val mem_ren    = Output(Bool())
+    val mem_raddr  = Output(UInt(64.W))
+    val mem_rdata  = Input(UInt(64.W))
+
+    val mem_wen    = Output(Bool())
+    val mem_waddr  = Output(UInt(64.W))
+    val mem_wdata  = Output(UInt(64.W))
+    val mem_wmask  = Output(Vec(8, Bool()))
+}
+
+
 class EXU extends Module {
     val idex_ex     = IO(new IDEX_EXU_Input())  
     // val ex_al       = IO(Flipped(new IDEX_EXU_Input()))  // flip之后直接给alu
     // val ex_al       = IO(new EXU_ALU_Output())  
     // val al_ex       = IO(new ALU_EXU_Input())
     val ls_ex       = IO(new LSU_EXU_Input())
+    val ex_mcif     = IO(new EXU_MCIF())
     val ex_exwb     = IO(new EXU_EXWB_Output())
     val ex_ctrl     = IO(new EXU_CTRL_Output())
     val ex_redirect = IO(new EXU_Redirect_Output())
@@ -74,7 +87,7 @@ class EXU extends Module {
 
     val LSU = Module(new LSU())
     ALU.al_ls   <>  LSU.al_ls
-    // LSU.ls_ex   <>  ls_ex
+    LSU.ls_mcif <>  ex_mcif 
 
     // ex to exwb 
     ex_exwb.pc          := idex_ex.pc

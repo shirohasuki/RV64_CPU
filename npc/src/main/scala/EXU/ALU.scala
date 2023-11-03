@@ -105,7 +105,7 @@ class ALU extends Module {
 
     //                      List(rd_wen,  rd_waddr, rd_wdata,    mem_ren,    mem_raddr,  mem_wen,    mem_wmask,  mem_wdata, mem_waddr, typej_jump_en, typej_jump_addr)
     val default_exce_list = List(NORd_Write, 0.U(5.W), 0.U(64.W), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W),  0.U(64.W), 0.U(64.W), NOTypeJ_Jump,  0.U(64.W))
-    val exce_list  = ListLookup(ex_al.opcode, default_exce_list, Array(
+    val exce_list  = Wire(ListLookup(ex_al.opcode, default_exce_list, Array(
         INST_TYPE_I     -> ListLookup(ex_al.func3, default_exce_list, Array(
                             INST_ADDI       -> List(Rd_Write, rd_addr,                   add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
                             INST_SLTI       -> List(Rd_Write, rd_addr,           less_signed(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
@@ -174,7 +174,7 @@ class ALU extends Module {
         INST_JALR_OP    -> List(Rd_Write, rd_addr, add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W),  0.U(64.W), 0.U(64.W), TypeJ_Jump, add(base_addr, offset_addr)),
         INST_LUI_OP     -> List(Rd_Write, rd_addr,          op2,  NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W),  0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
         INST_AUIPC_OP   -> List(Rd_Write, rd_addr, add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W),  0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W))
-    ))
+    )))
 
     // to exu
     al_ex.rd_wen            :=  exce_list(0)

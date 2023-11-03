@@ -118,7 +118,7 @@ class MCIF_R extends Module {
     val M_RID = UInt(2.W) // Master:IFU:0 MEM:1
     // val S_RID = UInt(2.W) // Slave: MEM
 
-    val req_array   = Wire(Vec(2, Flipped(Decoupled(UInt(64.W)))))
+    val req_array   = IO(Vec(2, Flipped(Decoupled(UInt(64.W)))))
     req_array(0)    <>  req0
     req_array(1)    <>  req1
     val raddr       = Flipped(Decoupled(UInt(64.W)))

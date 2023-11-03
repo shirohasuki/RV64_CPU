@@ -36,14 +36,14 @@ class LSU_Redirect_Output extends Bundle {
 }
 
 class LSU_MCIF extends Bundle{
-    val ren    = Output(Bool())
-    val raddr  = Output(UInt(64.W))
-    val rdata  = Input(UInt(64.W))
+    val mem_ren    = Output(Bool())
+    val mem_raddr  = Output(UInt(64.W))
+    val mem_rdata  = Input(UInt(64.W))
 
-    val wen    = Output(Bool())
-    val waddr  = Output(UInt(64.W))
-    val wdata  = Output(UInt(64.W))
-    val wmask  = Output(Vec(8, Bool()))
+    val mem_wen    = Output(Bool())
+    val mem_waddr  = Output(UInt(64.W))
+    val mem_wdata  = Output(UInt(64.W))
+    val mem_wmask  = Output(Vec(8, Bool()))
 }
 
 
@@ -57,7 +57,7 @@ class LSU extends Module {
 
     
     val rd_wdata = RegInit(0.U(64.W))
-    rd_wdata := Mux(al_ls.inst_isload, ls_mcif.rdata, 0.U)
+    rd_wdata := Mux(al_ls.inst_isload, ls_mcif.mem_rdata, 0.U)
 
     // to ex
     ls_ex.rd_wdata := MuxCase(0.U, Seq(
@@ -78,10 +78,10 @@ class LSU extends Module {
     ls_redirect.rd_wen   := ls_ex.rd_wen  
     
     // to mcif
-    ls_mcif.ren     := al_ls.mem_ren
-    ls_mcif.raddr   := al_ls.mem_raddr
-    ls_mcif.wen     := al_ls.mem_wen
-    ls_mcif.waddr   := al_ls.mem_waddr
-    ls_mcif.wdata   := al_ls.mem_wdata
-    ls_mcif.wmask   := al_ls.mem_wmask
+    ls_mcif.mem_ren     := al_ls.mem_ren
+    ls_mcif.mem_raddr   := al_ls.mem_raddr
+    ls_mcif.mem_wen     := al_ls.mem_wen
+    ls_mcif.mem_waddr   := al_ls.mem_waddr
+    ls_mcif.mem_wdata   := al_ls.mem_wdata
+    ls_mcif.mem_wmask   := al_ls.mem_wmask
 }

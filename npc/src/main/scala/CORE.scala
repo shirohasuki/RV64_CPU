@@ -5,7 +5,7 @@ import chisel3.util._
 import chisel3.stage._
 
 
-import PcReg._
+// import PcReg._
 import IFU._
 import IFID._
 import IDU._
@@ -50,7 +50,7 @@ class CORE extends Module {
     val core_axi_w = IO(new CORE_AXI4_W())  // 两边需要同向
 
     
-    val Pc       = Module(new PcReg())
+    // val Pc       = Module(new PcReg())
     val IFU      = Module(new IFU())
     val IFID     = Module(new IFID())
     val IDU      = Module(new IDU())
@@ -64,7 +64,7 @@ class CORE extends Module {
     val Redirect = Module(new Redirect())
     val RegFile  = Module(new RegFile())
 
-    Pc.pc_if        <> IFU.pc_if
+    // Pc.pc_if        <> IFU.pc_if
     IFU.if_mcif     <> MCIF.if_mcif
     
     IFU.if_ifid     <> IFID.if_ifid
@@ -94,7 +94,7 @@ class CORE extends Module {
     // LSU.ls_ctrl     <> CTRL.ls_ctrl
     MCIF.mcif_ctrl  <> CTRL.mcif_ctrl
     
-    CTRL.ctrl_pc    <> Pc.ctrl_pc
+    CTRL.ctrl_pc    <> IFU.ctrl_pc
     CTRL.ctrl_ifid  <> IFID.ctrl_ifid
     CTRL.ctrl_idex  <> IDEX.ctrl_idex        
     CTRL.ctrl_exwb  <> EXWB.ctrl_exwb  

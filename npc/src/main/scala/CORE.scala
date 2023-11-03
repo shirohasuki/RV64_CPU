@@ -20,7 +20,7 @@ import CTRL._
 import RegFile._
 
 
-class MCIF_AXI4_R_O extends Bundle{
+class MCIF_AXI4_R extends Bundle{
     // AR channel
     val AXI_ARID    = Output(UInt(2.W))
     val AXI_ARADDR  = Output(UInt(32.W))
@@ -48,7 +48,7 @@ class MCIF_AXI4_W extends Bundle {
 
 class CORE extends Module {
     val core_axi = IO(new Bundle{
-        val axi_r = new MCIF_AXI4_R_O()
+        val axi_r = new MCIF_AXI4_R()
         val axi_w = new MCIF_AXI4_W()
     })
 

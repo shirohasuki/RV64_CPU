@@ -2,7 +2,7 @@ package AXI4_LITE
 
 import chisel3._
 
-class MCIF_AXI4_R_I extends Bundle{
+class MCIF_AXI4_R extends Bundle{
     // AR channel
     val AXI_ARID    = Input(UInt(2.W))
     val AXI_ARADDR  = Input(UInt(32.W))
@@ -59,7 +59,7 @@ class MEM_AXI4_W extends Bundle{
 
 class AXI4_LITE extends Module {
     // ======================= READ ======================= //
-    val mcif_axi_r  = IO(new MCIF_AXI4_R_I())
+    val mcif_axi_r  = IO(new MCIF_AXI4_R())
     val mem_axi_r   = IO(new MEM_AXI4_R())
 
     val ar_hs   = RegInit(false.B)

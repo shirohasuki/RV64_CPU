@@ -120,11 +120,11 @@ class AXI4_LITE extends Module {
     val wstrb_default = VecInit(Seq.fill(8)(false.B))
     waddr   := Mux(mcif_axi_w.AXI_AWVALID, mcif_axi_w.AXI_AWADDR, 
                     Mux(aw_complete, waddr, 0.U)) 
-    wid     := Mux(mem_axi_w.AXI_WVALID, mem_axi_w.AXI_AWID, 
+    wid     := Mux(mcif_axi_w.AXI_WVALID, mcif_axi_w.AXI_AWID, 
                     Mux(wr_complete, wid,   0.U)) 
-    wdata   := Mux(mem_axi_w.AXI_WVALID, mem_axi_w.AXI_WDATA, 
+    wdata   := Mux(mcif_axi_w.AXI_WVALID, mcif_axi_w.AXI_WDATA, 
                     Mux(wr_complete, wdata, 0.U)) 
-    wstrb   := Mux(mem_axi_w.AXI_WVALID, mem_axi_w.AXI_WSTRB, 
+    wstrb   := Mux(mcif_axi_w.AXI_WVALID, mcif_axi_w.AXI_WSTRB, 
                     Mux(wr_complete, wstrb, wstrb_default)) 
 
     // to mem 
@@ -134,7 +134,7 @@ class AXI4_LITE extends Module {
     mem_axi_w.AXI_WVALID    := mcif_axi_w.AXI_WVALID
     mem_axi_w.AXI_WDATA     := Mux(wr_hs, wdata, 0.U)
     // mem_axi_w.AXI_WSTRB     := Mux(wr_hs, wstrb, wstrb_default)
-    mem_axi_w.AXI_WSTRB     := wstrb
+    mem_axi_w.AXI_WSTRB     := Mux(wr_hs, wstrb, wstrb_default)
     mem_axi_w.AXI_BREADY    := Mux(b_hs, 1.U, 0.U)
 
     // to mcif

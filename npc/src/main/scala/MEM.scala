@@ -43,7 +43,7 @@ class MEM extends Module {
     val ren   = RegInit(false.B)
     val raddr = RegInit(0.U(64.W))
     val rid   = RegInit(0.U(2.W))
-    val rdata_vec = Vec(8, UInt(8.W))
+    val rdata_vec = Wire(Vec(8, UInt(8.W)))
 
     ren     :=  mem_axi_r.AXI_ARVALID
     raddr   :=  mem_axi_r.AXI_RADDR

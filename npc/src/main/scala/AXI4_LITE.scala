@@ -119,13 +119,13 @@ class AXI4_LITE extends Module {
     val wstrb   = Wire(Vec(8, Bool()))
     val wstrb_default = VecInit(Seq.fill(8)(false.B))
     waddr   := Mux(mcif_axi_w.AXI_AWVALID, mcif_axi_w.AXI_AWADDR, 
-                    Mux(aw_complete, waddr, 0.U)) 
+                    Mux(aw_complete, 0.U, waddr)) 
     wid     := Mux(mcif_axi_w.AXI_WVALID, mcif_axi_w.AXI_AWID, 
-                    Mux(wr_complete, wid,   0.U)) 
+                    Mux(wr_complete, 0.U, wid)) 
     wdata   := Mux(mcif_axi_w.AXI_WVALID, mcif_axi_w.AXI_WDATA, 
-                    Mux(wr_complete, wdata, 0.U)) 
+                    Mux(wr_complete, 0.U, wdata)) 
     wstrb   := Mux(mcif_axi_w.AXI_WVALID, mcif_axi_w.AXI_WSTRB, 
-                    Mux(wr_complete, wstrb, wstrb_default)) 
+                    Mux(wr_complete, wstrb_default, wstrb)) 
 
     // to mem 
     mem_axi_w.AXI_AWVALID   := mcif_axi_w.AXI_AWVALID

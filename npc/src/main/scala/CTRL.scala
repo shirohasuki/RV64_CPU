@@ -72,8 +72,8 @@ class Ctrl extends Module {
     
     val inst_fetch_busy = mcif_ctrl.inst_fetch_busy & mcif_ctrl.axi_busy_end
     val load_store_busy = mcif_ctrl.load_store_busy & mcif_ctrl.axi_busy_end
-    // val axi_busy        = RegInit(0.U(1.W))      // Reg
-    // val axi_busy_start  = mcif_ctrl.axi_busy_start  // wire 一个寄存器加一根线保证全覆盖
+    val axi_busy        = RegInit(0.U(1.W))      // Reg
+    axi_busy  := (inst_fetch_busy | load_store_busy) & mcif_ctrl.axi_busy_end // wire 一个寄存器加一根线保证全覆盖
     // axi_busy := Mux(mcif_ctrl.axi_busy_start, 1.U, 
     //                 Mux(mcif_ctrl.axi_busy_end, 0.U, axi_busy))
     
@@ -84,7 +84,7 @@ class Ctrl extends Module {
     ctrl_pc.jump_en   := jump
 
     // 给事件进行优先编码
-    val event_code = PriorityEncoder(Cat(load_data_hit, inst_fetch_busy, load_store_busy, jump, NOEVENT)) // 从低到高输出第一个有1的位数 0->NOEVENT
+    val event_code = PriorityEncoder(Cat(load_data_hit, inst_fetch_busy & axi_busy, load_store_busy & axi_busy, jump, NOEVENT)) // 从低到高输出第一个有1的位数 0->NOEVENT
 
     //  List(pc_stall_en, if_id_stall_en, id_ex_stall_en, ex_wb_stall_en)
     val stall_list  = ListLookup(event_code, List(false.B, false.B, false.B, false.B), Array(

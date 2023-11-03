@@ -34,16 +34,14 @@ class CORE_AXI4_R extends Bundle{
 }
 
 class CORE_AXI4_W extends Bundle {
-    val AXI_AWID    = Input(UInt(2.W))
-    val AXI_AWADDR  = Input(UInt(32.W))
-    val AXI_AWVALID = Input(Bool())
-
-    val AXI_WDATA   = Input(UInt(64.W))
-    val AXI_WSTRB   = Input(Vec(8, Bool()))
-    val AXI_WVALID  = Input(Bool())
-    
-    val AXI_BRESP   = Output(UInt(1.W))
-    val AXI_BREADY  = Input(Bool())
+    val AXI_AWID    = Output(UInt(2.W))
+    val AXI_AWADDR  = Output(UInt(32.W))
+    val AXI_AWVALID = Output(Bool())
+    val AXI_WDATA   = Output(UInt(64.W))
+    val AXI_WSTRB   = Output(Vec(8, Bool()))
+    val AXI_WVALID  = Output(Bool())
+    val AXI_BRESP   = Input(UInt(1.W))
+    val AXI_BREADY  = Output(Bool())
 }
 
 

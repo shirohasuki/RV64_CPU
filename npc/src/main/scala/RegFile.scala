@@ -46,9 +46,11 @@ class RegFile extends Module {
     val DPIC_getGprs = Module(new getGprs())
     DPIC_getGprs.io.gprs := regs
     
+    val pc_buff = RegInit(0.U(64.W))
+    pc_buff := wb_reg.pc
     // DPI-C 获取Pc
     val DPIC_getPc = Module(new getPc())
-    DPIC_getPc.io.pc  := wb_reg.pc
+    DPIC_getPc.io.pc  := pc_buff
     // DPIC_getPc.io.clk := clock
 }
 

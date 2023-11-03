@@ -74,9 +74,9 @@ class AXI4_LITE extends Module {
     ar_complete := ar_hs
     rd_complete := rd_hs
     
-    val raddr   = RegInit(0.U(64.W))
-    val rid     = RegInit(0.U(64.W))
-    val rdata   = RegInit(0.U(64.W))
+    val raddr   = WireInit(0.U(64.W))
+    val rid     = WireInit(0.U(64.W))
+    val rdata   = WireInit(0.U(64.W))
     raddr   := Mux(mcif_axi_r.AXI_ARVALID, mcif_axi_r.AXI_ARADDR, 
                     Mux(ar_complete, 0.U, raddr)) 
     rid     := Mux(mem_axi_r.AXI_RVALID, mem_axi_r.AXI_RID, 

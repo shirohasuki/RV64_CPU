@@ -54,12 +54,13 @@ class MEM extends Module {
     ren_wait_a_clk  := ren
 
     mem_axi_r.AXI_ARREADY  := 1.U 
-
-    mem_axi_r.AXI_RDATA    := Mux(ren, mem.read(raddr >> 3), 0.U)
+    val rdata = WireInit(0.U(64.W))
+    rdata := Mux(ren, mem.read(raddr >> 3), 0.U)
+    // mem_axi_r.AXI_RDATA    := Mux(ren, mem.read(raddr >> 3), 0.U)
     when (ren_wait_a_clk) {
         mem_axi_r.AXI_RID      := rid 
         mem_axi_r.AXI_RVALID   := ren 
-        mem_axi_r.AXI_RDATA    := mem.read(raddr >> 3)
+        mem_axi_r.AXI_RDATA    := rdata
     }.otherwise {
         mem_axi_r.AXI_RID       := 0.U
         mem_axi_r.AXI_RVALID    := 0.U

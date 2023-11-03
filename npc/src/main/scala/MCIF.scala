@@ -56,6 +56,9 @@ class MCIF extends Module {
         val axi_busy_end   = Output(Bool())
     }) 
     
+        //  IO on the right(from/to AXI4(device))
+    val mcif_axi_r = IO(new MCIF_AXI4_R())
+    val mcif_axi_w = IO(new MCIF_AXI4_W())
     //  IO on the left(from/to core)
     val if_mcif = IO(new IFU_MCIF())
     val ls_mcif = IO(new LSU_MCIF())
@@ -77,9 +80,7 @@ class MCIF extends Module {
         MCIF_W.req0.bits.wdata  := ls_mcif.mem_wdata
         MCIF_W.req0.bits.wstrb  := ls_mcif.mem_wmask
 
-    //  IO on the right(from/to AXI4(device))
-    val mcif_axi_r = IO(new MCIF_AXI4_R())
-    val mcif_axi_w = IO(new MCIF_AXI4_W())
+
 
     mcif_axi_r <> MCIF_R.mcif_axi_r
     mcif_axi_w <> MCIF_W.mcif_axi_w
@@ -109,8 +110,6 @@ class MCIF_R_Output extends Bundle { val rdata = Output(UInt(64.W))}
 class MCIF_R extends Module {
     val req0  = IO(Flipped(Decoupled(UInt(64.W))))
     val req1  = IO(Flipped(Decoupled(UInt(64.W))))
-    // val req0  = IO(Flipped(Decoupled(new MCIF_R_Input())))       
-    // val req1  = IO(Flipped(Decoupled(new MCIF_R_Input())))       
 
     val resp0  = IO(Decoupled(UInt(64.W)))  
     val resp1  = IO(Decoupled(UInt(64.W)))

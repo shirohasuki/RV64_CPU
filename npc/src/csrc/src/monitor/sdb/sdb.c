@@ -46,7 +46,7 @@ static struct {
     { "c", "Continue the execution of the program", cmd_c },
     { "q", "Exit NEMU", cmd_q },
     {"si", "Execute the program in n steps\n\t\t-n nsteps(1~10000)", cmd_si }
-    // {"info", "print status\n\t\t-r print register status\n\t\t-w print watchpoints", cmd_info },
+    {"info", "print status -r print register status", cmd_info },
     // {"x", "scan the rom", cmd_x }
 };
 
@@ -108,26 +108,17 @@ static int cmd_q(char *args) {
     return -1;
 }
 
-// static int cmd_x(char *args) {
-//     /* extract the first argument */
-//     char *arg = strtok(NULL, " ");
-//     unsigned int cnt;
-//     /* first argument unrecognized */
-//     if (arg == NULL || sscanf(arg, "%u", &cnt) != 1) // 第一个参数记入cnt
-//     	printf("'%s' must be an integer.\n", arg);
-//     arg = strtok(NULL, " ");
-//     unsigned int addr;
-//     /* second argument unrecognized */
-//     if (arg == NULL || sscanf(arg, "%x", &addr) != 1) // 第二个参数记入addr
-//     	printf("'%s' must be an expression.\n", arg);
-//     /* address guest to host */
-//     uint8_t *pos = guest_to_host(addr); // pos = addr + 基地址
-//     for (int i = 0; i <= cnt; ++i) {
-//       	printf("%x: %02x %02x %02x %02x\n", addr, *pos, *(pos + 1), *(pos + 2), *(pos + 3));
-//       	pos += 4, addr += 4;
-//     }
-//     return 0;
-// }
+static int cmd_info(char *args) {
+	/* extract the first argument */
+	char *arg = strtok(NULL, " ");
+	/* no argument */
+	if (arg == NULL || strlen(arg) != 1)
+		printf("'%s' must be 'r' \n", arg);
+	/* registers */
+	else if (strcmp(arg, "r") == 0)
+		dump_gpr();
+	return 0;
+}
 
 static int cmd_si(char *args) {
     if (args == NULL) {

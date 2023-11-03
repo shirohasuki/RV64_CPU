@@ -84,14 +84,13 @@ class AXI4_LITE extends Module {
 
     // to mem 
     mem_axi_r.AXI_ARVALID := mcif_axi_r.AXI_ARVALID
-    mem_axi_r.AXI_RADDR  := Mux(ar_hs, raddr, 0.U)
+    mem_axi_r.AXI_RADDR   := Mux(ar_hs, raddr, 0.U)
 
     // to mcif
     mcif_axi_r.AXI_RID     := Mux(rd_hs, rid, 0.U) 
     mcif_axi_r.AXI_RDATA   := Mux(rd_hs, rdata, 0.U)
     mcif_axi_r.AXI_RVALID  := rd_hs
     mcif_axi_r.AXI_RLAST   := rd_complete
-
 
     // ======================= WRITE ======================= //
     val mcif_axi_w  = IO(new MCIF_AXI4_W())

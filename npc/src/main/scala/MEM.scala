@@ -54,6 +54,7 @@ class MEM extends Module {
     mem_axi_r.AXI_RID      := rid 
     mem_axi_r.AXI_RVALID   := ren 
     mem_axi_r.AXI_RDATA    := Mux(ren, mem.read(raddr >> 3), 0.U)
+    printf("raddr=%d\n",raddr>>3);
     // when (ren) {
     //     rdata_vec := mem.read(raddr)
     // }

@@ -23,8 +23,8 @@ class IFU extends Module {
         val pc    = Output(UInt(64.W))
     })
 
-    if_mcif.ren     := 1.U
-    if_mcif.raddr   := pc_if.pc
-    if_ifid.inst    := Mux(if_mcif.raddr(2) === 0.U, if_mcif.rdata(31, 0), if_mcif.rdata(63, 32))
+    if_mcif.mem_ren     := 1.U
+    if_mcif.mem_raddr   := pc_if.pc
+    if_ifid.inst    := Mux(if_mcif.mem_raddr(2) === 0.U, if_mcif.mem_rdata(31, 0), if_mcif.mem_rdata(63, 32))
     if_ifid.pc      := pc_if.pc
 }

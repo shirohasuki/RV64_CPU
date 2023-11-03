@@ -53,15 +53,15 @@ class MEM extends Module {
     mem_axi_r.AXI_ARREADY  := 1.U 
     mem_axi_r.AXI_RID      := rid 
     mem_axi_r.AXI_RVALID   := ren 
-    // mem_axi_r.AXI_RDATA    := Mux(ren, mem.read(raddr >> 3), 0.U)
-    when (ren) {
-        rdata_vec := mem.read(raddr)
-    }
+    mem_axi_r.AXI_RDATA    := Mux(ren, mem.read(raddr >> 3), 0.U)
+    // when (ren) {
+    //     rdata_vec := mem.read(raddr)
+    // }
 
-    for(i <- 0 until 8) { 
-        mem_axi_r.AXI_RDATA := Cat(rdata_vec(7), rdata_vec(6), rdata_vec(5), rdata_vec(4),
-            rdata_vec(3), rdata_vec(2), rdata_vec(1), rdata_vec(0))
-    }
+    // for(i <- 0 until 8) { 
+    //     mem_axi_r.AXI_RDATA := Cat(rdata_vec(7), rdata_vec(6), rdata_vec(5), rdata_vec(4),
+    //         rdata_vec(3), rdata_vec(2), rdata_vec(1), rdata_vec(0))
+    // }
 
     // ============= WRITE =============== // 
     val mem_axi_w = IO(new MEM_AXI4_W())

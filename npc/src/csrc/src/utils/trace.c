@@ -50,7 +50,7 @@ extern "C" void mtrace_record(unsigned char ren, unsigned char wen, long long in
         mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
     }
     if (wen) {
-        sprintf(mtrace_buf[mtrace_count], "write:  addr:%016llx data:%016llx mask:%08x", addr, data, mask);
+        sprintf(mtrace_buf[mtrace_count], "write:  addr:%016llx data:%016llx mask:%08llx", addr, data, mask);
         mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
     }
 }

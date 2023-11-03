@@ -5,7 +5,7 @@ import chisel3._
 class MCIF_AXI4_R extends Bundle{
     // AR channel
     val AXI_ARID    = Input(UInt(2.W))
-    val AXI_ARADDR  = Input(UInt(32.W))
+    val AXI_ARADDR  = Input(UInt(64.W))
     val AXI_ARVALID = Input(Bool())
     // Rd channel
     val AXI_RID     = Output(UInt(2.W))
@@ -32,7 +32,7 @@ class MEM_AXI4_R extends Bundle{
     // AR channel
     val AXI_ARVALID = Output(Bool())
     val AXI_ARID    = Output(UInt(2.W))
-    val AXI_ARADDR   = Output(Bool())
+    val AXI_ARADDR   = Output(UInt(64.W))
     val AXI_ARREADY = Input(Bool())
     // Rd channel
     val AXI_RID     = Input(UInt(2.W))
@@ -87,7 +87,7 @@ class AXI4_LITE extends Module {
     // to mem 
     mem_axi_r.AXI_ARID    := mcif_axi_r.AXI_ARID
     mem_axi_r.AXI_ARVALID := mcif_axi_r.AXI_ARVALID
-    mem_axi_r.AXI_RADDR   := Mux(ar_hs, raddr, 0.U)
+    mem_axi_r.AXI_ARADDR   := Mux(ar_hs, raddr, 0.U)
 
     // to mcif
     mcif_axi_r.AXI_RID     := Mux(rd_hs, rid, 0.U) 

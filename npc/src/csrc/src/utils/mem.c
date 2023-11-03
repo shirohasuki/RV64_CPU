@@ -74,7 +74,7 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 }
 
 // Memory Write
-extern "C" void pmem_write(ll waddr, ll wdata, ll mask) {
+extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
 #ifdef CONFIG_NPC_MTRACE
     sprintf(mtrace_buf[mtrace_count],"write: addr:%016llx data:%016llx wmask:%08x\n", waddr,  wdata, mask);
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;

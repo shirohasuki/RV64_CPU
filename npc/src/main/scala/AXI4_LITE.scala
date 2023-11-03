@@ -96,19 +96,6 @@ class AXI4_LITE extends Module {
     val mcif_axi_w  = IO(new MCIF_AXI4_W())
     val mem_axi_w   = IO(new MEM_AXI4_W())
 
-    val waddr   = RegInit(0.U(64.W))
-    val wid     = RegInit(0.U(2.W))
-    val wdata   = RegInit(0.U(64.W))
-    val wstrb   = RegInit(0.U(8.W))
-    waddr   := Mux(mcif_axi_w.AXI_AWVALID, mcif_axi_w.AXI_AWADDR, 
-                    Mux(aw_complete, 0.U, waddr)) 
-    wid     := Mux(mem_axi_w.AXI_WVALID, mem_axi_w.AXI_AWID, 
-                    Mux(wr_complete, 0.U, wid)) 
-    wdata   := Mux(mem_axi_w.AXI_WVALID, mem_axi_w.AXI_WDATA, 
-                    Mux(wr_complete, 0.U, wdata)) 
-    wstrb   := Mux(mem_axi_w.AXI_WVALID, mem_axi_w.AXI_WSTRB, 
-                    Mux(wr_complete, 0.U, wstrb)) 
-
     val aw_hs   = RegInit(false.B)
     val wr_hs   = RegInit(false.B)
     val b_hs    = RegInit(false.B)
@@ -122,6 +109,19 @@ class AXI4_LITE extends Module {
     aw_complete := aw_hs
     wr_complete := wr_hs
     b_complete  := b_hs
+
+    val waddr   = RegInit(0.U(64.W))
+    val wid     = RegInit(0.U(2.W))
+    val wdata   = RegInit(0.U(64.W))
+    val wstrb   = RegInit(0.U(8.W))
+    waddr   := Mux(mcif_axi_w.AXI_AWVALID, mcif_axi_w.AXI_AWADDR, 
+                    Mux(aw_complete, 0.U, waddr)) 
+    wid     := Mux(mem_axi_w.AXI_WVALID, mem_axi_w.AXI_AWID, 
+                    Mux(wr_complete, 0.U, wid)) 
+    wdata   := Mux(mem_axi_w.AXI_WVALID, mem_axi_w.AXI_WDATA, 
+                    Mux(wr_complete, 0.U, wdata)) 
+    wstrb   := Mux(mem_axi_w.AXI_WVALID, mem_axi_w.AXI_WSTRB, 
+                    Mux(wr_complete, 0.U, wstrb)) 
 
     // to mem 
     mem_axi_w.AXI_AWVALID   := mcif_axi_w.AXI_AWVALID

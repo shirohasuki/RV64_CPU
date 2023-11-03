@@ -60,6 +60,10 @@ class MCIF extends Module {
     val if_mcif = IO(new IFU_MCIF())
     val ls_mcif = IO(new LSU_MCIF())
 
+    //  IO on the right(from/to AXI4(device))
+    val mcif_axi_r = IO(new MCIF_AXI4_R())
+    val mcif_axi_w = IO(new MCIF_AXI4_W())
+
     val MCIF_R    = Module(new MCIF_R())
         MCIF_R.req0.valid := if_mcif.mem_ren
         MCIF_R.req0.bits  := if_mcif.mem_raddr
@@ -77,9 +81,7 @@ class MCIF extends Module {
         MCIF_W.req0.bits.wdata  := ls_mcif.mem_wdata
         MCIF_W.req0.bits.wstrb  := ls_mcif.mem_wmask
 
-    //  IO on the right(from/to AXI4(device))
-    val mcif_axi_r = IO(new MCIF_AXI4_R())
-    val mcif_axi_w = IO(new MCIF_AXI4_W())
+
 
     mcif_axi_r <> MCIF_R.mcif_axi_r
     mcif_axi_w <> MCIF_W.mcif_axi_w

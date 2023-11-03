@@ -130,7 +130,7 @@ class MCIF_R extends Module {
         raddr.ready := raddr.valid  // 只要收到valid, 立马ready上 
     
     //  ================= AR channel
-    mcif_axi_r.AXI_ARVALID  := Mux(raddr.valid === 1.U, true.B, false.B) // M->S
+    mcif_axi_r.AXI_ARVALID  := raddr.valid // M->S
     mcif_axi_r.AXI_ARADDR   := raddr.bits //& raddr.valid     // M->S    
     mcif_axi_r.AXI_ARID     := M_RID 
 

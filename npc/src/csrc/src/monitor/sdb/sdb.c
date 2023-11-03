@@ -1,15 +1,16 @@
-#include <readline/readline.h>
-#include <readline/history.h>
 #include "npc.h"
 #include <utils/macro.h>
 #include <utils/debug.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 
 static int is_batch_mode = false;
 
-
 extern CPU_state cpu_npc;  // DUT
+extern CPU_state cpu_nemu; // REF
 
-/* We use the `readline' library to provide more flexibility to read from stdin. */
+
+
 static char* rl_gets() {
     static char *line_read = NULL;
     if (line_read) {
@@ -44,7 +45,7 @@ static struct {
     { "help", "Display informations about all supported commands", cmd_help },
     { "c", "Continue the execution of the program", cmd_c },
     { "q", "Exit NEMU", cmd_q },
-    {"si", "Execute the program in n steps\n\t\t-n nsteps", cmd_si }
+    {"si", "Execute the program in n steps\n\t\t-n nsteps(1~10000)", cmd_si }
     // {"info", "print status\n\t\t-r print register status\n\t\t-w print watchpoints", cmd_info },
     // {"x", "scan the rom", cmd_x }
 };
@@ -52,9 +53,10 @@ static struct {
 #define NR_CMD ARRLEN(cmd_table)
 
 
-
 static int sdb_exec_once(int step) {
     while(step--) {
+		// printf("npc.pc = %lx\n", cpu_npc.pc); 
+		// printf("nemu.pc = %lx\n", cpu_nemu.pc); 
         // dump_gpr(); // 打印通用寄存器
         // dump_csr(); // 打印异常寄存器
         npc_exec_once();
@@ -79,8 +81,7 @@ static int cmd_help(char *args) {
 		for (i = 0; i < NR_CMD; i ++) {
 			printf("\t%-4s - %s\n", cmd_table[i].name, cmd_table[i].description);
 		}
-	}
-	else {
+	} else {
 		for (i = 0; i < NR_CMD; i ++) {
 			if (strcmp(arg, cmd_table[i].name) == 0) {
 				printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
@@ -137,7 +138,7 @@ static int cmd_si(char *args) {
         printf("Too Many Parameters.\n");
         return 0;
     }
-    if (step <= 0 || step >= 999) {
+    if (step <= 0 || step > 10000) {
         printf("Parameter Out of Range.\n");
     	return 0;
     }
@@ -151,12 +152,6 @@ void sdb_set_batch_mode() {
 }
 
 void sdb_mainloop() {
-// #ifdef CONFIG_NPC_DIFFTEST
-    // while (cpu_npc.pc != MEM_BASE) { 
-    //     // printf("%ld\n", cpu_npc.pc); 
-    //     npc_exec_once(); 
-    // } // pc先走三拍到EXU
-// #endif
 	if (is_batch_mode) {
 		cmd_c(NULL);
 		return;

@@ -15,11 +15,11 @@ class EXU_Redirect_Input extends Bundle {
     val rd_wdata       = Input(UInt(64.W))
 }
 
-class MEM_Redirect_Input extends Bundle {
-    val rd_wen         = Input(Bool())
-    val rd_waddr       = Input(UInt(64.W))
-    val rd_wdata       = Input(UInt(64.W))
-}
+// class LSU_Redirect_Input extends Bundle {
+//     val rd_wen         = Input(Bool())
+//     val rd_waddr       = Input(UInt(64.W))
+//     val rd_wdata       = Input(UInt(64.W))
+// }
 
 class WBU_Redirect_Input extends Bundle {
     val rd_wen         = Input(Bool())
@@ -45,7 +45,7 @@ class Redirect_IDU_Output extends Bundle {
 class Redirect extends Module {
     val id_redirect   = IO(new IDU_Redirect_Input())
     val ex_redirect   = IO(new EXU_Redirect_Input())
-    val mem_redirect  = IO(new MEM_Redirect_Input())
+    // val mem_redirect  = IO(new MEM_Redirect_Input())
     val wb_redirect   = IO(new WBU_Redirect_Input())
 
     val reg_redirect  = IO(new Reg_Redirect_Input())
@@ -57,28 +57,28 @@ class Redirect extends Module {
 
     // ================ hit检测
     val rs1_id_ex_hit  = (id_redirect.rs1_raddr === ex_redirect.rd_waddr)  && ex_redirect.rd_wen  && (id_redirect.rs1_raddr =/= 0.U)
-    val rs1_id_mem_hit = (id_redirect.rs1_raddr === mem_redirect.rd_waddr) && mem_redirect.rd_wen && (id_redirect.rs1_raddr =/= 0.U)
+    // val rs1_id_mem_hit = (id_redirect.rs1_raddr === mem_redirect.rd_waddr) && mem_redirect.rd_wen && (id_redirect.rs1_raddr =/= 0.U)
     val rs1_id_wb_hit  = (id_redirect.rs1_raddr === wb_redirect.rd_waddr)  && wb_redirect.rd_wen  && (id_redirect.rs1_raddr =/= 0.U)
 
     val rs2_id_ex_hit  = (id_redirect.rs2_raddr === ex_redirect.rd_waddr)  && ex_redirect.rd_wen  && (id_redirect.rs2_raddr =/= 0.U)
-    val rs2_id_mem_hit = (id_redirect.rs2_raddr === mem_redirect.rd_waddr) && mem_redirect.rd_wen && (id_redirect.rs2_raddr =/= 0.U)
+    // val rs2_id_mem_hit = (id_redirect.rs2_raddr === mem_redirect.rd_waddr) && mem_redirect.rd_wen && (id_redirect.rs2_raddr =/= 0.U)
     val rs2_id_wb_hit  = (id_redirect.rs2_raddr === wb_redirect.rd_waddr)  && wb_redirect.rd_wen  && (id_redirect.rs2_raddr =/= 0.U)
 
     redirect_ctrl.rs_id_ex_hit := rs1_id_ex_hit || rs2_id_ex_hit
 
     // rs1_addr_i数据冲突 reg_redirect.rs1_rdata为默认值
-    redirect_id.rs1_rdata := MuxCase(reg_redirect.rs1_rdata, Array(
+    redirect_id.rs1_rdata := MuxCase(reg_redirect.rs1_rdata, Seq(
         rs1_id_ex_hit   ->  ex_redirect.rd_wdata,
-        rs1_id_mem_hit  ->  mem_redirect.rd_wdata,
+        // rs1_id_mem_hit  ->  mem_redirect.rd_wdata,
         rs1_id_wb_hit   ->  wb_redirect.rd_wdata
-    ).toIndexedSeq)
+    ))
 
     // rs2_addr_i数据冲突 reg_redirect.rs2_rdata为默认值
-    redirect_id.rs2_rdata := MuxCase(reg_redirect.rs2_rdata, Array(
+    redirect_id.rs2_rdata := MuxCase(reg_redirect.rs2_rdata, Seq(
         rs2_id_ex_hit   -> ex_redirect.rd_wdata,
-        rs2_id_mem_hit  -> mem_redirect.rd_wdata,
+        // rs2_id_mem_hit  -> mem_redirect.rd_wdata,
         rs2_id_wb_hit   -> wb_redirect.rd_wdata
-    ).toIndexedSeq)
+    ))
 }
 
 

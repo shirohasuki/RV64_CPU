@@ -2,6 +2,7 @@
 #include <utils/macro.h>
 #include <utils/debug.h>
 
+
 static void welcome() {
 	printf(ASNI_FMT("ITrace: %s\t", ASNI_FG_BLUE), MUXDEF(CONFIG_NPC_ITRACE, ASNI_FMT("ON", ASNI_FG_GREEN), ASNI_FMT("OFF", ASNI_FG_RED)));
 	printf(ASNI_FMT("GPRTrace: %s\t", ASNI_FG_BLUE), MUXDEF(CONFIG_NPC_GPRTRACE, ASNI_FMT("ON", ASNI_FG_GREEN), ASNI_FMT("OFF", ASNI_FG_RED)));
@@ -27,11 +28,13 @@ static void init_log(const char *log_file) {
 	Log("Log is written to %s", log_file ? log_file : "stdout");
 }
 
+
 void init_monitor() {
 	init_log("./monitor_log.txt");
 	// 	init_elf(elf_file);
 	IFDEF(CONFIG_NPC_DEVICE, init_device());
 	IFDEF(CONFIG_NPC_ITRACE, init_disasm("riscv64-pc-linux-gnu")); 
+	IFDEF(CONFIG_NPC_DIFFTEST, init_npc()); // npc启动后打拍到第一条命令执行完
 	long img_size = load_image("/home/shiroha/Code/ysyx/ysyx-workbench/npc/image.bin");
 	IFDEF(CONFIG_NPC_DIFFTEST, init_difftest("/home/shiroha/Code/ysyx/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so", img_size););
 	welcome();

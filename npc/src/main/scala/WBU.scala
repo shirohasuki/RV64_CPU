@@ -2,7 +2,7 @@ package WBU
 
 import chisel3._
 
-class MEMWB_WB_Input extends Bundle {
+class EXWB_WB_Input extends Bundle {
     val pc        = Input(UInt(64.W))
     val rd_wdata  = Input(UInt(64.W))
     val rd_waddr  = Input(UInt(64.W))
@@ -16,13 +16,13 @@ class WBU_Redirect_Output extends Bundle {
 }
 
 class WBU extends Module {
-    val memwb_wb    = IO(new MEMWB_WB_Input())
-    val wb_reg      = IO(Flipped(new MEMWB_WB_Input()))
+    val exwb_wb    = IO(new EXWB_WB_Input())
+    val wb_reg      = IO(Flipped(new EXWB_WB_Input()))
     val wb_redirect = IO(new WBU_Redirect_Output())
 
-    wb_reg <> memwb_wb
-    wb_redirect.rd_wen   := memwb_wb.rd_wdata             
-    wb_redirect.rd_waddr := memwb_wb.rd_waddr     
-    wb_redirect.rd_wdata := memwb_wb.rd_wen               
+    wb_reg <> exwb_wb
+    wb_redirect.rd_wen   := exwb_wb.rd_wdata             
+    wb_redirect.rd_waddr := exwb_wb.rd_waddr     
+    wb_redirect.rd_wdata := exwb_wb.rd_wen               
 }
 

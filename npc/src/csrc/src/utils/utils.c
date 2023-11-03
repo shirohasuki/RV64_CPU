@@ -3,6 +3,7 @@
 #include <utils/debug.h>
 
 extern CPU_state cpu_npc;
+extern int npc_step;
 
 uint64_t *cpu_gpr = NULL;
 uint64_t *cpu_csr = NULL;
@@ -59,14 +60,16 @@ void dump_csr() {
 
 
 void npc_exit(int status) {
-    if (status == 0) puts("\33[1;32m[Sim Result]: HIT GOOD TRAP\33[0m");
+    if (status == 0) puts(ASNI_FMT("[Sim Result]: HIT GOOD TRAP\n", ASNI_FG_GREEN));
     else {
         IFDEF(CONFIG_NPC_ITRACE, itrace_output());
         IFDEF(CONFIG_NPC_MTRACE, print_mtrace());
         IFDEF(CONFIG_NPC_GPRTRACE, dump_gpr());
-        IFDEF(CONFIG_NPC_GPRTRACE, dump_csr());
-        puts("\33[1;31m[Sim Result]: HIT BAD TRAP\33[0m");
+	    printf(ASNI_FMT("NPC meets error at step %d\n", ASNI_FG_BLUE), npc_step);
+        // IFDEF(CONFIG_NPC_GPRTRACE, dump_csr());
+        printf(ASNI_FMT("[Sim Result]: HIT BAD TRAP\n", ASNI_FG_RED));
     }
+    sim_exit();
     exit(status);
 }
 

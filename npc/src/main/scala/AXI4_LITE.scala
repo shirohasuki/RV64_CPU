@@ -117,13 +117,13 @@ class AXI4_LITE extends Module {
     var wstrb_default = VecInit(Seq.fill(8)(false.B))
     // val wstrb_default = RegInit(VecInit(Seq.fill(8)(false.B)))
     waddr   := Mux(mcif_axi_w.AXI_AWVALID, mcif_axi_w.AXI_AWADDR, 
-                    Mux(aw_complete, 0.U, waddr)) 
+                    Mux(aw_complete, waddr, 0.U)) 
     wid     := Mux(mem_axi_w.AXI_WVALID, mem_axi_w.AXI_AWID, 
-                    Mux(wr_complete, 0.U, wid)) 
+                    Mux(wr_complete, wid,   0.U)) 
     wdata   := Mux(mem_axi_w.AXI_WVALID, mem_axi_w.AXI_WDATA, 
-                    Mux(wr_complete, 0.U, wdata)) 
+                    Mux(wr_complete, wdata, 0.U)) 
     wstrb   := Mux(mem_axi_w.AXI_WVALID, mem_axi_w.AXI_WSTRB, 
-                    Mux(wr_complete, wstrb_default, wstrb)) 
+                    Mux(wr_complete, wstrb, wstrb_default)) 
 
     // to mem 
     mem_axi_w.AXI_AWVALID   := mcif_axi_w.AXI_AWVALID

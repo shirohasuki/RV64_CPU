@@ -4,6 +4,8 @@ import chisel3._
 import chisel3.util._
 import chisel3.stage._
 
+import  DPIC.mtrace_record
+
 class MEM_AXI4_R extends Bundle{
     // AR channel
     val AXI_ARVALID = Input(Bool())
@@ -55,8 +57,10 @@ class MEM extends Module {
 
     mem_axi_r.AXI_ARREADY  := 1.U 
     val rdata = WireInit(0.U(64.W))
+
     rdata := Mux(ren, mem.read(raddr >> 3), 0.U) // 要提前读一次，过滤掉错误值，第一下默认返回mem.read(0)
     // mem_axi_r.AXI_RDATA    := Mux(ren, mem.read(raddr >> 3), 0.U)
+
     when (ren_wait_a_clk) {
         mem_axi_r.AXI_RID      := rid 
         mem_axi_r.AXI_RVALID   := ren 
@@ -111,4 +115,22 @@ class MEM extends Module {
     mem_axi_w.AXI_BID      := wid
     mem_axi_w.AXI_BVALID   := Mux(wen, 1.U, 0.U)
     mem_axi_w.AXI_BRESP    := Mux(wen, 1.U, 0.U)
+
+
+    // DPIC mtrace 只记录读写数据的内存部分，不记录取指部分
+    val DPIC_mtrace_read = Module(new mtrace_record())
+        DPIC_mtrace.io.ren   := rid === 1 & ren
+        DPIC_mtrace.io.wen   := wen
+        DPIC_mtrace.io.addr  := Mux(ren, raddr, 
+                                    Mux(wen, waddr, 0.U(64.W)))
+        DPIC_mtrace.io.data  := Mux(ren, mem_axi_r.AXI_RDATA, 
+                                    Mux(wen, wdata, 0.U(64.W)))
+        DPIC_mtrace.io.mask  := Cat(wmask(7), wmask(6), wmask(5), wmask(4), wmask(3), wmask(2), wmask(1), wmask(0))
+    
+    // val DPIC_mtrace_write = Module(new mtrace_record())
+    //     DPIC_mtrace.io.ren   
+    //     DPIC_mtrace.io.wen   :=
+    //     DPIC_mtrace.io.addr  
+    //     DPIC_mtrace.io.data  := wdata        
+    //     DPIC_mtrace.io.mask  := Cat(wmask(7), wmask(6), wmask(5), wmask(4), wmask(3), wmask(2), wmask(1), wmask(0))
 }

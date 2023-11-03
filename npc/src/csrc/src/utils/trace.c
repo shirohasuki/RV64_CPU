@@ -44,9 +44,18 @@ void itrace_output() {
 #ifdef CONFIG_NPC_MTRACE
 char mtrace_buf[SIZE_MTRACEBUF][100] = {0};
 int mtrace_count = 0;
-#endif
 
-#ifdef CONFIG_NPC_MTRACE
+extern "C" void mtrace_record(unsigned char ren, unsigned char wen, long long int addr,long long int data, int mask) {
+    if (ren) {
+        sprintf(mtrace_buf[mtrace_count], "read:  addr:%016llx data:%016llx", addr, data);
+        mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
+    }
+    if (wen) {
+        sprintf(mtrace_buf[mtrace_count], "write:  addr:%016llx data:%016llx mask:%08x", addr, data, mask);
+        mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
+    }
+}
+
 void print_mtrace() {
     puts("========== MTRACE Result ==========");
     for (int i = 0; i < SIZE_MTRACEBUF; i++) {

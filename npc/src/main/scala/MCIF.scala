@@ -124,8 +124,8 @@ class MCIF_R extends Module {
     val raddr       = Flipped(Decoupled(UInt(64.W)))
     
     val Arb1 = Module(new Arbiter(UInt(64.W), 2))  // 2 to 1 Priority Arbiter
-        Arb1.io.in(0) := req0
-        Arb1.io.in(1) := req1
+        Arb1.io.in(0) <> req0
+        Arb1.io.in(1) <> req1
         raddr       <> Arb1.io.out
         M_RID       := Arb1.io.chosen
         raddr.ready := raddr.valid  // 只要收到valid, 立马ready上 

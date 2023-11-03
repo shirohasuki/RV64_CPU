@@ -80,8 +80,16 @@ class MEM extends Module {
     for(i <- 0 until 8) { wdata_vec(i) := mem_axi_w.AXI_WDATA(8*i+7, 8*i)}
     // wdata   :=  mem_axi_w.AXI_WDATA
 
+    // when (wen) { 
+    //     mem.write(waddr >> 3, wdata_vec, wmask)
+    // }
+
     when (wen) { 
-        mem.write(waddr >> 3, wdata_vec, wmask)
+        when (wmask(7) == 1.U) {mem.write(waddr >> 3, mem_axi_w.AXI_WDATA)}
+        when (wmask(3) == 1.U) {mem.write(waddr >> 3, mem_axi_w.AXI_WDATA(31, 0))}
+        when (wmask(1) == 1.U) {mem.write(waddr >> 3, mem_axi_w.AXI_WDATA(15, 0))}
+        when (wmask(0) == 1.U) {mem.write(waddr >> 3, mem_axi_w.AXI_WDATA(7, 0))}
+        // mem.write(waddr >> 3, wdata_vec, wmask) 
     }
 
     mem_axi_w.AXI_AWREADY  := 1.U

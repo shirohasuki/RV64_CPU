@@ -136,6 +136,7 @@ static int cmd_si(char *args) {
     	return 0;
     }
     sdb_exec_once(step);
+	dump_gpr();
     return 0;
 }
 

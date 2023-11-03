@@ -85,7 +85,7 @@ class AXI4_LITE extends Module {
                     Mux(rd_complete, 0.U, rdata)) 
 
     // to mem 
-    mcif_axi_r.AXI_ARID   := mcif_axi_r.AXI_ARID
+    mem_axi_r.AXI_ARID   := mcif_axi_r.AXI_ARID
     mem_axi_r.AXI_ARVALID := mcif_axi_r.AXI_ARVALID
     mem_axi_r.AXI_RADDR   := Mux(ar_hs, raddr, 0.U)
 

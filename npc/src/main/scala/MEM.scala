@@ -69,7 +69,7 @@ class MEM extends Module {
     val waddr = RegInit(0.U(64.W))
     val wid   = RegInit(0.U(2.W))
     // val wmask = RegInit(0.U(8.W))
-    val wmask = RegInit(Vec(8, Bool()))
+    val wmask = Reg(Vec(8, Bool()))
     // val wdata = RegInit(0.U(64.W))
     val wdata_vec = Wire(Vec(8, UInt(8.W)))
 

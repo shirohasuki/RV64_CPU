@@ -147,7 +147,7 @@ class MCIF_R extends Module {
 class MCIF_W_Input extends Bundle {
     val waddr  = Input(UInt(64.W))
     val wdata  = Input(UInt(64.W))
-    val wstrb  = Input(UInt(8.W))
+    val wstrb  = Input(Vec(8, UInt(8.W)))
 }
 
 class MCIF_W extends Module {

@@ -119,12 +119,12 @@ class MEM extends Module {
 
     // DPIC mtrace 只记录读写数据的内存部分，不记录取指部分
     val DPIC_mtrace = Module(new mtrace())
-        DPIC_mtrace.io.ren   := (rid === 1) & ren
+        DPIC_mtrace.io.ren   := (rid === 1.U) & ren
         DPIC_mtrace.io.wen   := wen
         DPIC_mtrace.io.addr  := Mux(ren, raddr, 
                                     Mux(wen, waddr, 0.U(64.W)))
         DPIC_mtrace.io.data  := Mux(ren, mem_axi_r.AXI_RDATA, 
-                                    Mux(wen, wdata, 0.U(64.W)))
+                                    Mux(wen, mem_axi_w.AXI_WDATA, 0.U(64.W)))
         DPIC_mtrace.io.mask  := Cat(wmask(7), wmask(6), wmask(5), wmask(4), wmask(3), wmask(2), wmask(1), wmask(0))
     
     // val DPIC_mtrace_write = Module(new mtrace())

@@ -57,7 +57,7 @@ static struct {
 #define SIZE_RINGBUF 16 // iringbuf环形里单次存储指令条数目
 #define LEN_RINGBUF 256 // 单个buff可存放最大长度
 extern  int ringptr = SIZE_RINGBUF - 1;
-extern  ringbuf[SIZE_RINGBUF][LEN_RINGBUF];
+extern  char ringbuf[SIZE_RINGBUF][LEN_RINGBUF];
 #endif
 
 static int sdb_exec_once(int step) {

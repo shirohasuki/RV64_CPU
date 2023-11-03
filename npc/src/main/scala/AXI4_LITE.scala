@@ -114,7 +114,7 @@ class AXI4_LITE extends Module {
     val wid     = RegInit(0.U(2.W))
     val wdata   = RegInit(0.U(64.W))
     val wstrb   = Wire(Vec(8, Bool()))
-    var wstrb_default = VecInit(Seq.fill(8)(0.U(8.W)))
+    var wstrb_default = VecInit(Seq.fill(8)(Bool()))
     waddr   := Mux(mcif_axi_w.AXI_AWVALID, mcif_axi_w.AXI_AWADDR, 
                     Mux(aw_complete, 0.U, waddr)) 
     wid     := Mux(mem_axi_w.AXI_WVALID, mem_axi_w.AXI_AWID, 

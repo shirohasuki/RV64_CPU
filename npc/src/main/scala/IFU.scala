@@ -34,7 +34,7 @@ class IFU extends Module {
     val pc_next = RegInit(0.U(64.W)) // 缓存一下，和一周期后返回的inst一起过去
     pc_next := pc
 
-    if_mcif.mem_ren     := 1.U //& (pc =/= 0.U)
+    if_mcif.mem_ren     := 1.U & (pc =/= 0.U)
     if_mcif.mem_raddr   := pc
     if_ifid.inst        := Mux(if_mcif.mem_raddr(2) === 1.U, if_mcif.mem_rdata(31, 0), if_mcif.mem_rdata(63, 32))
     if_ifid.pc          := Mux(ctrl_pc.jump_en, 0.U, pc_next) 

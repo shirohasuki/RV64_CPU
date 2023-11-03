@@ -64,8 +64,8 @@ class AXI4_LITE extends Module {
     val mcif_axi_r  = IO(new MCIF_AXI4_R())
     val mem_axi_r   = IO(new MEM_AXI4_R())
 
-    val ar_hs   = RegInit(false.B)
-    val rd_hs   = RegInit(false.B)
+    val ar_hs   = WireInit(false.B)
+    val rd_hs   = WireInit(false.B)
     ar_hs   :=  mcif_axi_r.AXI_ARVALID & mem_axi_r.AXI_ARREADY 
     rd_hs   :=  mcif_axi_r.AXI_RREADY  & mem_axi_r.AXI_RVALID
     
@@ -90,7 +90,7 @@ class AXI4_LITE extends Module {
     mem_axi_r.AXI_RADDR   := Mux(ar_hs, raddr, 0.U)
 
     // to mcif
-    mcif_axi_r.AXI_RID    := Mux(rd_hs, rid, 0.U) 
+    mcif_axi_r.AXI_RID     := Mux(rd_hs, rid, 0.U) 
     mcif_axi_r.AXI_RDATA   := Mux(rd_hs, rdata, 0.U)
     mcif_axi_r.AXI_RVALID  := rd_hs
     mcif_axi_r.AXI_RLAST   := rd_complete
@@ -99,9 +99,9 @@ class AXI4_LITE extends Module {
     val mcif_axi_w  = IO(new MCIF_AXI4_W())
     val mem_axi_w   = IO(new MEM_AXI4_W())
 
-    val aw_hs   = RegInit(false.B)
-    val wr_hs   = RegInit(false.B)
-    val b_hs    = RegInit(false.B)
+    val aw_hs   = WireInit(false.B)
+    val wr_hs   = WireInit(false.B)
+    val b_hs    = WireInit(false.B)
     aw_hs   :=  mcif_axi_w.AXI_AWVALID & mem_axi_w.AXI_AWREADY 
     wr_hs   :=  mcif_axi_w.AXI_WVALID  & mem_axi_w.AXI_WREADY
     b_hs    :=  mcif_axi_w.AXI_BREADY  & mem_axi_w.AXI_BVALID

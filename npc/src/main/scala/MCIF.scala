@@ -102,13 +102,13 @@ class hs_pipe extends Module { // hand shake pipe
 } // 没用上，先在这放着
 
 // ====================== MCIF_R ================================ // 
-class MCIF_R_Input extends Bundle { val raddr  = Input(UInt(64.W))}
+// class MCIF_R_Input extends Bundle { val raddr  = Input(UInt(64.W))}
 
 class MCIF_R_Output extends Bundle { val rdata = Output(UInt(64.W))}
 
 class MCIF_R extends Module {
-    val req0  = IO(Flipped(Decoupled(new MCIF_R_Input())))       
-    val req1  = IO(Flipped(Decoupled(new MCIF_R_Input())))       
+    val req0  = IO(Flipped(Decoupled(new Bundle { val rdata = Output(UInt(64.W))})))       
+    val req1  = IO(Flipped(Decoupled(new Bundle { val rdata = Output(UInt(64.W))})))         
     
     val resp0  = IO(Decoupled(new MCIF_R_Output()))  
     val resp1  = IO(Decoupled(new MCIF_R_Output()))
@@ -118,7 +118,7 @@ class MCIF_R extends Module {
     val M_RID = UInt(2.W) // Master:IFU:0 MEM:1
     // val S_RID = UInt(2.W) // Slave: MEM
 
-    val req_array   = IO(Vec(2, (Decoupled(new MCIF_R_Input()))))
+    val req_array   = IO(Vec(2, (Decoupled(UInt(64.W)))))
     req_array(0)    <>  req0
     req_array(1)    <>  req1
     val raddr       = Flipped(Decoupled(UInt(64.W)))

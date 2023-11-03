@@ -45,7 +45,7 @@ void itrace_output() {
 char mtrace_buf[SIZE_MTRACEBUF][100] = {0};
 int mtrace_count = 0;
 
-extern "C" void mtrace_record(unsigned char ren, unsigned char wen, long long int addr,long long int data, int mask) {
+extern "C" void mtrace_record(unsigned char ren, unsigned char wen, long long int addr,long long int data, short int mask) {
     if (ren) {
         sprintf(mtrace_buf[mtrace_count], "read:  addr:%016llx data:%016llx", addr, data);
         mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;

@@ -117,7 +117,7 @@ class mtrace extends BlackBox with HasBlackBoxInline {
     })
     setInline("mtrace.v",
     """
-    |import "DPI-C" function void mtrace_record(bit ren, bit wen, longint addr, longint data, int mask);
+    |import "DPI-C" function void mtrace_record(bit ren, bit wen, longint addr, longint data, shortint mask);
     |module mtrace (
     |   input ren,  
     |   input wen,  

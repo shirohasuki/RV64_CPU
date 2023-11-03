@@ -155,7 +155,7 @@ class MCIF_W extends Module {
 
     val mcif_axi_w = IO(new MCIF_AXI4_W())
 
-    val M_WID = UInt(2.W) 
+    val M_WID = WireInit(0.U(2.W)) 
     M_WID := 1.U
     
     //  ================= AW channel

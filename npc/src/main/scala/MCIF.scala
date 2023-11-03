@@ -126,7 +126,7 @@ class MCIF_R extends Module {
     // req_array(1)    <> req1
     val raddr       = Flipped(Decoupled(UInt(64.W)))
     
-    val Arb1 = Module(new Arbiter(UInt(64.W), 2))  // 2 to 1 Priority Arbiter
+    val Arb1 = Module(new Arbiter(MCIF_R_Input, 2))  // 2 to 1 Priority Arbiter
         Arb1.io.in(0) <> req0
         Arb1.io.in(1) <> req1
         raddr       <> Arb1.io.out

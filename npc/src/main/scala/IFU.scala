@@ -6,9 +6,9 @@ import chisel3.stage._
 
 
 class IFU_MCIF_R extends Bundle {
-    val ren    = Output(Bool())
-    val raddr  = Output(UInt(64.W)) // pc
-    val rdata  = Input(UInt(64.W))  // inst
+    val mem_ren    = Output(Bool())
+    val mem_raddr  = Output(UInt(64.W)) // pc
+    val mem_rdata  = Input(UInt(64.W))  // inst
 }
 
 class IFU extends Module {

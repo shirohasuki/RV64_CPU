@@ -20,35 +20,35 @@ import CTRL._
 import RegFile._
 
 
-class MCIF_AXI4_R extends Bundle{
+class CORE_AXI4_R extends Bundle{
     // AR channel
-    val AXI_ARID    = Input(UInt(2.W))
-    val AXI_ARADDR  = Input(UInt(32.W))
-    val AXI_ARVALID = Input(Bool())
+    val AXI_ARID    = Output(UInt(2.W))
+    val AXI_ARADDR  = Output(UInt(32.W))
+    val AXI_ARVALID = Output(Bool())
     // Rd channel
-    val AXI_RID     = Output(UInt(2.W))
-    val AXI_RDATA   = Output(UInt(64.W))
-    val AXI_RVALID  = Output(Bool())
-    val AXI_RREADY  = Input(Bool())
-    val AXI_RLAST   = Output(Bool())
+    val AXI_RID     = Input(UInt(2.W))
+    val AXI_RDATA   = Input(UInt(64.W))
+    val AXI_RVALID  = Input(Bool())
+    val AXI_RREADY  = Output(Bool())
+    val AXI_RLAST   = Input(Bool())
 }
 
-class MCIF_AXI4_W extends Bundle {
-    val AXI_AWID    = Input(UInt(2.W))
-    val AXI_AWADDR  = Input(UInt(32.W))
-    val AXI_AWVALID = Input(Bool())
+class CORE_AXI4_W extends Bundle {
+    val AXI_AWID    = Output(UInt(2.W))
+    val AXI_AWADDR  = Output(UInt(32.W))
+    val AXI_AWVALID = Output(Bool())
 
-    val AXI_WDATA   = Input(UInt(64.W))
-    val AXI_WSTRB   = Input(Vec(8, Bool()))
-    val AXI_WVALID  = Input(Bool())
+    val AXI_WDATA   = Output(UInt(64.W))
+    val AXI_WSTRB   = Output(Vec(8, Bool()))
+    val AXI_WVALID  = Output(Bool())
     
-    val AXI_BRESP   = Output(UInt(2.W))
-    val AXI_BREADY  = Input(Bool())
+    val AXI_BRESP   = Input(UInt(2.W))
+    val AXI_BREADY  = Output(Bool())
 }
 
 class CORE extends Module {
-    val core_axi_r = IO(new MCIF_AXI4_R())
-    val core_axi_w = IO(new MCIF_AXI4_W())
+    val core_axi_r = IO(new CORE_AXI4_R())
+    val core_axi_w = IO(new CORE_AXI4_W())
 
     
     val Pc       = Module(new PcReg())
@@ -88,8 +88,8 @@ class CORE extends Module {
     EXWB.exwb_wb    <> WBU.exwb_wb
     WBU.wb_reg      <> RegFile.wb_reg
 
-    MCIF.mcif_axi_r <> core_axi_r
-    MCIF.mcif_axi_w <> core_axi_w
+    MCIF.mem_axi_r <> core_axi_r
+    MCIF.mem_axi_w <> core_axi_w
     
     EXU.ex_ctrl     <> CTRL.ex_ctrl
     // LSU.ls_ctrl     <> CTRL.ls_ctrl

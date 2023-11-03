@@ -30,7 +30,7 @@ class MCIF_AXI4_W extends Bundle {
 
 class MEM_AXI4_R extends Bundle{
     // AR channel
-    val AXI_ARVALID  = Output(Bool())
+    val AXI_ARVALID = Output(Bool())
     val AXI_RADDR   = Output(Bool())
     val AXI_ARREADY = Input(Bool())
     // Rd channel
@@ -121,7 +121,7 @@ class AXI4_LITE extends Module {
     wdata   := Mux(mem_axi_w.AXI_WVALID, mem_axi_w.AXI_WDATA, 
                     Mux(wr_complete, 0.U, wdata)) 
     wstrb   := Mux(mem_axi_w.AXI_WVALID, mem_axi_w.AXI_WSTRB, 
-                    Mux(wr_complete, 0.U, wstrb)) 
+                    Mux(wr_complete, Vec(false.B, false.B, false.B, false.B, false.B, false.B, false.B, false.B), wstrb)) 
 
     // to mem 
     mem_axi_w.AXI_AWVALID   := mcif_axi_w.AXI_AWVALID

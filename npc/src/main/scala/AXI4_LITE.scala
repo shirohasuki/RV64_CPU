@@ -39,6 +39,7 @@ class MEM_AXI4_R extends Bundle{
     val AXI_RVALID  = Input(Bool())
 }
 
+
 class MEM_AXI4_W extends Bundle{
     val AXI_AWVALID = Output(Bool())
     val	AXI_AWID    = Output(UInt(2.W))

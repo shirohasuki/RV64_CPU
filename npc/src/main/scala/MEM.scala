@@ -50,7 +50,7 @@ class MEM extends Module {
     raddr   :=  mem_axi_r.AXI_ARADDR
     rid     :=  mem_axi_r.AXI_ARID
 
-    val wait_a_clk = RegInit(false.B)
+    val ren_wait_a_clk = RegInit(false.B)
     ren_wait_a_clk  := ren
 
     mem_axi_r.AXI_ARREADY  := 1.U 

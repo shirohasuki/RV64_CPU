@@ -38,7 +38,7 @@ class MEM extends Module {
     val mem_axi_r = IO(new MEM_AXI4_R())
     
     // val mem = SyncReadMem(4096, Vec(8, UInt(8.W))) // 8个8字节=64
-    val mem = SyncReadMem(4096, UInt(64.W)) // 8个8字节=64
+    val mem = Mem(4096, UInt(64.W)) // 8个8字节=64
     // 采用写掩码的ram一定要分vec块读写
     // ============= READ ================ //
     val ren   = RegInit(false.B)

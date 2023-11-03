@@ -50,13 +50,13 @@ class MEM extends Module {
     raddr   :=  mem_axi_r.AXI_ARADDR
     rid     :=  mem_axi_r.AXI_ARID
 
-    // val wait_a_clk = RegInit(false.B)
-    // wait_a_clk  := ren
+    val wait_a_clk = RegInit(false.B)
+    ren_wait_a_clk  := ren
 
     mem_axi_r.AXI_ARREADY  := 1.U 
     mem_axi_r.AXI_RID      := rid 
     mem_axi_r.AXI_RVALID   := ren 
-    mem_axi_r.AXI_RDATA    := Mux(ren, mem.read(raddr >> 3), 0.U)
+    mem_axi_r.AXI_RDATA    := Mux(ren_wait_a_clk, mem.read(raddr >> 3), 0.U)
     // printf("raddr=%x\n",raddr>>3);
     // when (ren) {
     //     rdata_vec := mem.read(raddr)

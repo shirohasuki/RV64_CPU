@@ -45,8 +45,8 @@ static struct {
     { "help", "Display informations about all supported commands", cmd_help },
     { "c", "Continue the execution of the program", cmd_c },
     { "q", "Exit NEMU", cmd_q },
-    {"si", "Execute the program in n steps\n\t\t-n nsteps(1~10000)", cmd_si }
-    {"info", "print status -r print register status", cmd_info },
+    {"si", "Execute the program in n steps\n\t\t-n nsteps(1~10000)", cmd_si },
+    {"info", "print status -r print register status", cmd_info }
     // {"x", "scan the rom", cmd_x }
 };
 

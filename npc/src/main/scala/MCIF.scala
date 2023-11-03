@@ -33,7 +33,7 @@ class MCIF_AXI4_R extends Bundle{
     val AXI_RDATA   = Input(UInt(64.W))
     val AXI_RVALID  = Input(Bool())
     val AXI_RREADY  = Output(Bool())
-    val AXI_RLAST   = Output(Bool())
+    val AXI_RLAST   = Input(Bool())
 }
 
 class MCIF_AXI4_W extends Bundle {
@@ -54,7 +54,7 @@ class MCIF extends Module {
     val mcif_ctrl = IO(new Bundle{ 
         val axi_busy_start = Output(Bool())
         val axi_busy_end   = Output(Bool())
-    })
+    }) 
     
     //  IO on the left(from/to core)
     val if_mcif = IO(new IFU_MCIF())

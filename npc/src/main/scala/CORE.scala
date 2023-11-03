@@ -30,7 +30,7 @@ class CORE_AXI4_R extends Bundle{
     val AXI_RDATA   = Input(UInt(64.W))
     val AXI_RVALID  = Input(Bool())
     val AXI_RREADY  = Output(Bool())
-    val AXI_RLAST   = Output(Bool())
+    val AXI_RLAST   = Input(Bool())
 }
 
 class CORE_AXI4_W extends Bundle {
@@ -47,7 +47,7 @@ class CORE_AXI4_W extends Bundle {
 
 class CORE extends Module {
     val core_axi_r = IO(new CORE_AXI4_R())
-    val core_axi_w = IO(new CORE_AXI4_W())
+    val core_axi_w = IO(new CORE_AXI4_W())  // 两边需要同向
 
     
     val Pc       = Module(new PcReg())

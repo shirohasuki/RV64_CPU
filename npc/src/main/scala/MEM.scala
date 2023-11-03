@@ -87,9 +87,9 @@ class MEM extends Module {
 
     when (wen) { 
         when (wmask(7) === false.B) {mem.write(waddr >> 3, mem_axi_w.AXI_WDATA)
-        }.eleswhen (wmask(3) === false.B) {mem.write(waddr >> 3, mem_axi_w.AXI_WDATA(31, 0))
-        }.eleswhen (wmask(1) === false.B) {mem.write(waddr >> 3, mem_axi_w.AXI_WDATA(15, 0))
-        }.eleswhen (wmask(0) === false.B) {mem.write(waddr >> 3, mem_axi_w.AXI_WDATA(7, 0))}
+        }.elsewhen (wmask(3) === false.B) {mem.write(waddr >> 3, mem_axi_w.AXI_WDATA(31, 0))
+        }.elsewhen (wmask(1) === false.B) {mem.write(waddr >> 3, mem_axi_w.AXI_WDATA(15, 0))
+        }.elsewhen (wmask(0) === false.B) {mem.write(waddr >> 3, mem_axi_w.AXI_WDATA(7, 0))}
         // mem.write(waddr >> 3, wdata_vec, wmask) 
     }
 

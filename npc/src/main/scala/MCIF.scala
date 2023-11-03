@@ -131,7 +131,7 @@ class MCIF_R extends Module {
     
     //  ================= AR channel
     mcif_axi_r.AXI_ARVALID  := Mux(raddr.valid === 1.U, true.B, false.B) // M->S
-    mcif_axi_r.AXI_ARADDR   := raddr.bits //& raddr.valid     // M->S    
+    mcif_axi_r.AXI_ARADDR   := raddr.bits & raddr.valid     // M->S    
     mcif_axi_r.AXI_ARID     := M_RID 
 
     //  ================= R channel

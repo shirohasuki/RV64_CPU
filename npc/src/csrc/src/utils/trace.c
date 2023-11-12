@@ -46,7 +46,7 @@ int mtrace_count = 0;
 
 extern "C" void mtrace_record(unsigned char ren, unsigned char wen, long long int addr,long long int data, char mask) {
     if (ren) {
-        sprintf(mtrace_buf[mtrace_count], "read:  addr:%016llx data:%016llx", addr, data);
+        sprintf(mtrace_buf[mtrace_count], "read:   addr:%016llx data:%016llx", addr, data);
         mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
     }
     if (wen) {

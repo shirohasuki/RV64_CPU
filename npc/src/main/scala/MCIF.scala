@@ -138,10 +138,10 @@ class MCIF_R extends Module {
     mcif_axi_r.AXI_RREADY := 1.U // 暂时先一直拉高   // M->S
     
     when (mcif_axi_r.AXI_RVALID) {
-        resp0.valid := Mux(mcif_axi_r.AXI_RID === 0.U, mcif_axi_r.AXI_RVALID, 0.U)
-        resp1.valid := Mux(mcif_axi_r.AXI_RID === 1.U, mcif_axi_r.AXI_RVALID, 0.U)
-        resp0.bits  := Mux(mcif_axi_r.AXI_RID === 0.U, mcif_axi_r.AXI_RDATA, 0.U)
-        resp1.bits  := Mux(mcif_axi_r.AXI_RID === 1.U, mcif_axi_r.AXI_RDATA, 0.U)
+        resp0.valid := Mux(mcif_axi_r.AXI_RID === 1.U, mcif_axi_r.AXI_RVALID, 0.U)
+        resp1.valid := Mux(mcif_axi_r.AXI_RID === 0.U, mcif_axi_r.AXI_RVALID, 0.U)
+        resp0.bits  := Mux(mcif_axi_r.AXI_RID === 1.U, mcif_axi_r.AXI_RDATA, 0.U)
+        resp1.bits  := Mux(mcif_axi_r.AXI_RID === 0.U, mcif_axi_r.AXI_RDATA, 0.U)
     }.otherwise {
         resp0.valid := 0.U
         resp1.valid := 0.U

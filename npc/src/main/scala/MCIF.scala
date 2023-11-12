@@ -108,9 +108,9 @@ class MCIF_R_Input extends Bundle { val raddr  = Input(UInt(64.W))}
 
 class MCIF_R_Output extends Bundle { val rdata = Output(UInt(64.W))}
 
-class MCIF_R extends Module {
-    val req0  = IO(Flipped(Decoupled(UInt(64.W))))
-    val req1  = IO(Flipped(Decoupled(UInt(64.W))))
+class MCIF_R extends Module { 
+    val req0  = IO(Flipped(Decoupled(UInt(64.W)))) // IFU 优先级低
+    val req1  = IO(Flipped(Decoupled(UInt(64.W)))) // LSU 优先级高
     
     val resp0  = IO(Decoupled(UInt(64.W)))  
     val resp1  = IO(Decoupled(UInt(64.W)))

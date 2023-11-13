@@ -74,8 +74,10 @@ class Ctrl extends Module {
     val load_store_busy = RegInit(false.B)    
     when (mcif_ctrl.load_store_busy) {
         load_store_busy := true.B
-    } elsewhen (mcif_ctrl.axi_busy_end === 1.U) {
+    } elsewhen (mcif_ctrl.axi_busy_end) {
         load_store_busy := false.B
+    } otherwise {
+        load_store_busy := load_store_busy
     }
     
     val load_data_hit   = redirect_ctrl.rs_id_ex_hit && ex_ctrl.inst_isload

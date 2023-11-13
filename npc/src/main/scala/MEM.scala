@@ -56,7 +56,7 @@ class MEM extends Module {
     // ren_wait_a_clk  := ren
 
     val rdata = WireInit(0.U(64.W))
-    rdata := Mux(ren, mem.read(raddr >> 3), 0.U) // 要提前读一次，过滤掉错误值，第一下默认返回mem.read(0)
+    rdata := mem.read(raddr >> 3) // 要提前读一次，过滤掉错误值，第一下默认返回mem.read(0)
 
     val ren   = RegInit(false.B)
     val raddr = RegInit(0.U(64.W))

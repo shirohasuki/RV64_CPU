@@ -94,7 +94,7 @@ class EXU extends Module {
     when (ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore) {
         pc              := idex_ex.pc
         load_store_busy := true.B
-    } otherwise {
+    }.otherwise {
         pc              := 0.U
         load_store_busy := false.B
     }

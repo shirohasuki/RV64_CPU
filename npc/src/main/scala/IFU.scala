@@ -27,9 +27,8 @@ class IFU extends Module {
     })
 
     val pc   = RegInit("h80000000".U(64.W))
-
     pc := Mux(ctrl_pc.jump_en, ctrl_pc.jump_addr,
-            Mux(ctrl_pc.pc_stall_en, pc, pc + 4.U))
+            Mux(ctrl_pc.pc_stall_en, pc_next, pc + 4.U))
 
     val pc_next = RegInit(0.U(64.W)) // 缓存一下，和一周期后返回的inst一起过去
     pc_next := Mux(ctrl_pc.jump_en, 0.U, 

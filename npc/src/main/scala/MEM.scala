@@ -55,10 +55,8 @@ class MEM extends Module {
     // val ren_wait_a_clk = RegInit(false.B)
     // ren_wait_a_clk  := ren
 
-    mem_axi_r.AXI_ARREADY  := 1.U 
-    // val rdata = WireInit(0.U(64.W))
-
-    // rdata := Mux(ren, mem.read(raddr >> 3), 0.U) // 要提前读一次，过滤掉错误值，第一下默认返回mem.read(0)
+    val rdata = WireInit(0.U(64.W))
+    rdata := Mux(ren, mem.read(raddr >> 3), 0.U) // 要提前读一次，过滤掉错误值，第一下默认返回mem.read(0)
 
     val ren   = RegInit(false.B)
     val raddr = RegInit(0.U(64.W))
@@ -68,6 +66,7 @@ class MEM extends Module {
     raddr   := mem_axi_r.AXI_ARADDR
     rid     := mem_axi_r.AXI_ARID
 
+    mem_axi_r.AXI_ARREADY  := 1.U 
     mem_axi_r.AXI_RVALID   := ren 
     mem_axi_r.AXI_RDATA    := Mux(ren, mem.read(raddr >> 3), 0.U)
     mem_axi_r.AXI_RID      := rid 

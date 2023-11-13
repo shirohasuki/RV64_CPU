@@ -67,6 +67,8 @@ class EXU_MCIF extends Bundle{
     val mem_waddr  = Output(UInt(64.W))
     val mem_wdata  = Output(UInt(64.W))
     val mem_wmask  = Output(Vec(8, Bool()))
+
+    val axi_busy_end = Input(Bool())
 }
 
 

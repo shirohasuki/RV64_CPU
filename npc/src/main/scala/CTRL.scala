@@ -68,13 +68,13 @@ class Ctrl extends Module {
     // val ctrl_idclint = IO(new CTRL_IDClint_Output())
     val ctrl_exwb     = IO(new CTRL_EXWB_Output()  )
 
-    val jump            = ex_ctrl.typej_jump_en   // || ex_ctrl.intr_jump_en
+    val jump          = ex_ctrl.typej_jump_en   // || ex_ctrl.intr_jump_en
 
 
     val load_store_busy = RegInit(false.B)    
     when (mcif_ctrl.load_store_busy) {
         load_store_busy := true.B
-    } elsewhen (mcif_ctrl.axi_busy_end) {
+    } elsewhen (true.B) {
         load_store_busy := false.B
     } otherwise {
         load_store_busy := load_store_busy

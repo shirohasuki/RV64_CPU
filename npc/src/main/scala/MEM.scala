@@ -43,34 +43,46 @@ class MEM extends Module {
     val mem = SyncReadMem(4096, UInt(64.W)) // 8个8字节=64
     // 采用写掩码的ram一定要分vec块读写
     // ============= READ ================ //
-    val ren   = WireInit(false.B)
-    val raddr = WireInit(0.U(64.W))
-    val rid   = WireInit(0.U(2.W))
-    // val rdata_vec = Reg(Vec(8, UInt(8.W)))
+    // val ren   = WireInit(false.B)
+    // val raddr = WireInit(0.U(64.W))
+    // val rid   = WireInit(0.U(2.W))
+    // // val rdata_vec = Reg(Vec(8, UInt(8.W)))
  
-    ren     :=  mem_axi_r.AXI_ARVALID// & (mem_axi_r.AXI_ARADDR =/= 0.U)
-    raddr   :=  mem_axi_r.AXI_ARADDR
-    rid     :=  mem_axi_r.AXI_ARID
+    // ren     :=  mem_axi_r.AXI_ARVALID// & (mem_axi_r.AXI_ARADDR =/= 0.U)
+    // raddr   :=  mem_axi_r.AXI_ARADDR
+    // rid     :=  mem_axi_r.AXI_ARID
 
-    val ren_wait_a_clk = RegInit(false.B)
-    ren_wait_a_clk  := ren
+    // val ren_wait_a_clk = RegInit(false.B)
+    // ren_wait_a_clk  := ren
 
-    mem_axi_r.AXI_ARREADY  := 1.U 
-    val rdata = WireInit(0.U(64.W))
+    // mem_axi_r.AXI_ARREADY  := 1.U 
+    // val rdata = WireInit(0.U(64.W))
 
-    rdata := Mux(ren, mem.read(raddr >> 3), 0.U) // 要提前读一次，过滤掉错误值，第一下默认返回mem.read(0)
-    // mem_axi_r.AXI_RDATA    := Mux(ren, mem.read(raddr >> 3), 0.U)
+    // rdata := Mux(ren, mem.read(raddr >> 3), 0.U) // 要提前读一次，过滤掉错误值，第一下默认返回mem.read(0)
 
-    when (ren_wait_a_clk) {
-        mem_axi_r.AXI_RID      := rid 
-        mem_axi_r.AXI_RVALID   := ren 
-        mem_axi_r.AXI_RDATA    := rdata
-    }.otherwise {
-        mem_axi_r.AXI_RID      := 0.U
-        mem_axi_r.AXI_RVALID   := 0.U
-        mem_axi_r.AXI_RDATA    := 0.U
-    }
-    // printf("raddr=%x\n",raddr>>3);
+    val ren   = RegInit(false.B)
+    val raddr = RegInit(0.U(64.W))
+    val rid   = RegInit(0.U(2.W))
+
+    ren     := mem_axi_r.AXI_ARVALID
+    raddr   := mem_axi_r.AXI_ARADDR
+    rid     := mem_axi_r.AXI_ARID
+
+    mem_axi_r.AXI_RVALID   := ren 
+    mem_axi_r.AXI_RDATA    := Mux(ren, mem.read(raddr >> 3), 0.U)
+    mem_axi_r.AXI_RID      := rid 
+
+    // when (ren_wait_a_clk) {
+    //     mem_axi_r.AXI_RID      := rid 
+    //     mem_axi_r.AXI_RVALID   := ren 
+    //     mem_axi_r.AXI_RDATA    := rdata
+    // }.otherwise {
+    //     mem_axi_r.AXI_RID      := 0.U
+    //     mem_axi_r.AXI_RVALID   := 0.U
+    //     mem_axi_r.AXI_RDATA    := 0.U
+    // }
+
+
     // when (ren) {
     //     rdata_vec := mem.read(raddr)
     // }

@@ -43,7 +43,7 @@ class MEM extends Module {
     val mem = SyncReadMem(4096, UInt(64.W)) // 8个8字节=64
     // 采用写掩码的ram一定要分vec块读写
     // ============= READ ================ //
-    // val ren   = WireInit(false.B)
+    val ren   = WireInit(false.B)
     // val raddr = WireInit(0.U(64.W))
     // val rid   = WireInit(0.U(2.W))
     // // val rdata_vec = Reg(Vec(8, UInt(8.W)))
@@ -55,7 +55,7 @@ class MEM extends Module {
     // val ren_wait_a_clk = RegInit(false.B)
     // ren_wait_a_clk  := ren
 
-    val ren   = RegInit(false.B)
+    // val ren   = RegInit(false.B)
     val raddr = RegInit(0.U(64.W))
     val rid   = RegInit(0.U(2.W))
 
@@ -68,7 +68,7 @@ class MEM extends Module {
 
     mem_axi_r.AXI_ARREADY  := 1.U 
     mem_axi_r.AXI_RVALID   := ren 
-    mem_axi_r.AXI_RDATA    := rdata//Mux(ren, mem.read(raddr >> 3), 0.U)
+    mem_axi_r.AXI_RDATA    := Mux(ren, mem.read(raddr >> 3), 0.U)
     mem_axi_r.AXI_RID      := rid 
 
     // when (ren_wait_a_clk) {

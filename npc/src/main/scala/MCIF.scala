@@ -45,7 +45,7 @@ class MCIF_AXI4_W extends Bundle {
     val AXI_WSTRB   = Output(Vec(8, Bool()))
     val AXI_WVALID  = Output(Bool())
     
-    val AXI_BRESP   = Input(UInt(1.W))
+    val AXI_BRESP   = Input(Bool())
     val AXI_BREADY  = Output(Bool())
 }
 

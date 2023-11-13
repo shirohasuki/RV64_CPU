@@ -11,7 +11,7 @@ import DPIC.ebreak
 
 class EXU_ALU_Input extends Bundle {
     val inst        = Input(UInt(32.W))
-    val pc          = Input(UInt(64.W))
+    // val pc          = Input(UInt(64.W))
     val op1         = Input(UInt(64.W))
     val op2         = Input(UInt(64.W))
     val rd_addr     = Input(UInt(5.W))
@@ -35,7 +35,7 @@ class ALU_EXU_Output extends Bundle {
 
 class ALU_LSU_Output extends Bundle {
     val func3           = Output(UInt(3.W))
-    val pc              = Output(UInt(64.W))
+    // val pc              = Output(UInt(64.W))
     val inst_isload     = Output(Bool())
     val inst_isstore    = Output(Bool())
     val rd_waddr        = Output(UInt(5.W))
@@ -189,7 +189,7 @@ class ALU extends Module {
 
     // to lsu
     al_ls.func3         :=  ex_al.func3
-    al_ls.pc            :=  ex_al.pc
+    // al_ls.pc            :=  ex_al.pc
     al_ls.rd_waddr      :=  exce_list(1)
     al_ls.inst_isload   :=  exce_list(3)
     al_ls.inst_isstore  :=  exce_list(5)

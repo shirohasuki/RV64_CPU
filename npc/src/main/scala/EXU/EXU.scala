@@ -89,7 +89,7 @@ class EXU extends Module {
     ALU.al_ls   <>  LSU.al_ls
     LSU.ls_mcif <>  ex_mcif 
 
-    val pc = RegInit(0.UInt(64.W))
+    val pc = RegInit(0.U(64.W))
     when (ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore) {
         pc := idex_ex.pc
     }

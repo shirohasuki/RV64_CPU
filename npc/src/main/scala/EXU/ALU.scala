@@ -11,7 +11,7 @@ import DPIC.ebreak
 
 class EXU_ALU_Input extends Bundle {
     val inst        = Input(UInt(32.W))
-    // val pc          = Input(UInt(64.W))
+    val pc          = Input(UInt(64.W))
     val op1         = Input(UInt(64.W))
     val op2         = Input(UInt(64.W))
     val rd_addr     = Input(UInt(5.W))

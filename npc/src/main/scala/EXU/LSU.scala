@@ -25,13 +25,13 @@ class ALU_LSU_Input extends Bundle {
 // }
 
 class LSU_EXU_Output extends Bundle {
+    val pc             = Output(UInt(64.W))
     val rd_wen          = Output(Bool()) 
     val rd_waddr        = Output(UInt(5.W))
     val rd_wdata        = Output(UInt(64.W))
 }
 
 class LSU_Redirect_Output extends Bundle {
-    val pc             = Output(UInt(64.W))
     val rd_wen         = Output(Bool())
     val rd_waddr       = Output(UInt(64.W))
     val rd_wdata       = Output(UInt(64.W))

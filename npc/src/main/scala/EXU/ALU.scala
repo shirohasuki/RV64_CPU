@@ -189,6 +189,7 @@ class ALU extends Module {
 
     // to lsu
     al_ls.func3         :=  ex_al.func3
+    al_ls.pc            :=  ex_al.pc
     al_ls.rd_waddr      :=  exce_list(1)
     al_ls.inst_isload   :=  exce_list(3)
     al_ls.inst_isstore  :=  exce_list(5)

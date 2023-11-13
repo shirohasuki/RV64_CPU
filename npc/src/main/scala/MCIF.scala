@@ -20,6 +20,8 @@ class LSU_MCIF extends Bundle{
     val mem_waddr  = Input(UInt(64.W))
     val mem_wdata  = Input(UInt(64.W))
     val mem_wmask  = Input(Vec(8, Bool()))
+
+    val axi_busy_end = Output(Bool())
 }
 
 // ========== IO on the right(from/to AXI4(device)) ============ //

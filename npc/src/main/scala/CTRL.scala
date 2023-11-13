@@ -51,6 +51,10 @@ class CTRL_EXWB_Output extends Bundle {
     val exwb_flush_en = Output(Bool())
 }
 
+// class CTRL_EXU_Output extends Bundle {
+//     val axi_busy_end = Output(Bool())
+// }
+
 class Ctrl extends Module {
     val ex_ctrl       = IO(new EXU_CTRL_Input()     )
     // val clint_ctrl   = IO(new CLINT_CTRL_Input()   )
@@ -67,6 +71,8 @@ class Ctrl extends Module {
     val ctrl_idex     = IO(new CTRL_IDEX_Output()     )
     // val ctrl_idclint = IO(new CTRL_IDClint_Output())
     val ctrl_exwb     = IO(new CTRL_EXWB_Output()  )
+
+    // val ctrl_ex       = IO(new CTRL_EXU_Output()  )
 
     val jump          = ex_ctrl.typej_jump_en   // || ex_ctrl.intr_jump_en
 

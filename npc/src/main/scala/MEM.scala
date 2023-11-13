@@ -68,7 +68,7 @@ class MEM extends Module {
 
     mem_axi_r.AXI_ARREADY  := 1.U 
     mem_axi_r.AXI_RVALID   := ren 
-    mem_axi_r.AXI_RDATA    := Mux(ren, mem.read(raddr >> 3), 0.U)
+    mem_axi_r.AXI_RDATA    := rdata//Mux(ren, mem.read(raddr >> 3), 0.U)
     mem_axi_r.AXI_RID      := rid 
 
     // when (ren_wait_a_clk) {

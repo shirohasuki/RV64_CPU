@@ -35,7 +35,8 @@ class IFU extends Module {
             Mux(ctrl_pc.pc_stall_en, pc_next, pc))
 
     if_mcif.mem_ren     := 1.U & (pc =/= 0.U) & ~(ctrl_pc.jump_en)
-    if_mcif.mem_raddr   := Mux(ctrl_pc.jump_en, 0.U, pc) 
+    if_mcif.mem_raddr   := Mux(ctrl_pc.jump_en, 0.U, 
+                                Mux(ctrl_pc.pc_stall_en, pc_next, pc)) 
     if_ifid.inst        := Mux(if_mcif.mem_raddr(2) === 1.U, if_mcif.mem_rdata(31, 0), if_mcif.mem_rdata(63, 32))
     if_ifid.pc          := pc_next
 }

@@ -66,7 +66,7 @@ class MEM extends Module {
     // val rdata = RegInit(0.U(64.W))
     val rdata = WireInit(0.U(64.W))
     when (ren) {
-        rdata := mem.read(raddr >> 3)
+        rdata := mem.read(raddr)
     }
     // rdata := Mux(ren & (raddr =/= 0.U) , mem.read(raddr >> 3), 0.U)
     // rdata := Mux(ren & (raddr =/= 0.U) , mem.read(raddr >> 3), 0.U)

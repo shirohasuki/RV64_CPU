@@ -46,8 +46,8 @@ class EXU_EXWB_Output extends Bundle {
 }
 
 class EXU_CTRL_Output extends Bundle {
-    val inst_isload  = Output(Bool())
-    val inst_isstore = Output(Bool())
+    val inst_isload     = Output(Bool())
+    val inst_isstore    = Output(Bool())
     val typej_jump_en   = Output(Bool())
     val typej_jump_addr = Output(UInt(64.W))
 }
@@ -89,16 +89,21 @@ class EXU extends Module {
     ALU.al_ls   <>  LSU.al_ls
     LSU.ls_mcif <>  ex_mcif 
 
-    val pc = RegInit(0.U(64.W))
+    val pc              = RegInit(0.U(64.W))
+    val load_store_busy = RegInit(false.B)
     when (ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore) {
-        pc := idex_ex.pc
+        pc              := idex_ex.pc
+        load_store_busy := true.B
+    } otherwise {
+        pc              := 0.U
+        load_store_busy := false.B
     }
 
     // ex to exwb 
-    ex_exwb.pc          := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, pc , idex_ex.pc)
-    ex_exwb.rd_wen      := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, LSU.ls_ex.rd_wen  , ALU.al_ex.rd_wen  )
-    ex_exwb.rd_waddr    := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, LSU.ls_ex.rd_waddr, ALU.al_ex.rd_waddr)
-    ex_exwb.rd_wdata    := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, LSU.ls_ex.rd_wdata, ALU.al_ex.rd_wdata)
+    ex_exwb.pc          := Mux(load_store_busy, pc , idex_ex.pc)
+    ex_exwb.rd_wen      := Mux(load_store_busy, LSU.ls_ex.rd_wen  , ALU.al_ex.rd_wen  )
+    ex_exwb.rd_waddr    := Mux(load_store_busy, LSU.ls_ex.rd_waddr, ALU.al_ex.rd_waddr)
+    ex_exwb.rd_wdata    := Mux(load_store_busy, LSU.ls_ex.rd_wdata, ALU.al_ex.rd_wdata)
 
     // ex to redirect
     ex_redirect.rd_wen      := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, LSU.ls_ex.rd_wen,   ALU.al_ex.rd_wen)

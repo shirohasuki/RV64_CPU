@@ -66,16 +66,11 @@ class Ctrl extends Module {
     val ctrl_ifid     = IO(new CTRL_IFID_Output()     )
     val ctrl_idex     = IO(new CTRL_IDEX_Output()     )
     // val ctrl_idclint = IO(new CTRL_IDClint_Output())
-    val ctrl_exwb    = IO(new CTRL_EXWB_Output()  )
+    val ctrl_exwb     = IO(new CTRL_EXWB_Output()  )
 
     val jump            = ex_ctrl.typej_jump_en   // || ex_ctrl.intr_jump_en
     
-    // val inst_fetch_busy = mcif_ctrl.inst_fetch_busy //& mcif_ctrl.axi_busy_end
-    val load_store_busy = mcif_ctrl.load_store_busy //& mcif_ctrl.axi_busy_end
-    // val axi_busy        = RegInit(0.U(1.W))      // Reg
-    // axi_busy  := (inst_fetch_busy | load_store_busy) & mcif_ctrl.axi_busy_end // wire 一个寄存器加一根线保证全覆盖
-    // axi_busy := Mux(mcif_ctrl.axi_busy_start, 1.U, 
-    //                 Mux(mcif_ctrl.axi_busy_end, 0.U, axi_busy))
+    val load_store_busy = mcif_ctrl.load_store_busy
     
     val load_data_hit   = redirect_ctrl.rs_id_ex_hit && ex_ctrl.inst_isload
     val NOEVENT         = ~(jump | load_store_busy | load_data_hit)

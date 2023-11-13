@@ -90,7 +90,7 @@ class EXU extends Module {
     LSU.ls_mcif <>  ex_mcif 
 
     // ex to exwb 
-    ex_exwb.pc          := idex_ex.pc
+    ex_exwb.pc          := idex_ex.pc | LSU.ls_ex.pc
     ex_exwb.rd_wen      := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, LSU.ls_ex.rd_wen  , ALU.al_ex.rd_wen  )
     ex_exwb.rd_waddr    := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, LSU.ls_ex.rd_waddr, ALU.al_ex.rd_waddr)
     ex_exwb.rd_wdata    := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, LSU.ls_ex.rd_wdata, ALU.al_ex.rd_wdata)

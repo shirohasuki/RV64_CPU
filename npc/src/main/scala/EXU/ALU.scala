@@ -35,6 +35,7 @@ class ALU_EXU_Output extends Bundle {
 
 class ALU_LSU_Output extends Bundle {
     val func3           = Output(UInt(3.W))
+    val pc              = Output(UInt(64.W))
     val inst_isload     = Output(Bool())
     val inst_isstore    = Output(Bool())
     val rd_waddr        = Output(UInt(5.W))

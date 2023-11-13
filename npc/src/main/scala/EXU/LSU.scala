@@ -7,6 +7,7 @@ import define.function._
 
 class ALU_LSU_Input extends Bundle {
     val func3           = Input(UInt(3.W))
+    val pc              = Input(UInt(64.W))
     val inst_isload     = Input(Bool())
     val inst_isstore    = Input(Bool())
     val rd_waddr        = Input(UInt(5.W))
@@ -30,6 +31,7 @@ class LSU_EXU_Output extends Bundle {
 }
 
 class LSU_Redirect_Output extends Bundle {
+    val pc             = Output(UInt(64.W))
     val rd_wen         = Output(Bool())
     val rd_waddr       = Output(UInt(64.W))
     val rd_wdata       = Output(UInt(64.W))
@@ -60,6 +62,7 @@ class LSU extends Module {
     rd_wdata := Mux(al_ls.inst_isload, ls_mcif.mem_rdata, 0.U)
 
     // to ex
+    ls_ex.pc := al_ls.pc   
     ls_ex.rd_wdata := MuxCase(0.U, Seq(
         (al_ls.func3 === INST_LB )  ->  SEXT(rd_wdata(7, 0)),
         (al_ls.func3 === INST_LH )  ->  SEXT(rd_wdata(15, 0)),

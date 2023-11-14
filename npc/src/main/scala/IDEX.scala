@@ -1,3 +1,11 @@
+/*************************************************************************
+    > File Name: IDEX.scala
+    > Author: shiroha
+    > Email: whmio0115@hainanu.edu.cn
+    > Created Time: 2023-10-24 22:24:16
+    > Description: 
+*************************************************************************/
+
 package IDEX
 
 import chisel3._

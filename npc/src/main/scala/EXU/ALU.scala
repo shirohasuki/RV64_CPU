@@ -1,3 +1,11 @@
+/*************************************************************************
+    > File Name: ALU.scala
+    > Author: shiroha
+    > Email: whmio0115@hainanu.edu.cn
+    > Created Time: 2023-11-01 20:06:48
+    > Description: 
+*************************************************************************/
+
 package EXU.ALU
 
 import chisel3._
@@ -42,7 +50,8 @@ class ALU_LSU_Output extends Bundle {
     val mem_ren         = Output(Bool())
     val mem_raddr       = Output(UInt(64.W))
     val mem_wen         = Output(Bool())
-    val mem_wmask       = Output(Vec(8, Bool()))
+    // val mem_wmask       = Output(Vec(8, Bool()))
+    val mem_wmask       = Output(UInt(8.W))
     val mem_wdata       = Output(UInt(64.W))
     val mem_waddr       = Output(UInt(64.W))
 }
@@ -196,9 +205,11 @@ class ALU extends Module {
     al_ls.mem_ren       :=  exce_list(3)
     al_ls.mem_raddr     :=  exce_list(4)
     al_ls.mem_wen       :=  exce_list(5)
-    for(i <- 0 to 7) {
-        al_ls.mem_wmask(i) := exce_list(6)(i)
-    }  // UInt -> wmask
+    al_ls.mem_wmask     :=  exce_list(6)
+
+    // for(i <- 0 to 7) {
+    //     al_ls.mem_wmask(i) := exce_list(6)(i)
+    // }  // UInt -> wmask
         
     al_ls.mem_wdata     :=  exce_list(7)
     al_ls.mem_waddr     :=  exce_list(8)

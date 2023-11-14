@@ -1,3 +1,11 @@
+/*************************************************************************
+    > File Name: define.scala
+    > Author: shiroha
+    > Email: whmio0115@hainanu.edu.cn
+    > Created Time: 2023-10-21 17:41:01
+    > Description: 
+*************************************************************************/
+
 package define
 
 import chisel3._

@@ -1,3 +1,11 @@
+/*************************************************************************
+    > File Name: SOC.scala
+    > Author: shiroha
+    > Email: whmio0115@hainanu.edu.cn
+    > Created Time: 2023-10-22 18:41:21
+    > Description: 
+*************************************************************************/
+
 
 
 // import chisel3.util.experimental.loadMemoryFromFileInline

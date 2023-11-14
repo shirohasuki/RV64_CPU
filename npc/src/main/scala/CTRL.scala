@@ -1,3 +1,11 @@
+/*************************************************************************
+    > File Name: CTRL.scala
+    > Author: shiroha
+    > Email: whmio0115@hainanu.edu.cn
+    > Created Time: 2023-10-23 23:02:13
+    > Description: 
+*************************************************************************/
+
 package CTRL
 
 import chisel3._
@@ -20,7 +28,7 @@ class EXU_CTRL_Input extends Bundle {
 //     val mem_inst_isstore = Input(Bool())
 // }
 
-class Redirect_CTRL_Input extends Bundle {
+class Rename_CTRL_Input extends Bundle {
     val rs_id_ex_hit     = Input(Bool())
 }
 
@@ -59,7 +67,7 @@ class Ctrl extends Module {
     val ex_ctrl       = IO(new EXU_CTRL_Input()     )
     // val clint_ctrl   = IO(new CLINT_CTRL_Input()   )
     // val mem_ctrl      = IO(new MEM_CTRL_Input()     )
-    val redirect_ctrl = IO(new Bundle { val rs_id_ex_hit = Input(Bool())})
+    val rename_ctrl = IO(new Bundle { val rs_id_ex_hit = Input(Bool())})
     val mcif_ctrl     = IO(new Bundle {     
         // val inst_fetch_busy = Input(Bool())
         val load_store_busy = Input(Bool())
@@ -86,7 +94,7 @@ class Ctrl extends Module {
         load_store_busy := load_store_busy
     }
     
-    val load_data_hit   = redirect_ctrl.rs_id_ex_hit && ex_ctrl.inst_isload
+    val load_data_hit   = rename_ctrl.rs_id_ex_hit && ex_ctrl.inst_isload
     val NOEVENT         = ~(jump | (mcif_ctrl.load_store_busy | load_store_busy & ~mcif_ctrl.axi_busy_end) | load_data_hit)
 
     ctrl_pc.jump_addr := ex_ctrl.typej_jump_addr //| io.clint_ctrl.intr_jump_addr
@@ -110,7 +118,7 @@ class Ctrl extends Module {
 
         //  List(pc_flush_en, if_id_flush_en, id_ex_flush_en, ex_wb_flush_en)
     val flush_list  = ListLookup(event_code, List(false.B, false.B, false.B, false.B), Array(
-        BitPat("b10".U) -> List(false.B, false.B, true.B,  true.B),    // load_store_busy
+        BitPat("b10".U) -> List(false.B, false.B, true.B,  true.B),     // load_store_busy
         BitPat("b00".U) -> List(false.B, false.B, false.B, false.B),    // Noevent
         BitPat("b01".U) -> List(false.B, true.B,  true.B,  false.B),    // jump
         BitPat("b11".U) -> List(false.B, false.B, true.B,  false.B)     // load_data_hit 

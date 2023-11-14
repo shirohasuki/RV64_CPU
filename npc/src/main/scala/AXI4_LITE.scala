@@ -1,3 +1,11 @@
+/*************************************************************************
+    > File Name: AXI4_LITE.scala
+    > Author: shiroha
+    > Email: whmio0115@hainanu.edu.cn
+    > Created Time: 2023-10-29 21:05:35
+    > Description: 
+*************************************************************************/
+
 package AXI4_LITE
 
 import chisel3._

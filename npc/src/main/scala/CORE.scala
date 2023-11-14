@@ -13,7 +13,7 @@ import chisel3.util._
 import chisel3.stage._
 
 
-// import PcReg._
+import PcReg._
 import IFU._
 import ICACHE._
 import IFID._
@@ -88,7 +88,7 @@ class CORE extends Module {
     
     IDU.id_rename       <> Rename.id_rename 
     EXU.ex_rename       <> Rename.ex_rename 
-    MEM.ls_rename       <> Rename.mem_rename
+    MEM.mem_rename       <> Rename.mem_rename
     WBU.wb_rename       <> Rename.wb_rename 
     RegFile.reg_rename  <> Rename.reg_rename
     Rename.rename_reg   <> RegFile.rename_reg

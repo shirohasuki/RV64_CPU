@@ -64,17 +64,17 @@ class MEM extends Module {
     rid     := mem_axi_r.AXI_ARID
 
     // val rdata = RegInit(0.U(64.W))
-    // val rdata = WireInit(0.U(64.W))
-    // when (ren) {
-    //     rdata := mem.read(raddr >> 3)
-    // }
+    val rdata = WireInit(0.U(64.W))
+    when (ren) {
+        rdata := mem.read(raddr >> 3)
+    }
     // rdata := Mux(ren & (raddr =/= 0.U) , mem.read(raddr >> 3), 0.U)
     // rdata := Mux(ren & (raddr =/= 0.U) , mem.read(raddr >> 3), 0.U)
                 // Mux(raddr === "h80000008".U,  1.U,0.U)) // 要提前读一次，过滤掉错误值，第一下默认返回mem.read(0)
 
     mem_axi_r.AXI_ARREADY  := 1.U 
     mem_axi_r.AXI_RVALID   := ren 
-    mem_axi_r.AXI_RDATA    := Mux(ren, mem.read(raddr >> 3), 0.U)
+    mem_axi_r.AXI_RDATA    := rdata//Mux(ren, mem.read(raddr >> 3), 0.U)
     mem_axi_r.AXI_RID      := rid 
 
     // when (ren_wait_a_clk) {

@@ -17,7 +17,7 @@ class Ctrl_Input extends Bundle {
     val exmem_stall_en  = Input(Bool())
 }
 
-class EX_EXMEM_Input extends Bundle {
+class EXU_EXMEM_Input extends Bundle {
     val pc          = Input(UInt(64.W))
     val mem_en      = Input(Bool())
     val func3       = Input(UInt(3.W))
@@ -26,8 +26,8 @@ class EX_EXMEM_Input extends Bundle {
 }
 
 class EXMEM extends Module {  
-    val ex_exmem   = IO(new EXMEM_Input())
-    val exmem_mem  = IO(Flipped(new EXMEM_Input()))
+    val ex_exmem   = IO(new EXU_EXMEM_Input())
+    val exmem_mem  = IO(Flipped(new EXU_EXMEM_Input()))
     val ctrl_exmem = IO(new Ctrl_Input())
 
     exmem_mem.pc        := dff_set(ctrl_exmem.exmem_flush_en, ctrl_exmem.exmem_stall_en, 64.U, INST_NOP,  ex_exmem.pc       )

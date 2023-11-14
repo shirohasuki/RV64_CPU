@@ -81,7 +81,7 @@ class CORE extends Module {
     val RegFile  = Module(new RegFile())
 
     Pc.pc_if        <> IFU.pc_if
-    IFU.if_icache     <> MCIF.if_icache
+    IFU.if_icache     <> ICACHE.if_icache
     
     IFU.if_ifid     <> IFID.if_ifid
     IFID.ifid_id    <> IDU.ifid_id

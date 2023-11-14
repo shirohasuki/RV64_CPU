@@ -31,7 +31,7 @@ class MEM_MEMWB_Output extends Bundle {
     val rd_wen      = Input(Bool())
 }
 
-class WBU_Rename_Output extends Bundle {
+class MEM_Rename_Output extends Bundle {
     val rd_wen         = Output(Bool())
     val rd_waddr       = Output(UInt(64.W))
     val rd_wdata       = Output(UInt(64.W))
@@ -41,7 +41,7 @@ class MEM extends Module {
     val exmem_mem  = IO(new EXMEM_MEM_Input)
     val dcache_mem = IO(new DCACHE_MEM_Input)
     val mem_memwb  = IO(new MEM_MEMWB_Output)
-    val wb_rename  = IO(new WBU_Rename_Output)
+    val mem_rename  = IO(new MEM_Rename_Output)
 
     val rd_wdata    = WireInit(0.U(64.W))
     rd_wdata    :=  MuxCase(0.U, Seq(

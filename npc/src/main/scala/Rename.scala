@@ -53,7 +53,7 @@ class Rename_IDU_Output extends Bundle {
 class Rename extends Module {
     val id_rename   = IO(new IDU_Rename_Input())
     val ex_rename   = IO(new EXU_Rename_Input())
-    // val mem_rename  = IO(new MEM_Rename_Input())
+    val mem_rename  = IO(new MEM_Rename_Input())
     val wb_rename   = IO(new WBU_Rename_Input())
 
     val reg_rename  = IO(new Reg_Rename_Input())

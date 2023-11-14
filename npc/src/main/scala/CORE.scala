@@ -88,7 +88,7 @@ class CORE extends Module {
     
     IDU.id_rename       <> Rename.id_rename 
     EXU.ex_rename       <> Rename.ex_rename 
-    MEM.mem_rename       <> Rename.mem_rename
+    MEM.mem_rename      <> Rename.mem_rename
     WBU.wb_rename       <> Rename.wb_rename 
     RegFile.reg_rename  <> Rename.reg_rename
     Rename.rename_reg   <> RegFile.rename_reg
@@ -110,8 +110,10 @@ class CORE extends Module {
     // LSU.ls_ctrl     <> CTRL.ls_ctrl
     // MCIF.mcif_ctrl  <> CTRL.mcif_ctrl
     
-    CTRL.ctrl_pc    <> IFU.ctrl_pc
+    CTRL.ctrl_pc    <> PcReg.ctrl_pc
     CTRL.ctrl_ifid  <> IFID.ctrl_ifid
-    CTRL.ctrl_idex  <> IDEX.ctrl_idex        
+    CTRL.ctrl_idex  <> IDEX.ctrl_idex
+    CTRL.ctrl_ifid  <> EXMEM.ctrl_exmem
+    CTRL.ctrl_ifid  <> MEMWB.ctrl_memwb
     CTRL.ctrl_exwb  <> EXWB.ctrl_exwb  
 }

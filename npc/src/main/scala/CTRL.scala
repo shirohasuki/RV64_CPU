@@ -123,9 +123,9 @@ class Ctrl extends Module {
     ctrl_pc.pc_stall_en         := stall_list(0)
     ctrl_ifid.ifid_stall_en     := stall_list(1)
     ctrl_idex.idex_stall_en     := stall_list(2)
-    ctrl_idex.exmem_stall_en    := stall_list(3)
+    ctrl_exmem.exmem_stall_en    := stall_list(3)
     ctrl_exwb.exwb_stall_en     := stall_list(4)
-    ctrl_idex.memwb_stall_en    := stall_list(5)
+    ctrl_memwb.memwb_stall_en    := stall_list(5)
 
 
         //  List(pc_flush_en, if_id_flush_en, id_ex_flush_en, ex_mem_flush_en, ex_wb_flush_en, mem_wb_flush_en)
@@ -139,8 +139,8 @@ class Ctrl extends Module {
     ctrl_pc.pc_flush_en         := flush_list(0)
     ctrl_ifid.ifid_flush_en     := flush_list(1)
     ctrl_idex.idex_flush_en     := flush_list(2)
-    ctrl_idex.exmem_stall_en    := flush_list(3)
+    ctrl_exmem.exmem_stall_en    := flush_list(3)
     ctrl_exwb.exwb_flush_en     := flush_list(4)
-    ctrl_idex.memwb_stall_en    := flush_list(5)
+    ctrl_memwb.memwb_stall_en    := flush_list(5)
 
 }

@@ -10,6 +10,8 @@
 package DCACHE
 
 import chisel3._
+import chisel3.util._
+
 
 import DPIC.pmem_read
 import DPIC.pmem_write

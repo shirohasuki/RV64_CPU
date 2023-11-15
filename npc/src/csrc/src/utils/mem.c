@@ -22,6 +22,7 @@ uint8_t* cpu2mem(ll addr) {
 }
 
 extern "C" void pmem_read(ll raddr, ll *rdata) {
+    /*
     if (RTC_MMIO <= raddr && raddr <= RTC_MMIO + 8) { 
         if (cpu_npc.pc != 0) { rtc = mmio_read(raddr, 8); } // 判断不要多次执行 
         if (raddr == RTC_MMIO) { 
@@ -60,6 +61,7 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
     }
   
     Printf("[pmem_read] Invalid Read Mem, raddr is:%llx\n", RED, raddr);
+    */
     uint8_t *pt = cpu2mem(raddr) + 7;
     ll ret = 0;
     for (int i = 0; i < 8; ++i) {
@@ -81,6 +83,7 @@ extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
 #endif
     // if (cpu_npc.pc != 0) { printf("[pmem_write] waddr is:%llx wdata is:%llx wmask is:%llx\n", waddr, wdata & mask, mask); }
     // 其实&mask是没必要的，因为ex.v已经帮忙改造过了
+    /*
     if (SERIAL_MMIO <= waddr && waddr <= SERIAL_MMIO + 8) { 
         if (cpu_npc.pc != 0) {
             mmio_write(waddr, 1, wdata & mask); // 写串口
@@ -106,6 +109,7 @@ extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
         return;
     }
     Printf("[pmem_write] Invalid write Mem, waddr is:%llx wdata is:%llx\n", RED, waddr, wdata);
+    */
     uint8_t *pt = cpu2mem(waddr);
     for (int i = 0; i < 8; ++i) {
         if (mask & 1) *pt = (wdata & 0xff);

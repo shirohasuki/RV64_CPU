@@ -63,7 +63,8 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
     Printf("[pmem_read] Invalid Read Mem, raddr is:%llx\n", RED, raddr);
     */
     if (cpu_npc.pc == 0){ return ; } 
-    printf("%lx\n", raddr);
+    if (raddr == 0){ return ; } 
+    printf("%llx\n", raddr);
     uint8_t *pt = cpu2mem(raddr) + 7;
     ll ret = 0;
     for (int i = 0; i < 8; ++i) {

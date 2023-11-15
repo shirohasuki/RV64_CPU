@@ -61,7 +61,7 @@ class ICACHE extends Module {
 
     val DPIC_pmem_read  = Module(new pmem_read())
     when (if_icache.icache_raddr.valid) {
-        DPIC_pmem_read.io.raddr        := if_icache.icache_raddr.bits
+        DPIC_pmem_read.io.raddr        := if_icache.icache_raddr.bits 
         if_icache.icache_rdata         := DPIC_pmem_read.io.rdata   
     }.otherwise {
         if_icache.icache_rdata         := 0.U  

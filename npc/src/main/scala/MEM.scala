@@ -15,7 +15,7 @@ import define.function._
 
 class EXMEM_MEM_Input extends Bundle {
     val pc          = Input(UInt(64.W))
-    val mem_en = Input(Bool())
+    val mem_en      = Input(Bool())
     val func3       = Input(UInt(3.W))
     val rd_waddr  = Input(UInt(64.W))
     val rd_wen    = Input(Bool())
@@ -65,7 +65,7 @@ class MEM extends Module {
     mem_memwb.rd_waddr      := exmem_mem.rd_waddr   
     mem_memwb.rd_wen        := exmem_mem.mem_en
     // to rename
-    wb_rename.rd_wdata      := rd_wdata
-    wb_rename.rd_waddr      := mem_memwb.rd_waddr   
-    wb_rename.rd_wen        := mem_memwb.mem_en
+    mem_rename.rd_wdata      := rd_wdata
+    mem_rename.rd_waddr      := mem_memwb.rd_waddr   
+    mem_rename.rd_wen        := mem_memwb.mem_en
 }

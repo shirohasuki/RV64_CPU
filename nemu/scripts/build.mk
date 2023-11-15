@@ -28,7 +28,7 @@ endif
 LD := $(CXX)
 INCLUDES = $(addprefix -I, $(INC_PATH))
 # CFLAGS 包含了编译器选项，例如优化级别、警告选项等。
-CFLAGS  := -O2 -MMD -Wall -Werror $(INCLUDES) $(CFLAGS) -b
+CFLAGS  := -O2 -MMD -Wall -Werror $(INCLUDES) $(CFLAGS) 
 # LDFLAGS 包含了链接器选项，例如优化级别、链接库选项等。
 LDFLAGS := -O2 $(LDFLAGS)
 # OBJS是所有的目标文件（.o文件）的列表，包括从源文件编译得到的目标文件。

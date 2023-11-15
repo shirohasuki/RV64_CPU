@@ -31,6 +31,9 @@ LDFLAGS += -lSDL2 -lSDL2_image "-ldl $(shell llvm-config-11 --cxxflags) -fPIE $(
 run: verilog default sim
 # 生成verilog代码->构建bin->仿真
 
+runb: verilog default sim
+
+
 default: $(BIN)
 	$(shell mkdir -p $(BUILD_DIR))
 

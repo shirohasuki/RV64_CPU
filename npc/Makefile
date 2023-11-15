@@ -77,7 +77,7 @@ $(BIN): ${VSRCS} ${CSRCS}
 
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(BIN) -b
+	$(BIN) 
 	  @$^
 # 关于$(BIN)放在前后的对比（sim任务和default任务的不同）
 # default任务中$(BIN)放在default:后，表示依赖于$(BIN),在执行default前会先构建$(BIN)

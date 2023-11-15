@@ -1,7 +1,7 @@
 BUILD_DIR = $(abspath ./build)
 
 export PATH := $(PATH):$(abspath ./utils)
-
+ARGS
 # ========= verilator ==============
 TOPNAME = tb
 INC_PATH ?= /home/shiroha/Code/ysyx/ysyx-workbench/npc/src/csrc/include \
@@ -31,8 +31,8 @@ LDFLAGS += -lSDL2 -lSDL2_image "-ldl $(shell llvm-config-11 --cxxflags) -fPIE $(
 run: verilog default sim
 # 生成verilog代码->构建bin->仿真
 
-runb: verilog default simb
-# 批处理模式
+# runb: verilog default simb
+# # 批处理模式
 
 
 default: $(BIN)
@@ -77,22 +77,22 @@ $(BIN): ${VSRCS} ${CSRCS}
 
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(BIN) 
+	$(BIN) $(ARGS)
 	  @$^
 # 关于$(BIN)放在前后的对比（sim任务和default任务的不同）
 # default任务中$(BIN)放在default:后，表示依赖于$(BIN),在执行default前会先构建$(BIN)
 # sim任务中$(BIN)放在命令行中，表示普通的指令，即执行该可执行文件，而不会进行构建
 # 所以这个任务，只负责执行，不进行可执行文件的生成
 
-simb:
-	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(BIN) -b
-	  @$^
-# 批处理模式
+# simb:
+# 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
+# 	$(BIN) -b
+# 	  @$^
+# # 批处理模式
 
 wave:
 	gtkwave dump.vcd &
 
-.PHONY: run runb default test verilog help compile bsp reformat checkformat clean sim simb wave
+.PHONY: run default test verilog help compile bsp reformat checkformat clean sim wave
 
 include ../Makefile

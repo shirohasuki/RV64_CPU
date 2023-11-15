@@ -39,7 +39,7 @@ class EXU_EXMEM_Output extends Bundle {
 }
 
 class EXU_EXWB_Output extends Bundle {
-    // val mem_en    = Output(Bool())
+    val mem_en    = Output(Bool())
     val pc        = Output(UInt(64.W))
     val rd_wdata  = Output(UInt(64.W))
     val rd_waddr  = Output(UInt(64.W))

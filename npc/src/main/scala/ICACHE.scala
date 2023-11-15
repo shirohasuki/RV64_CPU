@@ -57,7 +57,7 @@ class ICACHE extends Module {
     // 5. read
     val pmem_read = Module(new pmem_read())
     when (if_icache.raddr.valid) {
-        pmem_read(if_icache.raddr.bit, if_icache.rdata);
+        pmem_read(if_icache.raddr.bits, if_icache.rdata);
     }
     // 6. LRU: Least recently used
 

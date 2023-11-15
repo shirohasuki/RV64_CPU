@@ -22,7 +22,7 @@ class IFU_ICACHE extends Bundle {
 class ICACHE extends Module {
     val if_icache   = IO(new IFU_ICACHE)
     // val icache_mem  = IO(new ICACHE_MEM_Output)
-    
+
     // 1. define ICache
 
 
@@ -57,6 +57,12 @@ class ICACHE extends Module {
 
 
     // 5. read
+    // Create a Wire to store the value of rdata
+    val pmemReadRdataWire = Wire(UInt(64.W))
+
+    // Connect the Wire to pmem_read.rdata
+    DPIC_pmem_read.io.rdata := pmemReadRdataWire
+
     val DPIC_pmem_read  = Module(new pmem_read())
     when (if_icache.raddr.valid) {
         DPIC_pmem_read.io.raddr  := if_icache.raddr.bits

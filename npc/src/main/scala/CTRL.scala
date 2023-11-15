@@ -105,7 +105,7 @@ class Ctrl extends Module {
     // }
     
     val load_data_hit   = rename_ctrl.rs_id_ex_hit && ex_ctrl.inst_isload
-    val NOEVENT         = ~(jump | load_data_hit)
+    val NOEVENT         = ~(jump | inst_load |load_data_hit)
 
     ctrl_pc.jump_addr := ex_ctrl.typej_jump_addr //| io.clint_ctrl.intr_jump_addr
     ctrl_pc.jump_en   := jump

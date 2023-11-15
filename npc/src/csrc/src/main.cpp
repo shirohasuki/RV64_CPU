@@ -58,10 +58,10 @@ void npc_exec_once() {
 } // 翻转两次走一条指令
 
 void sim_exit() {
-    step_and_dump_wave();
+    // step_and_dump_wave();
     // top->eval();
-    // contextp->timeInc(1);
-    // tfp->dump(contextp->time());
+    contextp->timeInc(1);
+    tfp->dump(contextp->time());
     tfp->close();
     printf("The wave data has been saved to the dump.vcd\n");
 }

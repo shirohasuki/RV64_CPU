@@ -88,6 +88,7 @@ simb:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	$(BIN) -b
 	  @$^
+# 批处理模式
 
 wave:
 	gtkwave dump.vcd &

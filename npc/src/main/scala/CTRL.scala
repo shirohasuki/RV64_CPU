@@ -92,6 +92,7 @@ class Ctrl extends Module {
 
     
     val jump          = ex_ctrl.typej_jump_en   // || ex_ctrl.intr_jump_en
+    val inst_load     = ex_ctrl.inst_isload   
 
 
     // val load_store_busy = RegInit(false.B)    
@@ -110,14 +111,15 @@ class Ctrl extends Module {
     ctrl_pc.jump_en   := jump
 
     // 给事件进行优先编码
-    val event_code = PriorityEncoder(Cat(load_data_hit, jump, NOEVENT)) // 从低到高输出第一个有1的位数 0->NOEVENT
+    val event_code = PriorityEncoder(Cat(load_data_hit, inst_load, jump, NOEVENT)) // 从低到高输出第一个有1的位数 0->NOEVENT
     // val event_code = PriorityEncoder(Cat(load_data_hit, (mcif_ctrl.load_store_busy | load_store_busy & ~mcif_ctrl.axi_busy_end), jump, NOEVENT)) // 从低到高输出第一个有1的位数 0->NOEVENT
 
     //  List(pc_stall_en, if_id_stall_en, id_ex_stall_en, ex_mem_stall_en, ex_wb_stall_en, mem_wb_stall_en)
     val stall_list  = ListLookup(event_code, List(false.B, false.B, false.B, false.B, false.B, false.B), Array(
         // BitPat("b10".U) -> List(true.B, true.B, false.B, true.B),     // load_store_busy    
         BitPat("b00".U) -> List(false.B, false.B, false.B, false.B, false.B, false.B),   // Noevent
-        BitPat("b10".U) -> List(true.B, true.B, false.B, false.B, false.B, false.B),     // load_data_hit         
+        BitPat("b10".U) -> List(true.B, true.B, true.B, false.B, false.B, false.B),     // inst_load
+        BitPat("b11".U) -> List(true.B, true.B, false.B, false.B, false.B, false.B),     // load_data_hit         
     ))
 
     ctrl_pc.pc_stall_en         := stall_list(0)

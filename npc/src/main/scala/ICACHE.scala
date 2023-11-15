@@ -58,8 +58,7 @@ class ICACHE extends Module {
 
     // 5. read
     // Create a Wire to store the value of rdata
-    val pmemReadRdataWire = Wire(UInt(64.W))
-
+    val pmemReadRdataWire = WireInit(0.U(64.W))
     // Connect the Wire to pmem_read.rdata
     DPIC_pmem_read.io.rdata := pmemReadRdataWire
 

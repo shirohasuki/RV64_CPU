@@ -53,6 +53,9 @@ class DCACHE extends Module {
         DPIC_pmem_write.io.waddr  := ex_dcache.dcache_waddr.bits
         DPIC_pmem_write.io.wdata  := ex_dcache.dcache_wdata.bits
         DPIC_pmem_write.io.wmask  := ex_dcache.dcache_wmask.bits
+        dcache_mem.dcache_rdata        := 0.U
+    }.otherwise {
+        dcache_mem.dcache_rdata        := 0.U
     }
 }
 

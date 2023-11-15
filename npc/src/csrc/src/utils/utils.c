@@ -60,14 +60,14 @@ void dump_csr() {
 
 
 void npc_exit(int status) {
-    if (status == 0) puts(ASNI_FMT("[Sim Result]: HIT GOOD TRAP", ASNI_FG_GREEN));
+    if (status == 0) printf(ASNI_FMT("[Sim Result]: HIT GOOD TRAP\n", ASNI_FG_GREEN));
     else {
         IFDEF(CONFIG_NPC_ITRACE, itrace_output());
         IFDEF(CONFIG_NPC_MTRACE, print_mtrace());
         IFDEF(CONFIG_NPC_GPRTRACE, dump_gpr());
-	    printf(ASNI_FMT("NPC meets error at step %d", ASNI_FG_BLUE), nemu_step);
+	    printf(ASNI_FMT("NPC meets error at step %d\n", ASNI_FG_BLUE), nemu_step);
         // IFDEF(CONFIG_NPC_GPRTRACE, dump_csr());
-        printf(ASNI_FMT("[Sim Result]: HIT BAD TRAP", ASNI_FG_RED));
+        printf(ASNI_FMT("[Sim Result]: HIT BAD TRAP\n", ASNI_FG_RED));
     }
     sim_exit();
     exit(status);

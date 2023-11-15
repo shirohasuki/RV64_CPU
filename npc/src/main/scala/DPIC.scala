@@ -169,7 +169,7 @@ class pmem_read extends BlackBox with HasBlackBoxInline {
     setInline("pmem_read.v",
     """
     |import "DPI-C" function void pmem_read( input longint raddr, output longint rdata);
-    |module ebreak (
+    |module pmem_read (
     |   input  [63:0] raddr,
     |   output [63:0] rdata
     |);

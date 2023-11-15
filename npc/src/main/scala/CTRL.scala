@@ -139,8 +139,8 @@ class Ctrl extends Module {
     ctrl_pc.pc_flush_en         := flush_list(0)
     ctrl_ifid.ifid_flush_en     := flush_list(1)
     ctrl_idex.idex_flush_en     := flush_list(2)
-    ctrl_exmem.exmem_stall_en   := flush_list(3)
+    ctrl_exmem.exmem_flush_en   := flush_list(3)
     ctrl_exwb.exwb_flush_en     := flush_list(4)
-    ctrl_memwb.memwb_stall_en   := flush_list(5)
+    ctrl_memwb.memwb_flush_en   := flush_list(5)
 
 }

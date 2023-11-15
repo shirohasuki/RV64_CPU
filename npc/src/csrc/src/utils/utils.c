@@ -70,7 +70,6 @@ void npc_exit(int status) {
         printf(ASNI_FMT("[Sim Result]: HIT BAD TRAP\n", ASNI_FG_RED));
     }
     sim_exit();
-    printf("here\n");
     exit(status);
 }
 

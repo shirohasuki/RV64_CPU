@@ -1,7 +1,7 @@
 BUILD_DIR = $(abspath ./build)
 
 export PATH := $(PATH):$(abspath ./utils)
-ARGS
+# ARGS
 # ========= verilator ==============
 TOPNAME = tb
 INC_PATH ?= /home/shiroha/Code/ysyx/ysyx-workbench/npc/src/csrc/include \

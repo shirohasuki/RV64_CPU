@@ -5,7 +5,7 @@ LDFLAGS   += --gc-sections -e _start
 CFLAGS 	+= -DMAINARGS=\"$(mainargs)\"
 CFLAGS += -I$(AM_HOME)/am/src/riscv/npc/include
 
-NPCFLAGS += 
+NPCFLAGS += -b
 NEMUFLAGS_BATCH_MODE += -b
 
 .PHONY: $(AM_HOME)/am/src/riscv/npc/trm.c
@@ -27,7 +27,7 @@ run: image
 #因为位宽为64所以使用sed两行合并为一行
 	@echo '======================= copy .bin -> .hex finish ============================='
 # $(MAKE) -C $(NPC_HOME)
-	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) runb ARGS="$(NPCFLAGS)" IMG=$(IMAGE).bin
+	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) run ARGS="$(NPCFLAGS)" IMG=$(IMAGE).bin
 # make 定义了很多默认变量，${MAKE} 就是预设的 make 这个命令的名称（或者路径）
 #-C dir　在读取 makefile 之前改变到指定的目录dir。
 # 生成完image后，去NPC_HOME下执行该make

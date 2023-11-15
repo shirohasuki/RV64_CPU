@@ -59,6 +59,9 @@ void npc_exec_once() {
 
 void sim_exit() {
     // step_and_dump_wave();
+    top->eval();
+    // contextp->timeInc(1);
+    // tfp->dump(contextp->time());
     printf("here\n");
     tfp->close();
     printf("The wave data has been saved to the dump.vcd\n");

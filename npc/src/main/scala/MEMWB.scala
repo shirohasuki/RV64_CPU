@@ -32,7 +32,7 @@ class MEMWB extends Module {
     val ctrl_memwb = IO(new Ctrl_Input())
 
     memwb_wb.pc          := dff_set(ctrl_memwb.memwb_flush_en, ctrl_memwb.memwb_stall_en, 64.U, 0.U(64.W), mem_memwb.pc      )
-    memwb_wb.mem_en := dff_set(ctrl_memwb.memwb_flush_en, ctrl_memwb.memwb_stall_en, 1.U,  false.B,   mem_memwb.mem_en  )
+    memwb_wb.mem_en      := dff_set(ctrl_memwb.memwb_flush_en, ctrl_memwb.memwb_stall_en, 1.U,  false.B,   mem_memwb.mem_en  )
     memwb_wb.rd_wdata    := dff_set(ctrl_memwb.memwb_flush_en, ctrl_memwb.memwb_stall_en, 64.U, 0.U(64.W), mem_memwb.rd_wdata)
     memwb_wb.rd_waddr    := dff_set(ctrl_memwb.memwb_flush_en, ctrl_memwb.memwb_stall_en, 64.U, 0.U(64.W), mem_memwb.rd_waddr)
     memwb_wb.rd_wen      := dff_set(ctrl_memwb.memwb_flush_en, ctrl_memwb.memwb_stall_en, 1.U,  false.B,   mem_memwb.rd_wen  )

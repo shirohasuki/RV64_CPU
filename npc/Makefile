@@ -92,6 +92,6 @@ simb:
 wave:
 	gtkwave dump.vcd &
 
-.PHONY: run runb default test verilog help compile bsp reformat checkformat clean sim wave
+.PHONY: run runb default test verilog help compile bsp reformat checkformat clean sim simb wave
 
 include ../Makefile

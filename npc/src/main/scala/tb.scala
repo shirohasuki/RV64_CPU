@@ -20,7 +20,7 @@ import MEM._
 
 class tb extends Module {
     val CORE        = Module(new CORE())
-    val AXI4_LITE   = Module(new AXI4_LITE())
+    // val AXI4_LITE   = Module(new AXI4_LITE())
     // val MEM         = Module(new MEM())
     
     // CORE.core_axi_r <> AXI4_LITE.mcif_axi_r

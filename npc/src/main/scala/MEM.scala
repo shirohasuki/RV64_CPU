@@ -47,6 +47,8 @@ class MEM extends Module {
     val mem_rename  = IO(new MEM_Rename_Output)
 
     val rd_wdata    = WireInit(0.U(64.W))
+    val dcache_rdata =  WireInit(0.U(64.W))
+    dcache_rdata := dcache_mem.dcache_rdata
     rd_wdata    :=  MuxCase(0.U, Seq(
         (exmem_mem.func3 === INST_LB )  ->  SEXT(dcache_mem.dcache_rdata(7, 0)),
         (exmem_mem.func3 === INST_LH )  ->  SEXT(dcache_mem.dcache_rdata(15, 0)),

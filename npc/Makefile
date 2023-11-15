@@ -33,10 +33,6 @@ LDFLAGS += -lSDL2 -lSDL2_image "-ldl $(shell llvm-config-11 --cxxflags) -fPIE $(
 run: verilog default sim
 # 生成verilog代码->构建bin->仿真
 
-# runb: verilog default simb
-# # 批处理模式
-
-
 default: $(BIN)
 	$(shell mkdir -p $(BUILD_DIR))
 
@@ -79,19 +75,12 @@ $(BIN): ${VSRCS} ${CSRCS}
 
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(BIN) 
-#$(ARGS)
+	$(BIN) $(ARGS)
 	  @$^
 # 关于$(BIN)放在前后的对比（sim任务和default任务的不同）
 # default任务中$(BIN)放在default:后，表示依赖于$(BIN),在执行default前会先构建$(BIN)
 # sim任务中$(BIN)放在命令行中，表示普通的指令，即执行该可执行文件，而不会进行构建
 # 所以这个任务，只负责执行，不进行可执行文件的生成
-
-# simb:
-# 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-# 	$(BIN) -b
-# 	  @$^
-# # 批处理模式
 
 wave:
 	gtkwave dump.vcd &

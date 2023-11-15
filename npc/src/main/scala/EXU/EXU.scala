@@ -95,7 +95,7 @@ class EXU extends Module {
     ex_exmem.func3       := idex_ex.func3
     ex_exmem.rd_waddr    := ALU.al_ex.rd_waddr
     ex_exmem.rd_wen      := ALU.al_ex.rd_wen  
-}
+
     // ex to rename
     ex_rename.rd_wen      := ALU.al_ex.rd_wen
     ex_rename.rd_waddr    := ALU.al_ex.rd_waddr

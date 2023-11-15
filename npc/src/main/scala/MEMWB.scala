@@ -14,8 +14,8 @@ import define.function._
 import define.MACRO._
 
 class Ctrl_Input extends Bundle {
-    val exwb_flush_en  = Input(Bool())
-    val exwb_stall_en  = Input(Bool())
+    val memwb_flush_en  = Input(Bool())
+    val memwb_stall_en  = Input(Bool())
 }
 
 class MEM_MEMWB_Input extends Bundle {

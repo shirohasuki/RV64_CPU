@@ -62,8 +62,6 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
   
     Printf("[pmem_read] Invalid Read Mem, raddr is:%llx\n", RED, raddr);
     */
-    if (cpu_npc.pc == 0){ return ; } 
-    if (raddr == 0){ return ; } 
     if (raddr < MEM_BASE){ printf("[pmem_read]  raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE); return ; } 
     printf("%llx\n", raddr);
     uint8_t *pt = cpu2mem(raddr) + 7;
@@ -81,7 +79,7 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 
 // Memory Write
 extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
-    if (cpu_npc.pc == 0){ return ; } 
+    if (waddr < MEM_BASE){ printf("[pmem_read]  waddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", waddr, MEM_BASE); return ; } 
 
 #ifdef CONFIG_NPC_MTRACE
     sprintf(mtrace_buf[mtrace_count],"write: addr:%016llx data:%016llx wmask:%08x\n", waddr,  wdata, mask);

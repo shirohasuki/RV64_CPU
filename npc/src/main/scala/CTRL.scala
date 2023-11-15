@@ -117,7 +117,7 @@ class Ctrl extends Module {
     //  List(pc_stall_en, if_id_stall_en, id_ex_stall_en, ex_mem_stall_en, ex_wb_stall_en, mem_wb_stall_en)
     val stall_list  = ListLookup(event_code, List(false.B, false.B, false.B, false.B, false.B, false.B), Array(
         // BitPat("b10".U) -> List(true.B, true.B, false.B, true.B),     // load_store_busy    
-        BitPat("b10".U) -> List(true.B, true.B, true.B, false.B, false.B, false.B),     // inst_load
+        BitPat("b10".U) -> List(true.B, true.B, false.B, false.B, false.B, false.B),     // inst_load
         BitPat("b00".U) -> List(false.B, false.B, false.B, false.B, false.B, false.B),   // Noevent
         BitPat("b11".U) -> List(true.B, true.B, false.B, false.B, false.B, false.B),     // load_data_hit         
     ))

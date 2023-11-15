@@ -101,11 +101,11 @@ class CORE extends Module {
     EXMEM.exmem_mem <> MEM.exmem_mem
     EXU.ex_exwb     <> EXWB.ex_exwb
     EXWB.exwb_wb    <> WBU.exwb_wb
-    MEM.mem_memwb    <> MEMWB.mem_memwb
+    MEM.mem_memwb   <> MEMWB.mem_memwb
     MEMWB.memwb_wb  <> WBU.memwb_wb
 
     EXU.ex_dcache   <> DCACHE.ex_dcache
-    EXWB.exwb_wb    <> WBU.exwb_wb
+    DCACHE.dcache_mem <> MEM.dcache_mem   
     WBU.wb_reg      <> RegFile.wb_reg
 
     // MCIF.mcif_axi_r <> core_axi_r

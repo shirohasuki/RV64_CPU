@@ -49,7 +49,7 @@ class DCACHE extends Module {
     when (ex_dcache.raddr.valid) {
         DPIC_pmem_read.io.raddr  := ex_dcache.raddr.bits
         DPIC_pmem_read.io.rdata  := dcache_mem.rdata
-    } elsewhen (ex_dcache.waddr.valid) {
+    }.elsewhen (ex_dcache.waddr.valid) {
         DPIC_pmem_write.io.waddr  := ex_dcache.waddr.bits
         DPIC_pmem_write.io.wdata  := ex_dcache.wdata.bits
         DPIC_pmem_write.io.wmask  := ex_dcache.wmask.bits

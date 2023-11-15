@@ -101,7 +101,7 @@ class CORE extends Module {
     EXMEM.exmem_mem <> MEM.exmem_mem
     EXU.ex_exwb     <> EXWB.ex_exwb
     EXWB.exwb_wb    <> WBU.exwb_wb
-    MEM.memwb_wb    <> MEMWB.memwb_wb
+    MEM.mem_memwb    <> MEMWB.wb_memwb
     MEMWB.memwb_wb  <> WBU.memwb_wb
 
     EXU.ex_dcache   <> DCACHE.ex_dcache

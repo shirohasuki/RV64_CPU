@@ -10,7 +10,8 @@ $(BINARY): compile_git
 # Some convenient rules
 
 override ARGS ?= --log=$(BUILD_DIR)/nemu-log.txt
-override ARGS += $(ARGS_DIFF) -b
+override ARGS += $(ARGS_DIFF) 
+# -b
 
 # Command to execute NEMU
 IMG ?=

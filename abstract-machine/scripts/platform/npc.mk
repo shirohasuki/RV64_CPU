@@ -44,4 +44,4 @@ runb: image
 #因为位宽为64所以使用sed两行合并为一行
 	@echo '======================= copy .bin -> .hex finish ================================='
 # $(MAKE) -C $(NPC_HOME)
-	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) runb ARGS="$(NEMUFLAGS_BATCH_MODE)" IMG=$(IMAGE).bin
+	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) run ARGS="$(NEMUFLAGS_BATCH_MODE)" IMG=$(IMAGE).bin

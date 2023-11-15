@@ -18,7 +18,7 @@ LDFLAGS   += --gc-sections -e _start
 CFLAGS 	+= -DMAINARGS=\"$(mainargs)\"
 CFLAGS += -I$(AM_HOME)/am/src/riscv/npc/include
 
-NPCFLAGS += b 
+NPCFLAGS += -b 
 
 .PHONY: $(AM_HOME)/am/src/riscv/npc/trm.c
 
@@ -40,4 +40,4 @@ run: image
 	@echo '======================= copy .bin -> .hex finish ================================='
 
 # $(MAKE) -C $(NPC_HOME)
-	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) run ARGS="$(NPCFLAGS)" IMG=$(IMAGE).bin
+	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) runb ARGS="$(NPCFLAGS)" IMG=$(IMAGE).bin

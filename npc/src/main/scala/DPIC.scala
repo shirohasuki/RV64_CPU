@@ -187,10 +187,10 @@ class pmem_write extends BlackBox with HasBlackBoxInline {
         val wdata  = Input(UInt(64.W)) 
         val wmask  = Input(UInt(8.W)) 
     })
-    setInline("pmem_read.v",
+    setInline("pmem_write.v",
     """
     |import "DPI-C" function void pmem_write( input longint waddr, input longint wdata, input byte mask);
-    |module ebreak (
+    |module pmem_write (
     |   input [63:0] waddr,
     |   input [63:0] wdata,
     |   input [63:0] wmask

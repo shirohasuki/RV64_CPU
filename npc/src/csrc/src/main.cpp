@@ -62,7 +62,6 @@ void sim_exit() {
     // top->eval();
     contextp->timeInc(1);
     tfp->dump(contextp->time());
-    printf("here\n");
     tfp->close();
     printf("The wave data has been saved to the dump.vcd\n");
 }

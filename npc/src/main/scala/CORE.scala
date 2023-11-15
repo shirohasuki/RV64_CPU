@@ -113,7 +113,7 @@ class CORE extends Module {
     CTRL.ctrl_pc    <> Pc.ctrl_pc
     CTRL.ctrl_ifid  <> IFID.ctrl_ifid
     CTRL.ctrl_idex  <> IDEX.ctrl_idex
-    CTRL.ctrl_ifid  <> EXMEM.ctrl_exmem
-    CTRL.ctrl_ifid  <> MEMWB.ctrl_memwb
+    CTRL.ctrl_exmem  <> EXMEM.ctrl_exmem
+    CTRL.ctrl_memwb  <> MEMWB.ctrl_memwb
     CTRL.ctrl_exwb  <> EXWB.ctrl_exwb  
 }

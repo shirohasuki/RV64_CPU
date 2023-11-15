@@ -45,7 +45,7 @@ class WBU extends Module {
     val wb_reg      = IO(new WBU_RegFile_Output())
     val wb_rename   = IO(new WBU_Rename_Output())
 
-    when (memwb_wb.mem_en) {
+    when (exwb_wb.mem_en) {
         wb_reg.pc       := memwb_wb.pc       
         wb_reg.rd_wdata := memwb_wb.rd_wdata 
         wb_reg.rd_waddr := memwb_wb.rd_waddr 

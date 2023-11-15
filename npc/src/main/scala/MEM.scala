@@ -61,11 +61,11 @@ class MEM extends Module {
 
 
     // to mem_memwb
-    mem_memwb.pc            := exmem_mem.mem_en & exmem_mem.pc
+    mem_memwb.pc            := Mux(exmem_mem.mem_en, exmem_mem.pc, 0.U)
     mem_memwb.mem_en        := exmem_mem.mem_en
-    mem_memwb.rd_wdata      := exmem_mem.mem_en & rd_wdata
-    mem_memwb.rd_waddr      := exmem_mem.mem_en & exmem_mem.rd_waddr   
-    mem_memwb.rd_wen        := exmem_mem.mem_en & exmem_mem.mem_en
+    mem_memwb.rd_wdata      := Mux(exmem_mem.mem_en, rd_wdata,           0.U)
+    mem_memwb.rd_waddr      := Mux(exmem_mem.mem_en, exmem_mem.rd_waddr, 0.U)       
+    mem_memwb.rd_wen        := Mux(exmem_mem.mem_en, exmem_mem.mem_en,   0.U)
     // to rename
     mem_rename.rd_wdata      := rd_wdata
     mem_rename.rd_waddr      := mem_memwb.rd_waddr   

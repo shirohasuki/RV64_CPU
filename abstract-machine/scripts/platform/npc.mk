@@ -5,7 +5,7 @@ LDFLAGS   += --gc-sections -e _start
 CFLAGS 	+= -DMAINARGS=\"$(mainargs)\"
 CFLAGS += -I$(AM_HOME)/am/src/riscv/npc/include
 
-NPCFLAGS += 
+NPCFLAGS += -b
 
 .PHONY: $(AM_HOME)/am/src/riscv/npc/trm.c
 

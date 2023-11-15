@@ -77,7 +77,7 @@ class CORE extends Module {
     val WBU      = Module(new WBU())
     // val MCIF     = Module(new MCIF())
     val CTRL     = Module(new Ctrl())
-    val Rename = Module(new Rename())
+    val Rename  = Module(new Rename())
     val RegFile  = Module(new RegFile())
 
     Pc.pc_if        <> IFU.pc_if

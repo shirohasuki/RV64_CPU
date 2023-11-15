@@ -63,7 +63,6 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
     Printf("[pmem_read] Invalid Read Mem, raddr is:%llx\n", RED, raddr);
     */
     if (raddr < MEM_BASE){ printf("[pmem_read]  raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE); return ; } 
-    // printf("%llx\n", raddr);
     uint8_t *pt = cpu2mem(raddr) + 7;
     ll ret = 0;
     for (int i = 0; i < 8; ++i) {

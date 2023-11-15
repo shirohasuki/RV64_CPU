@@ -28,6 +28,8 @@ run: image
 	@echo '======================= copy .bin -> .hex finish ============================='
 # $(MAKE) -C $(NPC_HOME)
 	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) run ARGS="$(NPCFLAGS)" IMG=$(IMAGE).bin
+# make 定义了很多默认变量，${MAKE} 就是预设的 make 这个命令的名称（或者路径）
+#-C dir　在读取 makefile 之前改变到指定的目录dir。
 
 runb: image
 	@echo '======================= copy .bin -> .hex start ================================='

@@ -70,6 +70,7 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
     }
     *rdata = ret;
 #ifdef CONFIG_NPC_MTRACE
+    if (addr < 0x80000124) return ;
     sprintf(mtrace_buf[mtrace_count], "read:  addr:%016llx data:%016llx", raddr, (*rdata));
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
 #endif

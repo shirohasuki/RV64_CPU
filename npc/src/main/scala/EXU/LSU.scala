@@ -34,11 +34,11 @@ class LSU_EXU_Output extends Bundle {
     val rd_wdata        = Output(UInt(64.W))
 }
 
-class LSU_Rename_Output extends Bundle {
-    val rd_wen         = Output(Bool())
-    val rd_waddr       = Output(UInt(64.W))
-    val rd_wdata       = Output(UInt(64.W))
-}
+// class LSU_Rename_Output extends Bundle {
+//     val rd_wen         = Output(Bool())
+//     val rd_waddr       = Output(UInt(64.W))
+//     val rd_wdata       = Output(UInt(64.W))
+// }
 
 class LSU_DCACHE_Output extends Bundle{
     val dcache_raddr  = Valid(UInt(64.W))
@@ -50,15 +50,15 @@ class LSU_DCACHE_Output extends Bundle{
 
 class LSU extends Module {
     val al_ls       = IO(new ALU_LSU_Input())
-    val ls_rename   = IO(new LSU_Rename_Output())
+    // val ls_rename   = IO(new LSU_Rename_Output())
     val ls_ex       = IO(new LSU_EXU_Output())
     
     val ls_dcache   = IO(new LSU_DCACHE_Output())
 
     // to rename
-    ls_rename.rd_wdata := ls_ex.rd_wdata
-    ls_rename.rd_waddr := ls_ex.rd_waddr   
-    ls_rename.rd_wen   := ls_ex.rd_wen  
+    // ls_rename.rd_wdata := ls_ex.rd_wdata
+    // ls_rename.rd_waddr := ls_ex.rd_waddr   
+    // ls_rename.rd_wen   := ls_ex.rd_wen  
     
     // to dcache
     ls_dcache.dcache_raddr.valid    := al_ls.dcache_ren

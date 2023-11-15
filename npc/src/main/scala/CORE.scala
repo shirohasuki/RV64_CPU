@@ -97,8 +97,13 @@ class CORE extends Module {
 
     IDU.id_idex     <> IDEX.id_idex
     IDEX.idex_ex    <> EXU.idex_ex
-    
+    EXU.ex_exmem    <> EXMEM.ex_exmem
+    EXMEM.exmem_mem <> MEM.exmem_mem
     EXU.ex_exwb     <> EXWB.ex_exwb
+    EXWB.exwb_wb    <> WBU.exwb_wb
+    MEM.memwb_wb    <> MEMWB.memwb_wb
+    MEMWB.memwb_wb  <> WBU.memwb_wb
+
     EXU.ex_dcache   <> DCACHE.ex_dcache
     EXWB.exwb_wb    <> WBU.exwb_wb
     WBU.wb_reg      <> RegFile.wb_reg

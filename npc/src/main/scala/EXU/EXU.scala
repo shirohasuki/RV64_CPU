@@ -72,7 +72,7 @@ class EXU extends Module {
     val idex_ex     = IO(new IDEX_EXU_Input()) 
     val ex_dcache   = IO(new EXU_DCACHE_Output) 
     val ex_exwb     = IO(new EXU_EXWB_Output())
-    val ex_exmem     = IO(new EXU_EXMEM_Output())
+    val ex_exmem    = IO(new EXU_EXMEM_Output())
     val ex_ctrl     = IO(new EXU_CTRL_Output())
     val ex_rename   = IO(new EXU_Rename_Output())
     

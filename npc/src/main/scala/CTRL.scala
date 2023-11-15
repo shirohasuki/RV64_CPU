@@ -117,15 +117,15 @@ class Ctrl extends Module {
     val stall_list  = ListLookup(event_code, List(false.B, false.B, false.B, false.B, false.B, false.B), Array(
         // BitPat("b10".U) -> List(true.B, true.B, false.B, true.B),     // load_store_busy    
         BitPat("b00".U) -> List(false.B, false.B, false.B, false.B, false.B, false.B),   // Noevent
-        BitPat("b11".U) -> List(true.B, true.B, false.B, false.B, false.B, false.B),     // load_data_hit         
+        BitPat("b10".U) -> List(true.B, true.B, false.B, false.B, false.B, false.B),     // load_data_hit         
     ))
 
     ctrl_pc.pc_stall_en         := stall_list(0)
     ctrl_ifid.ifid_stall_en     := stall_list(1)
     ctrl_idex.idex_stall_en     := stall_list(2)
-    ctrl_exmem.exmem_stall_en    := stall_list(3)
+    ctrl_exmem.exmem_stall_en   := stall_list(3)
     ctrl_exwb.exwb_stall_en     := stall_list(4)
-    ctrl_memwb.memwb_stall_en    := stall_list(5)
+    ctrl_memwb.memwb_stall_en   := stall_list(5)
 
 
         //  List(pc_flush_en, if_id_flush_en, id_ex_flush_en, ex_mem_flush_en, ex_wb_flush_en, mem_wb_flush_en)
@@ -133,7 +133,7 @@ class Ctrl extends Module {
         // BitPat("b10".U) -> List(false.B, false.B, true.B,  true.B),     // load_store_busy
         BitPat("b00".U) -> List(false.B, false.B, false.B, false.B, false.B, false.B),    // Noevent
         BitPat("b01".U) -> List(false.B, true.B,  true.B,  false.B, false.B, false.B),    // jump
-        BitPat("b11".U) -> List(false.B, false.B, true.B,  false.B, false.B, false.B)     // load_data_hit 
+        BitPat("b10".U) -> List(false.B, false.B, true.B,  false.B, false.B, false.B)     // load_data_hit 
     ))
 
     ctrl_pc.pc_flush_en         := flush_list(0)

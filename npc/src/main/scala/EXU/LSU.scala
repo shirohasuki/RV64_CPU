@@ -40,7 +40,7 @@ class LSU_Rename_Output extends Bundle {
     val rd_wdata       = Output(UInt(64.W))
 }
 
-class LSU_DCACHE extends Bundle{
+class LSU_DCACHE_Output extends Bundle{
     val dcache_raddr  = Valid(UInt(64.W))
     val dcache_waddr  = Valid(UInt(64.W))
     val dcache_wdata  = Valid(UInt(64.W))
@@ -53,7 +53,7 @@ class LSU extends Module {
     val ls_rename   = IO(new LSU_Rename_Output())
     val ls_ex       = IO(new LSU_EXU_Output())
     
-    val ls_dcache   = IO(new LSU_DCACHE())
+    val ls_dcache   = IO(new LSU_DCACHE_Output())
 
     // to rename
     ls_rename.rd_wdata := ls_ex.rd_wdata

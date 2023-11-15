@@ -14,8 +14,8 @@ import chisel3.stage._
 
 
 class IFU_ICACHE_R extends Bundle {
-    val raddr  = Valid(UInt(64.W)) // pc
-    val rdata  = Input(UInt(64.W))  // inst
+    val icache_raddr  = Valid(UInt(64.W)) // pc
+    val icache_rdata  = Input(UInt(64.W))  // inst
 }
 
 class IFU extends Module {
@@ -32,6 +32,6 @@ class IFU extends Module {
 
     if_icache.raddr.valid := 1.U       // ren
     if_icache.raddr.bits   := pc_if.pc
-    if_ifid.inst              := Mux(if_icache.raddr.bits(2) === 1.U, if_icache.rdata(31, 0), if_icache.rdata(63, 32))
+    if_ifid.inst              := Mux(if_icache.icache_raddr.bits(2) === 1.U, if_icache.icache_rdata(31, 0), if_icache.icache_rdata(63, 32))
     if_ifid.pc                := pc_if.pc
 }

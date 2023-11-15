@@ -14,8 +14,8 @@ import chisel3.util._
 import DPIC.pmem_read
 
 class IFU_ICACHE extends Bundle {
-    val raddr  = Flipped(Valid(UInt(64.W)))   // pc
-    val rdata  = Output(UInt(64.W))  // inst
+    val icache_raddr  = Flipped(Valid(UInt(64.W)))   // pc
+    val icache_rdata  = Output(UInt(64.W))  // inst
 }
 
 
@@ -61,8 +61,8 @@ class ICACHE extends Module {
 
     val DPIC_pmem_read  = Module(new pmem_read())
     when (if_icache.raddr.valid) {
-        DPIC_pmem_read.io.raddr := if_icache.raddr.bits
-        if_icache.rdata         := DPIC_pmem_read.io.rdata   
+        DPIC_pmem_read.io.raddr := if_icache.icache_raddr.bits
+        if_icache.icache_rdata         := DPIC_pmem_read.io.rdata   
     }
     // 6. LRU: Least recently used
 

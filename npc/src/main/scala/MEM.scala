@@ -23,7 +23,7 @@ class EXMEM_MEM_Input extends Bundle {
 }
 
 class DCACHE_MEM_Input extends Bundle {
-    val rdata          = Input(UInt(64.W))
+    val dcache_rdata          = Input(UInt(64.W))
 }
 
 class MEM_MEMWB_Output extends Bundle {
@@ -48,13 +48,13 @@ class MEM extends Module {
 
     val rd_wdata    = WireInit(0.U(64.W))
     rd_wdata    :=  MuxCase(0.U, Seq(
-        (exmem_mem.func3 === INST_LB )  ->  SEXT(dcache_mem.rdata(7, 0)),
-        (exmem_mem.func3 === INST_LH )  ->  SEXT(dcache_mem.rdata(15, 0)),
-        (exmem_mem.func3 === INST_LW )  ->  SEXT(dcache_mem.rdata(31, 0)),
-        (exmem_mem.func3 === INST_LD )  ->  SEXT(dcache_mem.rdata),
-        (exmem_mem.func3 === INST_LBU)  ->  ZEXT(dcache_mem.rdata(7, 0)),
-        (exmem_mem.func3 === INST_LHU)  ->  ZEXT(dcache_mem.rdata(15, 0)),
-        (exmem_mem.func3 === INST_LWU)  ->  ZEXT(dcache_mem.rdata(31, 0))
+        (exmem_mem.func3 === INST_LB )  ->  SEXT(dcache_mem.dcache_rdata(7, 0)),
+        (exmem_mem.func3 === INST_LH )  ->  SEXT(dcache_mem.dcache_rdata(15, 0)),
+        (exmem_mem.func3 === INST_LW )  ->  SEXT(dcache_mem.dcache_rdata(31, 0)),
+        (exmem_mem.func3 === INST_LD )  ->  SEXT(dcache_mem.dcache_rdata),
+        (exmem_mem.func3 === INST_LBU)  ->  ZEXT(dcache_mem.dcache_rdata(7, 0)),
+        (exmem_mem.func3 === INST_LHU)  ->  ZEXT(dcache_mem.dcache_rdata(15, 0)),
+        (exmem_mem.func3 === INST_LWU)  ->  ZEXT(dcache_mem.dcache_rdata(31, 0))
     ))// load
 
 

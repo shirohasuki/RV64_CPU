@@ -31,7 +31,7 @@ class IDEX_EXU_Input extends Bundle {
 }
 
 class EXU_EXMEM_Output extends Bundle {
-    // val mem_en    = Output(Bool())
+    val mem_en    = Output(Bool())
     val pc           = Output(UInt(64.W))
     val func3        = Output(UInt(3.W))
     // val rd_wdata  = Output(UInt(64.W))

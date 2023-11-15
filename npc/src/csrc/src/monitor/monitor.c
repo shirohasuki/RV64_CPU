@@ -28,6 +28,28 @@ static void init_log(const char *log_file) {
 	Log("Log is written to %s", log_file ? log_file : "stdout");
 }
 
+static int parse_args(int argc, char *argv[]) {
+	const struct option table[] = {
+		{"batch"    , no_argument      , NULL, 'b'},
+		{"log"      , required_argument, NULL, 'l'},
+		{"help"     , no_argument      , NULL, 'h'},
+	};
+	int o;
+	while ( (o = getopt_long(argc, argv, "-bhl:e:d:p:", table, NULL)) != -1) {
+		switch (o) {
+		case 'b': sdb_set_batch_mode(); break;
+		case 'l': log_file = optarg; break;
+		default:
+			printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
+			printf("\t-b,--batch              run with batch mode\n");
+			printf("\t-l,--log=FILE           output log to FILE\n");
+			printf("\n");
+			exit(0);
+		}
+	}
+	return 0;
+}
+
 
 void init_monitor() {
 	init_log("./monitor_log.txt");

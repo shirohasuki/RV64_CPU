@@ -26,7 +26,7 @@ else
 CXX := g++
 endif
 LD := $(CXX)
-INCLUDESL= $(addprefix -I, $(INC_PATH))
+INCLUDES = $(addprefix -I, $(INC_PATH))
 # CFLAGS 包含了编译器选项，例如优化级别、警告选项等。
 CFLAGS  := -O2 -MMD -Wall -Werror $(INCLUDES) $(CFLAGS)
 # LDFLAGS 包含了链接器选项，例如优化级别、链接库选项等。

@@ -70,7 +70,7 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
     }
     *rdata = ret;
 #ifdef CONFIG_NPC_MTRACE
-    if (raddr < 0x80000124) return ;
+    if (raddr < 0x80000124) return ; // 取指的不要记录
     sprintf(mtrace_buf[mtrace_count], "read:  addr:%016llx data:%016llx", raddr, (*rdata));
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
 #endif
@@ -114,6 +114,7 @@ extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
     }
     Printf("[pmem_write] Invalid write Mem, waddr is:%llx wdata is:%llx\n", RED, waddr, wdata);
     */
+    Printf("[pmem_write] waddr is:%llx wdata is:%llx wmask is:%llx\n", RED, waddr, wdata, wmask);
     uint8_t *pt = cpu2mem(waddr);
     for (int i = 0; i < 8; ++i) {
         if (mask & 1) *pt = (wdata & 0xff);

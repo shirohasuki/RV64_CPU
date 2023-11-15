@@ -21,7 +21,7 @@ class IFU_ICACHE extends Bundle {
 
 class ICACHE extends Module {
     val if_icache   = IO(new IFU_ICACHE)
-    val icache_mem  = IO(new ICACHE_MEM_Output)
+    // val icache_mem  = IO(new ICACHE_MEM_Output)
     // 1. define ICache
 
 

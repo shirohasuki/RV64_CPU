@@ -19,12 +19,12 @@ class ALU_LSU_Input extends Bundle {
     val inst_isload     = Input(Bool())
     val inst_isstore    = Input(Bool())
     val rd_waddr        = Input(UInt(5.W))
-    val mem_ren         = Input(Bool())
-    val mem_raddr       = Input(UInt(64.W))
-    val mem_wen         = Input(Bool())
-    val mem_wmask       = Input(Vec(8, Bool()))
-    val mem_wdata       = Input(UInt(64.W))
-    val mem_waddr       = Input(UInt(64.W))
+    val dcache_ren         = Input(Bool())
+    val dcache_raddr       = Input(UInt(64.W))
+    val dcache_wen         = Input(Bool())
+    val dcache_wmask       = Input(Vec(8, Bool()))
+    val dcache_wdata       = Input(UInt(64.W))
+    val dcache_waddr       = Input(UInt(64.W))
 }
 
 class LSU_EXU_Output extends Bundle {
@@ -55,33 +55,19 @@ class LSU extends Module {
     
     val ls_dcache   = IO(new LSU_DCACHE())
 
-    // to ex
-    // ls_ex.pc := al_ls.pc 
-    // ls_ex.rd_wdata := MuxCase(0.U, Seq(
-    //     (al_ls.func3 === INST_LB )  ->  SEXT(rd_wdata(7, 0)),
-    //     (al_ls.func3 === INST_LH )  ->  SEXT(rd_wdata(15, 0)),
-    //     (al_ls.func3 === INST_LW )  ->  SEXT(rd_wdata(31, 0)),
-    //     (al_ls.func3 === INST_LD )  ->  SEXT(rd_wdata),
-    //     (al_ls.func3 === INST_LBU)  ->  ZEXT(rd_wdata(7, 0)),
-    //     (al_ls.func3 === INST_LHU)  ->  ZEXT(rd_wdata(15, 0)),
-    //     (al_ls.func3 === INST_LWU)  ->  ZEXT(rd_wdata(31, 0))
-    // ))// load
-    // ls_ex.rd_waddr := al_ls.rd_waddr   
-    // ls_ex.rd_wen   := al_ls.inst_isload
-
     // to rename
     ls_rename.rd_wdata := ls_ex.rd_wdata
     ls_rename.rd_waddr := ls_ex.rd_waddr   
     ls_rename.rd_wen   := ls_ex.rd_wen  
     
     // to dcache
-    ls_dcache.dcache_raddr.valid := al_ls.mem_ren
-    ls_dcache.dcache_raddr.bit   := al_ls.mem_raddr
+    ls_dcache.dcache_raddr.valid    := al_ls.dcache_ren
+    ls_dcache.dcache_raddr.bits     := al_ls.dcache_raddr
 
-    ls_dcache.dcache_waddr.valid := al_ls.dcache_wen
-    ls_dcache.dcache_wdata.valid := al_ls.dcache_wen
-    ls_dcache.dcache_wmask.valid := al_ls.dcache_wen
-    ls_dcache.dcache_waddr.bit   := al_ls.mem_waddr
-    ls_dcache.dcache_wdata.bit   := al_ls.mem_wdata
-    ls_dcache.dcache_wmask.bit   := al_ls.mem_wmask
+    ls_dcache.dcache_waddr.valid    := al_ls.dcache_wen
+    ls_dcache.dcache_wdata.valid    := al_ls.dcache_wen
+    ls_dcache.dcache_wmask.valid    := al_ls.dcache_wen
+    ls_dcache.dcache_waddr.bits     := al_ls.dcache_waddr
+    ls_dcache.dcache_wdata.bits     := al_ls.dcache_wdata
+    ls_dcache.dcache_wmask.bits     := al_ls.dcache_wmask
 }

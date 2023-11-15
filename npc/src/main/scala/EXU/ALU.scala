@@ -47,13 +47,12 @@ class ALU_LSU_Output extends Bundle {
     val inst_isload     = Output(Bool())
     val inst_isstore    = Output(Bool())
     val rd_waddr        = Output(UInt(5.W))
-    val mem_ren         = Output(Bool())
-    val mem_raddr       = Output(UInt(64.W))
-    val mem_wen         = Output(Bool())
-    // val mem_wmask       = Output(Vec(8, Bool()))
-    val mem_wmask       = Output(UInt(8.W))
-    val mem_wdata       = Output(UInt(64.W))
-    val mem_waddr       = Output(UInt(64.W))
+    val dcache_ren      = Output(Bool())
+    val dcache_raddr    = Output(UInt(64.W))
+    val dcache_wen      = Output(Bool())
+    val dcache_wmask    = Output(UInt(8.W))
+    val dcache_wdata    = Output(UInt(64.W))
+    val dcache_waddr    = Output(UInt(64.W))
 }
 
 class ALU extends Module {
@@ -202,15 +201,15 @@ class ALU extends Module {
     al_ls.rd_waddr      :=  exce_list(1)
     al_ls.inst_isload   :=  exce_list(3)
     al_ls.inst_isstore  :=  exce_list(5)
-    al_ls.mem_ren       :=  exce_list(3)
-    al_ls.mem_raddr     :=  exce_list(4)
-    al_ls.mem_wen       :=  exce_list(5)
-    al_ls.mem_wmask     :=  exce_list(6)
+    al_ls.dcache_ren       :=  exce_list(3)
+    al_ls.dcache_raddr     :=  exce_list(4)
+    al_ls.dcache_wen       :=  exce_list(5)
+    al_ls.dcache_wmask     :=  exce_list(6)
 
     // for(i <- 0 to 7) {
     //     al_ls.mem_wmask(i) := exce_list(6)(i)
     // }  // UInt -> wmask
         
-    al_ls.mem_wdata     :=  exce_list(7)
-    al_ls.mem_waddr     :=  exce_list(8)
+    al_ls.dcache_wdata     :=  exce_list(7)
+    al_ls.dcache_waddr     :=  exce_list(8)
 }

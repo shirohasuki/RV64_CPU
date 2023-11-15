@@ -29,7 +29,7 @@ class tb extends Module {
     // AXI4_LITE.mem_axi_r <> MEM.mem_axi_r
     // AXI4_LITE.mem_axi_w <> MEM.mem_axi_w
 
-    // loadMemoryFromFileInline(MEM.mem, "./image.hex", MemoryLoadFileType.Hex); 
+    loadMemoryFromFileInline(MEM.mem, "./image.hex", MemoryLoadFileType.Hex); 
     // loadMemoryFromFile只会在chiseltest的时候生成readmemb
 }
 

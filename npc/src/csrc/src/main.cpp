@@ -75,10 +75,10 @@ void init_npc() {
 }
 
 
-int main() {
+int main(int argc, char *argv[]) {
     sim_init();
 
-    init_monitor();
+    init_monitor(int argc, char *argv[]);
 
     sdb_mainloop();
 

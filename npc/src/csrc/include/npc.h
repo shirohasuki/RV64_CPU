@@ -114,7 +114,8 @@ void npc_exec_once();
 void sim_exit(); // 在异常跳出时记录波形结束
 
 // ============== monitor and sdb======= // 
-void init_monitor();
+void init_monitor(int argc, char *argv[]);
+void sdb_set_batch_mode();
 void sdb_mainloop();
 
 // ============== DEVICE =============== //

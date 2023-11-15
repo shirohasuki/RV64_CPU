@@ -31,21 +31,15 @@ static void init_log(const char *log_file) {
 static int parse_args(int argc, char *argv[]) {
 	const struct option table[] = {
 		{"batch"    , no_argument      , NULL, 'b'},
-		{"log"      , required_argument, NULL, 'l'},
 		{"help"     , no_argument      , NULL, 'h'},
 	};
 	int o;
-	while ( (o = getopt_long(argc, argv, "-bhl:e:d:p:", table, NULL)) != -1) {
+	while ( (o = getopt_long(argc, argv, "-b", table, NULL)) != -1) {
 		switch (o) {
 		case 'b': sdb_set_batch_mode(); break;
-		case 'p': sscanf(optarg, "%d", &difftest_port); break;
-		case 'l': log_file = optarg; break;
-		case 'd': diff_so_file = optarg; break;
-		case 'e': elf_file = "optarg"; break;		// ELF read
 		default:
 			printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
 			printf("\t-b,--batch              run with batch mode\n");
-			printf("\t-l,--log=FILE           output log to FILE\n");
 			printf("\n");
 			exit(0);
 		}
@@ -55,6 +49,7 @@ static int parse_args(int argc, char *argv[]) {
 
 
 void init_monitor() {
+	parse_args(argc, argv);
 	init_log("./monitor_log.txt");
 	// 	init_elf(elf_file);
 	IFDEF(CONFIG_NPC_DEVICE, init_device());

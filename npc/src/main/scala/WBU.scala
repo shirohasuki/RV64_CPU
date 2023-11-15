@@ -26,6 +26,13 @@ class MEMWB_WB_Input extends Bundle {
     val rd_wen      = Input(Bool())
 }
 
+class WBU_RegFile_Output extends Bundle {
+    val pc             = Output(UInt(64.W))
+    val rd_wen         = Output(Bool())
+    val rd_waddr       = Output(UInt(64.W))
+    val rd_wdata       = Output(UInt(64.W))
+}
+
 class WBU_Rename_Output extends Bundle {
     val rd_wen         = Output(Bool())
     val rd_waddr       = Output(UInt(64.W))
@@ -35,8 +42,8 @@ class WBU_Rename_Output extends Bundle {
 class WBU extends Module {
     val exwb_wb     = IO(new EXWB_WB_Input())
     val memwb_wb    = IO(new MEMWB_WB_Input())
-    val wb_reg      = IO(Flipped(new EXWB_WB_Input()))
-    val wb_rename = IO(new WBU_Rename_Output())
+    val wb_reg      = IO(new WBU_RegFile_Output())
+    val wb_rename   = IO(new WBU_Rename_Output())
 
     when (exwb_wb.mem_en) {
         wb_reg.pc       := memwb_wb.pc       

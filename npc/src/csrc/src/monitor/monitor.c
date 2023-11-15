@@ -1,4 +1,5 @@
 #include "npc.h"
+#include <getopt.h>
 #include <utils/macro.h>
 #include <utils/debug.h>
 

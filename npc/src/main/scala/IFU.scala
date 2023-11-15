@@ -31,7 +31,7 @@ class IFU extends Module {
     })
 
     if_icache.raddr.valid := 1.U       // ren
-    if_icache.raddr.bit   := pc_if.pc
-    if_ifid.inst              := Mux(if_icache.raddr(2) === 1.U, if_icache.rdata(31, 0), if_icache.rdata(63, 32))
+    if_icache.raddr.bits   := pc_if.pc
+    if_ifid.inst              := Mux(if_icache.raddr.bits(2) === 1.U, if_icache.rdata(31, 0), if_icache.rdata(63, 32))
     if_ifid.pc                := pc_if.pc
 }

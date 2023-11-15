@@ -25,8 +25,8 @@ class ICACHE extends Module {
 
 
     // 2. FSM
-    val Idle :: Hit :: Miss :: Nil = Enum(3)
-    val state = RegInit(Idle)
+    // val Idle :: Hit :: Miss :: Nil = Enum(3)
+    // val state = RegInit(Idle)
 
     // switch (state) {
     //     is (Idle) {

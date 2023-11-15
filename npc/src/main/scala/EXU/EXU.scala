@@ -98,9 +98,9 @@ class EXU extends Module {
     // ex_exmem.rd_wdata    := LSU.ls_ex.rd_wdata
 
     // ex to rename
-    ex_rename.rd_wen      := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, LSU.ls_ex.rd_wen,   ALU.al_ex.rd_wen)
-    ex_rename.rd_waddr    := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, LSU.ls_ex.rd_waddr, ALU.al_ex.rd_waddr)
-    ex_rename.rd_wdata    := Mux(ALU.al_ex.inst_isload | ALU.al_ex.inst_isstore, LSU.ls_ex.rd_wdata, ALU.al_ex.rd_wdata)
+    ex_rename.rd_wen      := ALU.al_ex.rd_wen
+    ex_rename.rd_waddr    := ALU.al_ex.rd_waddr
+    ex_rename.rd_wdata    := ALU.al_ex.rd_wdata
     
     // ex to ctrl 
     ex_ctrl.inst_isload      := ALU.al_ex.inst_isload

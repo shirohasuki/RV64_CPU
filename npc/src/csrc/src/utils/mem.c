@@ -114,7 +114,7 @@ extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
     }
     Printf("[pmem_write] Invalid write Mem, waddr is:%llx wdata is:%llx\n", RED, waddr, wdata);
     */
-    Printf("[pmem_write] waddr is:%llx wdata is:%llx wmask is:%x\n", RED, waddr, wdata, mask);
+    // Printf("[pmem_write] waddr is:%llx wdata is:%llx wmask is:%x\n", RED, waddr, wdata, mask);
     uint8_t *pt = cpu2mem(waddr);
     for (int i = 0; i < 8; ++i) {
         if (mask & 1) *pt = (wdata & 0xff);

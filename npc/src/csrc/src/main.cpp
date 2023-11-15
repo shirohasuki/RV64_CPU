@@ -1,3 +1,10 @@
+/*
+ * @File Name: main.cpp
+ * @Author: shiroha
+ * @Email: whmio0115@hainanu.edu.cn
+ * @Created Time: 2023-10-18 17:23:29
+ * @Description: 
+ */
 #include "npc.h"
 #include <utils/macro.h>
 #include <utils/debug.h>
@@ -73,9 +80,9 @@ void init_npc() {
 
 
 int main() {
-    sim_init();
 
     init_monitor();
+    sim_init();
 
     sdb_mainloop();
 

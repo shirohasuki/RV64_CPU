@@ -193,7 +193,7 @@ class pmem_write extends BlackBox with HasBlackBoxInline {
     |module pmem_write (
     |   input [63:0] waddr,
     |   input [63:0] wdata,
-    |   input [63:0] wmask
+    |   input [7:0] wmask
     |);
     |   always @(*) begin
     |       pmem_write(waddr, wdata, wmask); 

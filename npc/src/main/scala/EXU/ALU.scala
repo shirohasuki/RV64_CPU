@@ -61,8 +61,8 @@ class ALU extends Module {
     val al_ls = IO(new ALU_LSU_Output())
 
     // 定义各种op
-    def add                       (op1: UInt, op2: UInt): UInt = op1 +& op2
-    def sub                       (op1: UInt, op2: UInt): UInt = op1 -& op2
+    def add                       (op1: UInt, op2: UInt): UInt = op1 + op2
+    def sub                       (op1: UInt, op2: UInt): UInt = op1 - op2
     def mul                       (op1: UInt, op2: UInt): UInt = op1 * op2
     def and                       (op1: UInt, op2: UInt): UInt = op1 & op2
     def xor                       (op1: UInt, op2: UInt): UInt = op1 ^ op2

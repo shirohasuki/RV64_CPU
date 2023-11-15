@@ -10,6 +10,7 @@ package MEM
 
 import chisel3._
 import define.MACRO._
+import define.function._
 
 
 class EXMEM_MEM_Input extends Bundle {

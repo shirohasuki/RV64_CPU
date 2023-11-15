@@ -18,9 +18,13 @@ class IFU_ICACHE extends Bundle {
     val rdata  = Output(UInt(64.W))  // inst
 }
 
-class ICACHE extends Module {
-    val if_icache = IO(new IFU_ICACHE)
+class ICACHE_MEM_Output extends Bundle {
+    val rdata  = Output(UInt(64.W))
+}    
 
+class ICACHE extends Module {
+    val if_icache   = IO(new IFU_ICACHE)
+    val icache_mem  = IO(new ICACHE_MEM_Output)
     // 1. define ICache
 
 
@@ -55,9 +59,10 @@ class ICACHE extends Module {
 
 
     // 5. read
-    val pmem_read = Module(new pmem_read())
+    val DPIC_pmem_read  = Module(new pmem_read())
     when (if_icache.raddr.valid) {
-        pmem_read(if_icache.raddr.bits, if_icache.rdata);
+        DPIC_pmem_read.io.raddr  := if_icache.raddr.bits
+        DPIC_pmem_read.io.rdata  := icache_mem.rdata
     }
     // 6. LRU: Least recently used
 

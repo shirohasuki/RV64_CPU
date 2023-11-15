@@ -27,12 +27,11 @@ class DCACHE_MEM_Input extends Bundle {
 }
 
 class MEM_MEMWB_Output extends Bundle {
-    val pc          = Input(UInt(64.W))
-    val mem_en = Input(Bool())
-
-    val rd_wdata    = Input(UInt(64.W))
-    val rd_waddr    = Input(UInt(64.W))
-    val rd_wen      = Input(Bool())
+    val pc          = Output(UInt(64.W))
+    val mem_en      = Output(Bool())
+    val rd_wdata    = Output(UInt(64.W))
+    val rd_waddr    = Output(UInt(64.W))
+    val rd_wen      = Output(Bool())
 }
 
 class MEM_Rename_Output extends Bundle {

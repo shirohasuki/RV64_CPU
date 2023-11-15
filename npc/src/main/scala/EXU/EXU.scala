@@ -61,12 +61,10 @@ class EXU_Rename_Output extends Bundle {
 }
 
 class EXU_DCACHE_Output extends Bundle{
-    val dcache_ren    = Output(Bool())
-    val dcache_raddr  = Output(UInt(64.W))
-    val dcache_wen    = Output(Bool())
-    val dcache_waddr  = Output(UInt(64.W))
-    val dcache_wdata  = Output(UInt(64.W))
-    val dcache_wmask  = Output(UInt(8.W))
+    val dcache_raddr  = Valid(UInt(64.W))
+    val dcache_waddr  = Valid(UInt(64.W))
+    val dcache_wdata  = Valid(UInt(64.W))
+    val dcache_wmask  = Valid(UInt(8.W))
     // val mem_wmask  = Output(Vec(8, Bool()))
 }
 

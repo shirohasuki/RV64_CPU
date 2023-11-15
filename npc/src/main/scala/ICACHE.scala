@@ -60,10 +60,8 @@ class ICACHE extends Module {
 
 
     val DPIC_pmem_read  = Module(new pmem_read())
-    val pmemReadRdataWire = WireInit(0.U(64.W))
-    
     when (if_icache.raddr.valid) {
-        DPIC_pmem_read.io.raddr  := if_icache.raddr.bits
+        DPIC_pmem_read.io.raddr := if_icache.raddr.bits
         if_icache.rdata         := DPIC_pmem_read.io.rdata   
     }
     // 6. LRU: Least recently used

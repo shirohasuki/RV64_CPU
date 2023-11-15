@@ -22,7 +22,7 @@ class ALU_LSU_Input extends Bundle {
     val dcache_ren         = Input(Bool())
     val dcache_raddr       = Input(UInt(64.W))
     val dcache_wen         = Input(Bool())
-    val dcache_wmask       = Input(Vec(8, Bool()))
+    val dcache_wmask       = Input(UInt(8.W))
     val dcache_wdata       = Input(UInt(64.W))
     val dcache_waddr       = Input(UInt(64.W))
 }

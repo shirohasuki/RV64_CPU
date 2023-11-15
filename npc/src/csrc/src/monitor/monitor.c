@@ -35,7 +35,7 @@ static int parse_args(int argc, char *argv[]) {
 		{"help"     , no_argument      , NULL, 'h'},
 	};
 	int o;
-	while ( (o = getopt_long(argc, argv, "-b", table, NULL)) != -1) {
+	while ( (o = getopt_long(argc, argv, "b", table, NULL)) != -1) {
 		switch (o) {
 		case 'b': sdb_set_batch_mode(); break;
 		default:

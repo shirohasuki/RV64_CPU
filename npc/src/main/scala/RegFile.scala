@@ -20,8 +20,8 @@ class Rename_REG_Input extends Bundle {
 }
 
 class REG_Rename_Output extends Bundle {
-    val rs1_rdata = Output(UInt(32.W))
-    val rs2_rdata = Output(UInt(32.W))
+    val rs1_rdata = Output(UInt(64.W))
+    val rs2_rdata = Output(UInt(64.W))
 }
 
 class WBU_REG_Input extends Bundle {
@@ -43,9 +43,10 @@ class RegFile extends Module {
     
     // 读寄存器的数据
     reg_rename.rs1_rdata := Mux(rename_reg.rs1_raddr === 0.U, 0.U(64.W), 
-                                    Mux((wb_reg.rd_wen && (wb_reg.rd_waddr === rename_reg.rs1_raddr)), wb_reg.rd_wdata, regs(rename_reg.rs1_raddr)))
+                                Mux((wb_reg.rd_wen && (wb_reg.rd_waddr === rename_reg.rs1_raddr)), wb_reg.rd_wdata, regs(rename_reg.rs1_raddr)))
     reg_rename.rs2_rdata := Mux(rename_reg.rs2_raddr === 0.U, 0.U(64.W), 
-                                    Mux((wb_reg.rd_wen && (wb_reg.rd_waddr === rename_reg.rs2_raddr)), wb_reg.rd_wdata, regs(rename_reg.rs2_raddr)))
+                                Mux((wb_reg.rd_wen && (wb_reg.rd_waddr === rename_reg.rs2_raddr)), wb_reg.rd_wdata, regs(rename_reg.rs2_raddr)))
+    
     // 写寄存器的数据:给出写信号，且rd不为0时写寄存器
     regs(wb_reg.rd_waddr) := Mux(wb_reg.rd_wen && (wb_reg.rd_waddr =/= 0.U),  wb_reg.rd_wdata, 0.U(64.W))   
 

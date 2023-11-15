@@ -64,7 +64,7 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
     */
     if (raddr < MEM_BASE){ printf("[pmem_read]  raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE); return ; } 
     uint8_t *pt = cpu2mem(raddr) + 7;
-    printf("%llx\n", cpu2mem(raddr) + 7);
+    printf("%hhn\n", cpu2mem(raddr) + 7);
     ll ret = 0;
     for (int i = 0; i < 8; ++i) {
         ret = (ret << 8) | (*pt--);

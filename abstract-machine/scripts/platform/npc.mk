@@ -5,12 +5,14 @@ LDFLAGS   += --gc-sections -e _start
 CFLAGS 	+= -DMAINARGS=\"$(mainargs)\"
 CFLAGS += -I$(AM_HOME)/am/src/riscv/npc/include
 
-NPCFLAGS += -b
+NPCFLAGS += 
+NEMUFLAGS_BATCH_MODE += -b
 
 .PHONY: $(AM_HOME)/am/src/riscv/npc/trm.c
 
 image: $(IMAGE).elf
 	@$(OBJDUMP) -d $(IMAGE).elf > $(IMAGE).txt
+	@echo + OBJCOPY "->" $(IMAGE_REL).bin
 	@$(OBJCOPY) -S --set-section-flags .bss=alloc,contents -O binary $(IMAGE).elf $(IMAGE).bin
 
 run: image
@@ -39,4 +41,4 @@ runb: image
 #因为位宽为64所以使用sed两行合并为一行
 	@echo '======================= copy .bin -> .hex finish ================================='
 # $(MAKE) -C $(NPC_HOME)
-	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) runb ARGS="$(NPCFLAGS)" IMG=$(IMAGE).bin
+	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) runb ARGS="$(NEMUFLAGS_BATCH_MODE)" IMG=$(IMAGE).bin

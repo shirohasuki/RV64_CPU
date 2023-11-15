@@ -49,7 +49,7 @@ static int parse_args(int argc, char *argv[]) {
 }
 
 
-void init_monitor() {
+void init_monitor(int argc, char *argv[]) {
 	parse_args(argc, argv);
 	init_log("./monitor_log.txt");
 	// 	init_elf(elf_file);

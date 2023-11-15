@@ -119,7 +119,7 @@ class Ctrl extends Module {
         // BitPat("b10".U) -> List(true.B, true.B, false.B, true.B),     // load_store_busy    
         BitPat("b10".U) -> List(true.B, true.B, false.B, false.B, false.B, false.B),     // inst_load
         BitPat("b00".U) -> List(false.B, false.B, false.B, false.B, false.B, false.B),   // Noevent
-        BitPat("b11".U) -> List(true.B, true.B, false.B, false.B, false.B, false.B),     // load_data_hit         
+        BitPat("b11".U) -> List(true.B, true.B, false.B, false.B, false.B, false.B)     // load_data_hit         
     ))
 
     ctrl_pc.pc_stall_en         := stall_list(0)

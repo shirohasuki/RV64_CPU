@@ -110,7 +110,7 @@ class CORE extends Module {
     // LSU.ls_ctrl     <> CTRL.ls_ctrl
     // MCIF.mcif_ctrl  <> CTRL.mcif_ctrl
     
-    CTRL.ctrl_pc    <> PcReg.ctrl_pc
+    CTRL.ctrl_pc    <> Pc.ctrl_pc
     CTRL.ctrl_ifid  <> IFID.ctrl_ifid
     CTRL.ctrl_idex  <> IDEX.ctrl_idex
     CTRL.ctrl_ifid  <> EXMEM.ctrl_exmem

@@ -73,9 +73,9 @@ void init_npc() {
 
 
 int main() {
+    sim_init();
 
     init_monitor();
-    sim_init();
 
     sdb_mainloop();
 

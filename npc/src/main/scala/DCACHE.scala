@@ -47,12 +47,12 @@ class DCACHE extends Module {
     val DPIC_pmem_read  = Module(new pmem_read())
     val DPIC_pmem_write = Module(new pmem_write())
     when (ex_dcache.raddr.valid) {
-        DPIC_pmem_read.io.raddr  := ex_dcache.raddr.bit
-        DPIC_pmem_read.io.rdata  := ex_dcache.rdata
+        DPIC_pmem_read.io.raddr  := ex_dcache.raddr.bits
+        DPIC_pmem_read.io.rdata  := dcache_mem.rdata
     } elsewhen (ex_dcache.waddr.valid) {
-        DPIC_pmem_write.io.waddr  := ex_dcache.waddr.bit
-        DPIC_pmem_write.io.wdata  := ex_dcache.wdata.bit
-        DPIC_pmem_write.io.wmask  := ex_dcache.wmask.bit
+        DPIC_pmem_write.io.waddr  := ex_dcache.waddr.bits
+        DPIC_pmem_write.io.wdata  := ex_dcache.wdata.bits
+        DPIC_pmem_write.io.wmask  := ex_dcache.wmask.bits
     }
 }
 

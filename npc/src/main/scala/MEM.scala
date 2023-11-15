@@ -52,7 +52,7 @@ class MEM extends Module {
     rd_wdata    :=  MuxCase(0.U, Seq(
         (exmem_mem.func3 === INST_LB )  ->  SEXT(dcache_rdata(7, 0)),
         (exmem_mem.func3 === INST_LH )  ->  SEXT(dcache_rdata(15, 0)),
-        (exmem_mem.func3 === INST_LW )  ->  SEXT(dcache_rdata(31, 0)),
+        (exmem_mem.func3 === INST_LW )  ->  SEXT(dcache_rdata(63, 32)),
         (exmem_mem.func3 === INST_LD )  ->  SEXT(dcache_rdata),
         (exmem_mem.func3 === INST_LBU)  ->  ZEXT(dcache_rdata(7, 0)),
         (exmem_mem.func3 === INST_LHU)  ->  ZEXT(dcache_rdata(15, 0)),

@@ -22,10 +22,10 @@ object function {
     // 这两个都是用在拓展到64位的，要拓展得改
     def SEXT (short: UInt): UInt = {
         val SEXT_data = Wire(UInt(64.W))
-        SEXT_data := Cat(Fill(64-short.getWidth, short(short.getWidth-1)), short(short.getWidth-1, 0))
+        SEXT_data := Cat(Fill(64-signedBitLength(short.getWidth), short(short.getWidth-1)), short(short.getWidth-1, 0))
         SEXT_data
     }
-    def ZEXT (short: UInt): UInt = Cat(Fill(32-short.getWidth,   0.U), short(short.getWidth-1, 0)) // zero extension 瞎取的名字，向前补0
+    def ZEXT (short: UInt): UInt = Cat(Fill(64-short.getWidth,   0.U), short(short.getWidth-1, 0)) // zero extension 瞎取的名字，向前补0
 } 
 
 // object DPI_C {

@@ -123,15 +123,15 @@ class ALU extends Module {
                             INST_ORI        -> List(Rd_Write, rd_addr,                    or(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
                             INST_AND        -> List(Rd_Write, rd_addr,                   and(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
                             INST_SLLI       -> List(Rd_Write, rd_addr,   shift_left_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
-                            INST_SRI        -> ListLookup(ex_al.func7, default_exce_list, Array(
-                                                BitPat("b0100000")   ->   List(Rd_Write, rd_addr, shift_right_signed(op1, op2),   NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),      // SRAI
-                                                BitPat("b0000000")   ->   List(Rd_Write, rd_addr, shift_right_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)))))),   // SRLI
+                            INST_SRI        -> ListLookup(ex_al.func7(6,1), default_exce_list, Array(
+                                                BitPat("b010000")   ->   List(Rd_Write, rd_addr, shift_right_signed(op1, op2),   NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),      // SRAI
+                                                BitPat("b000000")   ->   List(Rd_Write, rd_addr, shift_right_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)))))),   // SRLI
         INST_TYPE_I_W   -> ListLookup(ex_al.func3, default_exce_list, Array(
                             INST_ADDIW      -> List(Rd_Write, rd_addr,                compress_add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
                             INST_SLLIW      -> List(Rd_Write, rd_addr,compress_shift_left_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),
-                            INST_SRIW       -> ListLookup(ex_al.func7, default_exce_list, Array( 
-                                                BitPat("b0100000")   ->   List(Rd_Write, rd_addr, compress_shift_right_signed(op1, op2),   NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)), 
-                                                BitPat("b0000000")   ->   List(Rd_Write, rd_addr, compress_shift_right_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)))))),
+                            INST_SRIW       -> ListLookup(ex_al.func7(6,1), default_exce_list, Array( 
+                                                BitPat("b010000")   ->   List(Rd_Write, rd_addr, compress_shift_right_signed(op1, op2),   NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)), 
+                                                BitPat("b000000")   ->   List(Rd_Write, rd_addr, compress_shift_right_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)))))),
         INST_TYPE_R_M   -> ListLookup(ex_al.func3, default_exce_list, Array(
                             INST_ADD_SUB_MUL-> ListLookup(ex_al.func7, default_exce_list, Array(
                                                 BitPat("b0100000")   ->   List(Rd_Write, rd_addr, sub(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)), // sub

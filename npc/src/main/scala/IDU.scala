@@ -75,7 +75,7 @@ class IDU extends Module {
     val immL = Cat(Fill(52, inst(31)), inst(31, 20))
     
     val shamt_sext = Wire(UInt(5.W)) 
-    shamt_sext := Cat(Fill(59, 0), shamt)
+    shamt_sext := Cat(Fill(59, 0.U), shamt)
 
     id_idex.inst    := ifid_id.inst
     id_idex.pc      := ifid_id.pc  

@@ -90,7 +90,7 @@ class ALU extends Module {
     def compress_div                  (op1: UInt, op2: UInt): UInt =  SEXT(                    div(op1, op2)(31, 0))
     def compress_div_unsigned         (op1: UInt, op2: UInt): UInt =  SEXT(           div_unsigned(op1, op2)(31, 0))
     def compress_shift_left_unsigned  (op1: UInt, op2: UInt): UInt =  SEXT(                 (op1 << op2(4, 0))(31, 0))
-    def compress_shift_right_unsigned (op1: UInt, op2: UInt): UInt =  SEXT(                 (op1 >> op2(4, 0))(31, 0))
+    def compress_shift_right_unsigned (op1: UInt, op2: UInt): UInt =  SEXT(                 (op1 >> op2(4, 0)).asUInt(31, 0))
     def compress_shift_right_signed   (op1: UInt, op2: UInt): UInt =  SEXT(        (op1(31, 0).asSInt >> op2(4, 0)).asUInt)
 
     val op1         = ex_al.op1

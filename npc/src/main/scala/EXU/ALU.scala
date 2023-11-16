@@ -75,8 +75,8 @@ class ALU extends Module {
     def shift_right_unsigned      (op1: UInt, op2: UInt): UInt = op1 >> op2(5, 0)
     def shift_right_signed        (op1: UInt, op2: UInt): UInt = (op1.asSInt >> op2(5, 0)).asUInt
     def equal                     (op1: UInt, op2: UInt): UInt = op1 === op2
-    def less_signed               (op1: UInt, op2: UInt): UInt = op1 < op2
-    def less_unsigned             (op1: UInt, op2: UInt): UInt = op1.asSInt < op2.asSInt
+    def less_signed               (op1: UInt, op2: UInt): UInt = op1.asSInt < op2.asSInt
+    def less_unsigned             (op1: UInt, op2: UInt): UInt = op1 < op2
         
     // 压缩系列
     def compress_sub                  (op1: UInt, op2: UInt): UInt =  SEXT(                    sub(op1, op2)(31, 0))

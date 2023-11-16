@@ -53,7 +53,7 @@ class IDU extends Module {
     val opcode   = Wire(UInt(32.W))
     val func3    = Wire(UInt(3.W))
     val func7    = Wire(UInt(7.W))
-    val shamt    = Wire(UInt(5.W))
+    val shamt    = Wire(UInt(6.W))
     val rs1_addr = Wire(UInt(5.W))
     val rs2_addr = Wire(UInt(5.W))
     val rd_addr  = Wire(UInt(5.W))
@@ -74,7 +74,7 @@ class IDU extends Module {
     val immJ = Cat(Fill(44, inst(31)), inst(31), inst(19, 12), inst(20), inst(30, 21), Fill(1, 0.U))
     val immL = Cat(Fill(52, inst(31)), inst(31, 20))
     
-    val shamt_sext = Wire(UInt(5.W)) 
+    val shamt_sext = Wire(UInt(64.W)) 
     shamt_sext := Cat(Fill(59, 0.U), shamt)
 
     id_idex.inst    := ifid_id.inst

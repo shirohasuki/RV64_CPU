@@ -1,3 +1,11 @@
+/*************************************************************************
+    > File Name: tb.scala
+    > Author: shiroha
+    > Email: whmio0115@hainanu.edu.cn
+    > Created Time: 2023-10-22 18:41:32
+    > Description: 
+*************************************************************************/
+
 import chisel3._
 import chisel3.util._
 import chisel3.stage._
@@ -12,16 +20,16 @@ import MEM._
 
 class tb extends Module {
     val CORE        = Module(new CORE())
-    val AXI4_LITE   = Module(new AXI4_LITE())
-    val MEM         = Module(new MEM())
+    // val AXI4_LITE   = Module(new AXI4_LITE())
+    // val MEM         = Module(new MEM())
     
-    CORE.core_axi_r <> AXI4_LITE.mcif_axi_r
-    CORE.core_axi_w <> AXI4_LITE.mcif_axi_w
+    // CORE.core_axi_r <> AXI4_LITE.mcif_axi_r
+    // CORE.core_axi_w <> AXI4_LITE.mcif_axi_w
 
-    AXI4_LITE.mem_axi_r <> MEM.mem_axi_r
-    AXI4_LITE.mem_axi_w <> MEM.mem_axi_w
+    // AXI4_LITE.mem_axi_r <> MEM.mem_axi_r
+    // AXI4_LITE.mem_axi_w <> MEM.mem_axi_w
 
-    loadMemoryFromFileInline(MEM.mem, "./image.hex", MemoryLoadFileType.Hex); 
+    // loadMemoryFromFileInline(MEM.mem, "./image.hex", MemoryLoadFileType.Hex); 
     // loadMemoryFromFile只会在chiseltest的时候生成readmemb
 }
 

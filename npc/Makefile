@@ -2,6 +2,8 @@ BUILD_DIR = $(abspath ./build)
 
 export PATH := $(PATH):$(abspath ./utils)
 
+# ARGS
+
 # ========= verilator ==============
 TOPNAME = tb
 INC_PATH ?= /home/shiroha/Code/ysyx/ysyx-workbench/npc/src/csrc/include \
@@ -73,7 +75,7 @@ $(BIN): ${VSRCS} ${CSRCS}
 
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(BIN) 
+	$(BIN) $(ARGS)
 	  @$^
 # 关于$(BIN)放在前后的对比（sim任务和default任务的不同）
 # default任务中$(BIN)放在default:后，表示依赖于$(BIN),在执行default前会先构建$(BIN)

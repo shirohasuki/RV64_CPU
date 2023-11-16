@@ -1,3 +1,11 @@
+/*************************************************************************
+    > File Name: define.scala
+    > Author: shiroha
+    > Email: whmio0115@hainanu.edu.cn
+    > Created Time: 2023-10-21 17:41:01
+    > Description: 
+*************************************************************************/
+
 package define
 
 import chisel3._
@@ -11,9 +19,9 @@ object function {
         data_o
     }
 
-    // 这两个都是用在64位的，要拓展得改
-    def SEXT (short: UInt): UInt = Cat(Fill(32, short), short(short.getWidth-1, 0))
-    def ZEXT (short: UInt): UInt = Cat(Fill(32,   0.U), short(short.getWidth-1, 0)) // zero extension 瞎取的名字，向前补0
+    // 这两个都是用在拓展到64位的，要拓展得改
+    def SEXT (short: UInt): UInt = Cat(Fill(64-signedBitLength(short.getWidth), short(short.getWidth-1)), short(short.getWidth-1, 0))
+    def ZEXT (short: UInt): UInt = Cat(Fill(64-signedBitLength(short.getWidth),   0.U), short(short.getWidth-1, 0)) // zero extension 瞎取的名字，向前补0
 } 
 
 // object DPI_C {

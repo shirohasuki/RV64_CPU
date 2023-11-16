@@ -1,3 +1,11 @@
+/*************************************************************************
+    > File Name: MCIF.scala
+    > Author: shiroha
+    > Email: whmio0115@hainanu.edu.cn
+    > Created Time: 2023-10-29 18:55:53
+    > Description: 
+*************************************************************************/
+
 package MCIF
 // 2R2W, 2I2O
 
@@ -20,6 +28,8 @@ class LSU_MCIF extends Bundle{
     val mem_waddr  = Input(UInt(64.W))
     val mem_wdata  = Input(UInt(64.W))
     val mem_wmask  = Input(Vec(8, Bool()))
+
+    val axi_busy_end = Output(Bool())
 }
 
 // ========== IO on the right(from/to AXI4(device)) ============ //
@@ -45,16 +55,16 @@ class MCIF_AXI4_W extends Bundle {
     val AXI_WSTRB   = Output(Vec(8, Bool()))
     val AXI_WVALID  = Output(Bool())
     
-    val AXI_BRESP   = Input(UInt(1.W))
+    val AXI_BRESP   = Input(Bool())
     val AXI_BREADY  = Output(Bool())
 }
 
 // ====================== 连线 ================================ // 
 class MCIF extends Module {
-    val mcif_ctrl = IO(new Bundle{ 
+    val mcif_ctrl = IO(new Bundle { 
         // val inst_fetch_busy = Output(Bool())
         val load_store_busy = Output(Bool())
-        val axi_busy_end   = Output(Bool())
+        val axi_busy_end    = Output(Bool())
     }) 
     
     //  IO on the left(from/to core)
@@ -85,9 +95,10 @@ class MCIF extends Module {
     mcif_axi_r <> MCIF_R.mcif_axi_r
     mcif_axi_w <> MCIF_W.mcif_axi_w
 
-    // mcif_ctrl.inst_fetch_busy := if_mcif.mem_ren// & ~mcif_axi_r.AXI_RLAST
     mcif_ctrl.load_store_busy := ls_mcif.mem_ren | ls_mcif.mem_wen //& ~mcif_axi_w.AXI_BRESP
-    mcif_ctrl.axi_busy_end    := mcif_axi_r.AXI_RLAST | mcif_axi_w.AXI_BRESP
+    mcif_ctrl.axi_busy_end    := ((mcif_axi_r.AXI_RID === 0.U) & mcif_axi_r.AXI_RLAST) | ((mcif_axi_w.AXI_AWID === 1.U) & mcif_axi_w.AXI_BRESP)
+    
+    ls_mcif.axi_busy_end      := ((mcif_axi_r.AXI_RID === 0.U) & mcif_axi_r.AXI_RLAST) | ((mcif_axi_w.AXI_AWID === 1.U) & mcif_axi_w.AXI_BRESP)
 }
 
 // ========== some instance =========================== // 
@@ -108,29 +119,29 @@ class MCIF_R_Input extends Bundle { val raddr  = Input(UInt(64.W))}
 
 class MCIF_R_Output extends Bundle { val rdata = Output(UInt(64.W))}
 
-class MCIF_R extends Module {
-    val req0  = IO(Flipped(Decoupled(UInt(64.W))))
-    val req1  = IO(Flipped(Decoupled(UInt(64.W))))
+class MCIF_R extends Module { 
+    val req0  = IO(Flipped(Decoupled(UInt(64.W)))) // IFU 优先级低
+    val req1  = IO(Flipped(Decoupled(UInt(64.W)))) // LSU 优先级高
     
     val resp0  = IO(Decoupled(UInt(64.W)))  
     val resp1  = IO(Decoupled(UInt(64.W)))
 
     val mcif_axi_r = IO(new MCIF_AXI4_R())
 
-    val M_RID   = WireInit(0.U(2.W)) // Master:IFU:0 MEM:1
+    val M_RID   = WireInit(0.U(2.W)) // Master:IFU:1 LSU:0
     // val S_RID = UInt(2.W) // Slave: MEM
 
     val raddr   = Wire(Flipped(Decoupled(UInt(64.W))))
     
     val Arb1 = Module(new Arbiter(UInt(64.W), 2))  // 2 to 1 Priority Arbiter
-        Arb1.io.in(0) <> req0
-        Arb1.io.in(1) <> req1
+        Arb1.io.in(1) <> req0  // IFU
+        Arb1.io.in(0) <> req1  // LSU
         raddr       <> Arb1.io.out
         M_RID       := Arb1.io.chosen
         raddr.ready := raddr.valid  // 只要收到valid, 立马ready上 
     
     //  ================= AR channel
-    mcif_axi_r.AXI_ARVALID  := Mux(raddr.valid === 1.U, true.B, false.B) // M->S
+    mcif_axi_r.AXI_ARVALID  := raddr.valid // M->S
     mcif_axi_r.AXI_ARADDR   := raddr.bits //& raddr.valid     // M->S    
     mcif_axi_r.AXI_ARID     := M_RID 
 
@@ -138,10 +149,10 @@ class MCIF_R extends Module {
     mcif_axi_r.AXI_RREADY := 1.U // 暂时先一直拉高   // M->S
     
     when (mcif_axi_r.AXI_RVALID) {
-        resp0.valid := Mux(mcif_axi_r.AXI_RID === 0.U, mcif_axi_r.AXI_RVALID, 0.U)
-        resp1.valid := Mux(mcif_axi_r.AXI_RID === 1.U, mcif_axi_r.AXI_RVALID, 0.U)
-        resp0.bits  := Mux(mcif_axi_r.AXI_RID === 0.U, mcif_axi_r.AXI_RDATA, 0.U)
-        resp1.bits  := Mux(mcif_axi_r.AXI_RID === 1.U, mcif_axi_r.AXI_RDATA, 0.U)
+        resp0.valid := Mux(mcif_axi_r.AXI_RID === 1.U, mcif_axi_r.AXI_RVALID, 0.U)
+        resp1.valid := Mux(mcif_axi_r.AXI_RID === 0.U, mcif_axi_r.AXI_RVALID, 0.U)
+        resp0.bits  := Mux(mcif_axi_r.AXI_RID === 1.U, mcif_axi_r.AXI_RDATA, 0.U)
+        resp1.bits  := Mux(mcif_axi_r.AXI_RID === 0.U, mcif_axi_r.AXI_RDATA, 0.U)
     }.otherwise {
         resp0.valid := 0.U
         resp1.valid := 0.U
@@ -163,7 +174,7 @@ class MCIF_W extends Module {
     val mcif_axi_w = IO(new MCIF_AXI4_W())
 
     val M_WID = WireInit(0.U(2.W)) 
-    M_WID := 1.U
+    M_WID := 1.U // MEM = 1
     
     req0.ready := 1.U
 

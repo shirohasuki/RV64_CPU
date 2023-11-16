@@ -22,6 +22,7 @@ uint8_t* cpu2mem(ll addr) {
 }
 
 extern "C" void pmem_read(ll raddr, ll *rdata) {
+    /*
     if (RTC_MMIO <= raddr && raddr <= RTC_MMIO + 8) { 
         if (cpu_npc.pc != 0) { rtc = mmio_read(raddr, 8); } // 判断不要多次执行 
         if (raddr == RTC_MMIO) { 
@@ -60,6 +61,8 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
     }
   
     Printf("[pmem_read] Invalid Read Mem, raddr is:%llx\n", RED, raddr);
+    */
+    if (raddr < MEM_BASE){ return ; } 
     uint8_t *pt = cpu2mem(raddr) + 7;
     ll ret = 0;
     for (int i = 0; i < 8; ++i) {
@@ -67,6 +70,7 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
     }
     *rdata = ret;
 #ifdef CONFIG_NPC_MTRACE
+    if (raddr < 0x80000124) return ; // 取指的不要记录
     sprintf(mtrace_buf[mtrace_count], "read:  addr:%016llx data:%016llx", raddr, (*rdata));
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
 #endif
@@ -75,12 +79,15 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 
 // Memory Write
 extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
+    if (waddr < MEM_BASE){ return ; } 
+
 #ifdef CONFIG_NPC_MTRACE
-    sprintf(mtrace_buf[mtrace_count],"write: addr:%016llx data:%016llx wmask:%08x\n", waddr,  wdata, mask);
+    sprintf(mtrace_buf[mtrace_count],"write: addr:%016llx data:%016llx wmask:%08x", waddr,  wdata, mask);
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
 #endif
     // if (cpu_npc.pc != 0) { printf("[pmem_write] waddr is:%llx wdata is:%llx wmask is:%llx\n", waddr, wdata & mask, mask); }
     // 其实&mask是没必要的，因为ex.v已经帮忙改造过了
+    /*
     if (SERIAL_MMIO <= waddr && waddr <= SERIAL_MMIO + 8) { 
         if (cpu_npc.pc != 0) {
             mmio_write(waddr, 1, wdata & mask); // 写串口
@@ -106,6 +113,8 @@ extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
         return;
     }
     Printf("[pmem_write] Invalid write Mem, waddr is:%llx wdata is:%llx\n", RED, waddr, wdata);
+    */
+    // Printf("[pmem_write] waddr is:%llx wdata is:%llx wmask is:%x\n", RED, waddr, wdata, mask);
     uint8_t *pt = cpu2mem(waddr);
     for (int i = 0; i < 8; ++i) {
         if (mask & 1) *pt = (wdata & 0xff);

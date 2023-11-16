@@ -1,3 +1,11 @@
+/*************************************************************************
+    > File Name: DPIC.scala
+    > Author: shiroha
+    > Email: whmio0115@hainanu.edu.cn
+    > Created Time: 2023-10-27 13:04:55
+    > Description: 
+*************************************************************************/
+
 package DPIC
 
 import chisel3._
@@ -147,6 +155,48 @@ class ebreak extends BlackBox with HasBlackBoxInline {
     |       if (inst == 32'h00100073) begin
     |            ebreak();
     |       end
+    |   end
+    |
+    |endmodule
+    """.stripMargin)
+}
+
+class pmem_read extends BlackBox with HasBlackBoxInline {
+    val io = IO(new Bundle{
+        val raddr  = Input(UInt(64.W)) 
+        val rdata  = Output(UInt(64.W)) 
+    })
+    setInline("pmem_read.v",
+    """
+    |import "DPI-C" function void pmem_read( input longint raddr, output longint rdata);
+    |module pmem_read (
+    |   input  [63:0] raddr,
+    |   output [63:0] rdata
+    |);
+    |   always @(*) begin
+    |       pmem_read(raddr, rdata); 
+    |   end
+    |
+    |endmodule
+    """.stripMargin)
+}
+
+class pmem_write extends BlackBox with HasBlackBoxInline {
+    val io = IO(new Bundle{
+        val waddr  = Input(UInt(64.W)) 
+        val wdata  = Input(UInt(64.W)) 
+        val wmask  = Input(UInt(8.W)) 
+    })
+    setInline("pmem_write.v",
+    """
+    |import "DPI-C" function void pmem_write( input longint waddr, input longint wdata, input byte mask);
+    |module pmem_write (
+    |   input [63:0] waddr,
+    |   input [63:0] wdata,
+    |   input [7:0] wmask
+    |);
+    |   always @(*) begin
+    |       pmem_write(waddr, wdata, wmask); 
     |   end
     |
     |endmodule

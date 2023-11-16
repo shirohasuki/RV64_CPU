@@ -152,7 +152,7 @@ class ALU extends Module {
                             INST_SR_DIVU    -> ListLookup(ex_al.func7, default_exce_list, Array(
                                                 BitPat("b0100000")   ->  List(Rd_Write, rd_addr,    shift_right_signed(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),  // SRA 算术右移 
                                                 BitPat("b0000001")   ->  List(Rd_Write, rd_addr,          div_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)),  // divu 
-                                                BitPat("b0000000")   ->  List(Rd_Write, rd_addr, shift_right_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)))))),  // SRL 逻辑右移
+                                                BitPat("b0000000")   ->  List(Rd_Write, rd_addr,  shift_right_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)))))),  // SRL 逻辑右移
         INST_TYPE_R_M_W -> ListLookup(ex_al.func3, default_exce_list, Array(
                             INST_ADDW_SUBW_MULW -> ListLookup(ex_al.func7, default_exce_list, Array(
                                                 BitPat("b0100000")   ->  List(Rd_Write, rd_addr, compress_sub(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W)), // sub

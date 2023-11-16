@@ -73,7 +73,9 @@ class IDU extends Module {
     val immB = Cat(Fill(52, inst(31)), inst(7),  inst(30, 25), inst(11, 8), 0.U(1.W))
     val immJ = Cat(Fill(44, inst(31)), inst(31), inst(19, 12), inst(20), inst(30, 21), Fill(1, 0.U))
     val immL = Cat(Fill(52, inst(31)), inst(31, 20))
-        
+    
+    val shamt_sext = Wire(UInt(5.W)) 
+    shamt_sext := Cat(Fill(59, 0), shamt)
 
     id_idex.inst    := ifid_id.inst
     id_idex.pc      := ifid_id.pc  
@@ -84,7 +86,18 @@ class IDU extends Module {
     //  List(op1_o, op2_o, rs1_addr_o, rs2_addr_o, rd_addr_o, rd_wen, base_addr_o, offset_addr_o)
     val default_decode_list = List(0.U(64.W), 0.U(64.W), 0.U(5.W), 0.U(5.W), 0.U(64.W), false.B, 0.U(64.W), 0.U(64.W))
     val decode_list  = ListLookup(opcode, default_decode_list, Array(
-        INST_TYPE_I     -> List(rename_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U), 
+        INST_TYPE_I  -> ListLookup(id_idex.func3, default_decode_list, Array(
+                            INST_ADDI       -> List(rename_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U),
+                            INST_SLTI       -> List(rename_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U),
+                            INST_SLTIU      -> List(rename_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U),
+                            INST_XORI       -> List(rename_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U),
+                            INST_ORI        -> List(rename_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U),
+                            INST_AND        -> List(rename_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U),
+                            INST_SLLI       -> List(rename_id.rs1_rdata, shamt_sext, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U),
+                            INST_SRI        -> ListLookup(id_idex.func7, default_exce_list, Array(
+                                                BitPat("b0100000")   ->   List(rename_id.rs1_rdata, shamt_sext, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U),      // SRAI
+                                                BitPat("b0000000")   ->   List(rename_id.rs1_rdata, shamt_sext, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U)))),   // SRLI
+                        )
         INST_TYPE_I_W   -> List(rename_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U),  
         INST_TYPE_R_M   -> List(rename_id.rs1_rdata, rename_id.rs2_rdata, rs1_addr, rs2_addr, rd_addr, true.B, 0.U, 0.U), 
         INST_TYPE_R_M_W -> List(rename_id.rs1_rdata, rename_id.rs2_rdata, rs1_addr, rs2_addr, rd_addr, true.B, 0.U, 0.U),

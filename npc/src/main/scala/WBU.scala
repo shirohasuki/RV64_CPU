@@ -57,8 +57,19 @@ class WBU extends Module {
         wb_reg.rd_wen   := exwb_wb.rd_wen  
     } 
     // wb_reg <> exwb_wb
-    wb_rename.rd_wen   := wb_reg.rd_wdata             
-    wb_rename.rd_waddr := wb_reg.rd_waddr     
-    wb_rename.rd_wdata := wb_reg.rd_wen               
+
+    when (memwb_wb.mem_en) {
+        wb_rename.rd_wen   := memwb_wb.rd_wdata             
+        wb_rename.rd_waddr := memwb_wb.rd_waddr     
+        wb_rename.rd_wdata := memwb_wb.rd_wen     
+    }.otherwise {    
+        wb_rename.rd_wen   := exwb_wb.rd_wdata
+        wb_rename.rd_waddr := exwb_wb.rd_waddr
+        wb_rename.rd_wdata := exwb_wb.rd_wen  
+    } 
+
+    // wb_rename.rd_wen   := wb_reg.rd_wdata             
+    // wb_rename.rd_waddr := wb_reg.rd_waddr     
+    // wb_rename.rd_wdata := wb_reg.rd_wen               
 }
 

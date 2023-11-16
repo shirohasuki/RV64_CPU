@@ -102,7 +102,7 @@ class IDU extends Module {
                             INST_SLLIW      -> List(rename_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U),
                             INST_SRIW       -> ListLookup(id_idex.func7, default_decode_list, Array( 
                                                 BitPat("b0100000")   ->   List(rename_id.rs1_rdata, shamt_sext, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U), 
-                                                BitPat("b0000000")   ->   List(rename_id.rs1_rdata, shamt_sext, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U)))),
+                                                BitPat("b0000000")   ->   List(rename_id.rs1_rdata, shamt_sext, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U))))),
         INST_TYPE_R_M   -> List(rename_id.rs1_rdata, rename_id.rs2_rdata, rs1_addr, rs2_addr, rd_addr, true.B, 0.U, 0.U), 
         INST_TYPE_R_M_W -> List(rename_id.rs1_rdata, rename_id.rs2_rdata, rs1_addr, rs2_addr, rd_addr, true.B, 0.U, 0.U),
         INST_TYPE_B     -> List(rename_id.rs1_rdata, rename_id.rs2_rdata, rs1_addr, rs2_addr, 0.U, false.B, ifid_id.pc, immB),
@@ -112,7 +112,7 @@ class IDU extends Module {
         INST_JALR_OP    -> List(ifid_id.pc, 4.U,  rs1_addr, 0.U, rd_addr, true.B, rename_id.rs1_rdata, immI),
         INST_LUI_OP     -> List(0.U,        immU, 0.U,      0.U, rd_addr, true.B, 0.U,                   0.U ),
         INST_AUIPC_OP   -> List(ifid_id.pc, immU, 0.U,      0.U, rd_addr, true.B, 0.U,                   immU)
-    )))
+    ))
 
     // 为了降低复杂度，ID阶段SLL, SR相关的 op2 我全部直接使用了rs2的data，并没有只取低5/6位，需要EX截断截取，注意注意!
 

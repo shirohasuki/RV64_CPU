@@ -94,7 +94,7 @@ class IDU extends Module {
                             INST_ORI        -> List(rename_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U),
                             INST_AND        -> List(rename_id.rs1_rdata, immI, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U),
                             INST_SLLI       -> List(rename_id.rs1_rdata, shamt_sext, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U),
-                            INST_SRI        -> ListLookup(id_idex.func7, default_exce_list, Array(
+                            INST_SRI        -> ListLookup(id_idex.func7, default_decode_list, Array(
                                                 BitPat("b0100000")   ->   List(rename_id.rs1_rdata, shamt_sext, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U),      // SRAI
                                                 BitPat("b0000000")   ->   List(rename_id.rs1_rdata, shamt_sext, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U)))),   // SRLI
                         )

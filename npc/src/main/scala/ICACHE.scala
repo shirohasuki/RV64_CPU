@@ -89,12 +89,12 @@ class ICACHE extends Module {
 
     val DPIC_pmem_read  = Module(new pmem_read())
     when (ren) {
-        DPIC_pmem_read.io.raddr          := raddr
+        DPIC_pmem_read.io.raddr         := raddr
         if_icache.resp.bits.rdata       := DPIC_pmem_read.io.rdata   
         if_icache.resp.valid            := 1.U   
     }.otherwise {
         if_icache.resp.bits.rdata       := 0.U  
-        if_icache.resp.valid.rdata       := 0.U
+        if_icache.resp.valid            := 0.U
     }
     // 6. LRU: Least recently used
 

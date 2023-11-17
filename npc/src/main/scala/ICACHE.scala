@@ -21,12 +21,17 @@ class IFU_ICACHE extends Bundle {
     val resp = Valid(new CacheResp)         // inst
 }
 
+class ICACHE_Ctrl extends Bundle {
+    val icache_miss  = Output(Bool())         
+}
+
 // object CacheState extends ChiselEnum {
 //     val sIdle, sHit, sMiss = Value
 // }
 
 class ICACHE extends Module {
     val if_icache   = IO(new IFU_ICACHE)
+    val icache_ctrl = IO(new ICACHE_Ctrl)
     // val icache_mem  = IO(new ICACHE_MEM_Output)
 
     // 1. define ICache
@@ -98,6 +103,7 @@ class ICACHE extends Module {
     }
 
     // 5. MISS
+    // Read Allocate
     val DPIC_pmem_read  = Module(new pmem_read())
     when (ren) {
         DPIC_pmem_read.io.raddr         := raddr
@@ -112,6 +118,6 @@ class ICACHE extends Module {
     // 6. LRU: Least recently used
 
     // 7. output
-
+    icache_ctrl.icache_miss := state === sHit 
 }
 

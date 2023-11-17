@@ -82,6 +82,7 @@ class CORE extends Module {
 
     Pc.pc_if        <> IFU.pc_if
     IFU.if_icache     <> ICACHE.if_icache
+    ICACHE.icache_ctrl <> Ctrl.icache_ctrl
     
     IFU.if_ifid     <> IFID.if_ifid
     IFID.ifid_id    <> IDU.ifid_id
@@ -118,7 +119,7 @@ class CORE extends Module {
     CTRL.ctrl_pc    <> Pc.ctrl_pc
     CTRL.ctrl_ifid  <> IFID.ctrl_ifid
     CTRL.ctrl_idex  <> IDEX.ctrl_idex
-    CTRL.ctrl_exmem  <> EXMEM.ctrl_exmem
-    CTRL.ctrl_memwb  <> MEMWB.ctrl_memwb
+    CTRL.ctrl_exmem <> EXMEM.ctrl_exmem
+    CTRL.ctrl_memwb <> MEMWB.ctrl_memwb
     CTRL.ctrl_exwb  <> EXWB.ctrl_exwb  
 }

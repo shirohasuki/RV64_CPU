@@ -24,39 +24,41 @@ class ICACHE extends Module {
     // val icache_mem  = IO(new ICACHE_MEM_Output)
 
     // 1. define ICache
-
+    val icache_mem = Seq.fill(4)(SyncReadMem(64, Vec(2, UInt(64.W))))
 
     // 2. FSM
-    // val Idle :: Hit :: Miss :: Nil = Enum(3)
-    // val state = RegInit(Idle)
+    val Idle :: Hit :: Miss :: Nil = Enum(3)
+    val state      = RegInit(Idle)
+    val next_state = RegInit(Idle)
 
-    // switch (state) {
-    //     is (Idle) {
-    //         when (hit) {
-    //             state := Hit
-    //         }.elsewhen (miss) {
-    //             state := Miss
-    //         }
-    //     }
-    //     is (Hit) {
-    //         when (rd_complete) {
-    //             state := Idle
-    //         }
-    //     }
-    //     is (Miss) {
-    //         when (allocate_complete) {
-    //             state := Hit
-    //         }
-    //     }
-    // }
+    switch (state) {
+        is (Idle) {
+            when (hit) {
+                next_state := Hit
+            }.elsewhen (miss) {
+                next_state := Miss
+            }
+        }
+        is (Hit) {
+            when (rd_complete) {
+                next_state := Idle
+            }
+        }
+        is (Miss) {
+            when (allocate_complete) {
+                next_state := Hit
+            }
+        }
+    }
+    state := next_state
     
-    // 3. CompareTag
+    // 3. IDLE
 
 
-    // 4. Allocate
+    // 4. HIT
 
 
-    // 5. read
+    // 5. MISS
 
 
     val DPIC_pmem_read  = Module(new pmem_read())

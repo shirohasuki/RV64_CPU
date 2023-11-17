@@ -32,7 +32,7 @@ class IFU extends Module {
         val pc    = Input(UInt(64.W))
     })
 
-    if_icache.req.valid.raddr := 1.U       // ren
+    if_icache.req.valid       := 1.U       // ren
     if_icache.req.bits.raddr  := pc_if.pc
     if_ifid.inst              := if_icache.resp.bits.rdata(31, 0)// Mux(if_icache.icache_raddr.bits(2) === 1.U, if_icache.icache_rdata(31, 0), if_icache.icache_rdata(63, 32))
     if_ifid.pc                := pc_if.pc

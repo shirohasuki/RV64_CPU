@@ -13,52 +13,73 @@ import chisel3.util._
 
 import DPIC.pmem_read
 
+class CacheReq extends Bundle { val raddr = UInt(64.W) }
+class CacheResp extends Bundle { val rdata = UInt(64.W) }
+
 class IFU_ICACHE extends Bundle {
-    val icache_raddr  = Flipped(Valid(UInt(64.W)))   // pc
-    val icache_rdata  = Output(UInt(64.W))  // inst
+    val req  = Flipped(Valid(new CacheReq)) // pc
+    val resp = Valid(new CacheResp)         // inst
 }
 
+object CacheState extends ChiselEnum {
+    val sIdle, sHit, sMiss = Value
+}
 
 class ICACHE extends Module {
     val if_icache   = IO(new IFU_ICACHE)
     // val icache_mem  = IO(new ICACHE_MEM_Output)
 
     // 1. define ICache
-    val icache_mem = Seq.fill(4)(SyncReadMem(64, Vec(2, UInt(64.W))))
+      // memory
+    val v = RegInit(0.U(nSets.W))
+    val d = RegInit(0.U(nSets.W))
+    val tagMem  = SyncReadMem(Vec(64, UInt(52.W)))
+    val dataMem = Seq.fill(4)(SyncReadMem(64, Vec(2, UInt(8.W))))
+
+    val raddr = if_icache.req.bits.addr
+    val idx     = raddr(11, 6)
+
+    val raddr_reg = Reg(chiselTypeOf(if_icache.req.bits.addr))
+    val tag_reg = raddr_reg(63, 12)
+    val idx_reg = raddr_reg(11, 6)
+    val off_reg = raddr_reg(5, 0)
+
 
     // 2. FSM
-    val idle_state :: hit_state :: miss_state :: Nil = Enum(3)  // 枚举状态名的首字母要小写，这样Scala的编译器才能识别成变量模式匹配
-    val state      = RegInit(idle_state)
-    val next_state = RegInit(idle_state)
+    // val idle_state :: hit_state :: miss_state :: Nil = Enum(3)  // 枚举状态名的首字母要小写，这样Scala的编译器才能识别成变量模式匹配
+    import CacheState._
+    val state      = RegInit(sIdle)
+    val next_state = RegInit(sIdle)
 
-    val hit = WireInit(false.B)
-    val miss = WireInit(false.B)
-    val rd_complete = WireInit(false.B)
-    val allocate_complete = WireInit(false.B)
+    val hit     = WireInit(false.B)
+    val miss    = WireInit(false.B)
+    val rd_complete         = WireInit(false.B)
+    val allocate_complete   = WireInit(false.B)
 
     switch (state) {
-        is (idle_state) {
+        is (sIdle) {
             when (hit) {
-                next_state := hit_state
+                next_state := sHit
             }.elsewhen (miss) {
-                next_state := miss_state
+                next_state := sMiss
             }
         }
-        is (hit_state) {
+        is (sHit) {
             when (rd_complete) {
-                next_state := idle_state
+                next_state := sIdle
             }
         }
-        is (miss_state) {
+        is (sMiss) {
             when (allocate_complete) {
-                next_state := hit_state
+                next_state := sHit
             }
         }
     }
     state := next_state
     
     // 3. IDLE
-
+    hit  := if_icache.icache_raddr.valid & (tag === if_icache.icache_raddr.bits(64, 12)) 
+    miss := if_icache.icache_raddr.valid & (tag =/= if_icache.icache_raddr.bits(64, 12)) 
 
     // 4. HIT
 

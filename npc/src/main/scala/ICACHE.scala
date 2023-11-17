@@ -10,6 +10,7 @@ package ICACHE
 
 import chisel3._
 import chisel3.util._
+import junctions._
 
 import DPIC.pmem_read
 

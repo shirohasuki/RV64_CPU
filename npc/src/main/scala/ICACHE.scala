@@ -28,8 +28,8 @@ class ICACHE extends Module {
 
     // 2. FSM
     val idle_state :: hit_state :: miss_state :: Nil = Enum(3)  // 枚举状态名的首字母要小写，这样Scala的编译器才能识别成变量模式匹配
-    val state      = RegInit(Idle)
-    val next_state = RegInit(Idle)
+    val state      = RegInit(idle_state)
+    val next_state = RegInit(idle_state)
 
     switch (state) {
         is (idle_state) {

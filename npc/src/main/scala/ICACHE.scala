@@ -27,26 +27,26 @@ class ICACHE extends Module {
     val icache_mem = Seq.fill(4)(SyncReadMem(64, Vec(2, UInt(64.W))))
 
     // 2. FSM
-    val idle :: hit :: miss :: Nil = Enum(3)  // 枚举状态名的首字母要小写，这样Scala的编译器才能识别成变量模式匹配
+    val idle_state :: hit_state :: miss_state :: Nil = Enum(3)  // 枚举状态名的首字母要小写，这样Scala的编译器才能识别成变量模式匹配
     val state      = RegInit(Idle)
     val next_state = RegInit(Idle)
 
     switch (state) {
-        is (Idle) {
+        is (idle_state) {
             when (hit) {
-                next_state := Hit
+                next_state := hit_state
             }.elsewhen (miss) {
-                next_state := Miss
+                next_state := miss_state
             }
         }
-        is (Hit) {
+        is (hit_state) {
             when (rd_complete) {
-                next_state := Idle
+                next_state := idle_state
             }
         }
-        is (Miss) {
+        is (miss_state) {
             when (allocate_complete) {
-                next_state := Hit
+                next_state := hit_state
             }
         }
     }

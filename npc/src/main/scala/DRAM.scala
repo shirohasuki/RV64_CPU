@@ -1,12 +1,12 @@
 /*************************************************************************
-    > File Name: DDR.scala
+    > File Name: DRAM.scala
     > Author: shiroha
     > Email: whmio0115@hainanu.edu.cn
     > Created Time: 2023-10-24 22:24:30
     > Description: 
 *************************************************************************/
 
-package DDR
+package DRAM
 
 import chisel3._
 import chisel3.util._
@@ -44,7 +44,7 @@ class MEM_AXI4_W extends Bundle{
     val AXI_BRESP   = Output(Bool())
 }
 
-class DDR extends Module {
+class DRAM extends Module {
     val mem_axi_r = IO(new MEM_AXI4_R())
     
     // val mem = SyncReadMem(4096, Vec(8, UInt(8.W))) // 8个8字节=64

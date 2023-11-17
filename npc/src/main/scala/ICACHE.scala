@@ -67,7 +67,7 @@ class ICACHE extends Module {
     val hit                 = WireInit(false.B)
     val miss                = WireInit(false.B)
     val rd_complete         = WireInit(false.B)
-    val allocate_complete   = WireInit(false.B)
+    val reload_complete   = WireInit(false.B)
 
     switch (state) {
         is (sIdle) {
@@ -83,7 +83,7 @@ class ICACHE extends Module {
             }
         }
         is (sMiss) {
-            when (allocate_complete) {
+            when (reload_complete) {
                 next_state := sHit
             }
         }
@@ -110,10 +110,10 @@ class ICACHE extends Module {
         DPIC_pmem_read.io.raddr         := raddr
         dataMem(idx_reg)(offset_reg)    := DPIC_pmem_read.io.rdata   
         vMem.bitSet(idx_reg, true.B) 
-        allocate_complete               := 1.U
+        reload_complete                 := 1.U
     }.otherwise {
         // dataMem(idx_reg)(offset_reg)    := dataMem(idx_reg)(offset_reg) 
-        allocate_complete               := 0.U
+        reload_complete                 := 0.U
     }
 
     // 6. LRU: Least recently used

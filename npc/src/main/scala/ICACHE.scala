@@ -27,7 +27,7 @@ class ICACHE extends Module {
     val icache_mem = Seq.fill(4)(SyncReadMem(64, Vec(2, UInt(64.W))))
 
     // 2. FSM
-    val Idle :: Hit :: Miss :: Nil = Enum(3)
+    val idle :: hit :: miss :: Nil = Enum(3)  // 枚举状态名的首字母要小写，这样Scala的编译器才能识别成变量模式匹配
     val state      = RegInit(Idle)
     val next_state = RegInit(Idle)
 

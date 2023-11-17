@@ -88,7 +88,7 @@ class ICACHE extends Module {
     miss := ren && vMem(idx_reg) && (tag =/= tagMem(idx_reg)) 
 
     // 4. HIT
-    if_icache.resp.bits.data := dataMem(idx_reg)(offset_reg)
+    if_icache.resp.bits.rdata := dataMem(idx_reg)(offset_reg)
     if_icache.resp.valid     := state === sHit  
 
     // 5. MISS

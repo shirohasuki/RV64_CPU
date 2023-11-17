@@ -51,7 +51,7 @@ class ICACHE extends Module {
     val rdata   = WireInit(0.U(64.W))
 
     // reg
-    val raddr_reg   = Reg(chiselTypeOf(if_icache.req.bits.raddr))
+    val raddr_reg   = Reg(if_icache.req.bits.raddr)
     val tag_reg     = raddr_reg(63, 12)
     val idx_reg     = raddr_reg(11, 6)
     val offset_reg  = raddr_reg(5, 0)

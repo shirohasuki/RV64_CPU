@@ -34,7 +34,7 @@ class ICACHE extends Module {
     val tagMem  = SyncReadMem(Vec(64, UInt(52.W)))
     val dataMem = Seq.fill(4)(SyncReadMem(64, Vec(2, UInt(8.W))))
 
-    val raddr = if_icache.req.bits.addr
+    val raddr = if_icache.req.bits.raddr
     val idx     = raddr(11, 6)
 
     val raddr_reg = Reg(chiselTypeOf(if_icache.req.bits.addr))

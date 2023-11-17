@@ -112,7 +112,7 @@ class ICACHE extends Module {
         vMem.bitSet(idx_reg, true.B) 
         allocate_complete               := 1.U
     }.otherwise {
-        dataMem(idx_reg)(offset_reg)    := dataMem(idx_reg)(offset_reg) 
+        // dataMem(idx_reg)(offset_reg)    := dataMem(idx_reg)(offset_reg) 
         allocate_complete               := 0.U
     }
 

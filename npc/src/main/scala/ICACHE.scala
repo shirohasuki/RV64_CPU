@@ -85,15 +85,13 @@ class ICACHE extends Module {
     
     // 3. IDLE
     hit  := ren && vMem(idx_reg) && (tag === tagMem(idx_reg)) 
-    miss := ren && vMem(idx_reg) && (tag =/= tagMem(idx_reg)) 
+    miss := ren && (vMem(idx_reg) || (tag =/= tagMem(idx_reg))) 
 
     // 4. HIT
     if_icache.resp.bits.rdata := dataMem(idx_reg)(offset_reg)
-    if_icache.resp.valid     := state === sHit  
+    if_icache.resp.valid      := state === sHit  
 
     // 5. MISS
-
-
     val DPIC_pmem_read  = Module(new pmem_read())
     when (ren) {
         DPIC_pmem_read.io.raddr         := raddr

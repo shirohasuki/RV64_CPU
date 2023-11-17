@@ -31,7 +31,7 @@ class ICACHE extends Module {
     val state      = RegInit(idle_state)
     val next_state = RegInit(idle_state)
 
-    val hit = WireInit(false.Bool())
+    val hit = WireInit(false.B)
     switch (state) {
         is (idle_state) {
             when (hit) {

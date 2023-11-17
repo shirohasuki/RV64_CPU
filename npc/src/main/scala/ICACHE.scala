@@ -34,13 +34,16 @@ class ICACHE extends Module {
     val tagMem  = SyncReadMem(Vec(64, UInt(52.W)))
     val dataMem = Seq.fill(4)(SyncReadMem(64, Vec(2, UInt(8.W))))
 
-    val raddr = if_icache.req.bits.raddr
+    val raddr   = if_icache.req.bits.raddr
+    val ren     = if_icache.req.bits.valid
+    val tag     = raddr(63, 12)
     val idx     = raddr(11, 6)
+    val offset  = raddr(5, 0)
 
-    val raddr_reg = Reg(chiselTypeOf(if_icache.req.bits.addr))
-    val tag_reg = raddr_reg(63, 12)
-    val idx_reg = raddr_reg(11, 6)
-    val off_reg = raddr_reg(5, 0)
+    val raddr_reg   = Reg(chiselTypeOf(if_icache.req.bits.addr))
+    val tag_reg     = raddr_reg(63, 12)
+    val idx_reg     = raddr_reg(11, 6)
+    val offset_reg  = raddr_reg(5, 0)
 
 
     // 2. FSM
@@ -48,8 +51,8 @@ class ICACHE extends Module {
     val state      = RegInit(sIdle)
     val next_state = RegInit(sIdle)
 
-    val hit     = WireInit(false.B)
-    val miss    = WireInit(false.B)
+    val hit                 = WireInit(false.B)
+    val miss                = WireInit(false.B)
     val rd_complete         = WireInit(false.B)
     val allocate_complete   = WireInit(false.B)
 
@@ -75,8 +78,8 @@ class ICACHE extends Module {
     state := next_state
     
     // 3. IDLE
-    hit  := if_icache.icache_raddr.valid & (tag === if_icache.icache_raddr.bits(64, 12)) 
-    miss := if_icache.icache_raddr.valid & (tag =/= if_icache.icache_raddr.bits(64, 12)) 
+    hit  := ren & (tag === tag_reg) 
+    miss := ren & (tag =/= tag_reg) 
 
     // 4. HIT
 
@@ -85,11 +88,13 @@ class ICACHE extends Module {
 
 
     val DPIC_pmem_read  = Module(new pmem_read())
-    when (if_icache.icache_raddr.valid) {
-        DPIC_pmem_read.io.raddr        := if_icache.icache_raddr.bits 
-        if_icache.icache_rdata         := DPIC_pmem_read.io.rdata   
+    when (ren) {
+        DPIC_pmem_read.io.raddr                 := raddr
+        if_icache.icache_rdata.resp.bits        := DPIC_pmem_read.io.rdata   
+        if_icache.icache_rdata.resp.valid       := 1.U   
     }.otherwise {
-        if_icache.icache_rdata         := 0.U  
+        if_icache.icache_rdata.resp.bits        := 0.U  
+        if_icache.icache_rdata.resp.valid       := 0.U
     }
     // 6. LRU: Least recently used
 

@@ -53,7 +53,8 @@ class ICACHE extends Module {
 
 
     // 2. FSM
-    val sIdle :: sHit :: sMiss :: Nil = Enum(3)  // 枚举状态名的首字母要小写，这样Scala的编译器才能识别成变量模式匹配
+    val sIdle :: sHit :: sMiss :: Nil = Enum(3)  
+    // 枚举状态名的首字母要小写，这样Scala的编译器才能识别成变量模式匹配 sIdle 00 sHit 01 sMiss 10
     val state      = RegInit(sIdle)
     val next_state = RegInit(sIdle)
 
@@ -90,14 +91,21 @@ class ICACHE extends Module {
     // 4. HIT
     if_icache.resp.bits.rdata := dataMem(idx_reg)(offset_reg)
     if_icache.resp.valid      := state === sHit  
+    when (if_icache.resp.valid) {
+        rd_complete := 1.U
+    }.otherwise {
+        rd_complete := 0.U
+    }
 
     // 5. MISS
     val DPIC_pmem_read  = Module(new pmem_read())
     when (ren) {
         DPIC_pmem_read.io.raddr         := raddr
         dataMem(idx_reg)(offset_reg)    := DPIC_pmem_read.io.rdata   
+        allocate_complete               := 1.U
     }.otherwise {
         dataMem(idx_reg)(offset_reg)    := dataMem(idx_reg)(offset_reg) 
+        allocate_complete               := 0.U
     }
 
     // 6. LRU: Least recently used

@@ -31,6 +31,7 @@ class ICACHE extends Module {
 
     // 1. define ICache
       // memory
+    val vMem    = RegInit(0.U(64.W))    // 64行，每行占一位
     val tagMem  = SyncReadMem(64, UInt(52.W))
     val dataMem = Seq.fill(4)(SyncReadMem(64, Vec(2, UInt(8.W))))
 
@@ -78,8 +79,8 @@ class ICACHE extends Module {
     state := next_state
     
     // 3. IDLE
-    hit  := ren & (tag === tag_reg) 
-    miss := ren & (tag =/= tag_reg) 
+    hit  := ren && vMem(idx_reg) && (tag === tag_reg) 
+    miss := ren && vMem(idx_reg) && (tag =/= tag_reg) 
 
     // 4. HIT
 

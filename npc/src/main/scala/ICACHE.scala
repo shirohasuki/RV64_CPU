@@ -34,13 +34,13 @@ class ICACHE extends Module {
     val tagMem  = SyncReadMem(64, UInt(52.W))
     val dataMem = Seq.fill(4)(SyncReadMem(64, Vec(2, UInt(8.W))))
 
-    val raddr   = if_icache.req.raddr.bits
-    val ren     = if_icache.req.raddr.valid
+    val raddr   = if_icache.req.bits.raddr
+    val ren     = if_icache.req.valid.raddr
     val tag     = raddr(63, 12)
     val idx     = raddr(11, 6)
     val offset  = raddr(5, 0)
 
-    val raddr_reg   = Reg(chiselTypeOf(if_icache.req.raddr.bits))
+    val raddr_reg   = Reg(chiselTypeOf(if_icache.req.bits.raddr))
     val tag_reg     = raddr_reg(63, 12)
     val idx_reg     = raddr_reg(11, 6)
     val offset_reg  = raddr_reg(5, 0)
@@ -89,12 +89,12 @@ class ICACHE extends Module {
 
     val DPIC_pmem_read  = Module(new pmem_read())
     when (ren) {
-        DPIC_pmem_read.io.raddr                 := raddr
-        if_icache.resp.radta.bits        := DPIC_pmem_read.io.rdata   
-        if_icache.resp.radta.valid       := 1.U   
+        DPIC_pmem_read.io.raddr          := raddr
+        if_icache.resp.bits .radta       := DPIC_pmem_read.io.rdata   
+        if_icache.resp.valid.radta       := 1.U   
     }.otherwise {
-        if_icache.resp.radta.bits        := 0.U  
-        if_icache.resp.radta.valid       := 0.U
+        if_icache.resp.bits.radta       := 0.U  
+        if_icache.resp.valid.radta       := 0.U
     }
     // 6. LRU: Least recently used
 

@@ -102,9 +102,11 @@ class ICACHE extends Module {
     when (ren) {
         DPIC_pmem_read.io.raddr         := raddr
         dataMem(idx_reg)(offset_reg)    := DPIC_pmem_read.io.rdata   
+        vMem(idx_reg)                   := 1.U
         allocate_complete               := 1.U
     }.otherwise {
         dataMem(idx_reg)(offset_reg)    := dataMem(idx_reg)(offset_reg) 
+        vMem(idx_reg)                   := vMem(idx_reg)
         allocate_complete               := 0.U
     }
 

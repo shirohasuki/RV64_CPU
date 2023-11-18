@@ -103,7 +103,6 @@ class Ctrl extends Module {
 
     //  List(pc_stall_en, if_id_stall_en, id_ex_stall_en, ex_mem_stall_en, ex_wb_stall_en, mem_wb_stall_en)
     val stall_list  = ListLookup(event_code, List(false.B, false.B, false.B, false.B, false.B, false.B), Array(
-        // BitPat("b10".U) -> List(true.B, true.B, false.B, true.B),     // load_store_busy    
         BitPat("b010".U) -> List(true.B, true.B, false.B, false.B, false.B, false.B),     // inst_load
         BitPat("b000".U) -> List(false.B, false.B, false.B, false.B, false.B, false.B),   // Noevent
         BitPat("b011".U) -> List(true.B, false.B, false.B, false.B, false.B, false.B),   // icache_miss
@@ -120,13 +119,11 @@ class Ctrl extends Module {
 
         //  List(pc_flush_en, if_id_flush_en, id_ex_flush_en, ex_mem_flush_en, ex_wb_flush_en, mem_wb_flush_en)
     val flush_list  = ListLookup(event_code, List(false.B, false.B, false.B, false.B, false.B, false.B), Array(
-        // BitPat("b10".U) -> List(false.B, false.B, true.B,  true.B),     // load_store_busy
         BitPat("b001".U) -> List(false.B, true.B,  true.B,  true.B,  false.B, false.B),   // jump
         BitPat("b010".U) -> List(false.B, false.B, true.B,  false.B, true.B, false.B),    // inst_load
-        BitPat("b011".U) -> List(false.B, true.B, false.B,  false.B, false.B, false.B),   // icache_miss
+        BitPat("b011".U) -> List(false.B, true.B,  false.B,  false.B, false.B, false.B),   // icache_miss
         BitPat("b100".U) -> List(false.B, false.B, true.B,  false.B, false.B, false.B),   // load_data_hit 
         BitPat("b000".U) -> List(false.B, false.B, false.B, false.B, false.B, false.B)    // Noevent
-
     ))
 
     ctrl_pc.pc_flush_en         := flush_list(0)

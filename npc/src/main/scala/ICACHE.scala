@@ -111,8 +111,8 @@ class ICACHE extends Module {
     when (ren) {
         DPIC_pmem_read.io.raddr     := raddr
         dataMem(idx)(offset)        := DPIC_pmem_read.io.rdata   
-        DPIC_pmem_read.io.raddr     := raddr+4
-        dataMem(idx)(offset+1)        := DPIC_pmem_read.io.rdata   
+        DPIC_pmem_read.io.raddr     := raddr+4.U
+        dataMem(idx)(offset+1.U)        := DPIC_pmem_read.io.rdata   
         vMem                        := vMem.bitSet(idx, true.B) 
         tagMem(idx)                 := tag
         

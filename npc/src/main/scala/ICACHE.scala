@@ -91,9 +91,9 @@ class ICACHE extends Module {
     state := next_state
     
     // 3. IDLE
-    hit  := ren && vMem(idx_reg) && (tag === tagMem(idx_reg)) 
-    miss := ren && (~vMem(idx_reg) || (tag =/= tagMem(idx_reg))) 
-    val tagmiss = (tag =/= tagMem(idx_reg))
+    hit  := ren && vMem(idx_reg) && (tag === tagMem(idx)) 
+    miss := ren && (~vMem(idx_reg) || (tag =/= tagMem(idx))) 
+    // val tagmiss = (tag =/= tagMem(idx_reg))
 
     // 4. HIT
     if_icache.resp.bits.rdata := dataMem(idx_reg)(offset_reg)
@@ -111,7 +111,6 @@ class ICACHE extends Module {
         DPIC_pmem_read.io.raddr         := raddr
         vMem                            := vMem.bitSet(idx_reg, true.B) 
         tagMem(idx_reg)                 := tag
-        // tagMem.write(idx_reg, DPIC_pmem_read.io.rdata(63, 12))
         dataMem(idx_reg)(offset_reg)    := DPIC_pmem_read.io.rdata   
         reload_complete                 := 1.U
     }.otherwise {

@@ -67,7 +67,7 @@ class ICACHE extends Module {
     val hit                 = WireInit(false.B)
     val miss                = WireInit(false.B)
     val rd_complete         = WireInit(false.B)
-    val reload_complete   = WireInit(false.B)
+    val reload_complete     = WireInit(false.B)
 
     switch (state) {
         is (sIdle) {
@@ -119,6 +119,6 @@ class ICACHE extends Module {
     // 6. LRU: Least recently used
 
     // 7. output
-    icache_ctrl.icache_miss := state === sMiss 
+    icache_ctrl.icache_miss := miss//state === sMiss 
 }
 

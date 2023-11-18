@@ -107,15 +107,20 @@ class ICACHE extends Module {
     // 5. MISS
     // Read Allocate
     val DPIC_pmem_read  = Module(new pmem_read())
-    val rdata_test = RegInit(0.U(64.W))
+    val rdata_test1 = RegInit(0.U(64.W))
+    val rdata_test2 = RegInit(0.U(64.W))
+
     when (ren) {
         DPIC_pmem_read.io.raddr     := raddr
         dataMem(idx)(offset)        := DPIC_pmem_read.io.rdata   
         DPIC_pmem_read.io.raddr     := raddr+4.U
-        dataMem(idx)(offset+1.U)        := DPIC_pmem_read.io.rdata   
+        dataMem(idx)(offset+1.U)    := DPIC_pmem_read.io.rdata   
         vMem                        := vMem.bitSet(idx, true.B) 
         tagMem(idx)                 := tag
-        
+
+        rdata_test1 := dataMem(idx)(offset)
+        rdata_test2 := dataMem(idx)(offset+1)
+
         reload_complete             := 1.U
     }.otherwise {
         // dataMem(idx_reg)(offset_reg)    := dataMem(idx_reg)(offset_reg) 

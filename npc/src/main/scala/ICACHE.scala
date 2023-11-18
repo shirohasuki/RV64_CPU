@@ -119,6 +119,6 @@ class ICACHE extends Module {
     // 6. LRU: Least recently used
 
     // 7. output
-    icache_ctrl.icache_miss := state === sHit 
+    icache_ctrl.icache_miss := state === sMiss 
 }
 

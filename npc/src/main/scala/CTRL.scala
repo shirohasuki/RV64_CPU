@@ -92,7 +92,7 @@ class Ctrl extends Module {
     val inst_load     = ex_ctrl.inst_isload 
     val icache_miss   = icache_ctrl.icache_miss  
     val load_data_hit   = rename_ctrl.rs_id_ex_hit && ex_ctrl.inst_isload
-    val NOEVENT         = ~(jump | inst_load | icache_miss |load_data_hit)
+    val NOEVENT         = ~(jump | inst_load | icache_miss | load_data_hit)
 
     ctrl_pc.jump_addr := ex_ctrl.typej_jump_addr //| io.clint_ctrl.intr_jump_addr
     ctrl_pc.jump_en   := jump
@@ -123,7 +123,7 @@ class Ctrl extends Module {
         // BitPat("b10".U) -> List(false.B, false.B, true.B,  true.B),     // load_store_busy
         BitPat("b001".U) -> List(false.B, true.B,  true.B,  true.B,  false.B, false.B),   // jump
         BitPat("b010".U) -> List(false.B, false.B, true.B,  false.B, true.B, false.B),    // inst_load
-        BitPat("b011".U) -> List(false.B, true.B, false.B, false.B, false.B, false.B),   // icache_miss
+        BitPat("b011".U) -> List(false.B, true.B, false.B,  false.B, false.B, false.B),   // icache_miss
         BitPat("b100".U) -> List(false.B, false.B, true.B,  false.B, false.B, false.B),   // load_data_hit 
         BitPat("b000".U) -> List(false.B, false.B, false.B, false.B, false.B, false.B)    // Noevent
 

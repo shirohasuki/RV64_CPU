@@ -38,7 +38,7 @@ class ICACHE extends Module {
       // memory
     val vMem    = RegInit(0.U(64.W))    // 64行，每行占一位
     val tagMem  = SyncReadMem(64, UInt(49.W))
-    val dataMem = SyncReadMem(64, Vec(8, UInt(8.W)))
+    val dataMem = SyncReadMem(64, Vec(8, UInt(64.W)))
     // val dataMem = Seq.fill(4)(SyncReadMem(64, Vec(2, UInt(8.W))))
     
     // wire
@@ -112,8 +112,8 @@ class ICACHE extends Module {
         DPIC_pmem_read.io.raddr     := raddr
         vMem                        := vMem.bitSet(idx, true.B) 
         tagMem(idx)                 := tag
-        dataMem(offset)(idx)       := DPIC_pmem_read.io.rdata   
-        rdata_test    := dataMem(offset)(idx)
+        dataMem(idx)(offset)        := DPIC_pmem_read.io.rdata   
+        rdata_test    := dataMem(idx)(offset)
         reload_complete             := 1.U
     }.otherwise {
         // dataMem(idx_reg)(offset_reg)    := dataMem(idx_reg)(offset_reg) 

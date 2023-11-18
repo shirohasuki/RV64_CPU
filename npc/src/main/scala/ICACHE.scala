@@ -119,7 +119,7 @@ class ICACHE extends Module {
         tagMem(idx)                 := tag
 
         rdata_test1 := dataMem(idx)(offset)
-        rdata_test2 := dataMem(idx)(offset+1)
+        rdata_test2 := dataMem(idx)(offset+1.U)
 
         reload_complete             := 1.U
     }.otherwise {

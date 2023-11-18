@@ -91,8 +91,8 @@ class ICACHE extends Module {
     state := next_state
     
     // 3. IDLE
-    hit  := ren && vMem(idx_reg) && (tag === tagMem(idx)) 
-    miss := ren && (~vMem(idx_reg) || (tag =/= tagMem(idx))) 
+    hit  := ren && vMem(idx) && (tag === tagMem(idx)) 
+    miss := ren && (~vMem(idx) || (tag =/= tagMem(idx))) 
     // val tagmiss = (tag =/= tagMem(idx_reg))
 
     // 4. HIT

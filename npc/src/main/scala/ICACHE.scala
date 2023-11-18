@@ -110,10 +110,10 @@ class ICACHE extends Module {
     val rdata_test = RegInit(0.U(64.W))
     when (ren && miss) {
         DPIC_pmem_read.io.raddr         := raddr
-        vMem                            := vMem.bitSet(idx_reg, true.B) 
-        tagMem(idx_reg)                 := tag
-        dataMem(idx_reg)(offset_reg)    := DPIC_pmem_read.io.rdata   
-        rdata_test    := dataMem(idx_reg)(offset_reg)
+        vMem                            := vMem.bitSet(idx, true.B) 
+        tagMem(idx)                 := tag
+        dataMem(idx)(offset)    := DPIC_pmem_read.io.rdata   
+        rdata_test    := dataMem(idx)(offset)
         reload_complete                 := 1.U
     }.otherwise {
         // dataMem(idx_reg)(offset_reg)    := dataMem(idx_reg)(offset_reg) 

@@ -109,7 +109,7 @@ class ICACHE extends Module {
     when (ren && miss) {
         DPIC_pmem_read.io.raddr         := raddr
         dataMem(idx_reg)(offset_reg)    := DPIC_pmem_read.io.rdata   
-        vMem.bitSet(idx_reg, true.B) 
+        vMem.bitSet(idx_reg, 1.U) 
         reload_complete                 := 1.U
     }.otherwise {
         // dataMem(idx_reg)(offset_reg)    := dataMem(idx_reg)(offset_reg) 

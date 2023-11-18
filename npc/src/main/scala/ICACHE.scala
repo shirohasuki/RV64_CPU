@@ -107,7 +107,7 @@ class ICACHE extends Module {
     // 5. MISS
     // Read Allocate
     val DPIC_pmem_read  = Module(new pmem_read())
-    val rdata_test = WireInit(0.U(64.W))
+    val rdata_test = RegInit(0.U(64.W))
     when (ren && miss) {
         DPIC_pmem_read.io.raddr         := raddr
         vMem                            := vMem.bitSet(idx_reg, true.B) 

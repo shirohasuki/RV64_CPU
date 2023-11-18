@@ -34,7 +34,7 @@ class IFU extends Module {
     
     val pc_reg = RegInit(0.U(64.W)) 
     when (if_icache.resp.valid) {
-        pc_reg := pc
+        pc_reg := pc_if.pc
     }
 
     if_icache.req.valid       := 1.U       // ren

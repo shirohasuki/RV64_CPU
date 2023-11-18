@@ -33,12 +33,12 @@ class IFU extends Module {
     })
     
     val pc_reg = RegInit(0.U(64.W)) 
-    when (if_icache.req.valid) {
-        pc_reg := pc_reg
-    }
+    // when (if_icache.req.valid) {
+    //     pc_reg := pc_reg
+    // }
 
     if_icache.req.valid       := 1.U       // ren
     if_icache.req.bits.raddr  := pc_if.pc
     if_ifid.inst              := if_icache.resp.bits.rdata(31, 0)// Mux(if_icache.icache_raddr.bits(2) === 1.U, if_icache.icache_rdata(31, 0), if_icache.icache_rdata(63, 32))
-    if_ifid.pc                := pc_reg
+    if_ifid.pc                :=  pc_if.pc// pc_reg
 }

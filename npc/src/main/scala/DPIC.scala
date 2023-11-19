@@ -181,6 +181,26 @@ class pmem_read extends BlackBox with HasBlackBoxInline {
     """.stripMargin)
 }
 
+class pmem_read_cacheline extends BlackBox with HasBlackBoxInline {
+    val io = IO(new Bundle{
+        val raddr  = Input(UInt(64.W)) 
+        val rdata  = Output(UInt(512.W)) 
+    })
+    setInline("pmem_read_cacheline.v",
+    """
+    |import "DPI-C" function void pmem_read_cacheline( input longint raddr, output longint rdata);
+    |module pmem_read_cacheline (
+    |   input  [63:0] raddr,
+    |   output [511:0] rdata
+    |);
+    |   always @(*) begin
+    |       pmem_read_cacheline(raddr, rdata); 
+    |   end
+    |
+    |endmodule
+    """.stripMargin)
+}
+
 class pmem_write extends BlackBox with HasBlackBoxInline {
     val io = IO(new Bundle{
         val waddr  = Input(UInt(64.W)) 

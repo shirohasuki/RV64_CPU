@@ -77,6 +77,17 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
     // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
 }
 
+
+extern "C" void pmem_read_cacheline(ll raddr, ll *rdata) {
+    if (raddr < MEM_BASE){ return ; } 
+    uint8_t *pt = cpu2mem(raddr) + 63;
+    ll ret = 0;
+    for (int i = 0; i < 64; ++i) {
+        ret = (ret << 64) | (*pt--);
+    }
+    *rdata = ret;
+}
+
 // Memory Write
 extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
     if (waddr < MEM_BASE){ return ; } 

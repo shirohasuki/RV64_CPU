@@ -11,7 +11,7 @@ package ICACHE
 import chisel3._
 import chisel3.util._
 
-import DPIC.pmem_read
+import DPIC.pmem_read_cacheline
 
 class CacheReq extends Bundle { val raddr = UInt(64.W) }
 class CacheResp extends Bundle { val rdata = UInt(64.W) }
@@ -106,21 +106,15 @@ class ICACHE extends Module {
 
     // 5. MISS
     // Read Allocate
-    val DPIC_pmem_read  = Module(new pmem_read())
-    val rdata_test1 = RegInit(0.U(64.W))
-    val rdata_test2 = RegInit(0.U(64.W))
+    val DPIC_pmem_read_cacheline  = Module(new pmem_read_cacheline())
+    // val rdata_test1 = RegInit(0.U(64.W))
+    // val rdata_test2 = RegInit(0.U(64.W))
 
     when (ren) {
         DPIC_pmem_read.io.raddr     := raddr
-        dataMem(idx)(offset)        := DPIC_pmem_read.io.rdata   
-        DPIC_pmem_read.io.raddr     := raddr+4.U
-        dataMem(idx)(offset+1.U)    := DPIC_pmem_read.io.rdata   
+        dataMem(idx)        := DPIC_pmem_read.io.rdata   
         vMem                        := vMem.bitSet(idx, true.B) 
         tagMem(idx)                 := tag
-
-        rdata_test1 := dataMem(idx)(offset)
-        rdata_test2 := dataMem(idx)(offset+1.U)
-
         reload_complete             := 1.U
     }.otherwise {
         // dataMem(idx_reg)(offset_reg)    := dataMem(idx_reg)(offset_reg) 

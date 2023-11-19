@@ -58,7 +58,6 @@ void dump_csr() {
     printf("====================================\n");
 }
 
-
 void npc_exit(int status) {
     if (status == 0) printf(ASNI_FMT("[Sim Result]: HIT GOOD TRAP\n", ASNI_FG_GREEN));
     else {

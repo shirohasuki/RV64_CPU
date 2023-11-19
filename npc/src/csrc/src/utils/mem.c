@@ -101,19 +101,20 @@ extern "C" void pmem_read_cacheline(ll raddr, svBitVecVal rdata[16]) {
     ll ret_hi = 0;
     ll ret_lo = 0;
     int i = 0;
-    // for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
         pt += 3;
         for (int k = 0; k < 4; k++) {
             ret_lo = (ret_lo << 8) | (*pt--);
         } 
-        pt += 8;
+        // 这时候 pt= -1， 所以加8而不是7
+        pt += 8; 
         for (int j = 0; j < 4; j++) {
             ret_hi = (ret_hi << 8) | (*pt--);
         } 
         rdata[i * 2] = ret_hi; // 读取每8字节存一次
         rdata[i * 2 + 1] = ret_lo; 
         // printf("sizeof rdata = %ld\n", sizeof(rdata[0])); // bit最大只能32位
-    // }   // 存8次
+    }   // 存8次
     // *rdata = ret;
 }
 

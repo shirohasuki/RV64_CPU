@@ -87,7 +87,7 @@ extern "C" void pmem_read_cacheline(ll raddr, svBitVecVal rdata[8]) {
             ret = (ret << 8) | (*pt--);
         }
         rdata[7 - i] = ret;
-        pt -= 8; // 向前移动8个字节
+        // pt -= 8; // 向前移动8个字节
     }
     // *rdata = ret;
 }

@@ -188,7 +188,7 @@ class pmem_read_cacheline extends BlackBox with HasBlackBoxInline {
     })
     setInline("pmem_read_cacheline.v",
     """
-    |import "DPI-C" function void pmem_read_cacheline( input longint raddr, output longint rdata);
+    |import "DPI-C" function void pmem_read_cacheline( input longint raddr, output string rdata);
     |module pmem_read_cacheline (
     |   input  [63:0] raddr,
     |   output [511:0] rdata

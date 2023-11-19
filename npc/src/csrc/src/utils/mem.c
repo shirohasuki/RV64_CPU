@@ -102,8 +102,8 @@ extern "C" void pmem_read_cacheline(ll raddr, svBitVecVal rdata[8]) {
     // for (int i = 0; i < 8; i++) {
         // *pt += 7;
         int i = 0;
-        for (int j = 0; j < 8; j++) {
-            ret = (ret << 8) | (*pt--);
+        for (int j = 0; j < 4; j++) {
+            ret = (ret << 4) | (*pt--);
         } 
         // *pt += 8;
         // printf("pt = %p, *pt = %x\n", pt, *pt);

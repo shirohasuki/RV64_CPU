@@ -70,7 +70,7 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
     }
     *rdata = ret;
 #ifdef CONFIG_NPC_MTRACE
-    if (raddr < 0x80000124) return ; // 取指的不要记录
+    // if (raddr < 0x80000124) return ; // 取指的不要记录
     sprintf(mtrace_buf[mtrace_count], "read:  addr:%016llx data:%016llx", raddr, (*rdata));
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
 #endif
@@ -79,12 +79,12 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 
 
 extern "C" void pmem_read_cacheline(ll raddr, svBitVecVal rdata[8]) {
-    if (raddr < MEM_BASE){ return ; } 
+    if (raddr < MEM_BASE) { return ; } 
     uint8_t *pt = cpu2mem(raddr) + 63; // 指向64个字节的末尾
     ll ret = 0;
     for (int i = 0; i < 8; i++) {
-        for (int j = 0; j < 8; j++) {
-            ret = (ret << 8) | (*pt--);
+        for (int j = 0; j < 4; j++) {
+            ret = (ret << 4) | (*pt--);
         } 
         rdata[7 - i] = ret; // 读取每8字节存一次
     }   // 存8次
@@ -93,7 +93,7 @@ extern "C" void pmem_read_cacheline(ll raddr, svBitVecVal rdata[8]) {
 
 // Memory Write
 extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
-    if (waddr < MEM_BASE){ return ; } 
+    if (waddr < MEM_BASE) { return ; } 
 
 #ifdef CONFIG_NPC_MTRACE
     sprintf(mtrace_buf[mtrace_count],"write: addr:%016llx data:%016llx wmask:%08x", waddr,  wdata, mask);

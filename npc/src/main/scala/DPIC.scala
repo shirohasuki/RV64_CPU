@@ -202,14 +202,14 @@ class pmem_read_cacheline extends BlackBox with HasBlackBoxInline {
     |);
     |   wire [63:0] rdata[8];
     |   
-    |   assign rdata[0] = rdata_0;   
-    |   assign rdata[1] = rdata_1;   
-    |   assign rdata[2] = rdata_2;   
-    |   assign rdata[3] = rdata_3;   
-    |   assign rdata[4] = rdata_4;   
-    |   assign rdata[5] = rdata_5;   
-    |   assign rdata[6] = rdata_6;   
-    |   assign rdata[7] = rdata_7;   
+    |   assign rdata_0 = rdata[0];   
+    |   assign rdata_1 = rdata[1];   
+    |   assign rdata_2 = rdata[2];   
+    |   assign rdata_3 = rdata[3];   
+    |   assign rdata_4 = rdata[4];   
+    |   assign rdata_5 = rdata[5];   
+    |   assign rdata_6 = rdata[6];   
+    |   assign rdata_7 = rdata[7];   
     |
     |   always @(*) begin
     |       pmem_read_cacheline(raddr, rdata); 

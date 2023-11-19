@@ -107,10 +107,11 @@ extern "C" void pmem_read_cacheline(ll raddr, svBitVecVal rdata[8]) {
         } 
         pt += 7;
         for (int k = 0; k < 4; k++) {
-            ret = (ret << 16) | (*pt--);
+            ret = (ret << 8) | (*pt--);
         } 
         rdata[0] = ret; // 读取每8字节存一次
         rdata[1] = 0; 
+        printf("sieof rdata = %d\n", sizeof(rdata[0]));
         rdata[2] = ret; 
         rdata[3] = ret; 
         rdata[4] = ret; 

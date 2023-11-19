@@ -111,8 +111,8 @@ class ICACHE extends Module {
     // val rdata_test2 = RegInit(0.U(64.W))
 
     when (ren) {
-        DPIC_pmem_read.io.raddr     := raddr
-        dataMem(idx)        := DPIC_pmem_read.io.rdata   
+        DPIC_pmem_read_cacheline.io.raddr     := raddr
+        dataMem(idx)        := DPIC_pmem_read_cacheline.io.rdata   
         vMem                        := vMem.bitSet(idx, true.B) 
         tagMem(idx)                 := tag
         reload_complete             := 1.U

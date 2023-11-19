@@ -78,19 +78,37 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 }
 
 
+// extern "C" void pmem_read_cacheline(ll raddr, svBitVecVal rdata[8]) {
+//     if (raddr < MEM_BASE) { return ; } 
+//     uint8_t *pt = cpu2mem(raddr) + 63; // 指向64个字节的末尾
+//     ll ret = 0;
+//     for (int i = 0; i < 8; i++) {
+//         for (int j = 0; j < 8; j++) {
+//             ret = (ret << 8) | (*pt--);
+//         } 
+//         // printf("pt = %p, *pt = %x\n", pt, *pt);
+//         // for (int k = 0; k < 4; k++) {
+//         //     ret = (ret << 4) | (*pt--);
+//         // } 
+//         rdata[7 - i] = ret; // 读取每8字节存一次
+//     }   // 存8次
+//     // *rdata = ret;
+// }
+
 extern "C" void pmem_read_cacheline(ll raddr, svBitVecVal rdata[8]) {
     if (raddr < MEM_BASE) { return ; } 
-    uint8_t *pt = cpu2mem(raddr) + 63; // 指向64个字节的末尾
+    uint8_t *pt = cpu2mem(raddr); // 指向64个字节的末尾
     ll ret = 0;
     for (int i = 0; i < 8; i++) {
+        pt += 7;
         for (int j = 0; j < 8; j++) {
             ret = (ret << 8) | (*pt--);
         } 
-        printf("pt = %p, *pt = %x\n", pt, *pt);
+        // printf("pt = %p, *pt = %x\n", pt, *pt);
         // for (int k = 0; k < 4; k++) {
         //     ret = (ret << 4) | (*pt--);
         // } 
-        rdata[7 - i] = ret; // 读取每8字节存一次
+        rdata[i] = ret; // 读取每8字节存一次
     }   // 存8次
     // *rdata = ret;
 }

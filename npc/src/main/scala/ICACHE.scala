@@ -62,7 +62,7 @@ class ICACHE extends Module {
     val sIdle :: sHit :: sMiss :: Nil = Enum(3)  
     // 枚举状态名的首字母要小写，这样Scala的编译器才能识别成变量模式匹配 sIdle 00 sHit 01 sMiss 10
     val state      = RegInit(sIdle)
-    val next_state = RegInit(sIdle)
+    val next_state = WireInit(sIdle)
 
     val hit                 = WireInit(false.B)
     val miss                = WireInit(false.B)

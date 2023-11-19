@@ -100,12 +100,12 @@ extern "C" void pmem_read_cacheline(ll raddr, svBitVecVal rdata[8]) {
     uint8_t *pt = cpu2mem(raddr); // 指向64个字节的末尾
     ll ret = 0;
     // for (int i = 0; i < 8; i++) {
-        pt += 7;
+        pt += 3;
         int i = 0;
         for (int j = 0; j < 4; j++) {
             ret = (ret << 8) | (*pt--);
         } 
-        // pt += 7;
+        pt += 7;
         for (int k = 0; k < 4; k++) {
             ret = (ret << 8) | (*pt--);
         } 

@@ -110,8 +110,8 @@ extern "C" void pmem_read_cacheline(ll raddr, svLogicVecVal rdata[8]) {
             ret = (ret << 8) | (*pt--);
         } 
         rdata[0] = ret; // 读取每8字节存一次
-        rdata[1] = 0; 
-        printf("sieof rdata = %d\n", sizeof(rdata[0]));
+        rdata[1] = ret; 
+        printf("sieof rdata = %ld\n", sizeof(rdata[0]));
         rdata[2] = ret; 
         rdata[3] = ret; 
         rdata[4] = ret; 

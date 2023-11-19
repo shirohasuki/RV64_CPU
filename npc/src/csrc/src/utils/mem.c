@@ -98,8 +98,8 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 extern "C" void pmem_read_cacheline(ll raddr, svBitVecVal rdata[16]) {
     if (raddr < MEM_BASE) { return ; } 
     uint8_t *pt = cpu2mem(raddr); // 指向64个字节的末尾
-    ll ret_hi;
-    ll ret_lo;
+    ll ret_hi = 0;
+    ll ret_lo = 0;
     int i = 0;
     // for (int i = 0; i < 8; i++) {
         pt += 7;

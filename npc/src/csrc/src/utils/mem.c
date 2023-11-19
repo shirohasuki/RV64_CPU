@@ -95,10 +95,10 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 //     // *rdata = ret;
 // }
 
-extern "C" void pmem_read_cacheline(ll raddr, svLogicVecVal rdata[8]) {
+extern "C" void pmem_read_cacheline(ll raddr, svOpenArrayHandle rdata[]) {
     if (raddr < MEM_BASE) { return ; } 
     uint8_t *pt = cpu2mem(raddr); // 指向64个字节的末尾
-    svLogicVecVal ret;
+    ll ret;
     // for (int i = 0; i < 8; i++) {
         pt += 3;
         int i = 0;
@@ -110,8 +110,8 @@ extern "C" void pmem_read_cacheline(ll raddr, svLogicVecVal rdata[8]) {
             ret = (ret << 8) | (*pt--);
         } 
         rdata[0] = ret; // 读取每8字节存一次
-        rdata[1] = ret; 
-        printf("sieof rdata = %ld\n", sizeof(rdata[0]));
+        rdata[1] = 0; 
+        printf("sizeof rdata = %ld\n", sizeof(rdata[0]));
         rdata[2] = ret; 
         rdata[3] = ret; 
         rdata[4] = ret; 

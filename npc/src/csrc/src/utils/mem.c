@@ -80,10 +80,13 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 
 extern "C" void pmem_read_cacheline(ll raddr, ll *rdata) {
     if (raddr < MEM_BASE){ return ; } 
-    uint8_t *pt = cpu2mem(raddr) + 63;
+    uint8_t *pt = cpu2mem(raddr) + 63; // 指向64个字节的末尾
     ll ret = 0;
-    for (int i = 0; i < 64; ++i) {
-        ret = (ret << 64) | (*pt--);
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            ret = (ret << 8) | (*(pt - j));
+        }
+        pt -= 8; // 向前移动8个字节
     }
     *rdata = ret;
 }

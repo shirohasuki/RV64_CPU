@@ -78,7 +78,9 @@ class ICACHE extends Module {
             }
         }
         is (sHit) {
-            when (rd_complete) {
+            when (hit) {
+                next_state := sHit
+            }.elsewhen (rd_complete && ~hit) {
                 next_state := sIdle
             }
         }

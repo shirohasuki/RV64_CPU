@@ -100,7 +100,8 @@ extern "C" void pmem_read_cacheline(ll raddr, svBitVecVal rdata[16]) {
     uint8_t *pt = cpu2mem(raddr); // 指向64个字节的末尾
     ll ret_hi;
     ll ret_lo;
-    for (int i = 0; i < 8; i++) {
+    int i = 0;
+    // for (int i = 0; i < 8; i++) {
         pt += 7;
         for (int j = 0; j < 4; j++) {
             ret_hi = (ret_hi << 8) | (*pt--);
@@ -112,7 +113,7 @@ extern "C" void pmem_read_cacheline(ll raddr, svBitVecVal rdata[16]) {
         rdata[i * 2] = ret_lo; // 读取每8字节存一次
         rdata[i * 2 + 1] = ret_hi; 
         // printf("sizeof rdata = %ld\n", sizeof(rdata[0])); // bit最大只能32位
-    }   // 存8次
+    // }   // 存8次
     // *rdata = ret;
 }
 

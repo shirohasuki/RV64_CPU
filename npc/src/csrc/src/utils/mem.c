@@ -97,17 +97,17 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 
 extern "C" void pmem_read_cacheline(ll raddr, svBitVecVal rdata[8]) {
     if (raddr < MEM_BASE) { return ; } 
-    uint8_t *pt = cpu2mem(raddr)+3; // 指向64个字节的末尾
+    uint8_t *pt = cpu2mem(raddr)+7; // 指向64个字节的末尾
     ll ret = 0;
     // for (int i = 0; i < 8; i++) {
         // *pt += 7;
         int i = 0;
-        // for (int j = 0; j < 4; j++) {
-        //     ret = (ret << 8) | (*pt--);
-        // } 
         for (int j = 0; j < 4; j++) {
             ret = (ret << 8) | (*pt--);
         } 
+        // for (int j = 0; j < 8; j++) {
+        //     ret = (ret << 8) | (*pt--);
+        // } 
         // *pt += 8;
         // printf("pt = %p, *pt = %x\n", pt, *pt);
         // for (int k = 0; k < 4; k++) {

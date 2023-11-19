@@ -125,7 +125,7 @@ class ICACHE extends Module {
     rdata_test7 := dataMem(idx)(7)
 
     when (ren) {
-        DPIC_pmem_read_cacheline.io.raddr     := Cat(raddr(63, 8), Fill(8, 0.U))
+        DPIC_pmem_read_cacheline.io.raddr     := Cat(raddr(63, 10), Fill(10, 0.U))
         // for (i <- 0 until 8) {
         //     dataMem(idx)(i)         := DPIC_pmem_read_cacheline.io.rdata((i+1)*64-1, i*64)   
         // }

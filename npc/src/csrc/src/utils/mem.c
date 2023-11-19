@@ -78,7 +78,7 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 }
 
 
-extern "C" void pmem_read_cacheline(ll raddr, svOpenArrayHandle rdata) {
+extern "C" void pmem_read_cacheline(ll raddr, svLogicVecVal rdata) {
     if (raddr < MEM_BASE){ return ; } 
     uint8_t *pt = cpu2mem(raddr) + 63; // 指向64个字节的末尾
     ll ret = 0;
@@ -87,6 +87,7 @@ extern "C" void pmem_read_cacheline(ll raddr, svOpenArrayHandle rdata) {
             ret = (ret << 8) | (*(pt - j));
         }
         // *((ll*)svGetArrElemPtr(rdata, i)) = ret;
+        rdata[i] = ret;
         pt -= 8; // 向前移动8个字节
     }
     // *rdata = ret;

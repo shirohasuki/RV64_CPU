@@ -200,7 +200,7 @@ class pmem_read_cacheline extends BlackBox with HasBlackBoxInline {
     |   output [63:0] rdata_6,
     |   output [63:0] rdata_7
     |);
-    |   bit [31:0] rdata[8];
+    |   bit [31:0] rdata[16];
     |   
     |   assign rdata_0 = {rdata[0], rdata[1]};   
     |   assign rdata_1 = {rdata[2], rdata[3]};   

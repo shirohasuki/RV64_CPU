@@ -95,7 +95,7 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
 //     // *rdata = ret;
 // }
 
-extern "C" void pmem_read_cacheline(ll raddr, ll rdata[8]) {
+extern "C" void pmem_read_cacheline(ll raddr, svLogicVecVal rdata[8]) {
     if (raddr < MEM_BASE) { return ; } 
     uint8_t *pt = cpu2mem(raddr); // 指向64个字节的末尾
     ll ret = 0;

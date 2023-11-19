@@ -126,18 +126,9 @@ class ICACHE extends Module {
 
     when (ren) {
         DPIC_pmem_read_cacheline.io.raddr     := Cat(raddr(63, 9), Fill(9, 0.U))
-        // for (i <- 0 until 8) {
-        //     dataMem(idx)(i)         := DPIC_pmem_read_cacheline.io.rdata((i+1)*64-1, i*64)   
-        // }
-        dataMem(idx)(0)         := DPIC_pmem_read_cacheline.io.rdata(0)   
-        dataMem(idx)(1)         := DPIC_pmem_read_cacheline.io.rdata(1)   
-        dataMem(idx)(2)         := DPIC_pmem_read_cacheline.io.rdata(2)   
-        dataMem(idx)(3)         := DPIC_pmem_read_cacheline.io.rdata(3)   
-        dataMem(idx)(4)         := DPIC_pmem_read_cacheline.io.rdata(4)   
-        dataMem(idx)(5)         := DPIC_pmem_read_cacheline.io.rdata(5)   
-        dataMem(idx)(6)         := DPIC_pmem_read_cacheline.io.rdata(6)   
-        dataMem(idx)(7)         := DPIC_pmem_read_cacheline.io.rdata(7)   
-
+        for (i <- 0 until 8) {
+            dataMem(idx)(i)         := DPIC_pmem_read_cacheline.io.rdata((i))   
+        }
         vMem                        := vMem.bitSet(idx, true.B) 
         tagMem(idx)                 := tag
         reload_complete             := 1.U

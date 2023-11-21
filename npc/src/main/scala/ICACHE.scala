@@ -98,7 +98,7 @@ class ICACHE extends Module {
     // val tagmiss = (tag =/= tagMem(idx_reg))
 
     // 4. HIT
-    if_icache.resp.bits.rdata := dataMem(idx_reg)(offset_reg)
+    if_icache.resp.bits.rdata := dataMem(idx)(offset)
     if_icache.resp.valid      := state === sHit  
     when (if_icache.resp.valid) {
         rd_complete := 1.U
@@ -127,11 +127,11 @@ class ICACHE extends Module {
     rdata_test7 := dataMem(idx)(7)
 
     when (ren) {
-        DPIC_pmem_read_cacheline.io.raddr     := Cat(raddr(63, 9), Fill(9, 0.U))
-        for (i <- 0 until 8) { dataMem(idx)(i) := DPIC_pmem_read_cacheline.io.rdata((i))}
-        vMem                        := vMem.bitSet(idx, true.B) 
-        tagMem(idx)                 := tag
-        reload_complete             := 1.U
+        DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 9), Fill(9, 0.U))
+        for (i <- 0 until 8) { dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata((i))}
+        vMem                                    := vMem.bitSet(idx, true.B) 
+        tagMem(idx)                             := tag
+        reload_complete                         := 1.U
     }.otherwise {
         reload_complete             := 0.U
     }

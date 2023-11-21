@@ -128,15 +128,12 @@ class ICACHE extends Module {
 
     when (ren) {
         DPIC_pmem_read_cacheline.io.raddr     := Cat(raddr(63, 9), Fill(9, 0.U))
-        for (i <- 0 until 8) {
-            dataMem(idx)(i)         := DPIC_pmem_read_cacheline.io.rdata((i))   
-        }
+        for (i <- 0 until 8) { dataMem(idx)(i) := DPIC_pmem_read_cacheline.io.rdata((i))}
         vMem                        := vMem.bitSet(idx, true.B) 
         tagMem(idx)                 := tag
         reload_complete             := 1.U
     }.otherwise {
-        // dataMem(idx_reg)(offset_reg)    := dataMem(idx_reg)(offset_reg) 
-        reload_complete                 := 0.U
+        reload_complete             := 0.U
     }
 
     // 6. LRU: Least recently used

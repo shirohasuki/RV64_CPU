@@ -130,8 +130,15 @@ class ICACHE extends Module {
 
     when (ren) {
         DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))
-        for (i <- 0 until 8) { dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)}
-        // for (i <- 0 until 8) { dataMem(idx).write(i, DPIC_pmem_read_cacheline.io.rdata(i)) }
+
+        val writeAddress = 5.U
+        val writeData = VecInit(Seq.fill(8)(DPIC_pmem_read_cacheline.io.rdata(i)))
+        
+            // dataMem.write(writeAddress, writeData)
+        for (i <- 0 until 8) {
+            dataMem.write(writeAddress, writeData)
+        }
+        // for (i <- 0 until 8) { dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)}
         vMem                                    := vMem.bitSet(idx, true.B) 
         tagMem(idx)                             := tag
         reload_complete                         := 1.U

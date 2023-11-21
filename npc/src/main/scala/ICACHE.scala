@@ -142,7 +142,7 @@ class ICACHE extends Module {
             DPIC_pmem_read_cacheline.io.rdata(4), 
             DPIC_pmem_read_cacheline.io.rdata(5), 
             DPIC_pmem_read_cacheline.io.rdata(6), 
-            DPIC_pmem_read_cacheline.io.rdata(7)
+            DPIC_pmem_read_cacheline.io.rdata(0)
         ))
         dataMem.write(writeAddress, writeData)
         // for (i <- 0 until 8) { dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)}

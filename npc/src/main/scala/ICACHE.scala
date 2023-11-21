@@ -37,25 +37,25 @@ class ICACHE extends Module {
     // 1. define ICache
       // memory
     val vMem    = RegInit(0.U(64.W))    // 64行，每行占一位
-    val tagMem  = SyncReadMem(64, UInt(49.W))
+    val tagMem  = SyncReadMem(64, UInt(55.W))
     val dataMem = SyncReadMem(64, Vec(8, UInt(64.W)))
     // val dataMem = Seq.fill(4)(SyncReadMem(64, Vec(2, UInt(8.W))))
     
     // wire
     val raddr   = if_icache.req.bits.raddr
     val ren     = if_icache.req.valid
-    val tag     = raddr(63, 15)
-    val idx     = raddr(14, 9)
-    val offset  = raddr(8, 3)
+    val tag     = raddr(63, 12)
+    val idx     = raddr(11, 6)
+    val offset  = raddr(5, 3)
     val rdata   = WireInit(0.U(64.W))
 
     // reg
     // val raddr_reg   = Reg(chiselTypeOf(if_icache.req.bits.raddr))
     val raddr_reg   = RegInit(0.U(64.W))
     raddr_reg      := raddr
-    val tag_reg     = raddr_reg(63, 15)
-    val idx_reg     = raddr_reg(14, 9)
-    val offset_reg  = raddr_reg(8, 3)
+    val tag_reg     = raddr_reg(63, 12)
+    val idx_reg     = raddr_reg(11, 6)
+    val offset_reg  = raddr_reg(5, 3)
 
 
     // 2. FSM
@@ -127,7 +127,7 @@ class ICACHE extends Module {
     rdata_test7 := dataMem(idx)(7)
 
     when (ren) {
-        DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 9), Fill(9, 0.U))
+        DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))
         for (i <- 0 until 8) { dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata((i))}
         vMem                                    := vMem.bitSet(idx, true.B) 
         tagMem(idx)                             := tag

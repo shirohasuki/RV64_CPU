@@ -145,13 +145,11 @@ class ICACHE extends Module {
         //     // DPIC_pmem_read_cacheline.io.rdata(7)
         // ))
         // dataMem.write(writeAddress, writeData)
-        for (i <- 0 until 8) { 
-            dataMem(idx).tabulate(i)(i => DPIC_pmem_read_cacheline.io.rdata(i))
-        }
+
         // for (i <- 0 until 8) { dataMem.write(writeAddress, Seq(DPIC_pmem_read_cacheline.io.rdata(i)))
         //                          writeAddress = writeAddress + 1.U}
 
-        // for (i <- 0 until 8) { dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)}
+        for (i <- 0 until 8) { dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)}
         vMem                                    := vMem.bitSet(idx, true.B) 
         tagMem(idx)                             := tag
         reload_complete                         := 1.U

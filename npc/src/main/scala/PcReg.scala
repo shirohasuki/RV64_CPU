@@ -27,8 +27,8 @@ class PcReg extends Module {
     val pc   = RegInit("h80000000".U(64.W))
 
     pc := Mux(ctrl_pc.jump_en, ctrl_pc.jump_addr,
-            // Mux(ctrl_pc.pc_flush_en, 0.U,
-            Mux(ctrl_pc.pc_stall_en, pc, pc + 4.U))
-    pc_if.pc := Mux(ctrl_pc.pc_flush_en, 0.U, pc) 
-    // pc_if.pc := pc 
+            Mux(ctrl_pc.pc_flush_en, 0.U,
+            Mux(ctrl_pc.pc_stall_en, pc, pc + 4.U)))
+    // pc_if.pc := Mux(ctrl_pc.pc_flush_en, 0.U, pc) 
+    pc_if.pc := pc 
 }

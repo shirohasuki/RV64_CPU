@@ -80,7 +80,9 @@ class ICACHE extends Module {
         is (sHit) {
             when (hit) {
                 next_state := sHit
-            }.elsewhen (rd_complete && ~hit) {
+            }.elsewhen (rd_complete && miss) {
+                next_state := sMiss
+            }.otherwise {
                 next_state := sIdle
             }
         }

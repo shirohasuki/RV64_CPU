@@ -129,7 +129,8 @@ class ICACHE extends Module {
     rdata_test7 := dataMem(idx)(7)
 
     
-    val writeAddress = Cat(idx, i.U)
+    // val writeAddress = Cat(idx, i.U)
+    val writeAddress = idx
     val writeData = VecInit(Seq.fill(8)(0.U))
 
     when (ren) {

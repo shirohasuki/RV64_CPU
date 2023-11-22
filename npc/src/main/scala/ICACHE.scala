@@ -55,7 +55,6 @@ class ICACHE extends Module {
     val raddr_reg   = RegInit(0.U(64.W))
     raddr_reg      := raddr
     val tag_reg     = raddr_reg(63, 12)
-    tag_reg        := raddr(63, 12)
     val idx_reg     = raddr_reg(11, 6)
     val offset_reg  = raddr_reg(5, 3)
 

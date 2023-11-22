@@ -83,11 +83,13 @@ void print_mtrace() {
 ll ctrace_buf[SIZE_CTRACEBUF][10] = {0};   // v+tag+data=1+1+8=10
 int idx = 0;
 
-extern "C" void ctrace_record(char idx, ll tag, const svBitVecVal* cacheline) {
+extern "C" void ctrace_record(char idx, ll tag, const svLogicVecVal* cacheline) {
     ctrace_buf[idx][0] = 1;
     ctrace_buf[idx][1] = tag;
+    uint64_t offset[8] = {0};
+    offset = (uint64_t *)(((VerilatedDpiOpenVar*)cacheline) -> datap());
     for (int i = 0; i < 8; i++) {
-        ctrace_buf[idx][i] = (uint64_t)cacheline[i]; 
+        ctrace_buf[idx][i] = offset[i]; 
     }
 }
 

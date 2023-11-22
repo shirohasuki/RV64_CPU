@@ -249,7 +249,7 @@ class ctrace extends BlackBox with HasBlackBoxInline {
     })
     setInline("ctrace.v",
     """
-    |import "DPI-C" function void ctrace_record(input byte idx, input longint tag, input bit[63:0] cacheline[8]);
+    |import "DPI-C" function void ctrace_record(input byte idx, input longint tag, input logic [63:0] cacheline[8]);
     |module ctrace (
     |   input  [5:0]  idx,
     |   input  [51:0] tag,
@@ -269,7 +269,7 @@ class ctrace extends BlackBox with HasBlackBoxInline {
     |   wire [63:0] tag_to_longint;
     |   assign tag_to_longint = {12'b0, tag};
     |
-    |   bit [63:0] cacheline[8];
+    |   wire [63:0] cacheline[8];
     |
     |   assign cacheline[0] = cacheline_0;
     |   assign cacheline[1] = cacheline_1;

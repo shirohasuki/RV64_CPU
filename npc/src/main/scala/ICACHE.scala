@@ -147,7 +147,6 @@ class ICACHE extends Module {
     }.otherwise {
         reload_complete_tmp                         := 0.U
         reload_complete                         := reload_complete_tmp
-
     }
 
     // 6. LRU: Least recently used

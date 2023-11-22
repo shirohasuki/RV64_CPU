@@ -160,7 +160,7 @@ class ICACHE extends Module {
         // dataMem.write(writeAddress, writeData)
         for (i <- 0 until 8) { dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)}
         tagMem(idx)                             := tag 
-        tagMem(25)                              := tag 
+        tagMem(37)                              := tag 
         reload_complete                         := 1.U
     }.otherwise {
         reload_complete                         := 0.U

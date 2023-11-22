@@ -52,11 +52,11 @@ class ICACHE extends Module {
     val rdata   = WireInit(0.U(64.W))
 
     // reg
-    val raddr_reg   = RegInit(0.U(64.W))
-    raddr_reg      := raddr
-    val tag_reg     = raddr_reg(63, 12)
-    val idx_reg     = raddr_reg(11, 6)
-    val offset_reg  = raddr_reg(5, 3)
+    // val raddr_reg   = RegInit(0.U(64.W))
+    // raddr_reg      := raddr
+    // val tag_reg     = raddr_reg(63, 12)
+    // val idx_reg     = raddr_reg(11, 6)
+    // val offset_reg  = raddr_reg(5, 3)
 
 
     // 2. FSM
@@ -137,7 +137,6 @@ class ICACHE extends Module {
     rdata_test6 := dataMem(25)(6)
     rdata_test7 := dataMem(25)(7)
 
-
     val tag_test0 = WireInit(0.U(64.W))
     val tag_test1 = WireInit(0.U(64.W))
     val tag_test2 = WireInit(0.U(64.W))
@@ -171,7 +170,7 @@ class ICACHE extends Module {
     // LRU: Least recently used
 
     // 7. output
-    val icache_miss     = next_state === sMiss | state === sMiss
+    val icache_miss     = next_state === sMiss || state === sMiss
     val icache_latency  = RegInit(false.B)  // 同步读写自带的一周期latency
     when (next_state === sHit && ~icache_latency) {
         icache_latency := 1.U

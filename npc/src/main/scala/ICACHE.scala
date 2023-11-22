@@ -160,7 +160,7 @@ class ICACHE extends Module {
         // val writeData    = VecInit.tabulate(8)(i => DPIC_pmem_read_cacheline.io.rdata(i))
         // dataMem.write(writeAddress, writeData)
         for (i <- 0 until 8) { dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)}
-        tagMem(idx)                             := tag || tag_reg
+        tagMem(idx)                             := tag | tag_reg
         reload_complete                         := 1.U
     }.otherwise {
         reload_complete                         := 0.U

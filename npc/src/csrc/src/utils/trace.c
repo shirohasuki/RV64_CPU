@@ -104,7 +104,7 @@ void print_ctrace() {
         
         for (int offset = 0; offset < 8; offset++) {
             printf("||%16llx", ctrace_buf[idx][2 + offset]);
-            printf((offset == 7) ? "\n" : "|");
+            printf((offset == 7) ? "\n" : " ");
         }
     }
     puts("====================================");

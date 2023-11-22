@@ -269,7 +269,7 @@ class ctrace extends BlackBox with HasBlackBoxInline {
     |   wire [63:0] tag_to_longint;
     |   assign tag_to_longint = {12'b0, tag};
     |
-    |   wire [63:0] cacheline[8];
+    |   bit [63:0] cacheline[8];
     |
     |   assign cacheline[0] = cacheline_0;
     |   assign cacheline[1] = cacheline_1;

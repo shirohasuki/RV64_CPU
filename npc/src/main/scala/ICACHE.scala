@@ -52,11 +52,12 @@ class ICACHE extends Module {
     val rdata   = WireInit(0.U(64.W))
 
     // reg
-    // val raddr_reg   = RegInit(0.U(64.W))
-    // raddr_reg      := raddr
-    // val tag_reg     = raddr_reg(63, 12)
-    // val idx_reg     = raddr_reg(11, 6)
-    // val offset_reg  = raddr_reg(5, 3)
+    val raddr_reg   = RegInit(0.U(64.W))
+    raddr_reg      := raddr
+    val tag_reg     = raddr_reg(63, 12)
+    tag_reg := tag
+    val idx_reg     = raddr_reg(11, 6)
+    val offset_reg  = raddr_reg(5, 3)
 
 
     // 2. FSM
@@ -154,13 +155,12 @@ class ICACHE extends Module {
 
 
     when (ren && miss) {
-        tagMem(idx)                             := tag
-
         DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))
         // val writeAddress = idx
         // val writeData    = VecInit.tabulate(8)(i => DPIC_pmem_read_cacheline.io.rdata(i))
         // dataMem.write(writeAddress, writeData)
         for (i <- 0 until 8) { dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)}
+        tagMem(idx)                             := tag || tag_reg
         reload_complete                         := 1.U
     }.otherwise {
         reload_complete                         := 0.U

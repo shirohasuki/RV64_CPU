@@ -156,7 +156,7 @@ class ICACHE extends Module {
         dataMem(idx)(4)  := DPIC_pmem_read_cacheline.io.rdata(4)
         dataMem(idx)(5)  := DPIC_pmem_read_cacheline.io.rdata(5)
         dataMem(idx)(6)  := DPIC_pmem_read_cacheline.io.rdata(6)
-        dataMem(idx)(7)  := DPIC_pmem_read_cacheline.io.rdata(7)
+        // dataMem(idx)(7)  := DPIC_pmem_read_cacheline.io.rdata(7)
 
         // for (i <- 0 until 8) { 
         //     dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)

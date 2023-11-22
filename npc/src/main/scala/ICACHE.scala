@@ -166,7 +166,7 @@ class ICACHE extends Module {
 
         DPIC_ctrace_record.io.idx               := idx
         DPIC_ctrace_record.io.tag               := tag
-        for (i <- 0 until 8) { DPIC_ctrace_record.io.cacheline(i) := dataMem(idx)(i)}
+        for (i <- 0 until 8) { DPIC_ctrace_record.io.cacheline(i) := DPIC_pmem_read_cacheline.io.rdata(i)}
 
         reload_complete                         := 1.U
     }.otherwise {

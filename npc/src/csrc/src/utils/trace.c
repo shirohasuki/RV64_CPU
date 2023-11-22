@@ -103,8 +103,8 @@ void print_ctrace() {
         printf("%d\t%16llx\t", idx, ctrace_buf[idx][1]); // idx和tag
         
         for (int offset = 0; offset < 8; offset++) {
-            printf("%16llx", ctrace_buf[idx][2 + offset]);
-            printf((offset == 7) ? "\n" : "||");
+            printf("||%16llx", ctrace_buf[idx][2 + offset]);
+            printf((offset == 7) ? "\n" : "|");
         }
     }
     puts("====================================");

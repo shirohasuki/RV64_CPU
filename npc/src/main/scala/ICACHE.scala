@@ -143,6 +143,7 @@ class ICACHE extends Module {
         tagMem(idx)                             := tag
         reload_complete                         := 1.U
     }.otherwise {
+        DPIC_pmem_read_cacheline.io.raddr       := 0.U
         reload_complete                         := 0.U
     }
 

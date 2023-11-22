@@ -75,7 +75,9 @@ extern char mtrace_buf[SIZE_MTRACEBUF][100];
 extern int mtrace_count;
 void print_mtrace();
 
-
+// ============= CTRACE ==============
+void print_ctrace();
+ 
 // ============= REG ===================
 void dump_gpr(); // 打印寄存器
 void dump_csr(); // 打印异常寄存器

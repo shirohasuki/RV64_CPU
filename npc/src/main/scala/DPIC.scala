@@ -264,14 +264,14 @@ class ctrace extends BlackBox with HasBlackBoxInline {
     |);
     |   wire [63:0] cacheline[8];
     |
-    |   assign cacheline[0] = offset_0;
-    |   assign cacheline[1] = offset_1;
-    |   assign cacheline[2] = offset_2;
-    |   assign cacheline[3] = offset_3;
-    |   assign cacheline[4] = offset_4;
-    |   assign cacheline[5] = offset_5;
-    |   assign cacheline[6] = offset_6;
-    |   assign cacheline[7] = offset_7;
+    |   assign cacheline[0] = cacheline_0;
+    |   assign cacheline[1] = cacheline_1;
+    |   assign cacheline[2] = cacheline_2;
+    |   assign cacheline[3] = cacheline_3;
+    |   assign cacheline[4] = cacheline_4;
+    |   assign cacheline[5] = cacheline_5;
+    |   assign cacheline[6] = cacheline_6;
+    |   assign cacheline[7] = cacheline_7;
     |
     |   always @(*) begin
     |       ctrace_record(idx, tag, cacheline); 

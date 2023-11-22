@@ -135,7 +135,7 @@ class ICACHE extends Module {
     when (ren) {
         DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))
         val writeData = Vec(8, Seq(
-            DPIC_pmem_read_cacheline.io.rdata(0)
+            DPIC_pmem_read_cacheline.io.rdata(0),
             DPIC_pmem_read_cacheline.io.rdata(1), 
             DPIC_pmem_read_cacheline.io.rdata(2), 
             DPIC_pmem_read_cacheline.io.rdata(3),

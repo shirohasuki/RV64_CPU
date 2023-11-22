@@ -130,7 +130,14 @@ class ICACHE extends Module {
     val writeAddress = idx
     // val writeData = VecInit(Seq.fill(8)(0.U))
     val writeData = Wire(Vec(8, UInt(64.W)))
-
+    writeData(0)  :=  0.U   
+    writeData(1)  :=  0.U   
+    writeData(2)  :=  0.U   
+    writeData(3)  :=  0.U   
+    writeData(4)  :=  0.U   
+    writeData(5)  :=  0.U   
+    writeData(6)  :=  0.U   
+    writeData(7)  :=  0.U   
     when (ren) {
         DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))
             writeData(0)  :=    DPIC_pmem_read_cacheline.io.rdata(0)

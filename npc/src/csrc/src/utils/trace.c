@@ -83,7 +83,7 @@ void print_mtrace() {
 ll ctrace_buf[SIZE_CTRACEBUF][10] = {0};   // v+tag+data=1+1+8=10
 int idx = 0;
 
-extern "C" void ctrace_record(char idx, ll tag, const svOpenArrayHandle* cacheline) {
+extern "C" void ctrace_record(char idx, ll tag, const svOpenArrayHandle cacheline) {
     ctrace_buf[idx][0] = 1;
     ctrace_buf[idx][1] = tag;
     

@@ -67,6 +67,7 @@ class ICACHE extends Module {
     val miss                = WireInit(false.B)
     val rd_complete         = RegInit(false.B)
     val reload_complete     = RegInit(false.B)
+    val reload_complete_tmp     = RegInit(false.B)
 
     switch (state) {
         is (sIdle) {
@@ -141,9 +142,10 @@ class ICACHE extends Module {
 
         vMem                                    := vMem.bitSet(idx, true.B) 
         tagMem(idx)                             := tag
-        reload_complete                         := 1.U
+        reload_complete_tmp                     := 1.U
+        reload_complete                         := reload_complete_tmp
     }.otherwise {
-        reload_complete                         := 0.U
+        reload_complete_tmp                         := 0.U
     }
 
     // 6. LRU: Least recently used

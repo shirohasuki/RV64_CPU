@@ -76,7 +76,7 @@ extern int mtrace_count;
 void print_mtrace();
 
 // ============= CTRACE ==============
-#define SIZE_CTRACEBUF = 64
+#define SIZE_CTRACEBUF 64
 extern ll ctrace_buf[SIZE_CTRACEBUF][10];   // v+tag+data=1+1+8=10
 void print_ctrace();
 

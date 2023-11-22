@@ -144,7 +144,7 @@ class ICACHE extends Module {
         tagMem(idx)                             := tag
         reload_complete_tmp                     := 1.U
     }.otherwise {
-        reload_complete_tmp                         := 0.U
+        reload_complete_tmp                     := 0.U
     }
         reload_complete                         := reload_complete_tmp
 

@@ -65,8 +65,8 @@ class ICACHE extends Module {
 
     val hit                 = WireInit(false.B)
     val miss                = WireInit(false.B)
-    val rd_complete         = WireInit(false.B)
-    val reload_complete     = WireInit(false.B)
+    val rd_complete         = RegInit(false.B)
+    val reload_complete     = RegInit(false.B)
 
     switch (state) {
         is (sIdle) {
@@ -130,7 +130,7 @@ class ICACHE extends Module {
 
     
 
-    when (ren & (next_state === sMiss)) {
+    when (ren & miss) {
         DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))
 
         val writeAddress = idx

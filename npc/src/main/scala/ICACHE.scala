@@ -138,6 +138,19 @@ class ICACHE extends Module {
     rdata_test7 := dataMem(25)(7)
 
 
+    val tag_test0 = WireInit(0.U(64.W))
+    val tag_test1 = WireInit(0.U(64.W))
+    val tag_test2 = WireInit(0.U(64.W))
+    val tag_test3 = WireInit(0.U(64.W))
+    val tag_test4 = WireInit(0.U(64.W))
+    val tag_test5 = WireInit(0.U(64.W))
+    val tag_test6 = WireInit(0.U(64.W))
+    val tag_test7 = WireInit(0.U(64.W))
+
+    tag_test0 := tagMem(0)
+    tag_test0 := tagMem(1)
+    tag_test0 := tagMem(25)
+
     when (ren && miss) {
         DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))
         // val writeAddress = idx

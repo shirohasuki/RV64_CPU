@@ -88,6 +88,8 @@ class ICACHE extends Module {
         is (sMiss) {
             when (reload_complete) {
                 next_state := sHit
+            }.otherwise {
+                next_state := sMiss
             }
         }
     }

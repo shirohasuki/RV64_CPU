@@ -127,8 +127,8 @@ class ICACHE extends Module {
     rdata_test7 := dataMem(idx)(7)
 
     
-    // val writeAddress = idx
-    // val writeData = VecInit(Seq.fill(8)(0.U))
+    val writeAddress = idx
+    val writeData = VecInit(Seq.fill(8)(0.U))
 
     when (ren) {
         DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))

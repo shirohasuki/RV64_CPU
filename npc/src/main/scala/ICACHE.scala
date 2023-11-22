@@ -102,7 +102,7 @@ class ICACHE extends Module {
 
     // 4. HIT
     if_icache.resp.bits.rdata := dataMem(idx)(offset)
-    printf("if_icache.resp.bits.rdata = %d, idx = %d, offset = %d\n", if_icache.resp.bits.rdata, idx, offset);
+    // printf("if_icache.resp.bits.rdata = %d, idx = %d, offset = %d\n", if_icache.resp.bits.rdata, idx, offset);
     if_icache.resp.valid      := state === sHit  
     when (if_icache.resp.valid) {
         rd_complete := 1.U
@@ -130,7 +130,7 @@ class ICACHE extends Module {
     rdata_test6 := dataMem(0)(6)
     rdata_test7 := dataMem(0)(7)
 
-    
+    val writeData    = Wire(VecInit(8, 0.U(64.W)))
 
     when (ren && miss) {
         DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))
@@ -139,7 +139,8 @@ class ICACHE extends Module {
         // val writeData    = VecInit.tabulate(8)(i => DPIC_pmem_read_cacheline.io.rdata(i))
         // dataMem.write(writeAddress, writeData)
 
-        for (i <- 0 until 8) { dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)}
+        for (i <- 0 until 8) { writeData(i)     := DPIC_pmem_read_cacheline.io.rdata(i)}
+        for (i <- 0 until 8) { dataMem(idx)(i)  := writeData(i)}
         tagMem(idx)                             := tag
         reload_complete                         := 1.U
     }.otherwise {

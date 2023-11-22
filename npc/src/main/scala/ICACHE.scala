@@ -124,7 +124,7 @@ class ICACHE extends Module {
     rdata_test1 := dataMem(0)(1)
     rdata_test2 := dataMem(0)(2)
     rdata_test3 := dataMem(0)(3)
-    rdata_test4 := dataMem(4)(5)
+    rdata_test4 := dataMem(0)(4)
     rdata_test5 := dataMem(0)(5)
     rdata_test6 := dataMem(0)(6)
     rdata_test7 := dataMem(0)(7)

@@ -52,9 +52,9 @@ class ICACHE extends Module {
     val rdata   = WireInit(0.U(64.W))
 
     // reg
-    // val raddr_reg   = RegInit(0.U(64.W))
-    // raddr_reg      := raddr
-    // val tag_reg     = raddr_reg(63, 12)
+    val raddr_reg   = RegInit(0.U(64.W))
+    raddr_reg      := raddr
+    val tag_reg     = raddr_reg(63, 12)
     // val idx_reg     = raddr_reg(11, 6)
     // val offset_reg  = raddr_reg(5, 3)
 
@@ -98,8 +98,8 @@ class ICACHE extends Module {
     state := next_state
     
     // 3. IDLE
-    hit  := ren && vMem(idx) && (tag === tagMem(idx)) 
-    miss := ren && (~vMem(idx) || (tagMem(idx)=/=tag  ))
+    hit  := ren && vMem(idx) && (tag_reg === tagMem(idx)) 
+    miss := ren && (~vMem(idx) || (tag_reg =/= tagMem(idx)))
     // val tag_miss = (tag =/= tagMem(idx))
     // printf("tag = %x, tagMem(%d) = %x\n", tag, idx, tagMem(idx));
 

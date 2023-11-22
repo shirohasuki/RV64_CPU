@@ -100,7 +100,7 @@ void print_ctrace() {
     for (int idx = 0; idx < SIZE_CTRACEBUF; idx++) {
         if (ctrace_buf[idx][0] == 0) break; // valid == 0
 
-        printf("%d\t%llx\t", idx, ctrace_buf[idx][1]); // idx和tag
+        printf("%d\t%-16llx\t", idx, ctrace_buf[idx][1]); // idx和tag
         
         for (int offset = 0; offset < 8; offset++) {
             printf("%-16llx", ctrace_buf[idx][2 + offset]);

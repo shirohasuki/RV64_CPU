@@ -100,8 +100,8 @@ class ICACHE extends Module {
     // 3. IDLE
     hit  := ren && vMem(idx) && (tag === tagMem(idx)) 
     miss := ren && (~vMem(idx) || (tag =/= tagMem(idx))) 
-    val tag_miss = (tag =/= tagMem(idx))
-    printf("tag = %x, tagMem(%d) = %x\n", tag, idx, tagMem(idx));
+
+    // printf("tag = %x, tagMem(%d) = %x\n", tag, idx, tagMem(idx));
 
     // 4. HIT
     if_icache.resp.valid      := state === sHit && hit
@@ -160,7 +160,9 @@ class ICACHE extends Module {
         // dataMem.write(writeAddress, writeData)
         for (i <- 0 until 8) { dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)}
         tagMem(idx)                             := tag 
-        printf("2. tag = %x, tagMem(%d)\n", tag, idx);
+        // printf("2. tag = %x, tagMem(%d)\n", tag, idx);
+            val tag_miss = (tag =/= tagMem(idx))
+            
         reload_complete                         := 1.U
     }.otherwise {
         reload_complete                         := 0.U

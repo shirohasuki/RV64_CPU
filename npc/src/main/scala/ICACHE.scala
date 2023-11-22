@@ -149,6 +149,9 @@ class ICACHE extends Module {
     tag_test0 := tagMem(0)
     tag_test1 := tagMem(1)
     tag_test2 := tagMem(25)
+    tag_test3 := tagMem(3)
+    tag_test4 := tagMem(4)
+
 
     when (ren && miss) {
         DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))

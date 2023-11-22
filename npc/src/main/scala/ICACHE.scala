@@ -130,7 +130,7 @@ class ICACHE extends Module {
 
     
 
-    when (ren & (next_state === sMiss | state === sMiss)) {
+    when (ren & (next_state === sMiss)) {
         DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))
 
         val writeAddress = idx
@@ -143,7 +143,7 @@ class ICACHE extends Module {
         tagMem(idx)                             := tag
         reload_complete                         := 1.U
     }.otherwise {
-        reload_complete             := 0.U
+        reload_complete                         := 0.U
     }
 
     // 6. LRU: Least recently used

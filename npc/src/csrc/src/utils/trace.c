@@ -1,3 +1,11 @@
+/*
+ * @File Name: trace.c
+ * @Author: shiroha
+ * @Email: whmio0115@hainanu.edu.cn
+ * @Created Time: 2023-10-18 17:23:29
+ * @Description: 
+ */
+
 #include "npc.h"
 
 //=====================ITRACE=========================
@@ -40,7 +48,7 @@ void itrace_output() {
 #endif
 
 
-//=====================MTRACE=========================
+// =====================MTRACE=========================
 char mtrace_buf[SIZE_MTRACEBUF][100] = {0};
 int mtrace_count = 0;
 
@@ -71,3 +79,31 @@ void print_mtrace() {
     puts("====================================");
 }
 
+// ===================== CTRACE(Cache Trace) =========================
+#define SIZE_CTRACEBUF = 64
+ll ctrace_buf[SIZE_CTRACEBUF][10] = {0};   // v+tag+data=1+1+8=10
+int idx = 0;
+
+extern "C" void ctrace_record(int idx, ll tag, const svLogicVecVal* cacheline) {
+    ctrace_buf[idx][0] = 1;
+    ctrace_buf[idx][1] = tag;
+    for (int i = 0; i < 8; i++) {
+        ctrace_buf[idx][i] = (uint64_t)cacheline[i]; 
+    }
+}
+
+void print_ctrace() {
+    puts("========== CTRACE Result ==========");
+    printf("idx\ttag\toff0 || off1 || off2 || off3 || off4 || off5 || off6 || off7\n");
+    for (int idx = 0; idx < SIZE_CTRACEBUF; idx++) {
+        if (ctrace_buf[idx][0] == 0) break; // valid == 0
+
+        printf("%d\t%lx\t", idx, ctrace_buf[idx][1]); // idx和tag
+        
+        for (int offset = 0; offset < 8; offset++) {
+            printf("%llx", ctrace_buf[idx][2 + offset]);
+            (offset == 7) ? { printf("\n"); } : { printf("||"); }
+        }
+    }
+    puts("====================================");
+}

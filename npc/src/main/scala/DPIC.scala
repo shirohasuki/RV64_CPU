@@ -240,3 +240,42 @@ class pmem_write extends BlackBox with HasBlackBoxInline {
     |endmodule
     """.stripMargin)
 }
+
+class ctrace extends BlackBox with HasBlackBoxInline {
+    val io = IO(new Bundle{
+        val idx  = Input(UInt(6.W))
+        val tag  = Input(UInt(52.W))
+        val cacheline  = Input(Vec(8, UInt(64.W)))
+    })
+    setInline("ctrace.v",
+    """
+    |import "DPI-C" function void ctrace_record(input byte idx, input long int tag, input logic[7:0] cacheline);
+    |module ctrace (
+    |   input  [7:0]  idx,
+    |   input  [51:0] tag,
+    |   input  [63:0] offset_0,
+    |   input  [63:0] offset_1,
+    |   input  [63:0] offset_2,
+    |   input  [63:0] offset_3,
+    |   input  [63:0] offset_4,
+    |   input  [63:0] offset_5,
+    |   input  [63:0] offset_6,
+    |   input  [63:0] offset_7
+    |);
+    |   wire [63:0] cacheline[8];
+    |
+    |   assign cacheline[0] = offset_0;
+    |   assign cacheline[1] = offset_1;
+    |   assign cacheline[2] = offset_2;
+    |   assign cacheline[3] = offset_3;
+    |   assign cacheline[4] = offset_4;
+    |   assign cacheline[5] = offset_5;
+    |   assign cacheline[6] = offset_6;
+    |   assign cacheline[7] = offset_7;
+    |   always @(*) begin
+    |       ctrace_record(idx, tag, cacheline); 
+    |   end
+    |
+    |endmodule
+    """.stripMargin)
+}

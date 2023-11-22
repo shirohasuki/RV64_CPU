@@ -163,7 +163,7 @@ class ICACHE extends Module {
     // 7. output
     val icache_miss     = next_state === sMiss | state === sMiss
     val icache_latency  = WireInit(false.B)
-    when (state === sHit & ~icache_latency) {
+    when (state === sHit && ~icache_latency) {
         icache_latency := 1.U
     }.otherwise {
         icache_latency := 0.U

@@ -137,14 +137,14 @@ class ICACHE extends Module {
     rdata_test6 := dataMem(25)(6)
     rdata_test7 := dataMem(25)(7)
 
-    val tag_test0 = WireInit(0.U(64.W))
-    val tag_test1 = WireInit(0.U(64.W))
-    val tag_test2 = WireInit(0.U(64.W))
-    val tag_test3 = WireInit(0.U(64.W))
-    val tag_test4 = WireInit(0.U(64.W))
-    val tag_test5 = WireInit(0.U(64.W))
-    val tag_test6 = WireInit(0.U(64.W))
-    val tag_test7 = WireInit(0.U(64.W))
+    val tag_test0 = WireInit(0.U(52.W))
+    val tag_test1 = WireInit(0.U(52.W))
+    val tag_test2 = WireInit(0.U(52.W))
+    val tag_test3 = WireInit(0.U(52.W))
+    val tag_test4 = WireInit(0.U(52.W))
+    val tag_test5 = WireInit(0.U(52.W))
+    val tag_test6 = WireInit(0.U(52.W))
+    val tag_test7 = WireInit(0.U(52.W))
 
     tag_test0 := tagMem(0)
     tag_test1 := tagMem(1)
@@ -160,7 +160,7 @@ class ICACHE extends Module {
         // dataMem.write(writeAddress, writeData)
         for (i <- 0 until 8) { dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)}
         tagMem(idx)                             := tag 
-        tagMem(25)                             := tag 
+        tagMem(25)                              := tag 
         reload_complete                         := 1.U
     }.otherwise {
         reload_complete                         := 0.U

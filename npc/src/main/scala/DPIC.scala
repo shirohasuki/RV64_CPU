@@ -264,10 +264,10 @@ class ctrace extends BlackBox with HasBlackBoxInline {
     |);
     |   
     |   wire [7:0] idx_to_byte;
-    |   assign idx_to_byte = {{2{0}}, idx};
+    |   assign idx_to_byte = {2'b0, idx};
     |
     |   wire [63:0] tag_to_longint;
-    |   assign tag_to_longint = {{12{0}}, tag};
+    |   assign tag_to_longint = {12'b0, tag};
     |
     |   wire [63:0] cacheline[8];
     |

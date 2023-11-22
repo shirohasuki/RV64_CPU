@@ -117,14 +117,14 @@ class ICACHE extends Module {
     val rdata_test5 = WireInit(0.U(64.W))
     val rdata_test6 = WireInit(0.U(64.W))
     val rdata_test7 = WireInit(0.U(64.W))
-    // rdata_test0 := dataMem(4)(0)
-    // rdata_test1 := dataMem(4)(1)
-    // rdata_test2 := dataMem(4)(2)
-    // rdata_test3 := dataMem(4)(3)
-    // rdata_test4 := dataMem(4)(4)
-    // rdata_test5 := dataMem(4)(5)
-    // rdata_test6 := dataMem(4)(6)
-    // rdata_test7 := dataMem(4)(7)
+    rdata_test0 := dataMem(idx)(0)
+    rdata_test1 := dataMem(idx)(1)
+    rdata_test2 := dataMem(idx)(2)
+    rdata_test3 := dataMem(idx)(3)
+    rdata_test4 := dataMem(idx)(4)
+    rdata_test5 := dataMem(idx)(5)
+    rdata_test6 := dataMem(idx)(6)
+    rdata_test7 := dataMem(idx)(7)
 
     
 

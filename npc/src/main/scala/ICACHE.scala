@@ -160,7 +160,7 @@ class ICACHE extends Module {
         // dataMem.write(writeAddress, writeData)
         for (i <- 0 until 8) { dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)}
         tagMem(idx)                             := tag 
-        printf("2. tag = %x, tagMem(%d) = %x\n", tag, idx, tagMem(idx));
+        printf("2. tag = %x, tagMem(%d)\n", tag, idx);
         reload_complete                         := 1.U
     }.otherwise {
         reload_complete                         := 0.U

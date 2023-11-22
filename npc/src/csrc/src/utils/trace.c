@@ -86,6 +86,7 @@ int idx = 0;
 extern "C" void ctrace_record(char idx, ll tag, const svOpenArrayHandle* cacheline) {
     ctrace_buf[idx][0] = 1;
     ctrace_buf[idx][1] = tag;
+    
     uint64_t* offset = NULL;
     offset = (uint64_t *)(((VerilatedDpiOpenVar*)cacheline) -> datap());
     for (int i = 0; i < 8; i++) {

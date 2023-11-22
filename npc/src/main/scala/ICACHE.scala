@@ -105,7 +105,7 @@ class ICACHE extends Module {
     // 4. HIT
     if_icache.resp.bits.rdata := dataMem(idx)(offset)
     // printf("if_icache.resp.bits.rdata = %d, idx = %d, offset = %d\n", if_icache.resp.bits.rdata, idx, offset);
-    if_icache.resp.valid      := state === sHit || hit
+    if_icache.resp.valid      := state === sHit && hit
     when (if_icache.resp.valid) {
         rd_complete := 1.U
     }.otherwise {

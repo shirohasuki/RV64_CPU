@@ -106,6 +106,8 @@ class ICACHE extends Module {
     if_icache.resp.valid      := state === sHit && hit
     when (if_icache.resp.valid) {
         if_icache.resp.bits.rdata := dataMem(idx)(offset)
+    }.otherwise {
+        if_icache.resp.bits.rdata := 0.U
     } 
 
     when (if_icache.resp.valid) {

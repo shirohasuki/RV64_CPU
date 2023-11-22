@@ -80,7 +80,6 @@ void print_mtrace() {
 }
 
 // ===================== CTRACE(Cache Trace) =========================
-#define SIZE_CTRACEBUF = 64
 ll ctrace_buf[SIZE_CTRACEBUF][10] = {0};   // v+tag+data=1+1+8=10
 int idx = 0;
 

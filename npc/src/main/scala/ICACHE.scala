@@ -101,6 +101,7 @@ class ICACHE extends Module {
     // 3. IDLE
     hit  := ren && vMem(idx) && (tag === tagMem(idx)) 
     miss := ren && (~vMem(idx) || (tag =/= tagMem(idx))) 
+    val tag_miss = tag =/= tagMem(idx)
 
     // 4. HIT
     if_icache.resp.valid      := state === sHit && hit

@@ -98,8 +98,8 @@ class ICACHE extends Module {
     state := next_state
     
     // 3. IDLE
-    hit  := ren && vMem(idx) && (tag === tagMem(idx)) || (tag === tag_test2)
-    miss := ren && (~vMem(idx) || (tag =/= tagMem(idx))) &&  (tag === tag_test2)
+    hit  := ren && vMem(idx) && (tag === tagMem(idx)) 
+    miss := ren && (~vMem(idx) || (tag =/= tagMem(idx)))
     // val tag_miss = (tag =/= tagMem(idx))
     // printf("tag = %x, tagMem(%d) = %x\n", tag, idx, tagMem(idx));
 
@@ -153,7 +153,7 @@ class ICACHE extends Module {
     tag_test4 := tagMem(4)
 
 
-    when (ren && miss) {
+    when (ren) {
         DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))
         // val writeAddress = idx
         // val writeData    = VecInit.tabulate(8)(i => DPIC_pmem_read_cacheline.io.rdata(i))

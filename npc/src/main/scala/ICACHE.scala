@@ -22,7 +22,7 @@ class IFU_ICACHE extends Bundle {
 }
 
 class ICACHE_Ctrl extends Bundle {
-    val icache_miss  = Output(Bool())         
+    val icache_busy  = Output(Bool())         
 }
 
 // object CacheState extends ChiselEnum {
@@ -161,6 +161,13 @@ class ICACHE extends Module {
     // 6. LRU: Least recently used
 
     // 7. output
-    icache_ctrl.icache_miss := next_state === sMiss | state === sMiss
+    val icache_miss     = next_state === sMiss | state === sMiss
+    val icache_latency  = WireInit(false.B)
+    when (state === sHit) {
+        icache_latency = 1.U
+    }.otherwise {
+        icache_latency = 0.U
+    }
+    icache_ctrl.icache_busy := icache_miss | icache_latency
 }
 

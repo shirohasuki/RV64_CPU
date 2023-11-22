@@ -253,14 +253,14 @@ class ctrace extends BlackBox with HasBlackBoxInline {
     |module ctrace (
     |   input  [7:0]  idx,
     |   input  [51:0] tag,
-    |   input  [63:0] offset_0,
-    |   input  [63:0] offset_1,
-    |   input  [63:0] offset_2,
-    |   input  [63:0] offset_3,
-    |   input  [63:0] offset_4,
-    |   input  [63:0] offset_5,
-    |   input  [63:0] offset_6,
-    |   input  [63:0] offset_7
+    |   input  [63:0] cacheline_0,
+    |   input  [63:0] cacheline_1,
+    |   input  [63:0] cacheline_2,
+    |   input  [63:0] cacheline_3,
+    |   input  [63:0] cacheline_4,
+    |   input  [63:0] cacheline_5,
+    |   input  [63:0] cacheline_6,
+    |   input  [63:0] cacheline_7
     |);
     |   wire [63:0] cacheline[8];
     |

@@ -101,7 +101,7 @@ class ICACHE extends Module {
     hit  := ren && vMem(idx) && (tag === tagMem(idx)) 
     miss := ren && (~vMem(idx) || (tag =/= tagMem(idx))) 
     val tag_miss = (tag =/= tagMem(idx))
-    printf("tag = %x, tagMem(%idx) = %x\n", tag, tagMem(idx), idx);
+    printf("tag = %x, tagMem(%d) = %x\n", tag, idx, tagMem(idx));
 
     // 4. HIT
     if_icache.resp.valid      := state === sHit && hit

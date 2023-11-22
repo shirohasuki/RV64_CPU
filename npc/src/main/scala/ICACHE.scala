@@ -131,8 +131,6 @@ class ICACHE extends Module {
 
     
 
-
-
     when (ren) {
         DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))
 
@@ -141,12 +139,14 @@ class ICACHE extends Module {
         // dataMem.write(writeAddress, writeData)
 
         for (i <- 0 until 8) { dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)}
-
-        vMem                                    := vMem.bitSet(idx, true.B) 
         tagMem(idx)                             := tag
         reload_complete                         := 1.U
     }.otherwise {
         reload_complete                         := 0.U
+    }
+
+    when (reload_complete) {
+        vMem                                    := vMem.bitSet(idx, true.B) 
     }
 
 

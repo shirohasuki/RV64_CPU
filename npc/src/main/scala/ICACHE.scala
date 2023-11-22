@@ -44,7 +44,8 @@ class ICACHE extends Module {
     // wire
     val raddr   = WireInit(0.U(64.W))
     raddr   := if_icache.req.bits.raddr
-    val ren     = if_icache.req.valid
+    val ren     = WireInit(false.B)
+    ren     := if_icache.req.valid
     val tag     = raddr(63, 12)
     val idx     = raddr(11, 6)
     val offset  = raddr(5, 3)

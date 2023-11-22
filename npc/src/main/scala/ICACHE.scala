@@ -52,11 +52,11 @@ class ICACHE extends Module {
     val rdata   = WireInit(0.U(64.W))
 
     // reg
-    val raddr_reg   = RegInit(0.U(64.W))
-    raddr_reg      := raddr
-    val tag_reg     = raddr_reg(63, 12)
-    val idx_reg     = raddr_reg(11, 6)
-    val offset_reg  = raddr_reg(5, 3)
+    // val raddr_reg   = RegInit(0.U(64.W))
+    // raddr_reg      := raddr
+    // val tag_reg     = raddr_reg(63, 12)
+    // val idx_reg     = raddr_reg(11, 6)
+    // val offset_reg  = raddr_reg(5, 3)
 
 
     // 2. FSM
@@ -120,37 +120,37 @@ class ICACHE extends Module {
     // 5. MISS
     // Read Allocate
     val DPIC_pmem_read_cacheline  = Module(new pmem_read_cacheline())
-    // val rdata_test0 = WireInit(0.U(64.W))
-    // val rdata_test1 = WireInit(0.U(64.W))
-    // val rdata_test2 = WireInit(0.U(64.W))
-    // val rdata_test3 = WireInit(0.U(64.W))
-    // val rdata_test4 = WireInit(0.U(64.W))
-    // val rdata_test5 = WireInit(0.U(64.W))
-    // val rdata_test6 = WireInit(0.U(64.W))
-    // val rdata_test7 = WireInit(0.U(64.W))
-    // rdata_test0 := dataMem(25)(0)
-    // rdata_test1 := dataMem(25)(1)
-    // rdata_test2 := dataMem(25)(2)
-    // rdata_test3 := dataMem(25)(3)
-    // rdata_test4 := dataMem(25)(4)
-    // rdata_test5 := dataMem(25)(5)
-    // rdata_test6 := dataMem(25)(6)
-    // rdata_test7 := dataMem(25)(7)
+    val rdata_test0 = WireInit(0.U(64.W))
+    val rdata_test1 = WireInit(0.U(64.W))
+    val rdata_test2 = WireInit(0.U(64.W))
+    val rdata_test3 = WireInit(0.U(64.W))
+    val rdata_test4 = WireInit(0.U(64.W))
+    val rdata_test5 = WireInit(0.U(64.W))
+    val rdata_test6 = WireInit(0.U(64.W))
+    val rdata_test7 = WireInit(0.U(64.W))
+    rdata_test0 := dataMem(25)(0)
+    rdata_test1 := dataMem(25)(1)
+    rdata_test2 := dataMem(25)(2)
+    rdata_test3 := dataMem(25)(3)
+    rdata_test4 := dataMem(25)(4)
+    rdata_test5 := dataMem(25)(5)
+    rdata_test6 := dataMem(25)(6)
+    rdata_test7 := dataMem(25)(7)
 
-    // val tag_test0 = WireInit(0.U(64.W))
-    // val tag_test1 = WireInit(0.U(64.W))
-    // val tag_test2 = WireInit(0.U(64.W))
-    // val tag_test3 = WireInit(0.U(64.W))
-    // val tag_test4 = WireInit(0.U(64.W))
-    // val tag_test5 = WireInit(0.U(64.W))
-    // val tag_test6 = WireInit(0.U(64.W))
-    // val tag_test7 = WireInit(0.U(64.W))
+    val tag_test0 = WireInit(0.U(64.W))
+    val tag_test1 = WireInit(0.U(64.W))
+    val tag_test2 = WireInit(0.U(64.W))
+    val tag_test3 = WireInit(0.U(64.W))
+    val tag_test4 = WireInit(0.U(64.W))
+    val tag_test5 = WireInit(0.U(64.W))
+    val tag_test6 = WireInit(0.U(64.W))
+    val tag_test7 = WireInit(0.U(64.W))
 
-    // tag_test0 := tagMem(0)
-    // tag_test1 := tagMem(1)
-    // tag_test2 := tagMem(25)
-    // tag_test3 := tagMem(3)
-    // tag_test4 := tagMem(4)
+    tag_test0 := tagMem(0)
+    tag_test1 := tagMem(1)
+    tag_test2 := tagMem(25)
+    tag_test3 := tagMem(3)
+    tag_test4 := tagMem(4)
 
 
     when (ren && miss) {
@@ -159,7 +159,8 @@ class ICACHE extends Module {
         // val writeData    = VecInit.tabulate(8)(i => DPIC_pmem_read_cacheline.io.rdata(i))
         // dataMem.write(writeAddress, writeData)
         for (i <- 0 until 8) { dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)}
-        tagMem(idx)                             := tag | tag_reg
+        tagMem(idx)                             := tag 
+        tagMem(25)                             := tag 
         reload_complete                         := 1.U
     }.otherwise {
         reload_complete                         := 0.U

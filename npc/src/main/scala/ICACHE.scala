@@ -129,28 +129,30 @@ class ICACHE extends Module {
     
     val writeAddress = idx
     // val writeData = VecInit(Seq.fill(8)(0.U))
-    val writeData = Wire(Vec(8, UInt(64.W)))
-    writeData(0)  :=  0.U   
-    writeData(1)  :=  0.U   
-    writeData(2)  :=  0.U   
-    writeData(3)  :=  0.U   
-    writeData(4)  :=  0.U   
-    writeData(5)  :=  0.U   
-    writeData(6)  :=  0.U   
-    writeData(7)  :=  0.U   
+    // val writeData = Wire(Vec(8, UInt(64.W)))
+    // writeData(0)  :=  0.U   
+    // writeData(1)  :=  0.U   
+    // writeData(2)  :=  0.U   
+    // writeData(3)  :=  0.U   
+    // writeData(4)  :=  0.U   
+    // writeData(5)  :=  0.U   
+    // writeData(6)  :=  0.U   
+    // writeData(7)  :=  0.U   
+
     when (ren) {
         DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))
-            writeData(0)  :=    DPIC_pmem_read_cacheline.io.rdata(0)
-            writeData(1)  :=    DPIC_pmem_read_cacheline.io.rdata(1) 
-            writeData(2)  :=    DPIC_pmem_read_cacheline.io.rdata(2) 
-            writeData(3)  :=    DPIC_pmem_read_cacheline.io.rdata(3)
-            writeData(4)  :=    DPIC_pmem_read_cacheline.io.rdata(4) 
-            writeData(5)  :=    DPIC_pmem_read_cacheline.io.rdata(5) 
-            writeData(6)  :=    DPIC_pmem_read_cacheline.io.rdata(6) 
-            writeData(7)  :=    DPIC_pmem_read_cacheline.io.rdata(7)
-            dataMem.write(writeAddress, writeData)
+        
+        // writeData(0) := DPIC_pmem_read_cacheline.io.rdata(0)
+        // writeData(1) := DPIC_pmem_read_cacheline.io.rdata(1) 
+        // writeData(2) := DPIC_pmem_read_cacheline.io.rdata(2) 
+        // writeData(3) := DPIC_pmem_read_cacheline.io.rdata(3)
+        // writeData(4) := DPIC_pmem_read_cacheline.io.rdata(4) 
+        // writeData(5) := DPIC_pmem_read_cacheline.io.rdata(5) 
+        // writeData(6) := DPIC_pmem_read_cacheline.io.rdata(6) 
+        // writeData(7) := DPIC_pmem_read_cacheline.io.rdata(7)
+        val writeData = VecInit.tabulate(8)(i => DPIC_pmem_read_cacheline.io.rdata(i))
+        dataMem.write(writeAddress, writeData)
 
-  
         // dataMem(idx)(0)  := DPIC_pmem_read_cacheline.io.rdata(0)
         // dataMem(idx)(1)  := DPIC_pmem_read_cacheline.io.rdata(1)
         // dataMem(idx)(2)  := DPIC_pmem_read_cacheline.io.rdata(2)

@@ -128,27 +128,22 @@ class ICACHE extends Module {
 
     
     val writeAddress = idx
-    val writeData = VecInit(Seq.fill(8)(0.U))
+    // val writeData = VecInit(Seq.fill(8)(0.U))
+    val writeData = Wire(Vec(8, UInt(64.W)))
 
     when (ren) {
         DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))
-        // writeData := Vec(8, Seq(
-        //     DPIC_pmem_read_cacheline.io.rdata(0),
-        //     DPIC_pmem_read_cacheline.io.rdata(1), 
-        //     DPIC_pmem_read_cacheline.io.rdata(2), 
-        //     DPIC_pmem_read_cacheline.io.rdata(3),
-        //     DPIC_pmem_read_cacheline.io.rdata(4), 
-        //     DPIC_pmem_read_cacheline.io.rdata(5), 
-        //     DPIC_pmem_read_cacheline.io.rdata(6), 
-        //     DPIC_pmem_read_cacheline.io.rdata(7)
-        // ))
-        // dataMem.write(writeAddress, writeData)
+            writeData(0)  :=    DPIC_pmem_read_cacheline.io.rdata(0)
+            writeData(1)  :=    DPIC_pmem_read_cacheline.io.rdata(1) 
+            writeData(2)  :=    DPIC_pmem_read_cacheline.io.rdata(2) 
+            writeData(3)  :=    DPIC_pmem_read_cacheline.io.rdata(3)
+            writeData(4)  :=    DPIC_pmem_read_cacheline.io.rdata(4) 
+            writeData(5)  :=    DPIC_pmem_read_cacheline.io.rdata(5) 
+            writeData(6)  :=    DPIC_pmem_read_cacheline.io.rdata(6) 
+            writeData(7)  :=    DPIC_pmem_read_cacheline.io.rdata(7)
+            dataMem.write(writeAddress, writeData)
 
-        for (i <- 0 until 8) { 
-            dataMem.write(writeAddress, DPIC_pmem_read_cacheline.io.rdata(i))
-            writeAddress = writeAddress + 1.U
-        }
-        
+  
         // dataMem(idx)(0)  := DPIC_pmem_read_cacheline.io.rdata(0)
         // dataMem(idx)(1)  := DPIC_pmem_read_cacheline.io.rdata(1)
         // dataMem(idx)(2)  := DPIC_pmem_read_cacheline.io.rdata(2)

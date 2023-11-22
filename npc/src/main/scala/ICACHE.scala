@@ -127,16 +127,15 @@ class ICACHE extends Module {
     val rdata_test5 = WireInit(0.U(64.W))
     val rdata_test6 = WireInit(0.U(64.W))
     val rdata_test7 = WireInit(0.U(64.W))
-    rdata_test0 := dataMem(0)(0)
-    rdata_test1 := dataMem(0)(1)
-    rdata_test2 := dataMem(0)(2)
-    rdata_test3 := dataMem(0)(3)
-    rdata_test4 := dataMem(0)(4)
-    rdata_test5 := dataMem(0)(5)
-    rdata_test6 := dataMem(0)(6)
-    rdata_test7 := dataMem(0)(7)
+    rdata_test0 := dataMem(25)(0)
+    rdata_test1 := dataMem(25)(1)
+    rdata_test2 := dataMem(25)(2)
+    rdata_test3 := dataMem(25)(3)
+    rdata_test4 := dataMem(25)(4)
+    rdata_test5 := dataMem(25)(5)
+    rdata_test6 := dataMem(25)(6)
+    rdata_test7 := dataMem(25)(7)
 
-    
 
     when (ren && miss) {
         DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))
@@ -154,12 +153,12 @@ class ICACHE extends Module {
         vMem                                    := vMem.bitSet(idx, true.B) 
     }
 
-
-    // 6. LRU: Least recently used
+    // 6. update 
+    // LRU: Least recently used
 
     // 7. output
     val icache_miss     = next_state === sMiss | state === sMiss
-    val icache_latency  = RegInit(false.B)
+    val icache_latency  = RegInit(false.B)  // 同步读写自带的一周期latency
     when (next_state === sHit && ~icache_latency) {
         icache_latency := 1.U
     }.otherwise {

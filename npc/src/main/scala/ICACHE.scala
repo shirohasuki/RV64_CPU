@@ -130,7 +130,7 @@ class ICACHE extends Module {
 
     
 
-    when (ren & miss) {
+    when (ren & (next_state === sMiss | state === sMiss)) {
         DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))
 
         val writeAddress = idx

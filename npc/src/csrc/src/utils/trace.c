@@ -102,7 +102,7 @@ void print_ctrace() {
         
         for (int offset = 0; offset < 8; offset++) {
             printf("%llx", ctrace_buf[idx][2 + offset]);
-            (offset == 7) ? { printf("\n"); } : { printf("||"); }
+            (offset == 7) ? printf("\n"); : printf("||"); 
         }
     }
     puts("====================================");

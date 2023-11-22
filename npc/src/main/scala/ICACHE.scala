@@ -102,7 +102,7 @@ class ICACHE extends Module {
 
     // 4. HIT
     if_icache.resp.bits.rdata := dataMem(idx)(offset)
-    printf("dataMem(idx)(offset) = %d, idx = %d, offset = %d\n", dataMem(idx)(offset), idx, offset);
+    printf("if_icache.resp.bits.rdata = %d, idx = %d, offset = %d\n", if_icache.resp.bits.rdata, idx, offset);
     if_icache.resp.valid      := state === sHit  
     when (if_icache.resp.valid) {
         rd_complete := 1.U
@@ -143,7 +143,6 @@ class ICACHE extends Module {
         tagMem(idx)                             := tag
         reload_complete                         := 1.U
     }.otherwise {
-        DPIC_pmem_read_cacheline.io.raddr       := 0.U
         reload_complete                         := 0.U
     }
 

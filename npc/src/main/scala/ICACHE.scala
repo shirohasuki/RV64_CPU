@@ -127,7 +127,6 @@ class ICACHE extends Module {
     rdata_test7 := dataMem(idx)(7)
 
     
-    val writeAddress = idx
     // val writeData = VecInit(Seq.fill(8)(0.U))
     // val writeData = Wire(Vec(8, UInt(64.W)))
     // writeData(0)  :=  0.U   
@@ -150,6 +149,7 @@ class ICACHE extends Module {
         // writeData(5) := DPIC_pmem_read_cacheline.io.rdata(5) 
         // writeData(6) := DPIC_pmem_read_cacheline.io.rdata(6) 
         // writeData(7) := DPIC_pmem_read_cacheline.io.rdata(7)
+        val writeAddress = idx
         val writeData = VecInit.tabulate(8)(i => DPIC_pmem_read_cacheline.io.rdata(i))
         dataMem.write(writeAddress, writeData)
 

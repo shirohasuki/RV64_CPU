@@ -42,7 +42,8 @@ class ICACHE extends Module {
     // val dataMem = Seq.fill(4)(SyncReadMem(64, Vec(2, UInt(8.W))))
     
     // wire
-    val raddr   = if_icache.req.bits.raddr
+    val raddr   = WireInit(0.U(64.W))
+    raddr   := if_icache.req.bits.raddr
     val ren     = if_icache.req.valid
     val tag     = raddr(63, 12)
     val idx     = raddr(11, 6)
@@ -130,15 +131,7 @@ class ICACHE extends Module {
     rdata_test6 := dataMem(0)(6)
     rdata_test7 := dataMem(0)(7)
 
-    val rdata_test_0 = WireInit(0.U(64.W))
-    val rdata_test_1 = WireInit(0.U(64.W))
-    val rdata_test_2 = WireInit(0.U(64.W))
-    val rdata_test_3 = WireInit(0.U(64.W))
-    val rdata_test_4 = WireInit(0.U(64.W))
-    val rdata_test_5 = WireInit(0.U(64.W))
-    val rdata_test_6 = WireInit(0.U(64.W))
-    val rdata_test_7 = WireInit(0.U(64.W))
-
+    
 
     when (ren && miss) {
         DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))
@@ -147,29 +140,7 @@ class ICACHE extends Module {
         // val writeData    = VecInit.tabulate(8)(i => DPIC_pmem_read_cacheline.io.rdata(i))
         // dataMem.write(writeAddress, writeData)
 
-        // for (i <- 0 until 8) { 
-            // writeData(i)     := DPIC_pmem_read_cacheline.io.rdata(i)
-            rdata_test_0    := DPIC_pmem_read_cacheline.io.rdata(0)
-            rdata_test_1    := DPIC_pmem_read_cacheline.io.rdata(1)
-            rdata_test_2    := DPIC_pmem_read_cacheline.io.rdata(2)
-            rdata_test_3    := DPIC_pmem_read_cacheline.io.rdata(3)
-            rdata_test_4    := DPIC_pmem_read_cacheline.io.rdata(4)
-            rdata_test_5    := DPIC_pmem_read_cacheline.io.rdata(5)
-            rdata_test_6    := DPIC_pmem_read_cacheline.io.rdata(6)
-            rdata_test_7    := DPIC_pmem_read_cacheline.io.rdata(7)
-        // }
-        // for (i <- 0 until 8) { 
-        //     dataMem(idx)(i)  := writeData(i)
-        // }
-
-        dataMem(idx)(0)  := rdata_test_0
-        dataMem(idx)(1)  := rdata_test_1
-        dataMem(idx)(2)  := rdata_test_2
-        dataMem(idx)(3)  := rdata_test_3
-        dataMem(idx)(4)  := rdata_test_4
-        dataMem(idx)(5)  := rdata_test_5
-        dataMem(idx)(6)  := rdata_test_6
-        dataMem(idx)(7)  := rdata_test_7
+        for (i <- 0 until 8) { dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)}
 
         tagMem(idx)                             := tag
         reload_complete                         := 1.U

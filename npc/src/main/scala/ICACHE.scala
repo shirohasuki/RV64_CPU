@@ -50,7 +50,6 @@ class ICACHE extends Module {
     val rdata   = WireInit(0.U(64.W))
 
     // reg
-    // val raddr_reg   = Reg(chiselTypeOf(if_icache.req.bits.raddr))
     val raddr_reg   = RegInit(0.U(64.W))
     raddr_reg      := raddr
     val tag_reg     = raddr_reg(63, 12)
@@ -97,7 +96,6 @@ class ICACHE extends Module {
     // 3. IDLE
     hit  := ren && vMem(idx) && (tag === tagMem(idx)) 
     miss := ren && (~vMem(idx) || (tag =/= tagMem(idx))) 
-    // val tagmiss = (tag =/= tagMem(idx_reg))
 
     // 4. HIT
     if_icache.resp.bits.rdata := dataMem(idx)(offset)
@@ -149,14 +147,14 @@ class ICACHE extends Module {
         // for (i <- 0 until 8) { dataMem.write(writeAddress, Seq(DPIC_pmem_read_cacheline.io.rdata(i)))
         //                          writeAddress = writeAddress + 1.U}
         
-        dataMem(idx)(0)  := DPIC_pmem_read_cacheline.io.rdata(0)
-        dataMem(idx)(1)  := DPIC_pmem_read_cacheline.io.rdata(1)
-        dataMem(idx)(2)  := DPIC_pmem_read_cacheline.io.rdata(2)
-        dataMem(idx)(3)  := DPIC_pmem_read_cacheline.io.rdata(3)
-        dataMem(idx)(4)  := DPIC_pmem_read_cacheline.io.rdata(4)
-        dataMem(idx)(5)  := DPIC_pmem_read_cacheline.io.rdata(5)
-        dataMem(idx)(6)  := DPIC_pmem_read_cacheline.io.rdata(6)
-        // dataMem(idx)(7)  := DPIC_pmem_read_cacheline.io.rdata(7)
+        dataMem(idx)(0)  := DPIC_pmem_read_cacheline.io.rdata(7)
+        dataMem(idx)(1)  := DPIC_pmem_read_cacheline.io.rdata(6)
+        dataMem(idx)(2)  := DPIC_pmem_read_cacheline.io.rdata(5)
+        dataMem(idx)(3)  := DPIC_pmem_read_cacheline.io.rdata(4)
+        dataMem(idx)(4)  := DPIC_pmem_read_cacheline.io.rdata(3)
+        dataMem(idx)(5)  := DPIC_pmem_read_cacheline.io.rdata(2)
+        dataMem(idx)(6)  := DPIC_pmem_read_cacheline.io.rdata(1)
+        dataMem(idx)(7)  := DPIC_pmem_read_cacheline.io.rdata(0)
 
         // for (i <- 0 until 8) { 
         //     dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)

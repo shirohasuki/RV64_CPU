@@ -129,27 +129,40 @@ class ICACHE extends Module {
     rdata_test7 := dataMem(idx)(7)
 
     
-    val writeAddress = idx
-    val writeData = VecInit(Seq.fill(8)(0.U))
+    // val writeAddress = idx
+    // val writeData = VecInit(Seq.fill(8)(0.U))
 
     when (ren) {
         DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))
-        writeData := Vec(8, Seq(
-            DPIC_pmem_read_cacheline.io.rdata(0),
-            DPIC_pmem_read_cacheline.io.rdata(1), 
-            DPIC_pmem_read_cacheline.io.rdata(2), 
-            DPIC_pmem_read_cacheline.io.rdata(3),
-            DPIC_pmem_read_cacheline.io.rdata(4), 
-            DPIC_pmem_read_cacheline.io.rdata(5), 
-            DPIC_pmem_read_cacheline.io.rdata(6), 
-            DPIC_pmem_read_cacheline.io.rdata(7)
-        ))
-        dataMem.write(writeAddress, writeData)
+        // writeData := Vec(8, Seq(
+        //     DPIC_pmem_read_cacheline.io.rdata(0),
+        //     DPIC_pmem_read_cacheline.io.rdata(1), 
+        //     DPIC_pmem_read_cacheline.io.rdata(2), 
+        //     DPIC_pmem_read_cacheline.io.rdata(3),
+        //     DPIC_pmem_read_cacheline.io.rdata(4), 
+        //     DPIC_pmem_read_cacheline.io.rdata(5), 
+        //     DPIC_pmem_read_cacheline.io.rdata(6), 
+        //     DPIC_pmem_read_cacheline.io.rdata(7)
+        // ))
+        // dataMem.write(writeAddress, writeData)
 
         // for (i <- 0 until 8) { dataMem.write(writeAddress, Seq(DPIC_pmem_read_cacheline.io.rdata(i)))
         //                          writeAddress = writeAddress + 1.U}
+        
 
-        // for (i <- 0 until 8) { dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)}
+        dataMem(idx)(0)  := DPIC_pmem_read_cacheline.io.rdata(0)
+        dataMem(idx)(1)  := DPIC_pmem_read_cacheline.io.rdata(1)
+        dataMem(idx)(2)  := DPIC_pmem_read_cacheline.io.rdata(2)
+        dataMem(idx)(3)  := DPIC_pmem_read_cacheline.io.rdata(3)
+        dataMem(idx)(4)  := DPIC_pmem_read_cacheline.io.rdata(4)
+        dataMem(idx)(5)  := DPIC_pmem_read_cacheline.io.rdata(5)
+        dataMem(idx)(6)  := DPIC_pmem_read_cacheline.io.rdata(6)
+        dataMem(idx)(7)  := DPIC_pmem_read_cacheline.io.rdata(7)
+        
+
+        // for (i <- 0 until 8) { 
+        //     dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)
+        // }
 
         vMem                                    := vMem.bitSet(idx, true.B) 
         tagMem(idx)                             := tag

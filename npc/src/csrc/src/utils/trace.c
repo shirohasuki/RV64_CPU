@@ -97,11 +97,11 @@ extern "C" void ctrace_record(char idx, ll tag, const svOpenArrayHandle cachelin
 void print_ctrace() {
     puts("========== CTRACE Result ==========");
     puts("========== ICache ");
-    printf("idx\ttag\t||=======off0======||=======off1======||=======off2======||=======off3======||=======off4======||=======off5======||=======off6======||=======off7======||\n");
+    printf("idx  tag  ||=======off0======||=======off1======||=======off2======||=======off3======||=======off4======||=======off5======||=======off6======||=======off7======||\n");
     for (int idx = 0; idx < SIZE_CTRACEBUF; idx++) {
         if (icache_buf[idx][0] == 0) continue; // valid == 0
 
-        printf("%lld\t%llx\t", icache_buf[idx][1], icache_buf[idx][2]); // idx和tag
+        printf("%lld  %llx  ", icache_buf[idx][1], icache_buf[idx][2]); // idx和tag
         
         for (int offset = 0; offset < 8; offset++) {
             printf("||%016llx", icache_buf[idx][3 + offset]);

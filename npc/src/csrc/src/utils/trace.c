@@ -96,7 +96,7 @@ extern "C" void ctrace_record(char idx, ll tag, const svOpenArrayHandle cachelin
 
 void print_ctrace() {
     puts("========== CTRACE Result ==========");
-    printf("idx\ttag\t||\t off0 \t||\t off1 \t||\t off2 \t|| \toff3 \t|| \toff4 \t|| \toff5 \t|| \toff6 \t|| \toff7\n");
+    printf("idx\ttag\t||-----off0-----||\t off1 \t||\t off2 \t|| \toff3 \t|| \toff4 \t|| \toff5 \t|| \toff6 \t|| \toff7\n");
     for (int idx = 0; idx < SIZE_CTRACEBUF; idx++) {
         if (ctrace_buf[idx][0] == 0) break; // valid == 0
 

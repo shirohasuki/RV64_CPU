@@ -78,7 +78,7 @@ void print_mtrace();
 
 // ============= CTRACE ==============
 #define SIZE_CTRACEBUF 64
-extern ll ctrace_buf[SIZE_CTRACEBUF][10];   // v+tag+data=1+1+8=10
+extern ll icache_buf[SIZE_CTRACEBUF][10];   // v+tag+data=1+1+8=10
 void print_ctrace();
 
 // ============= REG ===================

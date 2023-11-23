@@ -34,6 +34,7 @@
 #define CONFIG_NPC_MTRACE 1
 // #define CONFIG_NPC_DTRACE 1
 // #define CONFIG_NPC_ETRACE 1
+#define CONFIG_NPC_CTRACE 1
 
 
 // ================ CPU ===================

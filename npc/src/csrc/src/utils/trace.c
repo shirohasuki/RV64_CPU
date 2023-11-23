@@ -90,14 +90,7 @@ extern "C" void ctrace_record(char idx, ll tag, const svOpenArrayHandle cachelin
     uint64_t* offset = NULL;
     offset = (uint64_t *)(((VerilatedDpiOpenVar*)cacheline) -> datap());
     for (int i = 0; i < 8; i++) {
-        ctrace_buf[idx][i] = offset[i]; 
-    }
-
-    printf("%d\t%16llx\t", idx, ctrace_buf[idx][1]); // idx和tag
-    
-    for (int offset = 0; offset < 8; offset++) {
-        printf("||%16llx", ctrace_buf[idx][2 + offset]);
-        printf((offset == 7) ? "\n" : " ");
+        ctrace_buf[idx][2 + i] = offset[i]; 
     }
 }
 

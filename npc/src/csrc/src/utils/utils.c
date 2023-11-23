@@ -1,3 +1,10 @@
+/*
+ * @File Name: utils.c
+ * @Author: shiroha
+ * @Email: whmio0115@hainanu.edu.cn
+ * @Created Time: 2023-10-18 17:23:29
+ * @Description: 
+ */
 #include "npc.h"
 #include <utils/macro.h>
 #include <utils/debug.h>
@@ -63,6 +70,7 @@ void npc_exit(int status) {
     else {
         IFDEF(CONFIG_NPC_ITRACE, itrace_output());
         IFDEF(CONFIG_NPC_MTRACE, print_mtrace());
+        IFDEF(CONFIG_NPC_CTRACE, print_ctrace());
         IFDEF(CONFIG_NPC_GPRTRACE, dump_gpr());
 	    printf(ASNI_FMT("NPC meets error at step %d\n", ASNI_FG_BLUE), nemu_step);
         // IFDEF(CONFIG_NPC_GPRTRACE, dump_csr());

@@ -22,6 +22,10 @@ class ICACHE_CTRL_Input extends Bundle {
     val icache_busy  = Input(Bool())
 }
 
+class DCACHE_CTRL_Input extends Bundle {
+    val dcache_busy  = Input(Bool())
+}
+
 // class CLINT_CTRL_Input extends Bundle {
 //     val intr_jump_en   = Input(Bool())
 //     val intr_jump_addr = Input(UInt(64.W))
@@ -76,6 +80,7 @@ class CTRL_MEMWB_Output extends Bundle {
 
 class Ctrl extends Module {
     val icache_ctrl   = IO(new ICACHE_CTRL_Input())
+    val dcache_ctrl   = IO(new DCACHE_CTRL_Input())
     val ex_ctrl       = IO(new EXU_CTRL_Input())
     val rename_ctrl   = IO(new Bundle { val rs_id_ex_hit = Input(Bool())})
 
@@ -91,22 +96,23 @@ class Ctrl extends Module {
     val jump          = ex_ctrl.typej_jump_en   // || ex_ctrl.intr_jump_en
     val inst_load     = ex_ctrl.inst_isload 
     val icache_busy   = icache_ctrl.icache_busy  
-    val load_data_hit   = rename_ctrl.rs_id_ex_hit && ex_ctrl.inst_isload
-    val NOEVENT         = ~(jump | inst_load | icache_busy | load_data_hit)
+    val dcache_busy   = dcache_ctrl.dcache_busy  
+    val load_data_hit = rename_ctrl.rs_id_ex_hit && ex_ctrl.inst_isload
+    val NOEVENT       = ~(jump | dcache_busy | inst_load | icache_busy | load_data_hit)
 
     ctrl_pc.jump_addr := ex_ctrl.typej_jump_addr //| io.clint_ctrl.intr_jump_addr
     ctrl_pc.jump_en   := jump
 
     // 给事件进行优先编码
-    val event_code = PriorityEncoder(Cat(load_data_hit, icache_busy, inst_load, jump, NOEVENT)) // 从低到高输出第一个有1的位数 0->NOEVENT
-    // val event_code = PriorityEncoder(Cat(load_data_hit, (mcif_ctrl.load_store_busy | load_store_busy & ~mcif_ctrl.axi_busy_end), jump, NOEVENT)) // 从低到高输出第一个有1的位数 0->NOEVENT
+    val event_code = PriorityEncoder(Cat(load_data_hit, dcache_busy, icache_busy, inst_load, jump, NOEVENT)) // 从低到高输出第一个有1的位数 0->NOEVENT
 
     //  List(pc_stall_en, if_id_stall_en, id_ex_stall_en, ex_mem_stall_en, ex_wb_stall_en, mem_wb_stall_en)
     val stall_list  = ListLookup(event_code, List(false.B, false.B, false.B, false.B, false.B, false.B), Array(
-        BitPat("b010") -> List(true.B, true.B, false.B, false.B, false.B, false.B),     // inst_load
+        BitPat("b010") -> List(true.B,  true.B,  false.B, false.B, false.B, false.B),   // inst_load
         BitPat("b000") -> List(false.B, false.B, false.B, false.B, false.B, false.B),   // Noevent
-        BitPat("b011") -> List(true.B, false.B, false.B, false.B, false.B, false.B),   // icache_busy
-        BitPat("b100") -> List(true.B, true.B, false.B, false.B, false.B, false.B)     // load_data_hit         
+        BitPat("b100") -> List(true.B,  true.B,  true.B,  false.B, false.B, false.B),   // dcache_busy
+        BitPat("b011") -> List(true.B,  false.B, false.B, false.B, false.B, false.B),   // icache_busy
+        BitPat("b101") -> List(true.B,  true.B,  false.B, false.B, false.B, false.B)    // load_data_hit         
     ))
 
     ctrl_pc.pc_stall_en         := stall_list(0)
@@ -121,8 +127,9 @@ class Ctrl extends Module {
     val flush_list  = ListLookup(event_code, List(false.B, false.B, false.B, false.B, false.B, false.B), Array(
         BitPat("b001") -> List(false.B, true.B,  true.B,  true.B,  false.B, false.B),   // jump
         BitPat("b010") -> List(false.B, false.B, true.B,  false.B, true.B,  false.B),   // inst_load
+        BitPat("b100") -> List(false.B, false.B, false.B, true.B,  false.B, false.B),   // dcache_busy
         BitPat("b011") -> List(false.B, true.B,  false.B, false.B, false.B, false.B),   // icache_busy
-        BitPat("b100") -> List(false.B, false.B, true.B,  false.B, false.B, false.B),   // load_data_hit 
+        BitPat("b101") -> List(false.B, false.B, true.B,  false.B, false.B, false.B),   // load_data_hit 
         BitPat("b000") -> List(false.B, false.B, false.B, false.B, false.B, false.B)    // Noevent
     ))
 

@@ -181,15 +181,15 @@ class pmem_read extends BlackBox with HasBlackBoxInline {
     """.stripMargin)
 }
 
-class pmem_read_cacheline extends BlackBox with HasBlackBoxInline {
+class pmem_read_Icacheline extends BlackBox with HasBlackBoxInline {
     val io = IO(new Bundle{
         val raddr  = Input(UInt(64.W)) 
         val rdata  = Output(Vec(8, UInt(64.W)))
     })
-    setInline("pmem_read_cacheline.v",
+    setInline("pmem_read_Icacheline.v",
     """
-    |import "DPI-C" function void pmem_read_cacheline( input longint raddr, output bit[31:0] rdata[16]);
-    |module pmem_read_cacheline (
+    |import "DPI-C" function void pmem_read_Icacheline( input longint raddr, output bit[31:0] rdata[16]);
+    |module pmem_read_Icacheline (
     |   input  [63:0] raddr,
     |   output [63:0] rdata_0,
     |   output [63:0] rdata_1,
@@ -210,6 +210,36 @@ class pmem_read_cacheline extends BlackBox with HasBlackBoxInline {
     |   assign rdata_5 = {rdata[10], rdata[11]};   
     |   assign rdata_6 = {rdata[12], rdata[13]};   
     |   assign rdata_7 = {rdata[14], rdata[15]};   
+    |
+    |   always @(*) begin
+    |       pmem_read_cacheline(raddr, rdata); 
+    |   end
+    |
+    |endmodule
+    """.stripMargin)
+}
+
+class pmem_read_Dcacheline extends BlackBox with HasBlackBoxInline {
+    val io = IO(new Bundle{
+        val raddr  = Input(UInt(64.W)) 
+        val rdata  = Output(Vec(8, UInt(64.W)))
+    })
+    setInline("pmem_read_Dcacheline.v",
+    """
+    |import "DPI-C" function void pmem_read_Icacheline( input longint raddr, output bit[31:0] rdata[8]);
+    |module pmem_read_Dcacheline (
+    |   input  [63:0] raddr,
+    |   output [63:0] rdata_0,
+    |   output [63:0] rdata_1,
+    |   output [63:0] rdata_2,
+    |   output [63:0] rdata_3
+    |);
+    |   bit [31:0] rdata[8];
+    |   
+    |   assign rdata_0 = {rdata[0], rdata[1]};   
+    |   assign rdata_1 = {rdata[2], rdata[3]};   
+    |   assign rdata_2 = {rdata[4], rdata[5]};   
+    |   assign rdata_3 = {rdata[6], rdata[7]};   
     |
     |   always @(*) begin
     |       pmem_read_cacheline(raddr, rdata); 

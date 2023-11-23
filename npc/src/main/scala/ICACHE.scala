@@ -11,7 +11,7 @@ package ICACHE
 import chisel3._
 import chisel3.util._
 
-import DPIC.pmem_read_cacheline
+import DPIC.pmem_read_Icacheline
 import DPIC.ctrace
 
 class ICacheReq extends Bundle { val raddr = UInt(64.W) }
@@ -120,14 +120,14 @@ class ICACHE extends Module {
     when (ren && miss) {
         DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))
         val writeAddress = idx
-        val writeData    = VecInit.tabulate(8)(i => DPIC_pmem_read_cacheline.io.rdata(i))
+        val writeData    = VecInit.tabulate(8)(i => DPIC_pmem_read_Icacheline.io.rdata(i))
         dataMem.write(writeAddress, writeData)
         // for (i <- 0 until 8) { dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)}
         tagMem(idx)                             := tag
 
         DPIC_ctrace_record.io.idx               := idx
         DPIC_ctrace_record.io.tag               := tag
-        for (i <- 0 until 8) { DPIC_ctrace_record.io.cacheline(i) := DPIC_pmem_read_cacheline.io.rdata(i)}
+        for (i <- 0 until 8) { DPIC_ctrace_record.io.cacheline(i) := DPIC_pmem_read_Icacheline.io.rdata(i)}
 
         reload_complete                         := 1.U
     }.otherwise {
@@ -141,7 +141,7 @@ class ICACHE extends Module {
     // 6. update 
     // LRU: Least recently used
 
-    // 7. output
+    // 7. to ctrl
     val icache_miss     = next_state === sMiss || state === sMiss
     val icache_latency  = RegInit(false.B)  // 同步读写自带的一周期latency
     when (next_state === sHit && ~icache_latency) {

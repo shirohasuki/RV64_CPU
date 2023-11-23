@@ -105,7 +105,7 @@ void print_ctrace() {
         
         for (int offset = 0; offset < 8; offset++) {
             printf("||%016llx", icache_buf[idx][3 + offset]);
-            printf((offset == 7) ? " ||\n" : " ");
+            printf((offset == 7) ? "||\n" : "");
         }
     }
     puts("====================================");

@@ -105,7 +105,7 @@ class Ctrl extends Module {
     val stall_list  = ListLookup(event_code, List(false.B, false.B, false.B, false.B, false.B, false.B), Array(
         BitPat("b010") -> List(true.B, true.B, false.B, false.B, false.B, false.B),     // inst_load
         BitPat("b000") -> List(false.B, false.B, false.B, false.B, false.B, false.B),   // Noevent
-        BitPat("b011") -> List(true.B, false.B, false.B, false.B, false.B, false.B),   // icache_busy
+        BitPat("b011") -> List(true.B, false.B, false.B, false.B, false.B, false.B),   // icache_miss
         BitPat("b100") -> List(true.B, true.B, false.B, false.B, false.B, false.B)     // load_data_hit         
     ))
 

@@ -1,11 +1,3 @@
-/*
- * @File Name: trace.c
- * @Author: shiroha
- * @Email: whmio0115@hainanu.edu.cn
- * @Created Time: 2023-10-18 17:23:29
- * @Description: 
- */
-
 #include "npc.h"
 
 //=====================ITRACE=========================
@@ -48,7 +40,7 @@ void itrace_output() {
 #endif
 
 
-// =====================MTRACE=========================
+//=====================MTRACE=========================
 char mtrace_buf[SIZE_MTRACEBUF][100] = {0};
 int mtrace_count = 0;
 
@@ -79,34 +71,3 @@ void print_mtrace() {
     puts("====================================");
 }
 
-// ===================== CTRACE(Cache Trace) =========================
-ll icache_buf[SIZE_CTRACEBUF][11] = {0};   // v+idx+tag+data=1+1+1+8=11
-
-extern "C" void ctrace_record(char idx, ll tag, const svOpenArrayHandle cacheline) {
-    icache_buf[idx][0] = 1;
-    icache_buf[idx][1] = idx;
-    icache_buf[idx][2] = tag;
-    
-    uint64_t* offset = NULL;
-    offset = (uint64_t *)(((VerilatedDpiOpenVar*)cacheline) -> datap());
-    for (int i = 0; i < 8; i++) {
-        icache_buf[idx][3 + i] = offset[i]; 
-    }
-}
-
-void print_ctrace() {
-    puts("========== CTRACE Result ==========");
-    puts("========== ICache ");
-    printf("idx  tag   ||======off0======||======off1======||======off2======||======off3======||======off4======||======off5======||======off6======||======off7======||\n");
-    for (int idx = 0; idx < SIZE_CTRACEBUF; idx++) {
-        if (icache_buf[idx][0] == 0) continue; // valid == 0
-
-        printf("%2lld  %llx  ", icache_buf[idx][1], icache_buf[idx][2]); // idx和tag
-        
-        for (int offset = 0; offset < 8; offset++) {
-            printf("||%016llx", icache_buf[idx][3 + offset]);
-            printf((offset == 7) ? "||\n" : "");
-        }
-    }
-    puts("====================================");
-}

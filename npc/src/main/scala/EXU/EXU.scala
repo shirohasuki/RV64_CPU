@@ -60,20 +60,12 @@ class EXU_Rename_Output extends Bundle {
     val rd_wdata       = Output(UInt(64.W))
 }
 
-
-class DCache_Rd_Req extends Bundle { 
-    val raddr = UInt(64.W) 
-}
-
-class DCache_Wr_Req extends Bundle { 
-    val waddr = UInt(64.W) 
-    val wdata = UInt(64.W) 
-    val wmask = UInt(8.W) 
-}
-
 class EXU_DCACHE_Output extends Bundle{
-    val rd_req  = Valid(new DCache_Rd_Req) 
-    val wr_req  = Valid(new DCache_Wr_Req) 
+    val dcache_raddr  = Valid(UInt(64.W))
+    val dcache_waddr  = Valid(UInt(64.W))
+    val dcache_wdata  = Valid(UInt(64.W))
+    val dcache_wmask  = Valid(UInt(8.W))
+    // val mem_wmask  = Output(Vec(8, Bool()))
 }
 
 class EXU extends Module {

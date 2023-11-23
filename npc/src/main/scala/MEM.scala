@@ -22,12 +22,8 @@ class EXMEM_MEM_Input extends Bundle {
     val rd_wen    = Input(Bool())
 }
 
-class DCacheResp extends Bundle { 
-    val rdata = UInt(64.W) 
-}
-
-class DCACHE_MEM_Input extends Bundle{
-    val resp = Flipped(Valid(new DCacheResp))
+class DCACHE_MEM_Input extends Bundle {
+    val dcache_rdata          = Input(UInt(64.W))
 }
 
 class MEM_MEMWB_Output extends Bundle {
@@ -52,7 +48,7 @@ class MEM extends Module {
 
     val rd_wdata        = WireInit(0.U(64.W))
     val dcache_rdata    = RegInit(0.U(64.W))
-    dcache_rdata := dcache_mem.resp.bits.rdata
+    dcache_rdata := dcache_mem.dcache_rdata
     rd_wdata    :=  MuxCase(0.U, Seq(
         (exmem_mem.func3 === INST_LB )  ->  SEXT(dcache_rdata(7, 0)),
         (exmem_mem.func3 === INST_LH )  ->  SEXT(dcache_rdata(15, 0)),

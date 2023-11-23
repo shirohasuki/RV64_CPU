@@ -6,36 +6,36 @@
     > Description: 
 *************************************************************************/
 
-
 package DCACHE
 
 import chisel3._
 import chisel3.util._
 
-
 import DPIC.pmem_read
 import DPIC.pmem_write
 
 
+class DCache_Rd_Req extends Bundle { 
+    val raddr = UInt(64.W) 
+}
+
+class DCache_Wr_Req extends Bundle { 
+    val waddr = UInt(64.W) 
+    val wdata = UInt(64.W) 
+    val wmask = UInt(8.W) 
+}
+
+class DCacheResp extends Bundle { 
+    val rdata = UInt(64.W) 
+}
+
 class EXU_DCACHE extends Bundle{
-    val dcache_raddr  = Flipped(Valid(UInt(64.W)))
-    val dcache_waddr  = Flipped(Valid(UInt(64.W)))
-    val dcache_wdata  = Flipped(Valid(UInt(64.W)))
-    val dcache_wmask  = Flipped(Valid(UInt(8.W)))
+    val rd_req  = Valid(new DCache_Rd_Req) 
+    val wr_req  = Valid(new DCache_Wr_Req) 
 }
 
-class DCACHE_MCIF extends Bundle {
-    val ren    = Output(Bool())
-    val raddr  = Output(UInt(64.W))
-    val rdata  = Input(UInt(64.W))
-    val wen    = Output(Bool())
-    val waddr  = Output(UInt(64.W))
-    val wdata  = Output(UInt(64.W))
-    val wmask  = Output(UInt(8.W))
-}
-
-class DCACHE_MEM_Output extends Bundle{
-    val dcache_rdata  = Output(UInt(64.W))
+class DCACHE_MEM extends Bundle{
+    val resp = Valid(new DCacheResp)
 }
 
 class DCACHE extends Module {
@@ -44,16 +44,20 @@ class DCACHE extends Module {
 
     val DPIC_pmem_read  = Module(new pmem_read())
     val DPIC_pmem_write = Module(new pmem_write())
-    when (ex_dcache.dcache_raddr.valid) {
-        DPIC_pmem_read.io.raddr := ex_dcache.dcache_raddr.bits
-        dcache_mem.dcache_rdata        := DPIC_pmem_read.io.rdata
-    }.elsewhen (ex_dcache.dcache_waddr.valid) {
-        DPIC_pmem_write.io.waddr  := ex_dcache.dcache_waddr.bits
-        DPIC_pmem_write.io.wdata  := ex_dcache.dcache_wdata.bits
-        DPIC_pmem_write.io.wmask  := ex_dcache.dcache_wmask.bits
-        dcache_mem.dcache_rdata        := 0.U
+    when (ex_dcache.rd_req.valid) {
+        DPIC_pmem_read.io.raddr         := ex_dcache.bits.raddr
+        dcache_mem.resp.bits.rdata      := DPIC_pmem_read.io.rdata
+        dcache_mem.resp.valid           := 1.U
+    }.elsewhen (ex_dcache.wr_req.valid) {
+        DPIC_pmem_write.io.waddr        := ex_dcache.bits.waddr
+        DPIC_pmem_write.io.wdata        := ex_dcache.bits.wdata
+        DPIC_pmem_write.io.wmask        := ex_dcache.bits.wmask
+        
+        dcache_mem.resp.bits.rdata      := 0.U
+        dcache_mem.resp.valid           := 0.U
     }.otherwise {
-        dcache_mem.dcache_rdata        := 0.U
+        dcache_mem.resp.bits.rdata      := 0.U
+        dcache_mem.resp.valid           := 0.U
     }
 }
 

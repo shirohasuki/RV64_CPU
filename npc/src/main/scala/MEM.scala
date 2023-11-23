@@ -22,8 +22,12 @@ class EXMEM_MEM_Input extends Bundle {
     val rd_wen    = Input(Bool())
 }
 
-class DCACHE_MEM_Input extends Bundle {
-    val dcache_rdata          = Input(UInt(64.W))
+class DCacheResp extends Bundle { 
+    val rdata = UInt(64.W) 
+}
+
+class DCACHE_MEM extends Bundle{
+    val resp = Valid(new DCacheResp)
 }
 
 class MEM_MEMWB_Output extends Bundle {

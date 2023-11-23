@@ -14,21 +14,17 @@ import chisel3.util._
 import DPIC.pmem_read_cacheline
 import DPIC.ctrace
 
-class CacheReq extends Bundle { val raddr = UInt(64.W) }
-class CacheResp extends Bundle { val rdata = UInt(64.W) }
+class ICacheReq extends Bundle { val raddr = UInt(64.W) }
+class ICacheResp extends Bundle { val rdata = UInt(64.W) }
 
 class IFU_ICACHE extends Bundle {
-    val req  = Flipped(Valid(new CacheReq)) // pc
-    val resp = Valid(new CacheResp)         // inst
+    val req  = Flipped(Valid(new ICacheReq)) // pc
+    val resp = Valid(new ICacheResp)         // inst
 }
 
 class ICACHE_Ctrl extends Bundle {
     val icache_busy  = Output(Bool())         
 }
-
-// object CacheState extends ChiselEnum {
-//     val sIdle, sHit, sMiss = Value
-// }
 
 class ICACHE extends Module {
     val if_icache   = IO(new IFU_ICACHE)
@@ -38,15 +34,15 @@ class ICACHE extends Module {
     // 1. define ICache
       // memory
     val vMem    = RegInit(0.U(64.W))    // 64行，每行占一位
-    val tagMem  = Reg(Vec(64, UInt(52.W)))//SyncReadMem(64, UInt(52.W))
+    val tagMem  = Reg(Vec(64, UInt(52.W))) 
     val dataMem = SyncReadMem(64, Vec(8, UInt(64.W)))
     // val dataMem = Seq.fill(4)(SyncReadMem(64, Vec(2, UInt(8.W))))
     
     // wire
     val raddr   = WireInit(0.U(64.W))
-    raddr   := if_icache.req.bits.raddr
     val ren     = WireInit(false.B)
-    ren     := if_icache.req.valid
+    raddr       := if_icache.req.bits.raddr
+    ren         := if_icache.req.valid
     val tag     = raddr(63, 12)
     val idx     = raddr(11, 6)
     val offset  = raddr(5, 3)
@@ -101,8 +97,6 @@ class ICACHE extends Module {
     // 3. IDLE
     hit  := ren && vMem(idx) && (tag === tagMem(idx)) 
     miss := ren && (~vMem(idx) || (tag =/= tagMem(idx)))
-    // val tag_miss = (tag_reg =/= tagMem(idx))
-    // printf("tag = %x, tagMem(%d) = %x\n", tag, idx, tagMem(idx));
 
     // 4. HIT
     if_icache.resp.valid      := state === sHit && hit
@@ -122,39 +116,6 @@ class ICACHE extends Module {
     // Read Allocate
     val DPIC_pmem_read_cacheline  = Module(new pmem_read_cacheline())
     val DPIC_ctrace_record  = Module(new ctrace())
-
-    // val rdata_test0 = WireInit(0.U(64.W))
-    // val rdata_test1 = WireInit(0.U(64.W))
-    // val rdata_test2 = WireInit(0.U(64.W))
-    // val rdata_test3 = WireInit(0.U(64.W))
-    // val rdata_test4 = WireInit(0.U(64.W))
-    // val rdata_test5 = WireInit(0.U(64.W))
-    // val rdata_test6 = WireInit(0.U(64.W))
-    // val rdata_test7 = WireInit(0.U(64.W))
-    // rdata_test0 := dataMem(25)(0)
-    // rdata_test1 := dataMem(25)(1)
-    // rdata_test2 := dataMem(25)(2)
-    // rdata_test3 := dataMem(25)(3)
-    // rdata_test4 := dataMem(25)(4)
-    // rdata_test5 := dataMem(25)(5)
-    // rdata_test6 := dataMem(25)(6)
-    // rdata_test7 := dataMem(25)(7)
-
-    // val tag_test0 = WireInit(0.U(52.W))
-    // val tag_test1 = WireInit(0.U(52.W))
-    // val tag_test2 = WireInit(0.U(52.W))
-    // val tag_test3 = WireInit(0.U(52.W))
-    // val tag_test4 = WireInit(0.U(52.W))
-    // val tag_test5 = WireInit(0.U(52.W))
-    // val tag_test6 = WireInit(0.U(52.W))
-    // val tag_test7 = WireInit(0.U(52.W))
-
-    // tag_test0 := tagMem(0)
-    // tag_test1 := tagMem(1)
-    // tag_test2 := tagMem(37)
-    // tag_test3 := tagMem(3)
-    // tag_test4 := tagMem(4)
-
 
     when (ren && miss) {
         DPIC_pmem_read_cacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))

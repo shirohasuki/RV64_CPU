@@ -29,17 +29,17 @@ class DCacheResp extends Bundle {
     val rdata = UInt(64.W) 
 }
 
-class EXU_DCACHE extends Bundle{
-    val rd_req  = Valid(new DCache_Rd_Req) 
-    val wr_req  = Valid(new DCache_Wr_Req) 
+class EXU_DCACHE_Input extends Bundle{
+    val rd_req  = Flipped(Valid(new DCache_Rd_Req))
+    val wr_req  = Flipped(Valid(new DCache_Wr_Req))
 }
 
-class DCACHE_MEM extends Bundle{
+class DCACHE_MEM_Output extends Bundle{
     val resp = Valid(new DCacheResp)
 }
 
 class DCACHE extends Module {
-    val ex_dcache  = IO(new EXU_DCACHE)
+    val ex_dcache  = IO(new EXU_DCACHE_Input)
     val dcache_mem = IO(new DCACHE_MEM_Output)
 
     val DPIC_pmem_read  = Module(new pmem_read())

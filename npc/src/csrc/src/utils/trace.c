@@ -97,7 +97,7 @@ extern "C" void ctrace_record(char idx, ll tag, const svOpenArrayHandle cachelin
 void print_ctrace() {
     puts("========== CTRACE Result ==========");
     puts("========== ICache ");
-    printf("idx  tag  ||======off0======||======off1======||======off2======||======off3======||======off4======||======off5======||======off6======||======off7======||\n");
+    printf("idx  tag   ||======off0======||======off1======||======off2======||======off3======||======off4======||======off5======||======off6======||======off7======||\n");
     for (int idx = 0; idx < SIZE_CTRACEBUF; idx++) {
         if (icache_buf[idx][0] == 0) continue; // valid == 0
 

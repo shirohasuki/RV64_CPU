@@ -34,6 +34,7 @@
 #define CONFIG_NPC_MTRACE 1
 // #define CONFIG_NPC_DTRACE 1
 // #define CONFIG_NPC_ETRACE 1
+#define CONFIG_NPC_CTRACE 1
 
 
 // ================ CPU ===================
@@ -75,6 +76,10 @@ extern char mtrace_buf[SIZE_MTRACEBUF][100];
 extern int mtrace_count;
 void print_mtrace();
 
+// ============= CTRACE ==============
+#define SIZE_CTRACEBUF 64
+extern ll icache_buf[SIZE_CTRACEBUF][11];   // v+idx+tag+data=1+1+1+8=11
+void print_ctrace();
 
 // ============= REG ===================
 void dump_gpr(); // 打印寄存器

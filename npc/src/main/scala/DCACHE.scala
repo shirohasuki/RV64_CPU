@@ -36,8 +36,6 @@ class DCACHE_MCIF extends Bundle {
 
 class DCACHE_MEM_Output extends Bundle{
     val dcache_rdata  = Output(UInt(64.W))
-    // val rlast  = Output(Bool())
-    // val wlast  = Output(Bool())
 }
 
 class DCACHE extends Module {

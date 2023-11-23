@@ -92,11 +92,18 @@ extern "C" void ctrace_record(char idx, ll tag, const svOpenArrayHandle cachelin
     for (int i = 0; i < 8; i++) {
         ctrace_buf[idx][i] = offset[i]; 
     }
+
+    printf("%d\t%16llx\t", idx, ctrace_buf[idx][1]); // idx和tag
+    
+    for (int offset = 0; offset < 8; offset++) {
+        printf("||%16llx", ctrace_buf[idx][2 + offset]);
+        printf((offset == 7) ? "\n" : " ");
+    }
 }
 
 void print_ctrace() {
     puts("========== CTRACE Result ==========");
-    printf("idx\ttag\t\t\toff0  ||  off1  ||  off2  ||  off3  ||  off4  ||  off5  ||  off6  ||  off7\n");
+    printf("idx\ttag\t\t\t||  off0  ||  off1  ||  off2  ||  off3  ||  off4  ||  off5  ||  off6  ||  off7\n");
     for (int idx = 0; idx < SIZE_CTRACEBUF; idx++) {
         if (ctrace_buf[idx][0] == 0) break; // valid == 0
 

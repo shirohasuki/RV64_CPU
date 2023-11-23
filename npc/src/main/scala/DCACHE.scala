@@ -45,7 +45,7 @@ class DCACHE extends Module {
     val DPIC_pmem_read  = Module(new pmem_read())
     val DPIC_pmem_write = Module(new pmem_write())
     when (ex_dcache.rd_req.valid) {
-        DPIC_pmem_read.io.raddr         := ex_dcache.wr_req.bits.raddr
+        DPIC_pmem_read.io.raddr         := ex_dcache.rd_req.bits.raddr
         dcache_mem.resp.bits.rdata      := DPIC_pmem_read.io.rdata
         dcache_mem.resp.valid           := 1.U
     }.elsewhen (ex_dcache.wr_req.valid) {

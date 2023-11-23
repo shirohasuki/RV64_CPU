@@ -80,31 +80,32 @@ void print_mtrace() {
 }
 
 // ===================== CTRACE(Cache Trace) =========================
-ll icache_buf[SIZE_CTRACEBUF][10] = {0};   // v+tag+data=1+1+8=10
+ll icache_buf[SIZE_CTRACEBUF][11] = {0};   // v+idx+tag+data=1+1+1+8=11
 int idx = 0;
 
 extern "C" void ctrace_record(char idx, ll tag, const svOpenArrayHandle cacheline) {
     icache_buf[idx][0] = 1;
-    icache_buf[idx][1] = tag;
+    icache_buf[idx][1] = idx;
+    icache_buf[idx][2] = tag;
     
     uint64_t* offset = NULL;
     offset = (uint64_t *)(((VerilatedDpiOpenVar*)cacheline) -> datap());
     for (int i = 0; i < 8; i++) {
-        icache_buf[idx][2 + i] = offset[i]; 
+        icache_buf[idx][3 + i] = offset[i]; 
     }
 }
 
 void print_ctrace() {
     puts("========== CTRACE Result ==========");
-    puts("========== ICache BUFF");
+    puts("========== ICache ");
     printf("idx\ttag\t||=======off0======||=======off1======||=======off2======||=======off3======||=======off4======||=======off5======||=======off6======||=======off7======||\n");
     for (int idx = 0; idx < SIZE_CTRACEBUF; idx++) {
         if (icache_buf[idx][0] == 0) break; // valid == 0
 
-        printf("%d\t%llx\t", idx, icache_buf[idx][1]); // idx和tag
+        printf("%d\t%llx\t", icache_buf[idx][1], icache_buf[idx][2]); // idx和tag
         
         for (int offset = 0; offset < 8; offset++) {
-            printf("||%016llx", icache_buf[idx][2 + offset]);
+            printf("||%016llx", icache_buf[idx][3 + offset]);
             printf((offset == 7) ? " ||\n" : " ");
         }
     }

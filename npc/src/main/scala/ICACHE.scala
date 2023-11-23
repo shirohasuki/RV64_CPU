@@ -82,7 +82,7 @@ class ICACHE extends Module {
         is (sHit) {
             when (hit) {
                 next_state := sHit
-            }.elsewhen (rd_complete && miss) {
+            }.elsewhen (miss) {
                 next_state := sMiss
             }.otherwise {
                 next_state := sIdle
@@ -101,7 +101,7 @@ class ICACHE extends Module {
     // 3. IDLE
     hit  := ren && vMem(idx) && (tag_reg === tagMem(idx)) 
     miss := ren && (~vMem(idx) || (tag_reg =/= tagMem(idx)))
-    val tag_miss = (tag_reg =/= tagMem(idx))
+    // val tag_miss = (tag_reg =/= tagMem(idx))
     // printf("tag = %x, tagMem(%d) = %x\n", tag, idx, tagMem(idx));
 
     // 4. HIT

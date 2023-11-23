@@ -26,7 +26,7 @@ class DCacheResp extends Bundle {
     val rdata = UInt(64.W) 
 }
 
-class DCACHE_MEM extends Bundle{
+class DCACHE_MEM_Input extends Bundle{
     val resp = Valid(new DCacheResp)
 }
 

@@ -102,7 +102,7 @@ void print_ctrace() {
     for (int idx = 0; idx < SIZE_CTRACEBUF; idx++) {
         if (icache_buf[idx][0] == 0) break; // valid == 0
 
-        printf("%d\t%llx\t", icache_buf[idx][1], icache_buf[idx][2]); // idx和tag
+        printf("%lld\t%llx\t", icache_buf[idx][1], icache_buf[idx][2]); // idx和tag
         
         for (int offset = 0; offset < 8; offset++) {
             printf("||%016llx", icache_buf[idx][3 + offset]);

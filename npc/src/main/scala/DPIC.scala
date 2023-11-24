@@ -212,7 +212,7 @@ class pmem_read_Icacheline extends BlackBox with HasBlackBoxInline {
     |   assign rdata_7 = {rdata[14], rdata[15]};   
     |
     |   always @(*) begin
-    |       pmem_read_cacheline(raddr, rdata); 
+    |       pmem_read_Icacheline(raddr, rdata); 
     |   end
     |
     |endmodule
@@ -242,7 +242,7 @@ class pmem_read_Dcacheline extends BlackBox with HasBlackBoxInline {
     |   assign rdata_3 = {rdata[6], rdata[7]};   
     |
     |   always @(*) begin
-    |       pmem_read_cacheline(raddr, rdata); 
+    |       pmem_read_Dcacheline(raddr, rdata); 
     |   end
     |
     |endmodule

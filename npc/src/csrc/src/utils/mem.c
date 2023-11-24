@@ -77,30 +77,11 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
     // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
 }
 
-
-// extern "C" void pmem_read_cacheline(ll raddr, svBitVecVal rdata[8]) {
-//     if (raddr < MEM_BASE) { return ; } 
-//     uint8_t *pt = cpu2mem(raddr) + 63; // 指向64个字节的末尾
-//     ll ret = 0;
-//     for (int i = 0; i < 8; i++) {
-//         for (int j = 0; j < 8; j++) {
-//             ret = (ret << 8) | (*pt--);
-//         } 
-//         // printf("pt = %p, *pt = %x\n", pt, *pt);
-//         // for (int k = 0; k < 4; k++) {
-//         //     ret = (ret << 4) | (*pt--);
-//         // } 
-//         rdata[7 - i] = ret; // 读取每8字节存一次
-//     }   // 存8次
-//     // *rdata = ret;
-// }
-
-extern "C" void pmem_read_cacheline(ll raddr, svBitVecVal rdata[16]) {
+extern "C" void pmem_read_Icacheline(ll raddr, svBitVecVal rdata[16]) {
     if (raddr < MEM_BASE) { return ; } 
     uint8_t *pt = cpu2mem(raddr); // 指向64个字节的末尾
     ll ret_hi = 0;
     ll ret_lo = 0;
-    int i = 0;
     for (int i = 0; i < 8; i++) {
         pt += 3;
         for (int k = 0; k < 4; k++) {
@@ -112,12 +93,33 @@ extern "C" void pmem_read_cacheline(ll raddr, svBitVecVal rdata[16]) {
             ret_hi = (ret_hi << 8) | (*pt--);
         } 
         pt += 5; // 加到下一个字节
-        rdata[i * 2] = ret_hi; // 读取每8字节存一次
+        rdata[i * 2]     = ret_hi; // 读取每8字节存一次
         rdata[i * 2 + 1] = ret_lo; 
         // printf("sizeof rdata = %ld\n", sizeof(rdata[0])); // bit最大只能32位
     }   // 存8次
-    // *rdata = ret;
 }
+
+extern "C" void pmem_read_Dcacheline(ll raddr, svBitVecVal rdata[8]) {
+    if (raddr < MEM_BASE) { return ; } 
+    uint8_t *pt = cpu2mem(raddr); // 指向64个字节的末尾
+    ll ret_hi = 0;
+    ll ret_lo = 0;
+    for (int i = 0; i < 4; i++) {
+        pt += 3;
+        for (int k = 0; k < 4; k++) {
+            ret_lo = (ret_lo << 8) | (*pt--);
+        } 
+        // 这时候 pt= -1， 所以加8而不是7
+        pt += 8; 
+        for (int j = 0; j < 4; j++) {
+            ret_hi = (ret_hi << 8) | (*pt--);
+        } 
+        pt += 5; // 加到下一个字节
+        rdata[i * 2]     = ret_hi; // 读取每8字节存一次
+        rdata[i * 2 + 1] = ret_lo; 
+    }   // 存4次
+}
+
 
 // Memory Write
 extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
@@ -165,23 +167,18 @@ extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
     return ;
 }
 
-// extern "C" void inst_fetch(ll raddr, ll *rdata) {
-//     if (raddr < MEM_BASE) {
-// #ifdef CONFIG_NPC_IFTRACE
-//         printf("[inst_fetch] raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
-// #endif
-//         return;
-//     }
-//     uint8_t *pt = cpu2mem(raddr) + 7;
-//     ll ret = 0;
-//     for (int i = 0; i < 8; ++i) {
-//         ret = (ret << 8) | (*pt--);
-//     }
-//     *rdata = ret;
-// #ifdef CONFIG_NPC_IFTRACE
-//     printf("[inst_fetch] addr is:%llx, data is:%llx\n", raddr, *rdata);
-// #endif
-// } // 和pmem_read一样，引用方便临时改个名字
+
+extern "C" void pmem_write_Dcacheline(ll waddr, ll wdata) {
+    if (waddr < MEM_BASE) { return ; } 
+    uint8_t *pt = cpu2mem(waddr);
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 8; j++) {
+            *pt++ = wdata;
+            wdata >>= 8;
+        }
+    }
+    return ;
+} // 一次写一行进去
 
 
 // Load image from am-kernels (Makefile -> ./image.bin)

@@ -234,6 +234,7 @@ class DCACHE extends Module {
         dcache_mem.resp.bits.rdata        := 0.U
     }
 
-    icache_ctrl.dcache_busy := 0.U
+    icache_ctrl.dcache_busy      := 0.U
+    dcache_mem.resp.valid        := 1.U
 }
 

@@ -34,7 +34,7 @@
 //     val ex_dcache  = IO(new EXU_DCACHE_Input)
 //     val dcache_mem = IO(new DCACHE_MEM_Output)
 
-//     val icache_ctrl = IO(new Bundle { val dcache_busy  = Output(Bool())})
+//     val dcache_ctrl = IO(new Bundle { val dcache_busy  = Output(Bool())})
 
 
 //     // val nSets = 8.U; // 组数:8组

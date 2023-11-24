@@ -105,9 +105,10 @@ class CORE extends Module {
     MEM.mem_memwb   <> MEMWB.mem_memwb
     MEMWB.memwb_wb  <> WBU.memwb_wb
 
-    EXU.ex_dcache   <> DCACHE.ex_dcache
-    DCACHE.dcache_mem <> MEM.dcache_mem   
-    WBU.wb_reg      <> RegFile.wb_reg
+    EXU.ex_dcache       <> DCACHE.ex_dcache
+    DCACHE.dcache_ctrl  <> CTRL.dcache_ctrl
+    DCACHE.dcache_mem   <> MEM.dcache_mem   
+    WBU.wb_reg          <> RegFile.wb_reg
 
     // MCIF.mcif_axi_r <> core_axi_r
     // MCIF.mcif_axi_w <> core_axi_w

@@ -135,9 +135,7 @@ void print_ctrace() {
         for (int way_idx = 0; way_idx < DCACHE_WAYNUM; way_idx++) {
             if (dcache_buf[set_idx][way_idx][0] == 0) continue; // valid == 0
 
-            printf("%2d    ||%6llx", way_idx, dcache_buf[set_idx][way_idx][3]); // idx和tag
-            
-            if (way_idx == dcache_buf[set_idx][way_idx][2]) { printf("(LRU)");}
+            printf((way_idx == dcache_buf[set_idx][way_idx][2]) ? "%2d(LRU)||%6llx", way_idx, dcache_buf[set_idx][way_idx][3] : "%2d     ||%6llx", way_idx, dcache_buf[set_idx][way_idx][3]); // idx和tag
             
             for (int offset = 0; offset < 4; offset++) {
                 printf("||%016llx", dcache_buf[set_idx][way_idx][4 + offset]);

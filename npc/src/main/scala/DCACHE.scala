@@ -169,21 +169,21 @@ class DCACHE extends Module {
 
 
     // update 伪LRU 最终ageMem的值对应最近使用次数最少的那一行
-    ageMem(set_idx).bitSet(6, Mux(way_idx > 3.U, true.B, false.B))
+    ageMem(set_idx).bitSet(6.U, Mux(way_idx > 3.U, true.B, false.B))
 
-    ageMem(set_idx).bitSet(5, Mux(ageMem(6) === 1.U, ageMem(5) & 1.U,  // 维持原值
+    ageMem(set_idx).bitSet(5.U, Mux(ageMem(6) === 1.U, ageMem(5) & 1.U,  // 维持原值
                     Mux(way_idx > 1.U, true.B, false.B))) 
-    ageMem(set_idx).bitSet(4, Mux(ageMem(6) === 0.U, ageMem(4) & 1.U,  // 维持原值
+    ageMem(set_idx).bitSet(4.U, Mux(ageMem(6) === 0.U, ageMem(4) & 1.U,  // 维持原值
                     Mux(way_idx > 5.U, true.B, false.B)))
 
-    ageMem(set_idx).bitSet(3, Mux(ageMem(5) === 1.U, ageMem(3) & 1.U,  // 维持原值
+    ageMem(set_idx).bitSet(3.U, Mux(ageMem(5) === 1.U, ageMem(3) & 1.U,  // 维持原值
                     Mux(way_idx === 1.U, true.B, false.B)))
-    ageMem(set_idx).bitSet(2, Mux(ageMem(5) === 0.U, ageMem(2) & 1.U,  // 维持原值
+    ageMem(set_idx).bitSet(2.U, Mux(ageMem(5) === 0.U, ageMem(2) & 1.U,  // 维持原值
                     Mux(way_idx === 3.U, true.B, false.B))) 
 
-    ageMem(set_idx).bitSet(1, Mux(ageMem(4) === 1.U, ageMem(1) & 1.U,  // 维持原值
+    ageMem(set_idx).bitSet(1.U, Mux(ageMem(4) === 1.U, ageMem(1) & 1.U,  // 维持原值
                     Mux(way_idx === 5.U, true.B, false.B))) 
-    ageMem(set_idx).bitSet(0, Mux(ageMem(4) === 0.U, ageMem(0) & 1.U,  // 维持原值
+    ageMem(set_idx).bitSet(0.U, Mux(ageMem(4) === 0.U, ageMem(0) & 1.U,  // 维持原值
                     Mux(way_idx === 7.U, true.B, false.B))) 
 
 

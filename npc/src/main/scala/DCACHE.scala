@@ -114,7 +114,7 @@ class DCACHE extends Module {
         hit  := Mux(hitDetected, 1.U, 0.U)
         miss := Mux(~hitDetected, 1.U, 0.U)
 
-        way_idx := PriorityEncoderOH(VecInit(indices))
+        way_idx := PriorityEncoderOH(indices.asUInt)
         
         full := Mux(PopCount((0 until nWays).map(i => vMem(set_idx)(i))) === 8.U, 1.U, 0.U)
     }

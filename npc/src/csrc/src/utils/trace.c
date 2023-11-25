@@ -136,7 +136,7 @@ void print_ctrace() {
             printf("%d  %llx  ", way_idx, dcache_buf[set_idx][way_idx][3]); // idx和tag
 
             for (int offset = 0; offset < 4; offset++) {
-                printf("||%016lln", dcache_buf[way_idx][3 + offset]);
+                printf("||%016llx", dcache_buf[way_idx][3 + offset]);
                 printf((offset == 3) ? "||\n\n" : "");
             }
         }

@@ -322,16 +322,18 @@ class ctrace_dcache extends BlackBox with HasBlackBoxInline {
     val io = IO(new Bundle{
         val set_idx  = Input(UInt(4.W))
         val way_idx  = Input(UInt(3.W))
+        val age      = Input(UInt(7.W))
         val tag      = Input(UInt(55.W))
         val cacheline  = Input(Vec(4, UInt(64.W)))
     })
     setInline("ctrace_dcache.v",
     """
-    |import "DPI-C" function void ctrace_dcache_record(input byte set_idx, input byte way_idx, input longint tag, input logic [63:0] cacheline[]);
+    |import "DPI-C" function void ctrace_dcache_record(input byte set_idx, input byte way_idx, input byte age, input longint tag, input logic [63:0] cacheline[]);
     |
     |module ctrace_dcache (
     |   input  [3:0]  set_idx,
     |   input  [2:0]  way_idx,
+    |   input  [6:0]  age,
     |   input  [54:0] tag,
     |   input  [63:0] cacheline_0,
     |   input  [63:0] cacheline_1,
@@ -344,6 +346,9 @@ class ctrace_dcache extends BlackBox with HasBlackBoxInline {
     |
     |   wire [7:0] way_idx_to_byte;
     |   assign way_idx_to_byte = {5'b0, way_idx};
+    |
+    |   wire [7:0] age_to_byte;
+    |   assign age_to_byte = {1'b0, age};
     |
     |   wire [63:0] tag_to_longint;
     |   assign tag_to_longint = {10'b0, tag};

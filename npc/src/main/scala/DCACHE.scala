@@ -155,6 +155,7 @@ class DCACHE extends Module {
 
         DPIC_ctrace_dcache_record.io.set_idx        := set_idx
         DPIC_ctrace_dcache_record.io.way_idx        := way_idx
+        DPIC_ctrace_dcache_record.io.age            := ageMem(set_idx)
         DPIC_ctrace_dcache_record.io.tag            := tag
         for (i <- 0 until 4) { DPIC_ctrace_dcache_record.io.cacheline(i) := DPIC_pmem_read_Dcacheline.io.rdata(i)}
 

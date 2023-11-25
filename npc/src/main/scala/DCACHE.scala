@@ -55,7 +55,8 @@ class DCACHE extends Module {
 
     val tag     = raddr(63, 9)
     // val set_idx : Int = raddr(8, 5).litValue.toInt
-    val set_idx = raddr(8, 5).asTypeOf(Int(4.W))
+    val set_idx = 0
+    set_idx :=  raddr(8, 5)
     val way_idx = WireInit(0.U(3.W))
     val offset  = raddr(4, 3)
     val rdata   = WireInit(0.U(64.W))

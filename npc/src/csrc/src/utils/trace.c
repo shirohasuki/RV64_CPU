@@ -80,10 +80,14 @@ void print_mtrace() {
 }
 
 // ===================== CTRACE(Cache Trace) =========================
-ll icache_buf[SIZE_CTRACEBUF][11] = {0};   // v+idx+tag+data=1+1+1+8=11
-// ll dcache_buf[SIZE_CTRACEBUF][11] = {0};   // v+d+age+tag+data=1+1+1+1+8=12
+#define ICACHE_WAYNUM 64
+#define DCACHE_SETNUM 16
+#define DCACHE_WAYNUM 8
 
-extern "C" void ctrace_record(char idx, ll tag, const svOpenArrayHandle cacheline) {
+ll icache_buf[ICACHE_WAYNUM][11] = {0};   // v+idx+tag+data=1+1+1+8=11
+ll dcache_buf[DCACHE_SETNUM][DCACHE_WAYNUM][8] = {0};   // v+d+age+tag+data=1+1+1+1+4=8
+
+extern "C" void ctrace_icache_record(char idx, ll tag, const svOpenArrayHandle cacheline) {
     icache_buf[idx][0] = 1;
     icache_buf[idx][1] = idx;
     icache_buf[idx][2] = tag;
@@ -95,11 +99,24 @@ extern "C" void ctrace_record(char idx, ll tag, const svOpenArrayHandle cachelin
     }
 }
 
+extern "C" void ctrace_dcache_record(int set_idx, char way_idx, char dirty, char age, ll tag, const svOpenArrayHandle cacheline) {
+    dcache_buf[set_idx][way_idx][0] = 1;
+    dcache_buf[set_idx][way_idx][1] = 0;
+    dcache_buf[set_idx][way_idx][2] = age;
+    dcache_buf[set_idx][way_idx][3] = tag;
+    
+    uint64_t* offset = NULL;
+    offset = (uint64_t *)(((VerilatedDpiOpenVar*)cacheline) -> datap());
+    for (int i = 0; i < 4; i++) {
+        dcache_buf[idx][4 + i] = offset[i]; 
+    }
+}
+
 void print_ctrace() {
     puts("========== CTRACE Result ==========");
     puts("========== ICache ");
     printf("idx  tag   ||======off0======||======off1======||======off2======||======off3======||======off4======||======off5======||======off6======||======off7======||\n");
-    for (int idx = 0; idx < SIZE_CTRACEBUF; idx++) {
+    for (int idx = 0; idx < ICACHE_WAYNUM; idx++) {
         if (icache_buf[idx][0] == 0) continue; // valid == 0
 
         printf("%2lld  %llx  ", icache_buf[idx][1], icache_buf[idx][2]); // idx和tag
@@ -109,17 +126,21 @@ void print_ctrace() {
             printf((offset == 7) ? "||\n" : "");
         }
     }
-    // puts("\n========== DCache ");
-    // printf("idx  tag   ||======off0======||======off1======||======off2======||======off3======||======off4======||======off5======||======off6======||======off7======||\n");
-    // for (int idx = 0; idx < SIZE_CTRACEBUF; idx++) {
-    //     if (icache_buf[idx][0] == 0) continue; // valid == 0
+    puts("\n========== DCache ");
+    for (int set_idx = 0; set_idx < DCACHE_SETNUM; set_idx++) {
+        printf("Set %d  The Least Recently Used one is way %d\n", set_idx, dcache_buf[set_idx][0][2]);
+        printf("idx  tag   ||======off0======||======off1======||======off2======||======off3======||======off4======||\n");
+        for (int way_idx = 0; way_idx < DCACHE_WAYNUM; way_idx++) {
+            if (dcache_buf[set_idx][way_idx][0] == 0) continue; // valid == 0
 
-    //     printf("%2lld  %llx  ", icache_buf[idx][1], icache_buf[idx][2]); // idx和tag
-        
-    //     for (int offset = 0; offset < 8; offset++) {
-    //         printf("||%016llx", icache_buf[idx][3 + offset]);
-    //         printf((offset == 7) ? "||\n" : "");
-    //     }
-    // }
+            printf("%lld  %llx  ", way_idx, dcache_buf[set_idx][way_idx][3]); // idx和tag
+
+            for (int offset = 0; offset < 4; offset++) {
+                printf("||%016llx", dcache_buf[way_idx][3 + offset]);
+                printf((offset == 3) ? "||\n" : "");
+            }
+        }
+    
+    }
     puts("====================================");
 }

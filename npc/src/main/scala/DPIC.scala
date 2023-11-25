@@ -271,16 +271,16 @@ class pmem_write extends BlackBox with HasBlackBoxInline {
     """.stripMargin)
 }
 
-class ctrace extends BlackBox with HasBlackBoxInline {
+class ctrace_icache extends BlackBox with HasBlackBoxInline {
     val io = IO(new Bundle{
         val idx  = Input(UInt(6.W))
         val tag  = Input(UInt(52.W))
         val cacheline  = Input(Vec(8, UInt(64.W)))
     })
-    setInline("ctrace.v",
+    setInline("ctrace_icache.v",
     """
-    |import "DPI-C" function void ctrace_record(input byte idx, input longint tag, input logic [63:0] cacheline[]);
-    |module ctrace (
+    |import "DPI-C" function void ctrace_icache_record(input byte idx, input longint tag, input logic [63:0] cacheline[]);
+    |module ctrace_icache (
     |   input  [5:0]  idx,
     |   input  [51:0] tag,
     |   input  [63:0] cacheline_0,
@@ -311,7 +311,7 @@ class ctrace extends BlackBox with HasBlackBoxInline {
     |   assign cacheline[7] = cacheline_7;
     |
     |   always @(*) begin
-    |       ctrace_record(idx_to_byte, tag_to_longint, cacheline); 
+    |       ctrace_icache_record(idx_to_byte, tag_to_longint, cacheline); 
     |   end
     |
     |endmodule

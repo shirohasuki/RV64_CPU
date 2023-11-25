@@ -12,7 +12,7 @@ import chisel3._
 import chisel3.util._
 
 import DPIC.pmem_read_Icacheline
-import DPIC.ctrace
+import DPIC.ctrace_icache
 
 class ICacheReq extends Bundle { val raddr = UInt(64.W) }
 class ICacheResp extends Bundle { val rdata = UInt(64.W) }
@@ -115,7 +115,7 @@ class ICACHE extends Module {
     // 5. MISS
     // Read Allocate
     val DPIC_pmem_read_Icacheline  = Module(new pmem_read_Icacheline())
-    val DPIC_ctrace_record  = Module(new ctrace())
+    val DPIC_ctrace_icache_record  = Module(new ctrace_icache())
 
     when (ren && miss) {
         DPIC_pmem_read_Icacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))
@@ -125,9 +125,9 @@ class ICACHE extends Module {
         // for (i <- 0 until 8) { dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)}
         tagMem(idx)                             := tag
 
-        DPIC_ctrace_record.io.idx               := idx
-        DPIC_ctrace_record.io.tag               := tag
-        for (i <- 0 until 8) { DPIC_ctrace_record.io.cacheline(i) := DPIC_pmem_read_Icacheline.io.rdata(i)}
+        DPIC_ctrace_icache_record.io.idx               := idx
+        DPIC_ctrace_icache_record.io.tag               := tag
+        for (i <- 0 until 8) { DPIC_ctrace_icache_record.io.cacheline(i) := DPIC_pmem_read_Icacheline.io.rdata(i)}
 
         reload_complete                         := 1.U
     }.otherwise {

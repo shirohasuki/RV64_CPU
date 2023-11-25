@@ -74,7 +74,7 @@ class DCACHE extends Module {
         is (sIdle) {
             when (hit) {
                 next_state := sHit
-            }.elsewhen (miss) {if_icache
+            }.elsewhen (miss) {
                 next_state := sMiss
             }
         }
@@ -107,8 +107,6 @@ class DCACHE extends Module {
     state := next_state
     
     // 3. IDLE    
-    val way_idx = RegInit(0.U(3.W))
-
     when (ren) {
         val indices = (0 until nWays).map(i => vMem(i) && tag === tagMem(i))
         val hitDetected = indices.exists(identity)
@@ -144,11 +142,11 @@ class DCACHE extends Module {
         DPIC_pmem_read_Dcacheline.io.raddr      := Cat(raddr(63, 5), Fill(5, 0.U))
 
         when (full) {
-            for (i <- 0 until 4) { dataMem(set_idx)(ageMem)(i)  := DPIC_pmem_read_Dcacheline.io.rdata(i)}
+            for (i <- 0 until 4) { dataMem(set_idx)(ageMem)(i) := DPIC_pmem_read_Dcacheline.io.rdata(i)}
             tagMem(set_idx)(ageMem)                := tag
         }.otherwise {
             for (i <- 0 until 4) { dataMem(set_idx)(idx)(i)  := DPIC_pmem_read_Dcacheline.io.rdata(i)}
-            tagMem(set_idx)(way_idx)                := tag
+            tagMem(set_idx)(way_idx)               := tag
         }
         reload_complete                         := 1.U
     }.otherwise {

@@ -122,7 +122,7 @@ void print_ctrace() {
         printf("%2lld  %llx  ", icache_buf[idx][1], icache_buf[idx][2]); // idx和tag
         
         for (int offset = 0; offset < 8; offset++) {
-            printf("||%016lln", icache_buf[idx][3 + offset]);
+            printf("||%016llx", icache_buf[idx][3 + offset]);
             printf((offset == 7) ? "||\n" : "");
         }
     }
@@ -137,7 +137,7 @@ void print_ctrace() {
             printf("%d  %llx  ", way_idx, dcache_buf[set_idx][way_idx][3]); // idx和tag
 
             for (int offset = 0; offset < 4; offset++) {
-                printf("||%016llx", dcache_buf[way_idx][3 + offset]);
+                printf("||%016llx", dcache_buf[way_idx][4 + offset]);
                 printf((offset == 3) ? "||\n\n" : "");
             }
         }

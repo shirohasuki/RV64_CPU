@@ -54,13 +54,10 @@ class DCACHE extends Module {
     val dataMem = Reg(Vec(16, (Vec(8, (Vec(4, UInt(64.W))))))) // 16组，8行,每行4个64位
 
     // wire
-    val raddr   = WireInit(0.U(64.W))
-    raddr       := ex_dcache.rd_req.bits.raddr
-    val ren     = WireInit(false.B)
-    ren         := ex_dcache.rd_req.valid
+    val raddr   = ex_dcache.rd_req.bits.raddr
+    val ren     = ex_dcache.rd_req.valid
 
     val tag     = raddr(63, 9)
-    // val set_idx : Int = raddr(8, 5).litValue.toInt
     val set_idx = raddr(8, 5)
     val way_idx = WireInit(0.U(3.W))
     val offset  = raddr(4, 3)
@@ -123,9 +120,9 @@ class DCACHE extends Module {
         hit  := Mux(hitDetected, 1.U, 0.U)
         miss := Mux(~hitDetected, 1.U, 0.U)
 
-        way_idx := PriorityEncoderOH(Cat(VecInit(indices)))
-        
         full := Mux(PopCount((0 until nWays).map(i => vMem(set_idx)(i))) === 8.U, 1.U, 0.U)
+
+        way_idx := Mux(full, ageMem(set_idx), PriorityEncoderOH(Cat(VecInit(indices)))) 
     }
 
 
@@ -150,13 +147,15 @@ class DCACHE extends Module {
     when (ren && miss) {
         DPIC_pmem_read_Dcacheline.io.raddr      := Cat(raddr(63, 5), Fill(5, 0.U))
 
-        when (full) {
-            for (i <- 0 until 4) { dataMem(set_idx)(ageMem(set_idx))(i) := DPIC_pmem_read_Dcacheline.io.rdata(i)}
-            tagMem(set_idx)(ageMem(set_idx))                := tag
-        }.otherwise {
-            for (i <- 0 until 4) { dataMem(set_idx)(way_idx)(i)  := DPIC_pmem_read_Dcacheline.io.rdata(i)}
-            tagMem(set_idx)(way_idx)               := tag
-        }
+        for (i <- 0 until 4) { dataMem(set_idx)(way_idx)(i)  := DPIC_pmem_read_Dcacheline.io.rdata(i)}
+        tagMem(set_idx)(way_idx)               := tag
+
+
+        DPIC_ctrace_dcache_record.io.set_idx        := set_idx
+        DPIC_ctrace_dcache_record.io.way_idx        := way_idx
+        DPIC_ctrace_dcache_record.io.tag            := tag
+        for (i <- 0 until 4) { DPIC_ctrace_dcache_record.io.cacheline(i) := DPIC_pmem_read_Dcacheline.io.rdata(i)}
+
         reload_complete                         := 1.U
     }.otherwise {
         reload_complete                         := 0.U

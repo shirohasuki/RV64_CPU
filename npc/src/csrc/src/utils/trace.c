@@ -99,7 +99,7 @@ extern "C" void ctrace_icache_record(char idx, ll tag, const svOpenArrayHandle c
     }
 }
 
-extern "C" void ctrace_dcache_record(int set_idx, char way_idx, char dirty, char age, ll tag, const svOpenArrayHandle cacheline) {
+extern "C" void ctrace_dcache_record(char set_idx, char way_idx, char age, ll tag, const svOpenArrayHandle cacheline) {
     dcache_buf[set_idx][way_idx][0] = 1;
     dcache_buf[set_idx][way_idx][1] = 0;
     dcache_buf[set_idx][way_idx][2] = age;
@@ -129,7 +129,7 @@ void print_ctrace() {
     puts("\n========== DCache ");
     printf("idx  tag   ||======off0======||======off1======||======off2======||======off3======||======off4======||\n");
     for (int set_idx = 0; set_idx < DCACHE_SETNUM; set_idx++) {
-        printf("Set %d  The Least Recently Used one is way %lld\n", set_idx, dcache_buf[set_idx][0][2]);
+        printf("Set %2d  The Least Recently Used one is way %lld\n", set_idx, dcache_buf[set_idx][0][2]);
         for (int way_idx = 0; way_idx < DCACHE_WAYNUM; way_idx++) {
             if (dcache_buf[set_idx][way_idx][0] == 0) continue; // valid == 0
 

@@ -317,3 +317,48 @@ class ctrace_icache extends BlackBox with HasBlackBoxInline {
     |endmodule
     """.stripMargin)
 }
+
+class ctrace_dcache extends BlackBox with HasBlackBoxInline {
+    val io = IO(new Bundle{
+        val set_idx  = Input(UInt(4.W))
+        val way_idx  = Input(UInt(3.W))
+        val tag      = Input(UInt(55.W))
+        val cacheline  = Input(Vec(4, UInt(64.W)))
+    })
+    setInline("ctrace_dcache.v",
+    """
+    |import "DPI-C" function void ctrace_dcache_record(input byte set_idx, input byte way_idx, input longint tag, input logic [63:0] cacheline[]);
+    |
+    |module ctrace_dcache (
+    |   input  [3:0]  set_idx,
+    |   input  [2:0]  way_idx,
+    |   input  [54:0] tag,
+    |   input  [63:0] cacheline_0,
+    |   input  [63:0] cacheline_1,
+    |   input  [63:0] cacheline_2,
+    |   input  [63:0] cacheline_3
+    |);
+    |   
+    |   wire [7:0] set_idx_to_byte;
+    |   assign set_idx_to_byte = {4'b0, set_idx};
+    |
+    |   wire [7:0] way_idx_to_byte;
+    |   assign way_idx_to_byte = {5'b0, way_idx};
+    |
+    |   wire [63:0] tag_to_longint;
+    |   assign tag_to_longint = {10'b0, tag};
+    |
+    |   wire [63:0] cacheline[4];
+    |
+    |   assign cacheline[0] = cacheline_0;
+    |   assign cacheline[1] = cacheline_1;
+    |   assign cacheline[2] = cacheline_2;
+    |   assign cacheline[3] = cacheline_3;
+    |
+    |   always @(*) begin
+    |       ctrace_dcache_record(set_idx_to_byte, way_idx_to_byte, tag_to_longint, cacheline); 
+    |   end
+    |
+    |endmodule
+    """.stripMargin)
+}

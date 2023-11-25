@@ -181,15 +181,15 @@ class pmem_read extends BlackBox with HasBlackBoxInline {
     """.stripMargin)
 }
 
-class pmem_read_cacheline extends BlackBox with HasBlackBoxInline {
+class pmem_read_Icacheline extends BlackBox with HasBlackBoxInline {
     val io = IO(new Bundle{
         val raddr  = Input(UInt(64.W)) 
         val rdata  = Output(Vec(8, UInt(64.W)))
     })
-    setInline("pmem_read_cacheline.v",
+    setInline("pmem_read_Icacheline.v",
     """
-    |import "DPI-C" function void pmem_read_cacheline( input longint raddr, output bit[31:0] rdata[16]);
-    |module pmem_read_cacheline (
+    |import "DPI-C" function void pmem_read_Icacheline( input longint raddr, output bit[31:0] rdata[16]);
+    |module pmem_read_Icacheline (
     |   input  [63:0] raddr,
     |   output [63:0] rdata_0,
     |   output [63:0] rdata_1,
@@ -212,7 +212,37 @@ class pmem_read_cacheline extends BlackBox with HasBlackBoxInline {
     |   assign rdata_7 = {rdata[14], rdata[15]};   
     |
     |   always @(*) begin
-    |       pmem_read_cacheline(raddr, rdata); 
+    |       pmem_read_Icacheline(raddr, rdata); 
+    |   end
+    |
+    |endmodule
+    """.stripMargin)
+}
+
+class pmem_read_Dcacheline extends BlackBox with HasBlackBoxInline {
+    val io = IO(new Bundle{
+        val raddr  = Input(UInt(64.W)) 
+        val rdata  = Output(Vec(4, UInt(64.W)))
+    })
+    setInline("pmem_read_Dcacheline.v",
+    """
+    |import "DPI-C" function void pmem_read_Dcacheline( input longint raddr, output bit[31:0] rdata[8]);
+    |module pmem_read_Dcacheline (
+    |   input  [63:0] raddr,
+    |   output [63:0] rdata_0,
+    |   output [63:0] rdata_1,
+    |   output [63:0] rdata_2,
+    |   output [63:0] rdata_3
+    |);
+    |   bit [31:0] rdata[8];
+    |   
+    |   assign rdata_0 = {rdata[0], rdata[1]};   
+    |   assign rdata_1 = {rdata[2], rdata[3]};   
+    |   assign rdata_2 = {rdata[4], rdata[5]};   
+    |   assign rdata_3 = {rdata[6], rdata[7]};   
+    |
+    |   always @(*) begin
+    |       pmem_read_Dcacheline(raddr, rdata); 
     |   end
     |
     |endmodule
@@ -241,16 +271,16 @@ class pmem_write extends BlackBox with HasBlackBoxInline {
     """.stripMargin)
 }
 
-class ctrace extends BlackBox with HasBlackBoxInline {
+class ctrace_icache extends BlackBox with HasBlackBoxInline {
     val io = IO(new Bundle{
         val idx  = Input(UInt(6.W))
         val tag  = Input(UInt(52.W))
         val cacheline  = Input(Vec(8, UInt(64.W)))
     })
-    setInline("ctrace.v",
+    setInline("ctrace_icache.v",
     """
-    |import "DPI-C" function void ctrace_record(input byte idx, input longint tag, input logic [63:0] cacheline[]);
-    |module ctrace (
+    |import "DPI-C" function void ctrace_icache_record(input byte idx, input longint tag, input logic [63:0] cacheline[]);
+    |module ctrace_icache (
     |   input  [5:0]  idx,
     |   input  [51:0] tag,
     |   input  [63:0] cacheline_0,
@@ -281,7 +311,57 @@ class ctrace extends BlackBox with HasBlackBoxInline {
     |   assign cacheline[7] = cacheline_7;
     |
     |   always @(*) begin
-    |       ctrace_record(idx_to_byte, tag_to_longint, cacheline); 
+    |       ctrace_icache_record(idx_to_byte, tag_to_longint, cacheline); 
+    |   end
+    |
+    |endmodule
+    """.stripMargin)
+}
+
+class ctrace_dcache extends BlackBox with HasBlackBoxInline {
+    val io = IO(new Bundle{
+        val set_idx  = Input(UInt(4.W))
+        val way_idx  = Input(UInt(3.W))
+        val age      = Input(UInt(7.W))
+        val tag      = Input(UInt(55.W))
+        val cacheline  = Input(Vec(4, UInt(64.W)))
+    })
+    setInline("ctrace_dcache.v",
+    """
+    |import "DPI-C" function void ctrace_dcache_record(input byte set_idx, input byte way_idx, input byte age, input longint tag, input logic [63:0] cacheline[]);
+    |
+    |module ctrace_dcache (
+    |   input  [3:0]  set_idx,
+    |   input  [2:0]  way_idx,
+    |   input  [6:0]  age,
+    |   input  [54:0] tag,
+    |   input  [63:0] cacheline_0,
+    |   input  [63:0] cacheline_1,
+    |   input  [63:0] cacheline_2,
+    |   input  [63:0] cacheline_3
+    |);
+    |   
+    |   wire [7:0] set_idx_to_byte;
+    |   assign set_idx_to_byte = {4'b0, set_idx};
+    |
+    |   wire [7:0] way_idx_to_byte;
+    |   assign way_idx_to_byte = {5'b0, way_idx};
+    |
+    |   wire [7:0] age_to_byte;
+    |   assign age_to_byte = {1'b0, age};
+    |
+    |   wire [63:0] tag_to_longint;
+    |   assign tag_to_longint = {9'b0, tag};
+    |
+    |   wire [63:0] cacheline[4];
+    |
+    |   assign cacheline[0] = cacheline_0;
+    |   assign cacheline[1] = cacheline_1;
+    |   assign cacheline[2] = cacheline_2;
+    |   assign cacheline[3] = cacheline_3;
+    |
+    |   always @(*) begin
+    |       ctrace_dcache_record(set_idx_to_byte, way_idx_to_byte, age_to_byte, tag_to_longint, cacheline); 
     |   end
     |
     |endmodule

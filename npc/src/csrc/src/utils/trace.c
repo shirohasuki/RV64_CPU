@@ -29,8 +29,8 @@ void itrace_record(uint64_t pc) {
     // prepare buffer
     char *p = ringbuf[ringptr];
     p += sprintf(p, "0x%016lx:", pc);
-    for (int i = 0; i < 4; ++i) {
-        p += sprintf(p, " %02x", inst[i]);
+    for (int i = 0; i < 4; i++) {
+        p += sprintf(p, " %02x", inst[3-i]);
     }
     p += sprintf(p, "\t");
     // disasm
@@ -80,10 +80,14 @@ void print_mtrace() {
 }
 
 // ===================== CTRACE(Cache Trace) =========================
-ll icache_buf[SIZE_CTRACEBUF][11] = {0};   // v+idx+tag+data=1+1+1+8=11
-// ll dcache_buf[SIZE_CTRACEBUF][11] = {0};   // v+idx+tag+data=1+1+1+8=11
+#define ICACHE_WAYNUM 64
+#define DCACHE_SETNUM 16
+#define DCACHE_WAYNUM 8
 
-extern "C" void ctrace_record(char idx, ll tag, const svOpenArrayHandle cacheline) {
+ll icache_buf[ICACHE_WAYNUM][11] = {0};   // v+idx+tag+data=1+1+1+8=11
+ll dcache_buf[DCACHE_SETNUM][DCACHE_WAYNUM][8] = {0};   // v+d+age+tag+data=1+1+1+1+4=8
+
+extern "C" void ctrace_icache_record(char idx, ll tag, const svOpenArrayHandle cacheline) {
     icache_buf[idx][0] = 1;
     icache_buf[idx][1] = idx;
     icache_buf[idx][2] = tag;
@@ -95,11 +99,24 @@ extern "C" void ctrace_record(char idx, ll tag, const svOpenArrayHandle cachelin
     }
 }
 
+extern "C" void ctrace_dcache_record(char set_idx, char way_idx, char age, ll tag, const svOpenArrayHandle cacheline) {
+    dcache_buf[set_idx][way_idx][0] = 1;
+    dcache_buf[set_idx][way_idx][1] = 0;
+    dcache_buf[set_idx][way_idx][2] = age;
+    dcache_buf[set_idx][way_idx][3] = tag;
+    
+    uint64_t* offset = NULL;
+    offset = (uint64_t *)(((VerilatedDpiOpenVar*)cacheline) -> datap());
+    for (int i = 0; i < 4; i++) {
+        dcache_buf[set_idx][way_idx][4 + i] = offset[i]; 
+    }
+}
+
 void print_ctrace() {
     puts("========== CTRACE Result ==========");
     puts("========== ICache ");
     printf("idx  tag   ||======off0======||======off1======||======off2======||======off3======||======off4======||======off5======||======off6======||======off7======||\n");
-    for (int idx = 0; idx < SIZE_CTRACEBUF; idx++) {
+    for (int idx = 0; idx < ICACHE_WAYNUM; idx++) {
         if (icache_buf[idx][0] == 0) continue; // valid == 0
 
         printf("%2lld  %llx  ", icache_buf[idx][1], icache_buf[idx][2]); // idx和tag
@@ -109,17 +126,23 @@ void print_ctrace() {
             printf((offset == 7) ? "||\n" : "");
         }
     }
-    // puts("\n========== DCache ");
-    // printf("idx  tag   ||======off0======||======off1======||======off2======||======off3======||======off4======||======off5======||======off6======||======off7======||\n");
-    // for (int idx = 0; idx < SIZE_CTRACEBUF; idx++) {
-    //     if (icache_buf[idx][0] == 0) continue; // valid == 0
+    puts("\n========== DCache ");
+    printf("set  way   ||  tag  ||======off0======||======off1======||======off2======||======off3======||\n");
+    for (int set_idx = 0; set_idx < DCACHE_SETNUM; set_idx++) {
+        if (dcache_buf[set_idx][0][0] == 0) continue; // valid == 0
+        printf("%2d  ", set_idx);
+        // printf("Set %2d  The Least Recently Used one is way %lld\n", set_idx, dcache_buf[set_idx][0][2]);
+        for (int way_idx = 0; way_idx < DCACHE_WAYNUM; way_idx++) {
+            if (dcache_buf[set_idx][way_idx][0] == 0) continue; // valid == 0
 
-    //     printf("%2lld  %llx  ", icache_buf[idx][1], icache_buf[idx][2]); // idx和tag
-        
-    //     for (int offset = 0; offset < 8; offset++) {
-    //         printf("||%016llx", icache_buf[idx][3 + offset]);
-    //         printf((offset == 7) ? "||\n" : "");
-    //     }
-    // }
+            printf((way_idx == dcache_buf[set_idx][way_idx][2]) ? "%2d(LRU)|| %6llx" : "%2d     || %6llx", way_idx, dcache_buf[set_idx][way_idx][3]); // idx和tag
+            
+            for (int offset = 0; offset < 4; offset++) {
+                printf("||%016llx", dcache_buf[set_idx][way_idx][4 + offset]);
+                printf((offset == 3) ? "||\n\t   ||=======||================||================||================||================||\n" : "");
+            }
+        }
+    
+    }
     puts("====================================");
 }

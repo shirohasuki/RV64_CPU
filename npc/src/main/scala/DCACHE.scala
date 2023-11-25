@@ -48,13 +48,13 @@ class DCACHE extends Module {
     val dataMem = Seq.fill(nSets)(SyncReadMem(nWays, Vec(4, UInt(64.W)))) // 16组，8行,每行4个64位
 
     // wire
-    val raddr   = WireDefault(0.U(64.W))
+    val raddr   = WireInit(0.U(64.W))
     raddr       := ex_dcache.rd_req.bits.raddr
     val ren     = WireInit(false.B)
     ren         := ex_dcache.rd_req.valid
 
     val tag     = raddr(63, 9)
-    val set_idx : Int = raddr(8, 5).litValue.toInt
+    val set_idx : Int = ex_dcache.rd_req.bits.raddr(8, 5).litValue.toInt
     val way_idx = WireInit(0.U(3.W))
     val offset  = raddr(4, 3)
     val rdata   = WireInit(0.U(64.W))

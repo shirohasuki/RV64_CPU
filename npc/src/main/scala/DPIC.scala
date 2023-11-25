@@ -351,7 +351,7 @@ class ctrace_dcache extends BlackBox with HasBlackBoxInline {
     |   assign age_to_byte = {1'b0, age};
     |
     |   wire [63:0] tag_to_longint;
-    |   assign tag_to_longint = {10'b0, tag};
+    |   assign tag_to_longint = {9'b0, tag};
     |
     |   wire [63:0] cacheline[4];
     |

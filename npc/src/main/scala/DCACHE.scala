@@ -109,7 +109,7 @@ class DCACHE extends Module {
     // 3. IDLE    
     when (ren) {
         val indices = (0 until nWays).map(i => (vMem(set_idx)(i) && tag === tagMem(set_idx)(i)))
-        val hitDetected = indices.exists(identity).asBool
+        val hitDetected = indices.reduce(_ || _)
 
         hit  := Mux(hitDetected, 1.U, 0.U)
         miss := Mux(~hitDetected, 1.U, 0.U)

@@ -361,7 +361,7 @@ class ctrace_dcache extends BlackBox with HasBlackBoxInline {
     |   assign cacheline[3] = cacheline_3;
     |
     |   always @(*) begin
-    |       ctrace_dcache_record(set_idx_to_byte, way_idx_to_byte, tag_to_longint, cacheline); 
+    |       ctrace_dcache_record(set_idx_to_byte, way_idx_to_byte, age_to_byte, tag_to_longint, cacheline); 
     |   end
     |
     |endmodule

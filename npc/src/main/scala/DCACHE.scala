@@ -143,7 +143,7 @@ class DCACHE extends Module {
 
         when (full) {
             for (i <- 0 until 4) { dataMem(set_idx)(ageMem(set_idx))(i) := DPIC_pmem_read_Dcacheline.io.rdata(i)}
-            tagMem(set_idx)(ageMem)                := tag
+            tagMem(set_idx)(ageMem(set_idx))                := tag
         }.otherwise {
             for (i <- 0 until 4) { dataMem(set_idx)(way_idx)(i)  := DPIC_pmem_read_Dcacheline.io.rdata(i)}
             tagMem(set_idx)(way_idx)               := tag

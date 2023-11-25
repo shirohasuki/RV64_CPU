@@ -44,7 +44,7 @@ class DCACHE extends Module {
     val vMem    = RegInit(VecInit(Seq.fill(nSets)(0.U(16.W))))                       // 16组，8行，每行占一位
     val dMem    = RegInit(VecInit(Seq.fill(nSets)(0.U(16.W))))                       // 16组，8行，每行占一位
     val ageMem  = RegInit(VecInit(Seq.fill(nSets)(0.U(7.W))))                        // 16组，三层age位
-    val tagMem  = Reg(Seq.fill(nSets)(Vec(nWays, UInt(57.W))))             // 16组，8行tag 
+    val tagMem  = Seq.fill(nSets)(Reg((Vec(nWays, UInt(57.W)))))             // 16组，8行tag 
     val dataMem = Seq.fill(nSets)(SyncReadMem(nWays, Vec(4, UInt(64.W)))) // 16组，8行,每行4个64位
 
     // wire
@@ -160,7 +160,7 @@ class DCACHE extends Module {
 
 
     // update 伪LRU 最终ageMem的值对应最近使用次数最少的那一行
-    ageMem(6) := Mux(way_idx > 3, 1.U, 0.U)
+    ageMem(6) := Mux(way_idx > 3.U, 1.U, 0.U)
 
     ageMem(5) := Mux(ageMem(6) === 1.U, ageMem(5),  // 维持原值
                     Mux(way_idx > 1, 1.U, 0.U))

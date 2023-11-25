@@ -181,8 +181,6 @@ class pmem_read extends BlackBox with HasBlackBoxInline {
     """.stripMargin)
 }
 
-<<<<<<< HEAD
-=======
 class pmem_read_Icacheline extends BlackBox with HasBlackBoxInline {
     val io = IO(new Bundle{
         val raddr  = Input(UInt(64.W)) 
@@ -251,7 +249,6 @@ class pmem_read_Dcacheline extends BlackBox with HasBlackBoxInline {
     """.stripMargin)
 }
 
->>>>>>> tracer-ysyx2204
 class pmem_write extends BlackBox with HasBlackBoxInline {
     val io = IO(new Bundle{
         val waddr  = Input(UInt(64.W)) 
@@ -272,8 +269,6 @@ class pmem_write extends BlackBox with HasBlackBoxInline {
     |
     |endmodule
     """.stripMargin)
-<<<<<<< HEAD
-=======
 }
 
 class ctrace_icache extends BlackBox with HasBlackBoxInline {
@@ -371,5 +366,4 @@ class ctrace_dcache extends BlackBox with HasBlackBoxInline {
     |
     |endmodule
     """.stripMargin)
->>>>>>> tracer-ysyx2204
 }

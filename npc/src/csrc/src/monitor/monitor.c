@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 /*
  * @File Name: monitor.c
  * @Author: shiroha
@@ -7,7 +5,6 @@
  * @Created Time: 2023-10-28 22:14:32
  * @Description: 
  */
->>>>>>> tracer-ysyx2204
 #include "npc.h"
 #include <getopt.h>
 #include <utils/macro.h>
@@ -22,10 +19,7 @@ static void welcome() {
 	printf(ASNI_FMT("MTrace: %s\t", ASNI_FG_BLUE), MUXDEF(CONFIG_NPC_MTRACE, ASNI_FMT("ON", ASNI_FG_GREEN), ASNI_FMT("OFF", ASNI_FG_RED)));
 	printf(ASNI_FMT("DTrace: %s\t", ASNI_FG_BLUE), MUXDEF(CONFIG_NPC_DTRACE, ASNI_FMT("ON", ASNI_FG_GREEN), ASNI_FMT("OFF", ASNI_FG_RED)));
 	printf(ASNI_FMT("ETrace: %s\t\n", ASNI_FG_BLUE), MUXDEF(CONFIG_NPC_ETRACE, ASNI_FMT("ON", ASNI_FG_GREEN), ASNI_FMT("OFF", ASNI_FG_RED)));
-<<<<<<< HEAD
-=======
 	printf(ASNI_FMT("CTrace: %s\t\n", ASNI_FG_BLUE), MUXDEF(CONFIG_NPC_CTRACE, ASNI_FMT("ON", ASNI_FG_GREEN), ASNI_FMT("OFF", ASNI_FG_RED)));
->>>>>>> tracer-ysyx2204
 
   	Log("Build time: %s, %s", __TIME__, __DATE__);
   	printf("Welcome to %s!\n", ASNI_FMT(str(NPC), ASNI_FG_YELLOW ASNI_BG_RED));

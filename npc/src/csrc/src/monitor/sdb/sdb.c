@@ -120,16 +120,6 @@ static int cmd_q(char *args) {
 }
 
 static int cmd_info(char *args) {
-<<<<<<< HEAD
-	/* extract the first argument */
-	char *arg = strtok(NULL, " ");
-	/* no argument */
-	if (arg == NULL || strlen(arg) != 1)
-		printf("'%s' must be 'r' \n", arg);
-	/* registers */
-	else if (strcmp(arg, "r") == 0)
-		dump_gpr();
-=======
 	char *arg = strtok(NULL, " ");	/* extract the first argument */
 
 	if (arg == NULL || strlen(arg) != 1) { 
@@ -140,7 +130,6 @@ static int cmd_info(char *args) {
 		print_ctrace(); /* dispaly cache space */
 	} 
 	
->>>>>>> tracer-ysyx2204
 	return 0;
 }
 

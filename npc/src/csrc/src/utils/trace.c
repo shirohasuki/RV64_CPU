@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 /*
  * @File Name: trace.c
  * @Author: shiroha
@@ -8,7 +6,6 @@
  * @Description: 
  */
 
->>>>>>> tracer-ysyx2204
 #include "npc.h"
 
 //=====================ITRACE=========================
@@ -32,13 +29,8 @@ void itrace_record(uint64_t pc) {
     // prepare buffer
     char *p = ringbuf[ringptr];
     p += sprintf(p, "0x%016lx:", pc);
-<<<<<<< HEAD
-    for (int i = 0; i < 4; ++i) {
-        p += sprintf(p, " %02x", inst[i]);
-=======
     for (int i = 0; i < 4; i++) {
         p += sprintf(p, " %02x", inst[3-i]);
->>>>>>> tracer-ysyx2204
     }
     p += sprintf(p, "\t");
     // disasm
@@ -56,11 +48,7 @@ void itrace_output() {
 #endif
 
 
-<<<<<<< HEAD
-//=====================MTRACE=========================
-=======
 // =====================MTRACE=========================
->>>>>>> tracer-ysyx2204
 char mtrace_buf[SIZE_MTRACEBUF][100] = {0};
 int mtrace_count = 0;
 
@@ -91,8 +79,6 @@ void print_mtrace() {
     puts("====================================");
 }
 
-<<<<<<< HEAD
-=======
 // ===================== CTRACE(Cache Trace) =========================
 #define ICACHE_WAYNUM 64
 #define DCACHE_SETNUM 16
@@ -160,4 +146,3 @@ void print_ctrace() {
     }
     puts("====================================");
 }
->>>>>>> tracer-ysyx2204

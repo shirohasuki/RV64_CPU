@@ -70,22 +70,13 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
     }
     *rdata = ret;
 #ifdef CONFIG_NPC_MTRACE
-<<<<<<< HEAD
-    if (raddr < 0x80000124) return ; // 取指的不要记录
-=======
     // if (raddr < 0x80000124) return ; // 取指的不要记录
->>>>>>> tracer-ysyx2204
     sprintf(mtrace_buf[mtrace_count], "read:  addr:%016llx data:%016llx", raddr, (*rdata));
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
 #endif
     // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
 }
 
-<<<<<<< HEAD
-// Memory Write
-extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
-    if (waddr < MEM_BASE){ return ; } 
-=======
 extern "C" void pmem_read_Icacheline(ll raddr, svBitVecVal rdata[16]) {
     if (raddr < MEM_BASE) { return ; } 
     uint8_t *pt = cpu2mem(raddr); // 指向64个字节的末尾
@@ -133,7 +124,6 @@ extern "C" void pmem_read_Dcacheline(ll raddr, svBitVecVal rdata[8]) {
 // Memory Write
 extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
     if (waddr < MEM_BASE) { return ; } 
->>>>>>> tracer-ysyx2204
 
 #ifdef CONFIG_NPC_MTRACE
     sprintf(mtrace_buf[mtrace_count],"write: addr:%016llx data:%016llx wmask:%08x", waddr,  wdata, mask);
@@ -177,25 +167,6 @@ extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
     return ;
 }
 
-<<<<<<< HEAD
-// extern "C" void inst_fetch(ll raddr, ll *rdata) {
-//     if (raddr < MEM_BASE) {
-// #ifdef CONFIG_NPC_IFTRACE
-//         printf("[inst_fetch] raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
-// #endif
-//         return;
-//     }
-//     uint8_t *pt = cpu2mem(raddr) + 7;
-//     ll ret = 0;
-//     for (int i = 0; i < 8; ++i) {
-//         ret = (ret << 8) | (*pt--);
-//     }
-//     *rdata = ret;
-// #ifdef CONFIG_NPC_IFTRACE
-//     printf("[inst_fetch] addr is:%llx, data is:%llx\n", raddr, *rdata);
-// #endif
-// } // 和pmem_read一样，引用方便临时改个名字
-=======
 
 extern "C" void pmem_write_Dcacheline(ll waddr, ll wdata) {
     if (waddr < MEM_BASE) { return ; } 
@@ -208,7 +179,6 @@ extern "C" void pmem_write_Dcacheline(ll waddr, ll wdata) {
     }
     return ;
 } // 一次写一行进去
->>>>>>> tracer-ysyx2204
 
 
 // Load image from am-kernels (Makefile -> ./image.bin)

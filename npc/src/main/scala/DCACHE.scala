@@ -36,7 +36,7 @@ class DCACHE extends Module {
     val dcache_ctrl = IO(new Bundle { val dcache_busy  = Output(Bool())})
 
 
-    val nSets = 16.U // 组数:16组
+    val nSets = 16 // 组数:16组
     val nWays =  8 // 路数:8路
 
     // 1. define DCache
@@ -54,7 +54,7 @@ class DCACHE extends Module {
     ren         := ex_dcache.rd_req.valid
 
     val tag     = raddr(63, 9)
-    val set_idx : Int = raddr(8, 5).litValue.toInt
+    // val set_idx : Int = raddr(8, 5).litValue.toInt
     val way_idx = WireInit(0.U(3.W))
     val offset  = raddr(4, 3)
     val rdata   = WireInit(0.U(64.W))

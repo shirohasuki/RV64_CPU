@@ -30,7 +30,7 @@ void itrace_record(uint64_t pc) {
     char *p = ringbuf[ringptr];
     p += sprintf(p, "0x%016lx:", pc);
     for (int i = 0; i < 4; i++) {
-        p += sprintf(p, "%02x", inst[3-i]);
+        p += sprintf(p, " %02x", inst[3-i]);
     }
     p += sprintf(p, "\t");
     // disasm

@@ -127,7 +127,7 @@ void print_ctrace() {
         }
     }
     puts("\n========== DCache ");
-    printf("set  idx  tag   ||======off0======||======off1======||======off2======||======off3======||======off4======||\n");
+    printf("set  idx  tag   ||======off0======||======off1======||======off2======||======off3======||\n");
     for (int set_idx = 0; set_idx < DCACHE_SETNUM; set_idx++) {
         if (dcache_buf[set_idx][0][0] == 0) continue; // valid == 0
         printf("%2d  ", set_idx);

@@ -143,7 +143,8 @@ class DCACHE extends Module {
     // 5. MISS
     // Read Allocate
     val DPIC_pmem_read_Dcacheline    = Module(new pmem_read_Dcacheline())
-    
+    val DPIC_ctrace_dcache_record  = Module(new ctrace_dcache())
+
     when (ren && miss) {
         DPIC_pmem_read_Dcacheline.io.raddr      := Cat(raddr(63, 5), Fill(5, 0.U))
 

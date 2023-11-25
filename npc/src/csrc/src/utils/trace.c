@@ -139,7 +139,7 @@ void print_ctrace() {
 
             for (int offset = 0; offset < 4; offset++) {
                 printf("||%016llx", dcache_buf[set_idx][way_idx][4 + offset]);
-                printf((offset == 3) ? "||\n\t\t||================||================||================||================||\n" : "");
+                printf((offset == 3) ? "||\n\t\t ||================||================||================||================||\n" : "");
             }
         }
     

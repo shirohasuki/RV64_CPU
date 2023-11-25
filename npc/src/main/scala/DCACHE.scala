@@ -41,11 +41,18 @@ class DCACHE extends Module {
 
     // 1. define DCache
     // memory
-    val vMem    = RegInit(VecInit(Seq.fill(nSets)(0.U(16.W))))                       // 16组，8行，每行占一位
-    val dMem    = RegInit(VecInit(Seq.fill(nSets)(0.U(16.W))))                       // 16组，8行，每行占一位
-    val ageMem  = RegInit(VecInit(Seq.fill(nSets)(0.U(7.W))))                        // 16组，三层age位
-    val tagMem  = Seq.fill(nSets)(Reg((Vec(nWays, UInt(55.W)))))             // 16组，8行tag 
-    val dataMem = Seq.fill(nSets)(SyncReadMem(nWays, Vec(4, UInt(64.W)))) // 16组，8行,每行4个64位
+    // val vMem    = RegInit(VecInit(Seq.fill(nSets)(0.U(16.W))))                       // 16组，8行，每行占一位
+    // val dMem    = RegInit(VecInit(Seq.fill(nSets)(0.U(16.W))))                       // 16组，8行，每行占一位
+    // val ageMem  = RegInit(VecInit(Seq.fill(nSets)(0.U(7.W))))                        // 16组，三层age位
+    // val tagMem  = RegInit(VecInit(Seq.fill(nSets)(VecInit(Seq.fill(nWays)(0.U(55.W)))))) // 16组，8行tag 
+    // val dataMem = RegInit(VecInit(Seq.fill(nSets)(VecInit(Seq.fill(nWays)(VecInit(Seq.fill(4)(0.U(64.W)))))))) // 16组，8行,每行4个64位
+        Seq.fill(nSets)(SyncReadMem(nWays, Vec(4, UInt(64.W))))
+
+    val vMem    = RegInit(VecInit(16, (0.U(16.W))))
+    val dMem    = RegInit(VecInit(16, (0.U(16.W))))
+    val ageMem  = RegInit(VecInit(16, (0.U( 7.W))))
+    val tagMem  = RegInit(VecInit(16, (VecInit(8, (0.U(55.W))))))
+    val dataMem = RegInit(VecInit(16, (VecInit(8, (VecInit(4, (0.U(64.W))))))))
 
     // wire
     val raddr   = WireInit(0.U(64.W))
@@ -55,7 +62,7 @@ class DCACHE extends Module {
 
     val tag     = raddr(63, 9)
     // val set_idx : Int = raddr(8, 5).litValue.toInt
-    val set_idx = raddr(8, 5).asTypeOf(Int)
+    val set_idx = raddr(8, 5)
     val way_idx = WireInit(0.U(3.W))
     val offset  = raddr(4, 3)
     val rdata   = WireInit(0.U(64.W))

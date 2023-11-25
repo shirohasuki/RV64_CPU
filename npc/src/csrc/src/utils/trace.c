@@ -127,9 +127,9 @@ void print_ctrace() {
         }
     }
     puts("\n========== DCache ");
+    printf("idx  tag   ||======off0======||======off1======||======off2======||======off3======||======off4======||\n");
     for (int set_idx = 0; set_idx < DCACHE_SETNUM; set_idx++) {
-        printf("Set %lld  The Least Recently Used one is way %d\n", set_idx, dcache_buf[set_idx][0][2]);
-        printf("idx  tag   ||======off0======||======off1======||======off2======||======off3======||======off4======||\n");
+        printf("Set %d  The Least Recently Used one is way %lld\n", set_idx, dcache_buf[set_idx][0][2]);
         for (int way_idx = 0; way_idx < DCACHE_WAYNUM; way_idx++) {
             if (dcache_buf[set_idx][way_idx][0] == 0) continue; // valid == 0
 

@@ -46,7 +46,6 @@ class DCACHE extends Module {
     // val ageMem  = RegInit(VecInit(Seq.fill(nSets)(0.U(7.W))))                        // 16组，三层age位
     // val tagMem  = RegInit(VecInit(Seq.fill(nSets)(VecInit(Seq.fill(nWays)(0.U(55.W)))))) // 16组，8行tag 
     // val dataMem = RegInit(VecInit(Seq.fill(nSets)(VecInit(Seq.fill(nWays)(VecInit(Seq.fill(4)(0.U(64.W)))))))) // 16组，8行,每行4个64位
-        Seq.fill(nSets)(SyncReadMem(nWays, Vec(4, UInt(64.W))))
 
     val vMem    = RegInit(Vec(16, (0.U(16.W))))
     val dMem    = RegInit(Vec(16, (0.U(16.W))))

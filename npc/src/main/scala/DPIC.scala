@@ -222,11 +222,11 @@ class pmem_read_Icacheline extends BlackBox with HasBlackBoxInline {
 class pmem_read_Dcacheline extends BlackBox with HasBlackBoxInline {
     val io = IO(new Bundle{
         val raddr  = Input(UInt(64.W)) 
-        val rdata  = Output(Vec(8, UInt(64.W)))
+        val rdata  = Output(Vec(4, UInt(64.W)))
     })
     setInline("pmem_read_Dcacheline.v",
     """
-    |import "DPI-C" function void pmem_read_Icacheline( input longint raddr, output bit[31:0] rdata[8]);
+    |import "DPI-C" function void pmem_read_Icacheline( input longint raddr, output bit[31:0] rdata[4]);
     |module pmem_read_Dcacheline (
     |   input  [63:0] raddr,
     |   output [63:0] rdata_0,

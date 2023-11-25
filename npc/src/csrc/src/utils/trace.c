@@ -122,13 +122,14 @@ void print_ctrace() {
         printf("%2lld  %llx  ", icache_buf[idx][1], icache_buf[idx][2]); // idx和tag
         
         for (int offset = 0; offset < 8; offset++) {
-            printf("||%016llx", icache_buf[idx][3 + offset]);
+            printf("||%016lln", icache_buf[idx][3 + offset]);
             printf((offset == 7) ? "||\n" : "");
         }
     }
     puts("\n========== DCache ");
     printf("idx  tag   ||======off0======||======off1======||======off2======||======off3======||======off4======||\n");
     for (int set_idx = 0; set_idx < DCACHE_SETNUM; set_idx++) {
+        if (dcache_buf[set_idx][0][0] == 0) continue; // valid == 0
         printf("Set %2d  The Least Recently Used one is way %lld\n", set_idx, dcache_buf[set_idx][0][2]);
         for (int way_idx = 0; way_idx < DCACHE_WAYNUM; way_idx++) {
             if (dcache_buf[set_idx][way_idx][0] == 0) continue; // valid == 0

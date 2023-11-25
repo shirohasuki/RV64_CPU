@@ -50,7 +50,7 @@ class DCACHE extends Module {
     // wire
     val raddr   = WireInit(0.U(64.W))
     raddr       := ex_dcache.rd_req.bits.raddr
-    val ren     = WireInit(0.U(64.W))
+    val ren     = WireInit(false.B))
     ren         := ex_dcache.rd_req.valid
 
     val tag     = raddr(63, 9)

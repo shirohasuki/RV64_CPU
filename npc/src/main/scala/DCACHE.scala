@@ -44,7 +44,7 @@ class DCACHE extends Module {
     val vMem    = RegInit(VecInit(Seq.fill(nSets)(0.U(16.W))))                       // 16组，8行，每行占一位
     val dMem    = RegInit(VecInit(Seq.fill(nSets)(0.U(16.W))))                       // 16组，8行，每行占一位
     val ageMem  = RegInit(VecInit(Seq.fill(nSets)(0.U(7.W))))                        // 16组，三层age位
-    val tagMem  = Reg(Vec(nSets, Vec(8, UInt(57.W))))             // 16组，8行tag 
+    val tagMem  = Reg(Seq.fill(nSets)(Vec(nWays, UInt(57.W))))             // 16组，8行tag 
     val dataMem = Seq.fill(nSets)(SyncReadMem(nWays, Vec(4, UInt(64.W)))) // 16组，8行,每行4个64位
 
     // wire
@@ -108,7 +108,7 @@ class DCACHE extends Module {
     
     // 3. IDLE    
     when (ren) {
-        val indices = (0 until nWays).map(i => (vMem(i) && tag === tagMem(i)))
+        val indices = (0 until nWays).map(i => (vMem(set_idx)(i) && tag === tagMem(i)))
         val hitDetected = indices.exists(identity)
 
         hit  := Mux(hitDetected.asBool, 1.U, 0.U)
@@ -116,7 +116,7 @@ class DCACHE extends Module {
 
         way_idx := PriorityEncoderOH(VecInit(indices))
         
-        full := Mux(PopCount((0 until nWays).map(i => vMem(i))) === 8.U, 1.U, 0.U)
+        full := Mux(PopCount((0 until nWays).map(i => vMem(set_idx)(i))) === 8.U, 1.U, 0.U)
     }
 
 
@@ -145,7 +145,7 @@ class DCACHE extends Module {
             for (i <- 0 until 4) { dataMem(set_idx)(ageMem)(i) := DPIC_pmem_read_Dcacheline.io.rdata(i)}
             tagMem(set_idx)(ageMem)                := tag
         }.otherwise {
-            for (i <- 0 until 4) { dataMem(set_idx)(idx)(i)  := DPIC_pmem_read_Dcacheline.io.rdata(i)}
+            for (i <- 0 until 4) { dataMem(set_idx)(way_idx)(i)  := DPIC_pmem_read_Dcacheline.io.rdata(i)}
             tagMem(set_idx)(way_idx)               := tag
         }
         reload_complete                         := 1.U
@@ -154,7 +154,7 @@ class DCACHE extends Module {
     }
 
     when (reload_complete) {
-        vMem                                    := vMem.bitSet(idx, true.B) 
+        vMem(set_idx)                                    := vMem(set_idx).bitSet(way_idx, true.B) 
     }
 
 

@@ -127,7 +127,7 @@ void print_ctrace() {
         }
     }
     puts("\n========== DCache ");
-    printf("set  way  ||=tag==||======off0======||======off1======||======off2======||======off3======||\n");
+    printf("set  way  ||  tag ||======off0======||======off1======||======off2======||======off3======||\n");
     for (int set_idx = 0; set_idx < DCACHE_SETNUM; set_idx++) {
         if (dcache_buf[set_idx][0][0] == 0) continue; // valid == 0
         printf("%2d  ", set_idx);
@@ -139,7 +139,7 @@ void print_ctrace() {
 
             for (int offset = 0; offset < 4; offset++) {
                 printf("||%016llx", dcache_buf[set_idx][way_idx][4 + offset]);
-                printf((offset == 3) ? "||\n\t||=====||================||================||================||================||\n" : "");
+                printf((offset == 3) ? "||\n\t  ||=====||================||================||================||================||\n" : "");
             }
         }
     

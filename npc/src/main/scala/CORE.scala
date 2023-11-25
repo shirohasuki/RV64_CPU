@@ -82,6 +82,10 @@ class CORE extends Module {
 
     Pc.pc_if        <> IFU.pc_if
     IFU.if_icache     <> ICACHE.if_icache
+<<<<<<< HEAD
+=======
+    ICACHE.icache_ctrl <> CTRL.icache_ctrl
+>>>>>>> tracer-ysyx2204
     
     IFU.if_ifid     <> IFID.if_ifid
     IFID.ifid_id    <> IDU.ifid_id
@@ -104,9 +108,16 @@ class CORE extends Module {
     MEM.mem_memwb   <> MEMWB.mem_memwb
     MEMWB.memwb_wb  <> WBU.memwb_wb
 
+<<<<<<< HEAD
     EXU.ex_dcache   <> DCACHE.ex_dcache
     DCACHE.dcache_mem <> MEM.dcache_mem   
     WBU.wb_reg      <> RegFile.wb_reg
+=======
+    EXU.ex_dcache       <> DCACHE.ex_dcache
+    DCACHE.dcache_ctrl  <> CTRL.dcache_ctrl
+    DCACHE.dcache_mem   <> MEM.dcache_mem   
+    WBU.wb_reg          <> RegFile.wb_reg
+>>>>>>> tracer-ysyx2204
 
     // MCIF.mcif_axi_r <> core_axi_r
     // MCIF.mcif_axi_w <> core_axi_w
@@ -118,7 +129,12 @@ class CORE extends Module {
     CTRL.ctrl_pc    <> Pc.ctrl_pc
     CTRL.ctrl_ifid  <> IFID.ctrl_ifid
     CTRL.ctrl_idex  <> IDEX.ctrl_idex
+<<<<<<< HEAD
     CTRL.ctrl_exmem  <> EXMEM.ctrl_exmem
     CTRL.ctrl_memwb  <> MEMWB.ctrl_memwb
+=======
+    CTRL.ctrl_exmem <> EXMEM.ctrl_exmem
+    CTRL.ctrl_memwb <> MEMWB.ctrl_memwb
+>>>>>>> tracer-ysyx2204
     CTRL.ctrl_exwb  <> EXWB.ctrl_exwb  
 }

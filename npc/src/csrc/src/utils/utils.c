@@ -1,3 +1,13 @@
+<<<<<<< HEAD
+=======
+/*
+ * @File Name: utils.c
+ * @Author: shiroha
+ * @Email: whmio0115@hainanu.edu.cn
+ * @Created Time: 2023-10-18 17:23:29
+ * @Description: 
+ */
+>>>>>>> tracer-ysyx2204
 #include "npc.h"
 #include <utils/macro.h>
 #include <utils/debug.h>
@@ -58,12 +68,19 @@ void dump_csr() {
     printf("====================================\n");
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> tracer-ysyx2204
 void npc_exit(int status) {
     if (status == 0) printf(ASNI_FMT("[Sim Result]: HIT GOOD TRAP\n", ASNI_FG_GREEN));
     else {
         IFDEF(CONFIG_NPC_ITRACE, itrace_output());
         IFDEF(CONFIG_NPC_MTRACE, print_mtrace());
+<<<<<<< HEAD
+=======
+        IFDEF(CONFIG_NPC_CTRACE, print_ctrace());
+>>>>>>> tracer-ysyx2204
         IFDEF(CONFIG_NPC_GPRTRACE, dump_gpr());
 	    printf(ASNI_FMT("NPC meets error at step %d\n", ASNI_FG_BLUE), nemu_step);
         // IFDEF(CONFIG_NPC_GPRTRACE, dump_csr());

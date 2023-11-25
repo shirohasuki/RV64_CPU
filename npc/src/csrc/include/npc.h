@@ -9,6 +9,10 @@
 // DPI-C
 #include "verilated_dpi.h"
 #include "Vtb__Dpi.h"
+<<<<<<< HEAD
+=======
+#include "svdpi.h"
+>>>>>>> tracer-ysyx2204
 // verilator
 #include "verilated.h"
 #include "verilated_vcd_c.h"
@@ -33,6 +37,10 @@
 #define CONFIG_NPC_MTRACE 1
 // #define CONFIG_NPC_DTRACE 1
 // #define CONFIG_NPC_ETRACE 1
+<<<<<<< HEAD
+=======
+#define CONFIG_NPC_CTRACE 1
+>>>>>>> tracer-ysyx2204
 
 
 // ================ CPU ===================
@@ -74,6 +82,11 @@ extern char mtrace_buf[SIZE_MTRACEBUF][100];
 extern int mtrace_count;
 void print_mtrace();
 
+<<<<<<< HEAD
+=======
+// ============= CTRACE ==============
+void print_ctrace();
+>>>>>>> tracer-ysyx2204
 
 // ============= REG ===================
 void dump_gpr(); // 打印寄存器

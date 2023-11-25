@@ -11,6 +11,7 @@ package ICACHE
 import chisel3._
 import chisel3.util._
 
+<<<<<<< HEAD
 import DPIC.pmem_read
 
 class IFU_ICACHE extends Bundle {
@@ -70,5 +71,146 @@ class ICACHE extends Module {
     }
     // 6. LRU: Least recently used
 
+=======
+import DPIC.pmem_read_Icacheline
+import DPIC.ctrace_icache
+
+class ICacheReq extends Bundle { val raddr = UInt(64.W) }
+class ICacheResp extends Bundle { val rdata = UInt(64.W) }
+
+class IFU_ICACHE extends Bundle {
+    val req  = Flipped(Valid(new ICacheReq)) // pc
+    val resp = Valid(new ICacheResp)         // inst
+}
+
+class ICACHE_Ctrl extends Bundle {
+    val icache_busy  = Output(Bool())         
+}
+
+class ICACHE extends Module {
+    val if_icache   = IO(new IFU_ICACHE)
+    val icache_ctrl = IO(new ICACHE_Ctrl)
+    // val icache_mem  = IO(new ICACHE_MEM_Output)
+
+    // 1. define ICache
+      // memory
+    val vMem    = RegInit(0.U(64.W))    // 64行，每行占一位
+    val tagMem  = Reg(Vec(64, UInt(52.W))) 
+    val dataMem = SyncReadMem(64, Vec(8, UInt(64.W)))
+    // val dataMem = Seq.fill(4)(SyncReadMem(64, Vec(2, UInt(8.W))))
+    
+    // wire
+    val raddr   = WireInit(0.U(64.W))
+    val ren     = WireInit(false.B)
+    raddr       := if_icache.req.bits.raddr
+    ren         := if_icache.req.valid
+    val tag     = raddr(63, 12)
+    val idx     = raddr(11, 6)
+    val offset  = raddr(5, 3)
+    val rdata   = WireInit(0.U(64.W))
+
+    // reg
+    // val raddr_reg   = RegInit(0.U(64.W))
+    // raddr_reg      := raddr
+    // val tag_reg     = raddr_reg(63, 12)
+    // val idx_reg     = raddr_reg(11, 6)
+    // val offset_reg  = raddr_reg(5, 3)
+
+
+    // 2. FSM
+    val sIdle :: sHit :: sMiss :: Nil = Enum(3)  
+    // 枚举状态名的首字母要小写，这样Scala的编译器才能识别成变量模式匹配 sIdle 00 sHit 01 sMiss 10
+    val state      = RegInit(sIdle)
+    val next_state = WireInit(sIdle)
+
+    val hit                 = WireInit(false.B)
+    val miss                = WireInit(false.B)
+    val rd_complete         = RegInit(false.B)
+    val reload_complete     = RegInit(false.B)
+
+    switch (state) {
+        is (sIdle) {
+            when (hit) {
+                next_state := sHit
+            }.elsewhen (miss) {
+                next_state := sMiss
+            }
+        }
+        is (sHit) {
+            when (hit) {
+                next_state := sHit
+            }.elsewhen (miss) {
+                next_state := sMiss
+            }.otherwise {
+                next_state := sIdle
+            }
+        }
+        is (sMiss) {
+            when (reload_complete) {
+                next_state := sHit
+            }.otherwise {
+                next_state := sMiss
+            }
+        }
+    }
+    state := next_state
+    
+    // 3. IDLE
+    hit  := ren && vMem(idx) && (tag === tagMem(idx)) 
+    miss := ren && (~vMem(idx) || (tag =/= tagMem(idx)))
+
+    // 4. HIT
+    if_icache.resp.valid      := state === sHit && hit
+    when (if_icache.resp.valid) {
+        if_icache.resp.bits.rdata := dataMem(idx)(offset)
+    }.otherwise {
+        if_icache.resp.bits.rdata := 0.U
+    } 
+
+    when (if_icache.resp.valid) {
+        rd_complete := 1.U
+    }.otherwise {
+        rd_complete := 0.U
+    }
+
+    // 5. MISS
+    // Read Allocate
+    val DPIC_pmem_read_Icacheline  = Module(new pmem_read_Icacheline())
+    val DPIC_ctrace_icache_record  = Module(new ctrace_icache())
+
+    when (ren && miss) {
+        DPIC_pmem_read_Icacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))
+        val writeAddress = idx
+        val writeData    = VecInit.tabulate(8)(i => DPIC_pmem_read_Icacheline.io.rdata(i))
+        dataMem.write(writeAddress, writeData)
+        // for (i <- 0 until 8) { dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)}
+        tagMem(idx)                             := tag
+
+        DPIC_ctrace_icache_record.io.idx               := idx
+        DPIC_ctrace_icache_record.io.tag               := tag
+        for (i <- 0 until 8) { DPIC_ctrace_icache_record.io.cacheline(i) := DPIC_pmem_read_Icacheline.io.rdata(i)}
+
+        reload_complete                         := 1.U
+    }.otherwise {
+        reload_complete                         := 0.U
+    }
+
+    when (reload_complete) {
+        vMem                                    := vMem.bitSet(idx, true.B) 
+    }
+
+    // 6. update 
+    // LRU: Least recently used
+
+    // 7. to ctrl
+    val icache_miss     = next_state === sMiss || state === sMiss
+    val icache_latency  = RegInit(false.B)  // 同步读写自带的一周期latency
+    when (next_state === sHit && ~icache_latency) {
+        icache_latency := 1.U
+    }.otherwise {
+        icache_latency := 0.U
+    }
+    icache_ctrl.icache_busy := icache_miss | icache_latency
+>>>>>>> tracer-ysyx2204
 }
 

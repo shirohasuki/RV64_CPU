@@ -108,7 +108,7 @@ extern "C" void ctrace_dcache_record(int set_idx, char way_idx, char dirty, char
     uint64_t* offset = NULL;
     offset = (uint64_t *)(((VerilatedDpiOpenVar*)cacheline) -> datap());
     for (int i = 0; i < 4; i++) {
-        dcache_buf[idx][4 + i] = offset[i]; 
+        dcache_buf[set_idx][way_idx][4 + i] = offset[i]; 
     }
 }
 
@@ -128,15 +128,15 @@ void print_ctrace() {
     }
     puts("\n========== DCache ");
     for (int set_idx = 0; set_idx < DCACHE_SETNUM; set_idx++) {
-        printf("Set %d  The Least Recently Used one is way %d\n", set_idx, dcache_buf[set_idx][0][2]);
+        printf("Set %lld  The Least Recently Used one is way %d\n", set_idx, dcache_buf[set_idx][0][2]);
         printf("idx  tag   ||======off0======||======off1======||======off2======||======off3======||======off4======||\n");
         for (int way_idx = 0; way_idx < DCACHE_WAYNUM; way_idx++) {
             if (dcache_buf[set_idx][way_idx][0] == 0) continue; // valid == 0
 
-            printf("%lld  %llx  ", way_idx, dcache_buf[set_idx][way_idx][3]); // idx和tag
+            printf("%d  %llx  ", way_idx, dcache_buf[set_idx][way_idx][3]); // idx和tag
 
             for (int offset = 0; offset < 4; offset++) {
-                printf("||%016llx", dcache_buf[way_idx][3 + offset]);
+                printf("||%016lln", dcache_buf[way_idx][3 + offset]);
                 printf((offset == 3) ? "||\n" : "");
             }
         }

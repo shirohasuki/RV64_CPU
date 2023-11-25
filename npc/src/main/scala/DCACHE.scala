@@ -13,6 +13,7 @@ import chisel3.util._
 
 import DPIC.pmem_read_Dcacheline
 import DPIC.pmem_write
+import DPIC.ctrace_dcache
 
 
 class EXU_DCACHE_Input extends Bundle{

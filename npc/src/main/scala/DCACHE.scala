@@ -36,8 +36,8 @@ class DCACHE extends Module {
     val dcache_ctrl = IO(new Bundle { val dcache_busy  = Output(Bool())})
 
 
-    val nSets = 16.U; // 组数:16组
-    val nWays =  8.U; // 路数:8路
+    val nSets = 16; // 组数:16组
+    val nWays =  8; // 路数:8路
 
     // 1. define DCache
     // memory

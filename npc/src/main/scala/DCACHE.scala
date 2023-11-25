@@ -45,8 +45,8 @@ class DCACHE extends Module {
     val dMem    = RegInit(VecInit(Seq.fill(nSets)(0.U(16.W))))                       // 16组，8行，每行占一位
     val ageMem  = RegInit(VecInit(Seq.fill(nSets)(0.U(7.W))))                        // 16组，三层age位
     val tagMem  = Reg(Vec(nSets, Vec(8, UInt(57.W))))             // 16组，8行tag 
-    val dataMem = Vec(nSets, (SyncReadMem(8, Vec(4, UInt(64.W))))) // 16组，8行,每行4个64位
-    
+    val dataMem = Seq.fill(nSets)(SyncReadMem(nWays, Vec(4, UInt(64.W)))) // 16组，8行,每行4个64位
+
     // wire
     val raddr   = ex_dcache.rd_req.bits.raddr
     val ren     = ex_dcache.rd_req.valid

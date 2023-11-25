@@ -108,11 +108,11 @@ class DCACHE extends Module {
     
     // 3. IDLE    
     when (ren) {
-        val indices = (0 until nWays).map(i => vMem(i) && tag === tagMem(i))
+        val indices = (0 until nWays).map(i => (vMem(i) && tag === tagMem(i)))
         val hitDetected = indices.exists(identity)
 
-        hit  := Mux(hitDetected, 1.U, 0.U)
-        miss := Mux(!hitDetected, 1.U, 0.U)
+        hit  := Mux(hitDetected.asUInt, 1.U, 0.U)
+        miss := Mux(~hitDetected.asUInt, 1.U, 0.U)
 
         way_idx := PriorityEncoderOH(VecInit(indices))
         

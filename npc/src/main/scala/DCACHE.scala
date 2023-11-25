@@ -52,7 +52,7 @@ class DCACHE extends Module {
     val ren     = ex_dcache.rd_req.valid
 
     val tag     = raddr(63, 9)
-    val set_idx = raddr(8, 5).asSInt.asInt
+    val set_idx : Int = raddr(8, 5)
     val way_idx = WireInit(0.U(3.W))
     val offset  = raddr(4, 3)
     val rdata   = WireInit(0.U(64.W))

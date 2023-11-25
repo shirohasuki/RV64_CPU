@@ -163,19 +163,19 @@ class DCACHE extends Module {
     ageMem(6) := Mux(way_idx > 3.U, 1.U, 0.U)
 
     ageMem(5) := Mux(ageMem(6) === 1.U, ageMem(5),  // 维持原值
-                    Mux(way_idx > 1, 1.U, 0.U))
+                    Mux(way_idx > 1.U, 1.U, 0.U))
     ageMem(4) := Mux(ageMem(6) === 0.U, ageMem(4),  // 维持原值
-                    Mux(way_idx > 5, 1.U, 0.U))
+                    Mux(way_idx > 5.U, 1.U, 0.U))
 
     ageMem(3) := Mux(ageMem(5) === 1.U, ageMem(3),  // 维持原值
-                    Mux(way_idx === 1, 1.U, 0.U))    
+                    Mux(way_idx === 1.U, 1.U, 0.U))    
     ageMem(2) := Mux(ageMem(5) === 0.U, ageMem(2),  // 维持原值
-                    Mux(way_idx === 3, 1.U, 0.U))
+                    Mux(way_idx === 3.U, 1.U, 0.U))
 
     ageMem(1) := Mux(ageMem(4) === 1.U, ageMem(3),  // 维持原值
-                    Mux(way_idx === 5, 1.U, 0.U))    
+                    Mux(way_idx === 5.U, 1.U, 0.U))    
     ageMem(0) := Mux(ageMem(4) === 0.U, ageMem(2),  // 维持原值
-                    Mux(way_idx === 7, 1.U, 0.U))
+                    Mux(way_idx === 7.U, 1.U, 0.U))
 
 
     // 6. WB

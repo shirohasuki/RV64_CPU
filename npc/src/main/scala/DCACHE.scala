@@ -142,7 +142,7 @@ class DCACHE extends Module {
         DPIC_pmem_read_Dcacheline.io.raddr      := Cat(raddr(63, 5), Fill(5, 0.U))
 
         when (full) {
-            for (i <- 0 until 4) { dataMem(set_idx)(ageMem)(i) := DPIC_pmem_read_Dcacheline.io.rdata(i)}
+            for (i <- 0 until 4) { dataMem(set_idx)(ageMem(set_idx))(i) := DPIC_pmem_read_Dcacheline.io.rdata(i)}
             tagMem(set_idx)(ageMem)                := tag
         }.otherwise {
             for (i <- 0 until 4) { dataMem(set_idx)(way_idx)(i)  := DPIC_pmem_read_Dcacheline.io.rdata(i)}
@@ -160,21 +160,21 @@ class DCACHE extends Module {
 
 
     // update 伪LRU 最终ageMem的值对应最近使用次数最少的那一行
-    ageMem(6) := Mux(way_idx > 3.U, 1.U, 0.U)
+    ageMem(set_idx)(6) := Mux(way_idx > 3.U, 1.U, 0.U)
 
-    ageMem(5) := Mux(ageMem(6) === 1.U, ageMem(5),  // 维持原值
+    ageMem(set_idx)(5) := Mux(ageMem(6) === 1.U, ageMem(5),  // 维持原值
                     Mux(way_idx > 1.U, 1.U, 0.U))
-    ageMem(4) := Mux(ageMem(6) === 0.U, ageMem(4),  // 维持原值
+    ageMem(set_idx)(4) := Mux(ageMem(6) === 0.U, ageMem(4),  // 维持原值
                     Mux(way_idx > 5.U, 1.U, 0.U))
 
-    ageMem(3) := Mux(ageMem(5) === 1.U, ageMem(3),  // 维持原值
+    ageMem(set_idx)(3) := Mux(ageMem(5) === 1.U, ageMem(3),  // 维持原值
                     Mux(way_idx === 1.U, 1.U, 0.U))    
-    ageMem(2) := Mux(ageMem(5) === 0.U, ageMem(2),  // 维持原值
+    ageMem(set_idx)(2) := Mux(ageMem(5) === 0.U, ageMem(2),  // 维持原值
                     Mux(way_idx === 3.U, 1.U, 0.U))
 
-    ageMem(1) := Mux(ageMem(4) === 1.U, ageMem(3),  // 维持原值
+    ageMem(set_idx)(1) := Mux(ageMem(4) === 1.U, ageMem(3),  // 维持原值
                     Mux(way_idx === 5.U, 1.U, 0.U))    
-    ageMem(0) := Mux(ageMem(4) === 0.U, ageMem(2),  // 维持原值
+    ageMem(set_idx)(0) := Mux(ageMem(4) === 0.U, ageMem(2),  // 维持原值
                     Mux(way_idx === 7.U, 1.U, 0.U))
 
 

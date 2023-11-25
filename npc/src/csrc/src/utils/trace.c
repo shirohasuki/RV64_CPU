@@ -81,7 +81,7 @@ void print_mtrace() {
 
 // ===================== CTRACE(Cache Trace) =========================
 ll icache_buf[SIZE_CTRACEBUF][11] = {0};   // v+idx+tag+data=1+1+1+8=11
-// ll dcache_buf[SIZE_CTRACEBUF][11] = {0};   // v+idx+tag+data=1+1+1+8=11
+// ll dcache_buf[SIZE_CTRACEBUF][11] = {0};   // v+d+age+tag+data=1+1+1+1+8=12
 
 extern "C" void ctrace_record(char idx, ll tag, const svOpenArrayHandle cacheline) {
     icache_buf[idx][0] = 1;

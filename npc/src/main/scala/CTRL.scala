@@ -94,25 +94,24 @@ class Ctrl extends Module {
 
 
     val jump          = ex_ctrl.typej_jump_en   // || ex_ctrl.intr_jump_en
-    val inst_load     = ex_ctrl.inst_isload 
+    // val inst_load     = ex_ctrl.inst_isload 
     val icache_busy   = icache_ctrl.icache_busy  
     val dcache_busy   = dcache_ctrl.dcache_busy  
     val load_data_hit = rename_ctrl.rs_id_ex_hit && ex_ctrl.inst_isload
-    val NOEVENT       = ~(jump | dcache_busy | inst_load | icache_busy | load_data_hit)
+    val NOEVENT       = ~(jump | dcache_busy |  icache_busy | load_data_hit)
 
     ctrl_pc.jump_addr := ex_ctrl.typej_jump_addr //| io.clint_ctrl.intr_jump_addr
     ctrl_pc.jump_en   := jump
 
     // 给事件进行优先编码
-    val event_code = PriorityEncoder(Cat(load_data_hit, dcache_busy, icache_busy, inst_load, jump, NOEVENT)) // 从低到高输出第一个有1的位数 0->NOEVENT
+    val event_code = PriorityEncoder(Cat(load_data_hit, icache_busy, dcache_busy, jump, NOEVENT)) // 从低到高输出第一个有1的位数 0->NOEVENT
 
     //  List(pc_stall_en, if_id_stall_en, id_ex_stall_en, ex_mem_stall_en, ex_wb_stall_en, mem_wb_stall_en)
     val stall_list  = ListLookup(event_code, List(false.B, false.B, false.B, false.B, false.B, false.B), Array(
-        BitPat("b010") -> List(true.B,  true.B,  false.B, false.B, false.B, false.B),   // inst_load
         BitPat("b000") -> List(false.B, false.B, false.B, false.B, false.B, false.B),   // Noevent
-        BitPat("b100") -> List(true.B,  true.B,  true.B,  false.B, false.B, false.B),   // dcache_busy
+        BitPat("b010") -> List(true.B,  true.B,  true.B,  false.B, false.B, false.B),   // dcache_busy
         BitPat("b011") -> List(true.B,  false.B, false.B, false.B, false.B, false.B),   // icache_busy
-        BitPat("b101") -> List(true.B,  true.B,  false.B, false.B, false.B, false.B)    // load_data_hit         
+        BitPat("b100") -> List(true.B,  true.B,  false.B, false.B, false.B, false.B)    // load_data_hit         
     ))
 
     ctrl_pc.pc_stall_en         := stall_list(0)
@@ -126,10 +125,9 @@ class Ctrl extends Module {
         //  List(pc_flush_en, if_id_flush_en, id_ex_flush_en, ex_mem_flush_en, ex_wb_flush_en, mem_wb_flush_en)
     val flush_list  = ListLookup(event_code, List(false.B, false.B, false.B, false.B, false.B, false.B), Array(
         BitPat("b001") -> List(false.B, true.B,  true.B,  true.B,  false.B, false.B),   // jump
-        BitPat("b010") -> List(false.B, false.B, true.B,  false.B, true.B,  false.B),   // inst_load
-        BitPat("b100") -> List(false.B, false.B, false.B, true.B,  false.B, false.B),   // dcache_busy
+        BitPat("b010") -> List(false.B, false.B, false.B, true.B,  true.B,  false.B),   // dcache_busy
         BitPat("b011") -> List(false.B, true.B,  false.B, false.B, false.B, false.B),   // icache_busy
-        BitPat("b101") -> List(false.B, false.B, true.B,  false.B, false.B, false.B),   // load_data_hit 
+        BitPat("b100") -> List(false.B, false.B, true.B,  false.B, false.B, false.B),   // load_data_hit 
         BitPat("b000") -> List(false.B, false.B, false.B, false.B, false.B, false.B)    // Noevent
     ))
 

@@ -1,3 +1,10 @@
+/*
+ * @File Name: main.cpp
+ * @Author: shiroha
+ * @Email: whmio0115@hainanu.edu.cn
+ * @Created Time: 2023-11-25 23:59:39
+ * @Description: 
+ */
 #include "npc.h"
 #include <utils/macro.h>
 #include <utils/debug.h>
@@ -22,7 +29,7 @@ NPCState npc_state;
 // bool diff_skip_ref_flag = false;
 int diff_skip_ref_flag = 0;
 
-int nemu_step; // 记录nemu一共走了多少步，出错时抛出，方便单步调试到周围 
+int nemu_step = 1; // 记录nemu一共走了多少步，出错时抛出，方便单步调试到周围 
 
 
 //================ SIM FUNCTION =====================//

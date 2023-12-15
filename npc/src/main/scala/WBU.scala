@@ -9,10 +9,11 @@
 package WBU
 
 import chisel3._
+import chisel3.util._
+
 
 class EXWB_WB_Input extends Bundle {
     val pc        = Input(UInt(64.W))
-    val mem_en    = Input(Bool())
     val rd_wdata  = Input(UInt(64.W))
     val rd_waddr  = Input(UInt(64.W))
     val rd_wen    = Input(Bool())
@@ -20,7 +21,6 @@ class EXWB_WB_Input extends Bundle {
 
 class MEMWB_WB_Input extends Bundle {
     val pc          = Input(UInt(64.W))
-    val mem_en      = Input(Bool())
     val rd_wdata    = Input(UInt(64.W))
     val rd_waddr    = Input(UInt(64.W))
     val rd_wen      = Input(Bool())
@@ -40,21 +40,21 @@ class WBU_Rename_Output extends Bundle {
 }
 
 class WBU extends Module {
-    val exwb_wb     = IO(new EXWB_WB_Input())
-    val memwb_wb    = IO(new MEMWB_WB_Input())
-    val wb_reg      = IO(new WBU_RegFile_Output())
-    val wb_rename   = IO(new WBU_Rename_Output())
+    val exwb_wb     = IO(Flipped(Valid(new EXWB_WB_Input)))
+    val memwb_wb    = IO(Flipped(Valid(new MEMWB_WB_Input)))
+    val wb_reg      = IO(new WBU_RegFile_Output)
+    val wb_rename   = IO(new WBU_Rename_Output)
 
-    when (memwb_wb.mem_en) {
-        wb_reg.pc       := memwb_wb.pc       
-        wb_reg.rd_wdata := memwb_wb.rd_wdata 
-        wb_reg.rd_waddr := memwb_wb.rd_waddr 
-        wb_reg.rd_wen   := memwb_wb.rd_wen   
+    when (memwb_wb.valid) {
+        wb_reg.pc       := memwb_wb.bits.pc       
+        wb_reg.rd_wdata := memwb_wb.bits.rd_wdata 
+        wb_reg.rd_waddr := memwb_wb.bits.rd_waddr 
+        wb_reg.rd_wen   := memwb_wb.bits.rd_wen   
     }.otherwise {
-        wb_reg.pc       := exwb_wb.pc      
-        wb_reg.rd_wdata := exwb_wb.rd_wdata
-        wb_reg.rd_waddr := exwb_wb.rd_waddr
-        wb_reg.rd_wen   := exwb_wb.rd_wen  
+        wb_reg.pc       := exwb_wb.bits.pc      
+        wb_reg.rd_wdata := exwb_wb.bits.rd_wdata
+        wb_reg.rd_waddr := exwb_wb.bits.rd_waddr
+        wb_reg.rd_wen   := exwb_wb.bits.rd_wen  
     } 
     // wb_reg <> exwb_wb
 

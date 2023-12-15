@@ -67,8 +67,9 @@ static int sdb_exec_once(int step) {
         // dump_gpr(); // 打印通用寄存器
         // dump_csr(); // 打印异常寄存器
         npc_exec_once();
+        // IFDEF(CONFIG_NPC_CTRACE, print_ctrace());
 #ifdef CONFIG_NPC_ITRACE
-		printf("%s\n", ringbuf[ringptr]);
+		printf("step %4d  %s\n", nemu_step, ringbuf[ringptr]);
 #endif
 
 #ifdef CONFIG_NPC_DIFFTEST

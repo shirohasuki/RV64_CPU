@@ -168,13 +168,17 @@ extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
 }
 
 
-extern "C" void pmem_write_Dcacheline(ll waddr, ll wdata) {
+extern "C" void pmem_write_Dcacheline(ll waddr, const svBitVecVal wdata[8]) {
     if (waddr < MEM_BASE) { return ; } 
+    uint64_t wdata_array[4];  
+    for (int i = 0; i < 3; i++) {
+        wdata_array[i] = ((uint64_t)wdata[i*2+1] << 32) | wdata[i*2]; 
+    }
     uint8_t *pt = cpu2mem(waddr);
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 8; j++) {
-            *pt++ = wdata;
-            wdata >>= 8;
+            *pt++ = wdata_array[i];
+            wdata_array[i] >>= 8;
         }
     }
     return ;

@@ -271,6 +271,46 @@ class pmem_write extends BlackBox with HasBlackBoxInline {
     """.stripMargin)
 }
 
+class pmem_write_Dcacheline extends BlackBox with HasBlackBoxInline {
+    val io = IO(new Bundle{
+        val wen    = Input(Bool()) 
+        val waddr  = Input(UInt(64.W)) 
+        val wdata  = Input(Vec(4, UInt(64.W)))
+    })
+    setInline("pmem_write_Dcacheline.v",
+    """
+    |import "DPI-C" function void pmem_write_Dcacheline( input longint waddr, input bit [31:0] wdata[8]);
+    |module pmem_write_Dcacheline (
+    |   input        wen,
+    |   input [63:0] waddr,
+    |   input [63:0] wdata_0,
+    |   input [63:0] wdata_1,
+    |   input [63:0] wdata_2,
+    |   input [63:0] wdata_3
+    |);
+    |
+    |   bit [31:0] wdata[8];
+    |   
+    |   assign wdata[0] = wdata_0[31:  0];   
+    |   assign wdata[1] = wdata_0[63: 32];   
+    |   assign wdata[2] = wdata_1[31:  0];   
+    |   assign wdata[3] = wdata_1[63: 32];
+    |   assign wdata[4] = wdata_2[31:  0];   
+    |   assign wdata[5] = wdata_2[63: 32];   
+    |   assign wdata[6] = wdata_3[31:  0];   
+    |   assign wdata[7] = wdata_3[63: 32];      
+    |
+    |   always @(*) begin
+    |       if (wen) begin
+    |           pmem_write_Dcacheline(waddr, wdata); 
+    |       end
+    |   end
+    |
+    |endmodule
+    """.stripMargin)
+}
+
+
 class ctrace_icache extends BlackBox with HasBlackBoxInline {
     val io = IO(new Bundle{
         val idx  = Input(UInt(6.W))
@@ -323,18 +363,20 @@ class ctrace_dcache extends BlackBox with HasBlackBoxInline {
         val set_idx  = Input(UInt(4.W))
         val way_idx  = Input(UInt(3.W))
         val age      = Input(UInt(7.W))
+        val dirty    = Input(UInt(8.W))
         val tag      = Input(UInt(55.W))
-        val cacheline  = Input(Vec(4, UInt(64.W)))
+        val cacheline= Input(Vec(4, UInt(64.W)))
     })
     setInline("ctrace_dcache.v",
     """
-    |import "DPI-C" function void ctrace_dcache_record(input byte set_idx, input byte way_idx, input byte age, input longint tag, input logic [63:0] cacheline[]);
+    |import "DPI-C" function void ctrace_dcache_record(input byte set_idx, input byte way_idx, input byte age, input byte dirty, input longint tag, input logic [63:0] cacheline[]);
     |
     |module ctrace_dcache (
     |   input  [3:0]  set_idx,
     |   input  [2:0]  way_idx,
     |   input  [6:0]  age,
     |   input  [54:0] tag,
+    |   input  [7:0]  dirty,
     |   input  [63:0] cacheline_0,
     |   input  [63:0] cacheline_1,
     |   input  [63:0] cacheline_2,
@@ -361,7 +403,7 @@ class ctrace_dcache extends BlackBox with HasBlackBoxInline {
     |   assign cacheline[3] = cacheline_3;
     |
     |   always @(*) begin
-    |       ctrace_dcache_record(set_idx_to_byte, way_idx_to_byte, age_to_byte, tag_to_longint, cacheline); 
+    |       ctrace_dcache_record(set_idx_to_byte, way_idx_to_byte, age_to_byte, dirty, tag_to_longint, cacheline); 
     |   end
     |
     |endmodule

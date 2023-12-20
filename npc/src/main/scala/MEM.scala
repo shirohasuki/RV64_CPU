@@ -47,7 +47,7 @@ class MEM extends Module {
     val exmem_mem  = IO(Flipped(Valid(new EXMEM_MEM_Input)))
     val dcache_mem = IO(new DCACHE_MEM_Input)
     val mem_memwb  = IO(Valid(new MEM_MEMWB_Output))
-    val mem_rename = IO(new MEM_Rename_Output)
+    val mem_bypass = IO(new MEM_Rename_Output)
 
     val rd_wdata        = WireInit(0.U(64.W))
     val dcache_rdata    = RegInit(0.U(64.W))
@@ -82,8 +82,8 @@ class MEM extends Module {
     mem_memwb.bits.rd_wdata      := Mux(exmem_mem.valid, rd_wdata,          0.U)
     mem_memwb.bits.rd_waddr      := Mux(exmem_mem.valid, exmem_mem.bits.rd_waddr, 0.U)       
     mem_memwb.bits.rd_wen        := Mux(exmem_mem.valid, exmem_mem.valid,   0.U)
-    // to rename
-    mem_rename.rd_wdata      := rd_wdata
-    mem_rename.rd_waddr      := mem_memwb.bits.rd_waddr   
-    mem_rename.rd_wen        := mem_memwb.valid  // 只要是load指令，就会写寄存器
+    // to bypass
+    mem_bypass.rd_wdata      := rd_wdata
+    mem_bypass.rd_waddr      := mem_memwb.bits.rd_waddr   
+    mem_bypass.rd_wen        := mem_memwb.valid  // 只要是load指令，就会写寄存器
 }

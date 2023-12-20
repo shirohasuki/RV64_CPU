@@ -134,22 +134,22 @@ object MACRO {
 
     // ============== intr  ===============
     // val INST_FENCE  7'b0001111
-    // val INST_ECALL  32'h73
+    val INST_ECALL   = "h73".U(32.W)
     val INST_EBREAK  = "h00100073".U(32.W)
-    // val INST_MRET   32'h30200073
+    val INST_MRET    = "h30200073".U(32.W)
 
-    // val INST_TYPE_INTR 7'b1110011
-    // val INST_CSRRW        3'b001
-    // val INST_CSRRS        3'b010
-    // val INST_CSRRC        3'b011
-    // val INST_CSRRWI       3'b101
-    // val INST_CSRRSI       3'b110
-    // val INST_CSRRCI       3'b111
+    val INST_TYPE_INTR = BitPat("b1110011")
+    val INST_CSRRW     = BitPat("b001")
+    val INST_CSRRS     = BitPat("b010")
+    val INST_CSRRC     = BitPat("b011")
+    val INST_CSRRWI    = BitPat("b101")
+    val INST_CSRRSI    = BitPat("b110")
+    val INST_CSRRCI    = BitPat("b111")
 
-    // val CSR_MSTATUS   12'h300
-    // val CSR_MTVEC     12'h305
-    // val CSR_MEPC      12'h341
-    // val CSR_MCAUSE    12'h342
+    val CSR_MSTATUS  = "h300".U(12.W)
+    val CSR_MTVEC    = "h305".U(12.W)
+    val CSR_MEPC     = "h341".U(12.W)
+    val CSR_MCAUSE   = "h342".U(12.W)
 
     // // val CSR_MIP       12'h344
     // // val CSR_MTIME     12'h

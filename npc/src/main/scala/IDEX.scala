@@ -29,6 +29,8 @@ class IDEX_Input extends Bundle {
     val opcode      = Input(UInt(7.W))
     val func3       = Input(UInt(3.W))
     val func7       = Input(UInt(7.W))
+    val csr_wen     = Input(Bool())
+    val csr_waddr   = Input(UInt(12.W))
 }
 
 class IDEX extends Module {  
@@ -47,4 +49,6 @@ class IDEX extends Module {
     idex_ex.opcode      := dff_set(ctrl_idex.idex_flush_en, ctrl_idex.idex_stall_en, 7.U,   0.U(7.W),  id_idex.opcode     )
     idex_ex.func3       := dff_set(ctrl_idex.idex_flush_en, ctrl_idex.idex_stall_en, 3.U,   0.U(3.W),  id_idex.func3      )
     idex_ex.func7       := dff_set(ctrl_idex.idex_flush_en, ctrl_idex.idex_stall_en, 7.U,   0.U(7.W),  id_idex.func7      )
+    idex_ex.csr_wen     := dff_set(ctrl_idex.idex_flush_en, ctrl_idex.idex_stall_en, 1.U,   0.U(1.W),  id_idex.csr_wen    )
+    idex_ex.csr_waddr   := dff_set(ctrl_idex.idex_flush_en, ctrl_idex.idex_stall_en, 12.U,  0.U(12.W), id_idex.csr_waddr  )
 }

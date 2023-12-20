@@ -28,6 +28,8 @@ class IDEX_EXU_Input extends Bundle {
     val opcode      = Input(UInt(7.W))
     val func3       = Input(UInt(3.W))
     val func7       = Input(UInt(7.W))
+    val csr_wen     = Input(Bool())
+    val csr_waddr   = Input(UInt(12.W))
 }
 
 class EXU_EXMEM_Output extends Bundle {
@@ -39,11 +41,15 @@ class EXU_EXMEM_Output extends Bundle {
 }
 
 class EXU_EXWB_Output extends Bundle {
-    val pc        = Output(UInt(64.W))
-    val rd_wdata  = Output(UInt(64.W))
-    val rd_waddr  = Output(UInt(64.W))
-    val rd_wen    = Output(Bool())
+    val pc         = Output(UInt(64.W))
+    val rd_wdata   = Output(UInt(64.W))
+    val rd_waddr   = Output(UInt(5.W))
+    val rd_wen     = Output(Bool())
+    val csr_wdata  = Output(UInt(64.W))
+    val csr_waddr  = Output(UInt(12.W))
+    val csr_wen    = Output(Bool())
 }
+
 class EXU_CTRL_Output extends Bundle {
     val inst_isload     = Output(Bool())
     val inst_isstore    = Output(Bool())
@@ -51,12 +57,11 @@ class EXU_CTRL_Output extends Bundle {
     val typej_jump_addr = Output(UInt(64.W))
 }
 
-class EXU_Rename_Output extends Bundle {
+class EXU_Bypass_Output extends Bundle {
     val rd_wen         = Output(Bool())
     val rd_waddr       = Output(UInt(64.W))
     val rd_wdata       = Output(UInt(64.W))
 }
-
 
 class DCache_Rd_Req extends Bundle { 
     val raddr = UInt(64.W) 
@@ -79,7 +84,7 @@ class EXU extends Module {
     val ex_exwb     = IO(Valid(new EXU_EXWB_Output))
     val ex_exmem    = IO(Valid(new EXU_EXMEM_Output))
     val ex_ctrl     = IO(new EXU_CTRL_Output)
-    val ex_rename   = IO(new EXU_Rename_Output)
+    val ex_bypass   = IO(new EXU_Bypass_Output)
     
     val ALU = Module(new ALU())
     idex_ex         <>  ALU.ex_al // ???,奇了怪了怎么相同方向信号反而又可以了,我觉得可能是内部子单元连线方向一致
@@ -93,6 +98,9 @@ class EXU extends Module {
     ex_exwb.bits.rd_wen      := ALU.al_ex.rd_wen  
     ex_exwb.bits.rd_waddr    := ALU.al_ex.rd_waddr
     ex_exwb.bits.rd_wdata    := ALU.al_ex.rd_wdata
+    ex_exwb.bits.csr_wen     := ALU.al_ex.csr_wen  
+    ex_exwb.bits.csr_waddr   := ALU.al_ex.csr_waddr
+    ex_exwb.bits.csr_wdata   := ALU.al_ex.csr_wdata
 
     // ex to exmem 
     ex_exmem.valid            := ALU.al_ex.inst_isload
@@ -101,10 +109,10 @@ class EXU extends Module {
     ex_exmem.bits.rd_waddr    := ALU.al_ex.rd_waddr
     ex_exmem.bits.rd_wen      := ALU.al_ex.rd_wen  
 
-    // ex to rename
-    ex_rename.rd_wen      := ALU.al_ex.rd_wen
-    ex_rename.rd_waddr    := ALU.al_ex.rd_waddr
-    ex_rename.rd_wdata    := ALU.al_ex.rd_wdata
+    // ex to bypass
+    ex_bypass.rd_wen      := ALU.al_ex.rd_wen
+    ex_bypass.rd_waddr    := ALU.al_ex.rd_waddr
+    ex_bypass.rd_wdata    := ALU.al_ex.rd_wdata
     
     // ex to ctrl 
     ex_ctrl.inst_isload      := ALU.al_ex.inst_isload

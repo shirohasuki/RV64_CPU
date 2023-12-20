@@ -54,16 +54,8 @@ class DCACHE extends Module {
     val tagMem  = Reg(Vec(16, (Vec(8, UInt(55.W)))))   // 16组，8行tag 
     val dataMem = Reg(Vec(16, (Vec(8, (Vec(4, UInt(64.W))))))) // 16组，8行,每行4个64位
 
-    // Reg
-    // val ren_reg     = RegInit(false.B)
-    // val wen_reg     = RegInit(false.B)    
-
     // wire
     val raddr   = ex_dcache.rd_req.bits.raddr
-    // val ren     = WireInit(false.B)
-    // val wen     = WireInit(false.B)    
-    // ren         := ex_dcache.rd_req.valid | ren_reg
-    // wen         := ex_dcache.wr_req.valid | wen_reg
     val ren     = ex_dcache.rd_req.valid 
     val wen     = ex_dcache.wr_req.valid 
     val waddr   = ex_dcache.wr_req.bits.waddr
@@ -89,11 +81,6 @@ class DCACHE extends Module {
     val rd_complete     = RegInit(false.B)
     val reload_complete = RegInit(false.B)
     val wb_complete     = RegInit(false.B)
-
-    // ren_reg := Mux(ex_dcache.rd_req.valid, true.B, 
-    //                 Mux(state === sHit, false.B, ren_reg))
-    // wen_reg := Mux(ex_dcache.wr_req.valid, true.B, 
-    //                 Mux(state === sHit, false.B, wen_reg))
 
 
     switch (state) {
@@ -282,7 +269,7 @@ class DCACHE extends Module {
     when (ren || wen) {
         DPIC_ctrace_dcache_record.io.set_idx        := set_idx
         DPIC_ctrace_dcache_record.io.way_idx        := way_idx
-        DPIC_ctrace_dcache_record.io.age            := lru_line//ageMem(set_idx)
+        DPIC_ctrace_dcache_record.io.age            := lru_line // ageMem(set_idx)
         DPIC_ctrace_dcache_record.io.dirty          := dMem(set_idx)
         DPIC_ctrace_dcache_record.io.tag            := tag
         when (ren) { for (i <- 0 until 4) { DPIC_ctrace_dcache_record.io.cacheline(i) := DPIC_pmem_read_Dcacheline.io.rdata(i)}} 

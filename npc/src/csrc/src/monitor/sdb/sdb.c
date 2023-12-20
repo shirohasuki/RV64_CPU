@@ -62,23 +62,22 @@ extern  char ringbuf[SIZE_RINGBUF][LEN_RINGBUF];
 
 static int sdb_exec_once(int step) {
     while(step--) {
-		// printf("npc.pc = %lx\n", cpu_npc.pc); 
-		// printf("nemu.pc = %lx\n", cpu_nemu.pc); 
         // dump_gpr(); // 打印通用寄存器
         // dump_csr(); // 打印异常寄存器
         npc_exec_once();
+        IFDEF(CONFIG_NPC_DEVICE, device_update());
         // IFDEF(CONFIG_NPC_CTRACE, print_ctrace());
 #ifdef CONFIG_NPC_ITRACE
-		printf("step %4d  %s\n", nemu_step, ringbuf[ringptr]);
+		// printf("step %4d  %s\n", nemu_step, ringbuf[ringptr]);
 #endif
-
-#ifdef CONFIG_NPC_DIFFTEST
-        while (cpu_npc.pc == 0x0) {
+		while (cpu_npc.pc == 0x0) {
             npc_exec_once();   
         } // EX被冲刷以后，pc再走几拍
+#ifdef CONFIG_NPC_DIFFTEST
+		// printf("npc.pc = %lx, nemu.pc = %lx\n", cpu_npc.pc, cpu_nemu.pc);
         difftest_exec_once();
-		nemu_step++;
 #endif
+		nemu_step++;
     }
     return 0;
 }

@@ -74,6 +74,7 @@ void difftest_exec_once() {
     if (diff_skip_ref_flag) {
         // to skip the checking of an instruction, just copy the reg state to reference design
         // Log("diff_skip_ref_flag = %d", diff_skip_ref_flag);
+        printf("here\n");
         ref_difftest_regcpy(&cpu_npc, DIFFTEST_TO_REF); // `direction`为`DIFFTEST_TO_REF`时, 设置REF的寄存器状态为`dut`;
 
         // ref_difftest_regcpy(&cpu_nemu, DIFFTEST_TO_DUT);

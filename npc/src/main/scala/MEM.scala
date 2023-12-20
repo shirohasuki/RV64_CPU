@@ -43,29 +43,24 @@ class MEM_Rename_Output extends Bundle {
     val rd_wdata       = Output(UInt(64.W))
 }
 
+class LSU_MEM_Input extends Bundle{
+    val interface_rdata  = Flipped(Valid(new Bundle { val rdata = UInt(64.W)}))
+}  // interface
+
 class MEM extends Module {
     val exmem_mem  = IO(Flipped(Valid(new EXMEM_MEM_Input)))
     val dcache_mem = IO(new DCACHE_MEM_Input)
     val mem_memwb  = IO(Valid(new MEM_MEMWB_Output))
     val mem_bypass = IO(new MEM_Rename_Output)
+    
+    val ls_mem_i     = IO(new LSU_MEM_Input) // interface visit
+
 
     val rd_wdata        = WireInit(0.U(64.W))
     val dcache_rdata    = RegInit(0.U(64.W))
 
-    // dcache_rdata := MuxLookup(dcache_mem.resp.bits.offsetbit, 0.U, Seq(
-    //     0.U -> dcache_mem.resp.bits.rdata(63, 0),
-    //     1.U -> ZEXT(dcache_mem.resp.bits.rdata(63, 1*8)),
-    //     2.U -> ZEXT(dcache_mem.resp.bits.rdata(63, 2*8)),
-    //     3.U -> ZEXT(dcache_mem.resp.bits.rdata(63, 3*8)),
-    //     4.U -> ZEXT(dcache_mem.resp.bits.rdata(63, 4*8)),
-    //     5.U -> ZEXT(dcache_mem.resp.bits.rdata(63, 5*8)),
-    //     6.U -> ZEXT(dcache_mem.resp.bits.rdata(63, 6*8)),
-    //     7.U -> ZEXT(dcache_mem.resp.bits.rdata(63, 7*8))
-    // )) // TODO:B溃了位数不给用UInt, 怎么改写哇
-
-    dcache_rdata := dcache_mem.resp.bits.rdata
-
-    rd_wdata    :=  MuxCase(0.U, Seq(  
+    dcache_rdata := dcache_mem.resp.bits.rdata | (ls_mem_i.interface_rdata.valid & ls_mem_i.interface_rdata.bits.rdata)
+    rd_wdata     :=  MuxCase(0.U, Seq(  
         (exmem_mem.bits.func3 === INST_LB )  ->  SEXT(dcache_rdata(7, 0)),
         (exmem_mem.bits.func3 === INST_LH )  ->  SEXT(dcache_rdata(15, 0)),
         (exmem_mem.bits.func3 === INST_LW )  ->  SEXT(dcache_rdata(31, 0)),
@@ -75,13 +70,12 @@ class MEM extends Module {
         (exmem_mem.bits.func3 === INST_LWU)  ->  ZEXT(dcache_rdata(31, 0))
     )) // load
 
-
     // to mem_memwb
-    mem_memwb.valid              := exmem_mem.valid
-    mem_memwb.bits.pc            := Mux(exmem_mem.valid, exmem_mem.bits.pc, 0.U)
-    mem_memwb.bits.rd_wdata      := Mux(exmem_mem.valid, rd_wdata,          0.U)
-    mem_memwb.bits.rd_waddr      := Mux(exmem_mem.valid, exmem_mem.bits.rd_waddr, 0.U)       
-    mem_memwb.bits.rd_wen        := Mux(exmem_mem.valid, exmem_mem.valid,   0.U)
+    mem_memwb.valid              := exmem_mem.valid | ls_mem_i.interface_rdata.valid
+    mem_memwb.bits.pc            := Mux(mem_memwb.valid, exmem_mem.bits.pc, 0.U)
+    mem_memwb.bits.rd_wdata      := Mux(mem_memwb.valid, rd_wdata,          0.U)
+    mem_memwb.bits.rd_waddr      := Mux(mem_memwb.valid, exmem_mem.bits.rd_waddr, 0.U)       
+    mem_memwb.bits.rd_wen        := Mux(mem_memwb.valid, exmem_mem.valid,   0.U)
     // to bypass
     mem_bypass.rd_wdata      := rd_wdata
     mem_bypass.rd_waddr      := mem_memwb.bits.rd_waddr   

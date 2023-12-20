@@ -1,3 +1,4 @@
+
 #include <device/map.h>
 #include <common.h>
 #include <utils/debug.h>
@@ -31,6 +32,7 @@ word_t mmio_read(paddr_t addr, int len) {
 }
 
 void mmio_write(paddr_t addr, int len, word_t data) {
+    // printf("MMIO:HERE2");
     // if (addr == 0xa103fefc) { printf("catch\n");}
     // if (addr == 0xa103ff00) { printf("catch\n");} 
     map_write(addr, len, data, fetch_mmio_map(addr));

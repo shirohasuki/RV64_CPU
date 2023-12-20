@@ -1,3 +1,10 @@
+/*
+ * @File Name: device.c
+ * @Author: shiroha
+ * @Email: whmio0115@hainanu.edu.cn
+ * @Created Time: 2023-11-25 23:59:39
+ * @Description: 
+ */
 #include <common.h>
 #include <utils/macro.h>
 #include <device/alarm.h>
@@ -71,7 +78,6 @@ void init_device() {
     init_map();
 
     IFDEF(NPC_HAS_SERIAL, init_serial());
-
     IFDEF(NPC_HAS_TIMER, init_timer());
     IFDEF(NPC_HAS_VGA, init_vga());
     IFDEF(NPC_HAS_KBD, init_i8042());

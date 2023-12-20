@@ -27,7 +27,6 @@ static inline int find_mapid_by_addr(IOMap *maps, int size, paddr_t addr) {
             diff_skip_ref_flag = 2; // skip the difftest check, copy DUT regs to REF
             // printf("skip, mapid = %d\n", i);
 #endif 
-
             return i;
         }
     }

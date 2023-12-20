@@ -75,6 +75,7 @@ class CORE extends Module {
     val IDClint  = Module(new IDClint)
     val CLINT    = Module(new CLINT)
     val DCACHE   = Module(new DCACHE)
+    // val LSU      = Module(new LSU)
     val EXMEM    = Module(new EXMEM)
     val MEM      = Module(new MEM)
     val EXWB     = Module(new EXWB)
@@ -118,6 +119,7 @@ class CORE extends Module {
     EXU.ex_dcache       <> DCACHE.ex_dcache
     DCACHE.dcache_ctrl  <> CTRL.dcache_ctrl
     DCACHE.dcache_mem   <> MEM.dcache_mem   
+    EXU.ls_mem_o        <> MEM.ls_mem_i   
     WBU.wb_reg          <> RegFile.wb_reg
     WBU.wb_csr          <> CSRS.wb_csr
     CLINT.clint_csr_o   <> CSRS.clint_csr_i

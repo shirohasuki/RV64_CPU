@@ -78,6 +78,10 @@ class EXU_DCACHE_Output extends Bundle{
     val wr_req  = Valid(new DCache_Wr_Req) 
 }
 
+class LSU_MEM_Output extends Bundle{
+    val interface_rdata  = Valid(new Bundle { val rdata = UInt(64.W)}) 
+}  // interface
+
 class EXU extends Module {
     val idex_ex     = IO(new IDEX_EXU_Input) 
     val ex_dcache   = IO(new EXU_DCACHE_Output) 
@@ -85,15 +89,19 @@ class EXU extends Module {
     val ex_exmem    = IO(Valid(new EXU_EXMEM_Output))
     val ex_ctrl     = IO(new EXU_CTRL_Output)
     val ex_bypass   = IO(new EXU_Bypass_Output)
+
+    val ls_mem_o    = IO(new LSU_MEM_Output)
+
     
-    val ALU = Module(new ALU())
+    val ALU = Module(new ALU)
     idex_ex         <>  ALU.ex_al // ???,奇了怪了怎么相同方向信号反而又可以了,我觉得可能是内部子单元连线方向一致
 
-    val LSU = Module(new LSU())
+    val LSU = Module(new LSU)
     ALU.al_ls       <>  LSU.al_ls
+    ls_mem_o        <>  LSU.ls_mem_o
 
     // ex to exwb 
-    ex_exwb.valid            := ~ALU.al_ex.inst_isload
+    ex_exwb.valid            := ~ALU.al_ex.inst_isload 
     ex_exwb.bits.pc          := idex_ex.pc
     ex_exwb.bits.rd_wen      := ALU.al_ex.rd_wen  
     ex_exwb.bits.rd_waddr    := ALU.al_ex.rd_waddr

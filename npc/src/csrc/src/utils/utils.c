@@ -40,11 +40,11 @@ extern "C" void get_gprs(const svOpenArrayHandle r) {
     for (int i = 0; i < 32; i++) { cpu_npc.gpr[i] = cpu_gpr[i];}
 }
 
-// extern "C" void get_csrs(const svOpenArrayHandle r) {
-//     cpu_csr = (uint64_t *)(((VerilatedDpiOpenVar*)r) -> datap());
-//     // give csrs to CPU status
-//     for (int i = 0; i < 4; i++) { cpu_npc.csr[i] = cpu_csr[i];}
-// }
+extern "C" void get_csrs(const svOpenArrayHandle r) {
+    cpu_csr = (uint64_t *)(((VerilatedDpiOpenVar*)r) -> datap());
+    // give csrs to CPU status
+    for (int i = 0; i < 4; i++) { cpu_npc.csr[i] = cpu_csr[i];}
+}
 
 
 // 一个输出RTL中通用寄存器的值的示例
@@ -72,8 +72,8 @@ void npc_exit(int status) {
         IFDEF(CONFIG_NPC_MTRACE, print_mtrace());
         IFDEF(CONFIG_NPC_CTRACE, print_ctrace());
         IFDEF(CONFIG_NPC_GPRTRACE, dump_gpr());
+        IFDEF(CONFIG_NPC_GPRTRACE, dump_csr());
 	    printf(ASNI_FMT("NPC meets error at step %d\n", ASNI_FG_BLUE), nemu_step);
-        // IFDEF(CONFIG_NPC_GPRTRACE, dump_csr());
         printf(ASNI_FMT("[Sim Result]: HIT BAD TRAP\n", ASNI_FG_RED));
     }
     sim_exit();

@@ -115,6 +115,31 @@ class getPc extends BlackBox with HasBlackBoxInline {
     """.stripMargin)
 }
 
+class getCsrs extends BlackBox with HasBlackBoxInline {
+    val io = IO(new Bundle{val csrs = Input(Vec(4, UInt(64.W)))})
+    setInline("getCsrs.v",
+    """
+    |import "DPI-C" function void get_csrs(input logic [3:0] csrs[]);
+    |module getCsrs (
+    |   input [63:0] csrs_0,
+    |   input [63:0] csrs_1,
+    |   input [63:0] csrs_2,
+    |   input [63:0] csrs_3
+    |);
+    |   wire [63:0] csrs[32];
+    |   assign csrs[0] = csrs_0;
+    |   assign csrs[1] = csrs_1;
+    |   assign csrs[2] = csrs_2;
+    |   assign csrs[3] = csrs_3;
+    |
+    |   always @(*) begin
+    |       get_csrs(csrs);
+    |   end
+    |
+    |endmodule
+    """.stripMargin)
+}
+
 class mtrace extends BlackBox with HasBlackBoxInline {
     val io = IO(new Bundle{
         val ren  = Input(Bool())
@@ -251,20 +276,24 @@ class pmem_read_Dcacheline extends BlackBox with HasBlackBoxInline {
 
 class pmem_write extends BlackBox with HasBlackBoxInline {
     val io = IO(new Bundle{
+        val wen    = Input(UInt(1.W)) 
         val waddr  = Input(UInt(64.W)) 
         val wdata  = Input(UInt(64.W)) 
         val wmask  = Input(UInt(8.W)) 
     })
     setInline("pmem_write.v",
     """
-    |import "DPI-C" function void pmem_write( input longint waddr, input longint wdata, input byte mask);
+    |import "DPI-C" function void pmem_write(input bit wen, input longint waddr, input longint wdata, input byte mask);
     |module pmem_write (
+    |   input wen,
     |   input [63:0] waddr,
     |   input [63:0] wdata,
     |   input [7:0] wmask
     |);
+    |   
+    |
     |   always @(*) begin
-    |       pmem_write(waddr, wdata, wmask); 
+    |       pmem_write(wen, waddr, wdata, wmask); 
     |   end
     |
     |endmodule

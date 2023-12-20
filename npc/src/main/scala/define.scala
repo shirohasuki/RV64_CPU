@@ -29,7 +29,8 @@ object function {
 // }
 
 object MACRO {
-        // I type inst
+    val DEVICE_BASE = "ha0000000".U
+    // I type inst
     val INST_TYPE_I = BitPat("b0010011")
     val INST_ADDI   = BitPat("b000")
     val INST_SLTI   = BitPat("b010")

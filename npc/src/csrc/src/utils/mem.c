@@ -22,7 +22,6 @@ uint8_t* cpu2mem(ll addr) {
 }
 
 extern "C" void pmem_read(ll raddr, ll *rdata) {
-    /*
     if (RTC_MMIO <= raddr && raddr <= RTC_MMIO + 8) { 
         if (cpu_npc.pc != 0) { rtc = mmio_read(raddr, 8); } // 判断不要多次执行 
         if (raddr == RTC_MMIO) { 
@@ -34,7 +33,6 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
     sprintf(mtrace_buf[mtrace_count], "read:  addr:%016llx data:%016llx", raddr, (*rdata));
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
 #endif
-        // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
         return ; 
     } // 时钟
 
@@ -45,7 +43,6 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
     sprintf(mtrace_buf[mtrace_count], "read:  addr:%016llx data:%016llx", raddr, (*rdata));
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
 #endif
-        // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
         return ; 
     } // 键盘
 
@@ -55,13 +52,12 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
         *rdata = vgactl;
         return ;
     }      
-    if (raddr < MEM_BASE) {
-        printf("[pmem_read]  raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
-        return ;
-    }
-  
-    Printf("[pmem_read] Invalid Read Mem, raddr is:%llx\n", RED, raddr);
-    */
+    // if (raddr < MEM_BASE) {
+    //     printf("[pmem_read]  raddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", raddr, MEM_BASE);
+    //     return ;
+    // }
+    // Printf("[pmem_read] Invalid Read Mem, raddr is:%llx\n", RED, raddr);
+
     if (raddr < MEM_BASE){ return ; } 
     uint8_t *pt = cpu2mem(raddr) + 7;
     ll ret = 0;
@@ -70,11 +66,9 @@ extern "C" void pmem_read(ll raddr, ll *rdata) {
     }
     *rdata = ret;
 #ifdef CONFIG_NPC_MTRACE
-    // if (raddr < 0x80000124) return ; // 取指的不要记录
     sprintf(mtrace_buf[mtrace_count], "read:  addr:%016llx data:%016llx", raddr, (*rdata));
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
 #endif
-    // printf("[pmem_read] raddr is:%llx rdata is:%llx\n", raddr, *rdata);
 }
 
 extern "C" void pmem_read_Icacheline(ll raddr, svBitVecVal rdata[16]) {
@@ -122,48 +116,43 @@ extern "C" void pmem_read_Dcacheline(ll raddr, svBitVecVal rdata[8]) {
 
 
 // Memory Write
-extern "C" void pmem_write(ll waddr, ll wdata, char mask) {
-    if (waddr < MEM_BASE) { return ; } 
+extern "C" void pmem_write(unsigned char wen, ll waddr, ll wdata, char mask) {
+    if (wen == 0) {return ;}
+    // printf("here1\n");
+    if (waddr < MEM_BASE) { Printf("[pmem_write] waddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", RED, waddr, MEM_BASE); return ; } 
+    uint64_t maskedData = 0; 
+    for (int i = 0; i < 8; ++i) {
+        if (mask & 1) maskedData |= (wdata & 0xff);
+        wdata >>= 8, mask >>= 1;
+    }
 
 #ifdef CONFIG_NPC_MTRACE
     sprintf(mtrace_buf[mtrace_count],"write: addr:%016llx data:%016llx wmask:%08x", waddr,  wdata, mask);
     mtrace_count = (mtrace_count + 1) % SIZE_MTRACEBUF;
 #endif
-    // if (cpu_npc.pc != 0) { printf("[pmem_write] waddr is:%llx wdata is:%llx wmask is:%llx\n", waddr, wdata & mask, mask); }
-    // 其实&mask是没必要的，因为ex.v已经帮忙改造过了
-    /*
-    if (SERIAL_MMIO <= waddr && waddr <= SERIAL_MMIO + 8) { 
-        if (cpu_npc.pc != 0) {
-            mmio_write(waddr, 1, wdata & mask); // 写串口
-        } // 判断不要多次执行
+    // &mask是有必要的，因为在chisel代码中没有帮忙改造过
+    if (SERIAL_MMIO <= waddr && waddr <= SERIAL_MMIO + 8) { // 写串口
+    // printf("here3\n");
+        // if (cpu_npc.pc != 0) { 
+            mmio_write(waddr, 1, maskedData); 
+            // printf("here2\n");} // 判断不要多次执行
+            // printf("write: addr:%016llx data:%016llx\n", waddr, maskedData);
         return ;
     } 
     if (VGA_MMIO <= waddr && waddr <= VGA_MMIO + 8) {  // sync_addr
-        if (cpu_npc.pc != 0) { 
-            // printf("[pmem_write] waddr is:%llx wdata is:%llx wmask is:%llx\n", waddr, wdata & mask, mask); 
-            mmio_write(waddr, 4, wdata & mask); 
-        } // 判断不要多次执行
+        if (cpu_npc.pc != 0) { mmio_write(waddr, 4, maskedData); } // 判断不要多次执行
         return ;
     } 
-    if (FB_MMIO <= waddr && waddr <= FB_MMIO + 480000) { // 400x300x4 = 0x75300 
-        if (cpu_npc.pc != 0) {
-            // printf("[pmem_write] waddr is:%llx wdata is:%llx wmask is:%llx\n", waddr, wdata & mask, mask);
-            mmio_write(waddr, 4, wdata & mask); // 写显存
-        } // 判断不要多次执行
+    if (FB_MMIO <= waddr && waddr <= FB_MMIO + 480000) { // 写显存 400x300x4 = 0x75300 
+        if (cpu_npc.pc != 0) { mmio_write(waddr, 4, maskedData); } // 判断不要多次执行
         return ;
     } 
-    if (waddr < MEM_BASE) {
-        Printf("[pmem_write] waddr < MEM_BASE: addr is:%llx, MEM_BASE is %x\n", RED, waddr, MEM_BASE);
-        return;
-    }
     Printf("[pmem_write] Invalid write Mem, waddr is:%llx wdata is:%llx\n", RED, waddr, wdata);
-    */
-    // Printf("[pmem_write] waddr is:%llx wdata is:%llx wmask is:%x\n", RED, waddr, wdata, mask);
-    uint8_t *pt = cpu2mem(waddr);
-    for (int i = 0; i < 8; ++i) {
-        if (mask & 1) *pt = (wdata & 0xff);
-        wdata >>= 8, mask >>= 1, pt++;
-    }
+    // uint8_t *pt = cpu2mem(waddr);
+    // for (int i = 0; i < 8; ++i) {
+    //     if (mask & 1) *pt = (wdata & 0xff);
+    //     wdata >>= 8, mask >>= 1, pt++;
+    // }
     return ;
 }
 

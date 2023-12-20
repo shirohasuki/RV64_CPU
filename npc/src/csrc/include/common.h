@@ -1,3 +1,10 @@
+/*
+ * @File Name: common.h
+ * @Author: shiroha
+ * @Email: whmio0115@hainanu.edu.cn
+ * @Created Time: 2023-11-25 23:59:39
+ * @Description: 
+ */
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
@@ -15,13 +22,9 @@ typedef long long ll;
 typedef uint32_t paddr_t;
 typedef uint64_t word_t;
 typedef word_t vaddr_t;
-// typedef MUXDEF(PMEM64, uint64_t, uint32_t) paddr_t;
-// #define FMT_PADDR MUXDEF(PMEM64, "0x%016lx", "0x%08x")
-// typedef uint16_t ioaddr_t;
 
 
 // ----------- state -----------
-
 enum { NPC_RUNNING, NPC_STOP, NPC_END, NPC_ABORT, NPC_QUIT };
 
 typedef struct {
@@ -33,12 +36,12 @@ typedef struct {
 extern NPCState npc_state;
 
 // ============== IOE ================ //
-// #define CONFIG_NPC_DEVICE   1
-// #define NPC_HAS_SERIAL      1
-// #define NPC_HAS_TIMER       1
-// #define NPC_HAS_KBD         1
-// #define NPC_HAS_VGA         1
-// #define VGA_SHOW_SCREEN     1
+#define CONFIG_NPC_DEVICE   1
+#define NPC_HAS_SERIAL      1
+#define NPC_HAS_TIMER       1
+#define NPC_HAS_KBD         1
+#define NPC_HAS_VGA         1
+#define VGA_SHOW_SCREEN     1
 
 // ============== DEVICE MAP ===============
 #define DEVICE_BASE         0xa0000000

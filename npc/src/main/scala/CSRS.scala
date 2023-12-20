@@ -12,6 +12,7 @@ import chisel3._
 import chisel3.util._
 
 import define.MACRO._
+import DPIC.getCsrs
 
 class WBU_CSR_Input extends Bundle {
     val csr_wen       = Input(Bool())
@@ -84,6 +85,14 @@ class CSRS extends Module {
         mepc    := clint_csr_i.mepc   
         mcause  := clint_csr_i.mcause 
     }
+
+    // DPI-C 获取CSRs
+    val DPIC_getCsrs = Module(new getCsrs())
+    DPIC_getCsrs.io.csrs(0) := mtvec
+    DPIC_getCsrs.io.csrs(1) := mepc
+    DPIC_getCsrs.io.csrs(2) := mstatus
+    DPIC_getCsrs.io.csrs(3) := mcause
+
 }
 
 

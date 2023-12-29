@@ -27,7 +27,7 @@
 // typedef word_t vaddr_t;
 
 // ============== 调试选项 ============= //
-#define CONFIG_NPC_ITRACE 1
+// #define CONFIG_NPC_ITRACE 1
 #define CONFIG_NPC_GPRTRACE 1
 // #define CONFIG_NPC_IFTRACE 1
 #define CONFIG_NPC_DIFFTEST 1
@@ -53,7 +53,7 @@ void init_npc(); // npc启动后打三拍到EXU
 
 // =============== Memory ===============
 #define MEM_BASE           0x80000000
-#define MEM_SIZE           0x20000000
+#define MEM_SIZE           0x30000000
 // #define INTERFACE_MEM_BASE 0xa0000000
 // #define INTERFACE_MEM_SIZE 0x10000000
 
@@ -71,7 +71,7 @@ void itrace_record(uint64_t pc);
 void itrace_output();
 
 // ============= MTRACE ===============
-#define SIZE_MTRACEBUF 16  // mtrace_buf环形里单次存储指令条数目
+#define SIZE_MTRACEBUF 20  // mtrace_buf环形里单次存储指令条数目
 extern char mtrace_buf[SIZE_MTRACEBUF][100];
 extern int mtrace_count;
 void print_mtrace();

@@ -308,7 +308,7 @@ class pmem_write_Dcacheline extends BlackBox with HasBlackBoxInline {
     })
     setInline("pmem_write_Dcacheline.v",
     """
-    |import "DPI-C" function void pmem_write_Dcacheline( input longint waddr, input bit [31:0] wdata[8]);
+    |import "DPI-C" function void pmem_write_Dcacheline(input bit wen, input longint waddr, input bit [31:0] wdata[8]);
     |module pmem_write_Dcacheline (
     |   input        wen,
     |   input [63:0] waddr,
@@ -331,7 +331,7 @@ class pmem_write_Dcacheline extends BlackBox with HasBlackBoxInline {
     |
     |   always @(*) begin
     |       if (wen) begin
-    |           pmem_write_Dcacheline(waddr, wdata); 
+    |           pmem_write_Dcacheline(wen, waddr, wdata); 
     |       end
     |   end
     |

@@ -1,3 +1,10 @@
+/*
+ * > File Name: difftest.c
+ * > Author: shiroha
+ * > Email: whmio0115@hainanu.edu.cn
+ * > Created Time: 2023-11-25 23:59:39
+ * > Description: 
+ */
 #include "npc.h"
 #include <utils/debug.h>
 
@@ -58,7 +65,7 @@ int check_regs_npc(CPU_state cpu_nemu, CPU_state cpu_npc) {
     for (int i = 0; i < 4; i++) {
         // Printf("[difftest] nemu_csr[%2d]=%16lx, npc_csr[%2d]=%16lx\n", GREEN, i, cpu_nemu.csr[i], i, cpu_npc.csr[i]);
         if (cpu_npc.csr[i] != cpu_nemu.csr[i]) {
-            // Printf("Missing match csr[%d], nemu_val=%lx, npc_val=%lx\n", RED, i, cpu_nemu.csr[i], cpu_npc.csr[i]);
+            Printf("Missing match csr[%d], nemu_val=%lx, npc_val=%lx\n", RED, i, cpu_nemu.csr[i], cpu_npc.csr[i]);
             // printf(RED("npc_pc=%lx\n"), cpu_npc.pc);
             return 0;
         }
@@ -72,6 +79,7 @@ int check_regs_npc(CPU_state cpu_nemu, CPU_state cpu_npc) {
 extern int diff_skip_ref_flag;
 
 void difftest_exec_once() {
+    // Log("diff_skip_ref_flag = %d", diff_skip_ref_flag);
     if (diff_skip_ref_flag) {
         // to skip the checking of an instruction, just copy the reg state to reference design
         // Log("diff_skip_ref_flag = %d", diff_skip_ref_flag);
@@ -92,22 +100,5 @@ void difftest_exec_once() {
 
     if (!check_regs_npc(cpu_nemu, cpu_npc)) npc_exit(-1);
 }
-
-// static bool is_skip_ref = false;
-// static int skip_dut_nr_inst = 0;
-
-// this is used to let ref skip instructions which
-// can not produce consistent behavior with NEMU
-// void difftest_skip_ref() {
-//     is_skip_ref = true;
-//     // If such an instruction is one of the instruction packing in QEMU
-//     // (see below), we end the process of catching up with QEMU's pc to
-//     // keep the consistent behavior in our best.
-//     // Note that this is still not perfect: if the packed instructions
-//     // already write some memory, and the incoming instruction in NEMU
-//     // will load that memory, we will encounter false negative. But such
-//     // situation is infrequent.
-//     skip_dut_nr_inst = 0;
-// }
 
 #endif

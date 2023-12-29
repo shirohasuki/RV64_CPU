@@ -62,16 +62,16 @@ class LSU extends Module {
     // to interface 
     val DPIC_pmem_read  = Module(new pmem_read())
     val DPIC_pmem_write = Module(new pmem_write())
-    // val rdata   = RegInit(0.U(64.W))
-    // val ren     = RegInit(0.U(1.W)) // Reg 多暂存一拍
+    val rdata   = RegInit(0.U(64.W))
+    val ren     = RegInit(0.U(1.W)) // Reg 多暂存一拍
     // read
     // ren                                 := al_ls.dcache_ren & is_visit_interface
     // rdata                               := DPIC_pmem_read.io.rdata 
     ls_mem_o.interface_rdata.valid      := al_ls.dcache_ren & is_visit_interface
     ls_mem_o.interface_rdata.bits.rdata := DPIC_pmem_read.io.rdata 
-    DPIC_pmem_read.io.raddr             := al_ls.dcache_raddr
+    DPIC_pmem_read.io.raddr             := al_ls.dcache_raddr 
     // write
-    DPIC_pmem_write.io.wen      := al_ls.dcache_wen & is_visit_interface 
+    DPIC_pmem_write.io.wen      := al_ls.dcache_wen   & is_visit_interface 
     DPIC_pmem_write.io.waddr    := al_ls.dcache_waddr 
     DPIC_pmem_write.io.wdata    := al_ls.dcache_wdata 
     DPIC_pmem_write.io.wmask    := al_ls.dcache_wmask 

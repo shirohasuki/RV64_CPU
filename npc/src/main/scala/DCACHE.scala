@@ -50,24 +50,24 @@ class DCACHE extends Module {
     // val dMem    = Reg(Vec(16, UInt(8.W)))             // 16组，8行，每行占一位
     val vMem    = RegInit(VecInit(Seq.fill(nSets)(0.U(8.W))))             // 16组，8行，每行占一位
     val dMem    = RegInit(VecInit(Seq.fill(nSets)(0.U(8.W))))             // 16组，8行，每行占一位
-    val ageMem  = Reg(Vec(16, UInt(7.W)))             // 16组，三层age位
-    val tagMem  = Reg(Vec(16, (Vec(8, UInt(55.W)))))   // 16组，8行tag 
+    val ageMem  = Reg(Vec(16, UInt(7.W)))               // 16组，三层age位
+    val tagMem  = Reg(Vec(16, (Vec(8, UInt(55.W)))))    // 16组，8行tag 
     val dataMem = Reg(Vec(16, (Vec(8, (Vec(4, UInt(64.W))))))) // 16组，8行,每行4个64位
 
     // wire
-    val raddr   = ex_dcache.rd_req.bits.raddr
     val ren     = ex_dcache.rd_req.valid 
+    val raddr   = ex_dcache.rd_req.bits.raddr
     val wen     = ex_dcache.wr_req.valid 
     val waddr   = ex_dcache.wr_req.bits.waddr
     val wdata   = ex_dcache.wr_req.bits.wdata
     val wmask   = ex_dcache.wr_req.bits.wmask
 
-    val tag     = Mux(ren, raddr(63, 9), waddr(63, 9))
-    val set_idx = Mux(ren, raddr(8, 5), waddr(8, 5))
-    val way_idx = WireInit(0.U(3.W))
-    val offset  = Mux(ren, raddr(4, 3), waddr(4, 3))
-    val offsetbit  = Mux(ren, raddr(2, 0), waddr(2, 0))
-    val rdata   = WireInit(0.U(64.W))
+    val tag         = Mux(ren, raddr(63, 9), waddr(63, 9))
+    val set_idx     = Mux(ren, raddr(8, 5), waddr(8, 5))
+    val way_idx     = WireInit(0.U(3.W))
+    val offset      = Mux(ren, raddr(4, 3), waddr(4, 3))
+    val offsetbit   = Mux(ren, raddr(2, 0), waddr(2, 0))
+    val rdata       = WireInit(0.U(64.W))
 
     // 2. FSM
     val sIdle :: sHit :: sMiss :: sWb :: Nil = Enum(4)   // sIdle 00 sHit 01 sMiss 10 sWb 11
@@ -78,6 +78,7 @@ class DCACHE extends Module {
     val miss            = WireInit(false.B)
     val full            = WireInit(false.B)
     val dirty           = WireInit(false.B)
+    val dirty_need_wb   = WireInit(false.B)
     val rd_complete     = RegInit(false.B)
     val reload_complete = RegInit(false.B)
     val wb_complete     = RegInit(false.B)
@@ -87,7 +88,7 @@ class DCACHE extends Module {
         is (sIdle) {
             when (hit) {
                 next_state := sHit
-            }.elsewhen (dirty) {
+            }.elsewhen (dirty_need_wb) {
                 next_state := sWb
             }.elsewhen (miss) {
                 next_state := sMiss
@@ -96,7 +97,7 @@ class DCACHE extends Module {
         is (sHit) {
             when (hit) {
                 next_state := sHit
-            }.elsewhen (dirty) {
+            }.elsewhen (dirty_need_wb) {
                 next_state := sWb
             }.elsewhen (miss) {
                 next_state := sMiss
@@ -105,7 +106,7 @@ class DCACHE extends Module {
             }
         }
         is (sMiss) {
-            when (dirty) {
+            when (dirty_need_wb) {
                 next_state := sWb
             }.elsewhen (reload_complete) {
                 next_state := sHit
@@ -115,7 +116,7 @@ class DCACHE extends Module {
         }
         is (sWb) {
             when (wb_complete) {
-                next_state := sHit
+                next_state := sMiss
             }.otherwise {
                 next_state := sWb
             }
@@ -126,7 +127,7 @@ class DCACHE extends Module {
     // 3. IDLE    
     val indices  = (0 until nWays).map(i => Mux(vMem(set_idx)(i) & (tag === tagMem(set_idx)(i)), 1.U, 0.U)).reverse.reduce(_ ## _)
 
-    val hit_line = PriorityEncoder(indices) 
+    val hit_line = Mux(hit, PriorityEncoder(indices), 0.U)
     val top_line = PopCount((0 until nWays).map(i => vMem(set_idx)(i)))
     val lru_line = Lookup(ageMem(set_idx), 0.U, Seq(
                             BitPat("b11?1???")   ->  0.U,
@@ -143,10 +144,11 @@ class DCACHE extends Module {
         hit         := indices =/= 0.U
         miss        := indices === 0.U
         full        := Mux(PopCount((0 until nWays).map(i => vMem(set_idx)(i))) === 8.U, 1.U, 0.U)
-        dirty       := full & miss & dMem(set_idx)(lru_line)
+        dirty       := dMem(set_idx)(lru_line)
+        dirty_need_wb := full && miss && dirty
 
         way_idx     := Mux(hit, hit_line, 
-                        Mux(dirty, lru_line,
+                        Mux(full, lru_line,
                         Mux(miss, top_line, 0.U))) // 没满就按顺序取,满了根据LRU判断
     }
 
@@ -208,61 +210,58 @@ class DCACHE extends Module {
 
     when (wen && hit) {
         dataMem(set_idx)(way_idx)(offset)  := masked_wdata
-        dMem(set_idx) := dMem(set_idx).bitSet(way_idx, true.B) 
+        dMem(set_idx)                      := dMem(set_idx).bitSet(way_idx, true.B) 
     }
-
 
     // 5. MISS
     // not dirty
     val DPIC_pmem_read_Dcacheline    = Module(new pmem_read_Dcacheline())
-
-    when ((ren || wen) && miss && ~dirty) {
-        DPIC_pmem_read_Dcacheline.io.raddr      := Cat(raddr(63, 5), Fill(5, 0.U))
+    when ((ren || wen) && miss && ~(full && dirty)) {
+        DPIC_pmem_read_Dcacheline.io.raddr                  := Cat(raddr(63, 5), Fill(5, 0.U))
         for (i <- 0 until 4) { dataMem(set_idx)(way_idx)(i) := DPIC_pmem_read_Dcacheline.io.rdata(i)}
-        tagMem(set_idx)(way_idx)    := tag
-        dMem(set_idx)               := dMem(set_idx).bitSet(way_idx, false.B) 
-        vMem(set_idx)               := vMem(set_idx).bitSet(way_idx, true.B) 
-        reload_complete                         := 1.U
+        tagMem(set_idx)(way_idx)                            := tag
+        dMem(set_idx)                                       := dMem(set_idx).bitSet(way_idx, false.B) 
+        vMem(set_idx)                                       := vMem(set_idx).bitSet(way_idx, true.B) 
+        reload_complete                                     := 1.U
     }.otherwise {
-        reload_complete                         := 0.U
+        reload_complete                                     := 0.U
+        DPIC_pmem_read_Dcacheline.io.raddr                  := 0.U
     }
 
 
     // is dirty(WB)
     val DPIC_pmem_write_Dcacheline = Module(new pmem_write_Dcacheline())
-    when ((ren || wen) && miss && dirty) {
+    when ((ren || wen) && full && miss && dirty) {
         // 把dirty的 cache line 写进下一级
-        DPIC_pmem_write_Dcacheline.io.wen          := (ren || wen) && miss && dirty
+        DPIC_pmem_write_Dcacheline.io.wen          := 1.U
         DPIC_pmem_write_Dcacheline.io.waddr        := Cat(tagMem(set_idx)(way_idx), set_idx, Fill(5, 0.U))
         for (i <- 0 until 4) { DPIC_pmem_write_Dcacheline.io.wdata(i) := dataMem(set_idx)(way_idx)(i)}
-        // read需要的 Data block 进 cache 
-        DPIC_pmem_read_Dcacheline.io.raddr      := Cat(waddr(63, 5), Fill(5, 0.U))
-        for (i <- 0 until 4) { dataMem(set_idx)(way_idx)(i) := DPIC_pmem_read_Dcacheline.io.rdata(i)}
-        dMem(set_idx).bitSet(way_idx, false.B) 
-        wb_complete := 1.U
+        // // read需要的 Data block 进 cache 
+        // DPIC_pmem_read_Dcacheline.io.raddr          := Cat(waddr(63, 5), Fill(5, 0.U))
+        // for (i <- 0 until 4) { dataMem(set_idx)(way_idx)(i) := DPIC_pmem_read_Dcacheline.io.rdata(i)}
+        dMem(set_idx)                               := dMem(set_idx).bitSet(way_idx, false.B) 
+        wb_complete                                 := 1.U
     }.otherwise {
-        wb_complete := 0.U
+        DPIC_pmem_write_Dcacheline.io.wen          := 0.U
+        DPIC_pmem_write_Dcacheline.io.waddr        := 0.U
+        for (i <- 0 until 4) { DPIC_pmem_write_Dcacheline.io.wdata(i) := 0.U}
+        wb_complete                                := 0.U
     }
     
 
     // 伪LRU
-    ageMem(set_idx) := ageMem(set_idx).bitSet(6.U, Mux(way_idx > 3.U, true.B, false.B))
-
-    ageMem(set_idx) := ageMem(set_idx).bitSet(5.U, Mux(ageMem(set_idx)(6) === 1.U, (ageMem(set_idx)(5) & 1.U).asBool,  // 维持原值
-                    Mux(way_idx > 1.U, true.B, false.B))) 
-    ageMem(set_idx) := ageMem(set_idx).bitSet(4.U, Mux(ageMem(set_idx)(6) === 0.U, (ageMem(set_idx)(4) & 1.U).asBool,  // 维持原值
-                    Mux(way_idx > 5.U, true.B, false.B)))
-
-    ageMem(set_idx) := ageMem(set_idx).bitSet(3.U, Mux(ageMem(set_idx)(5) === 1.U, (ageMem(set_idx)(3) & 1.U).asBool,  // 维持原值
-                    Mux(way_idx === 1.U, true.B, false.B)))
-    ageMem(set_idx) := ageMem(set_idx).bitSet(2.U, Mux(ageMem(set_idx)(5) === 0.U, (ageMem(set_idx)(2) & 1.U).asBool,  // 维持原值
-                    Mux(way_idx === 3.U, true.B, false.B))) 
-
-    ageMem(set_idx) := ageMem(set_idx).bitSet(1.U, Mux(ageMem(set_idx)(4) === 1.U, (ageMem(set_idx)(1) & 1.U).asBool,  // 维持原值
-                    Mux(way_idx === 5.U, true.B, false.B))) 
-    ageMem(set_idx) := ageMem(set_idx).bitSet(0.U, Mux(ageMem(set_idx)(4) === 0.U, (ageMem(set_idx)(0) & 1.U).asBool,  // 维持原值
-                    Mux(way_idx === 7.U, true.B, false.B))) 
-
+    when (hit) {
+        switch (way_idx) {
+            is (0.U) { ageMem(set_idx) := ageMem(set_idx) & "b0_01_0111".U }
+            is (1.U) { ageMem(set_idx) := ageMem(set_idx) & "b0_01_1111".U | "b0_00_1000".U }
+            is (2.U) { ageMem(set_idx) := ageMem(set_idx) & "b0_11_1011".U | "b0_10_0000".U }
+            is (3.U) { ageMem(set_idx) := ageMem(set_idx) & "b0_11_1111".U | "b0_10_0100".U }
+            is (4.U) { ageMem(set_idx) := ageMem(set_idx) & "b1_10_1101".U | "b1_00_0000".U }
+            is (5.U) { ageMem(set_idx) := ageMem(set_idx) & "b1_01_1111".U | "b1_00_0010".U }
+            is (6.U) { ageMem(set_idx) := ageMem(set_idx) & "b1_11_1110".U | "b1_01_0000".U }
+            is (7.U) { ageMem(set_idx) := ageMem(set_idx) | "b1_01_0001".U }
+        }
+    }
 
     // DPIC Ctrace
     val DPIC_ctrace_dcache_record    = Module(new ctrace_dcache())

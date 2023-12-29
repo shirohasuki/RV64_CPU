@@ -25,10 +25,10 @@ CSRCS = $(shell find $(abspath ./src/csrc) -name "*.c" -or -name "*.cc" -or -nam
 
 # rules for verilator
 INCFLAGS = $(addprefix -I, $(INC_PATH))
-CFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
+CFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\"" -Og -ggdb3 # -Og -ggdb3为添加gdb调试
 LDFLAGS += -lSDL2 -lSDL2_image "-ldl $(shell llvm-config-11 --cxxflags) -fPIE $(shell llvm-config-11 --libs)" -lreadline
 # 使用readline函数的是否需要链接-lreadline
-#====================================
+# ====================================
 
 run: verilog default sim
 # 生成verilog代码->构建bin->仿真

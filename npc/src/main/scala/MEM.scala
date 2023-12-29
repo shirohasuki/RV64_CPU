@@ -59,7 +59,7 @@ class MEM extends Module {
     val rd_wdata        = WireInit(0.U(64.W))
     val dcache_rdata    = RegInit(0.U(64.W))
 
-    dcache_rdata := dcache_mem.resp.bits.rdata | (ls_mem_i.interface_rdata.valid & ls_mem_i.interface_rdata.bits.rdata)
+    dcache_rdata :=  Mux(ls_mem_i.interface_rdata.valid, ls_mem_i.interface_rdata.bits.rdata, dcache_mem.resp.bits.rdata)
     rd_wdata     :=  MuxCase(0.U, Seq(  
         (exmem_mem.bits.func3 === INST_LB )  ->  SEXT(dcache_rdata(7, 0)),
         (exmem_mem.bits.func3 === INST_LH )  ->  SEXT(dcache_rdata(15, 0)),

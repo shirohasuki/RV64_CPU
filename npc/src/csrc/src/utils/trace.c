@@ -102,7 +102,7 @@ extern "C" void ctrace_icache_record(char idx, ll tag, const svOpenArrayHandle c
 extern "C" void ctrace_dcache_record(char set_idx, char way_idx, char age, char dirty, ll tag, const svOpenArrayHandle cacheline) {
     dcache_buf[set_idx][way_idx][0] = 1;
     dcache_buf[set_idx][way_idx][1] = dirty & (1 << way_idx);
-    dcache_buf[set_idx][way_idx][2] = age;
+    dcache_buf[set_idx][0][2] = age;
     dcache_buf[set_idx][way_idx][3] = tag;
     
     uint64_t* offset = NULL;
@@ -135,7 +135,7 @@ void print_ctrace() {
         for (int way_idx = 0; way_idx < DCACHE_WAYNUM; way_idx++) {
             if (dcache_buf[set_idx][way_idx][0] == 0) continue; // valid == 0
             way_idx == 0 ? printf("%2d  ", set_idx) : printf("    "); 
-            printf((way_idx == dcache_buf[set_idx][way_idx][2]) ? "%2d(LRU)|| %6llx" : "%2d     || %6llx", way_idx, dcache_buf[set_idx][way_idx][3]); // idx和tag
+            printf((way_idx == dcache_buf[set_idx][0][2]) ? "%2d(LRU)|| %6llx" : "%2d     || %6llx", way_idx, dcache_buf[set_idx][way_idx][3]); // idx和tag
             
             for (int offset = 0; offset < 4; offset++) {
                 printf("||%016llx", dcache_buf[set_idx][way_idx][4 + offset]);

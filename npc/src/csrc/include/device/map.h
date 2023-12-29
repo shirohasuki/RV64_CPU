@@ -31,10 +31,9 @@ static inline int find_mapid_by_addr(IOMap *maps, int size, paddr_t addr) {
     for (int i = 0; i < size; i ++) {
         if (map_inside(maps + i, addr)) {
 #ifdef CONFIG_NPC_DIFFTEST 
-            diff_skip_ref_flag = 2; // skip the difftest check, copy DUT regs to REF
+            diff_skip_ref_flag = 5; // skip the difftest check, copy DUT regs to REF
             // printf("skip, mapid = %d\n", i);
 #endif 
-
             return i;
         }
     }

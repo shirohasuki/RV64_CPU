@@ -9,23 +9,23 @@ PCB *current = NULL;
 void naive_uload(PCB *pcb, const char *filename); 
 
 void switch_boot_pcb() {
-  current = &pcb_boot;
+	current = &pcb_boot;
 }
 
 void hello_fun(void *arg) {
-  int j = 1;
-  while (1) {
-    Log("Hello World from Nanos-lite with arg '%p' for the %dth time!", (uintptr_t)arg, j);
-    j ++;
-    yield();
-  }
+	int j = 1;
+	while (1) {
+		Log("Hello World from Nanos-lite with arg '%p' for the %dth time!", (uintptr_t)arg, j);
+		j ++;
+		yield();
+	}
 }
 
 void init_proc() {
     switch_boot_pcb();
 
     Log("Initializing processes...");
-        
+          
     // load program here
     // naive_uload(NULL, NULL);
     // naive_uload(NULL, "/bin/dummy");
@@ -39,10 +39,8 @@ void init_proc() {
     // naive_uload(NULL, "/bin/nterm");
     // naive_uload(NULL, "/bin/bird");
     naive_uload(NULL, "/bin/pal");
-
-
 }
 
 Context* schedule(Context *prev) {
-  return NULL;
+	return NULL;
 }

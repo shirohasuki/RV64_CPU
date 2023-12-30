@@ -72,10 +72,10 @@ class ALU extends Module {
     def and                       (op1: UInt, op2: UInt): UInt = op1 & op2
     def xor                       (op1: UInt, op2: UInt): UInt = op1 ^ op2
     def or                        (op1: UInt, op2: UInt): UInt = op1 | op2
-    def rem                       (op1: UInt, op2: UInt): UInt = (op1 % op2).asUInt
-    def rem_unsigned              (op1: UInt, op2: UInt): UInt = op1 % op2
-    def div                       (op1: UInt, op2: UInt): UInt = (op1 / op2).asUInt
-    def div_unsigned              (op1: UInt, op2: UInt): UInt = op1 / op2
+    def rem                       (op1: UInt, op2: UInt): UInt = (op1.asSInt() % op2.asSInt()).asUInt()
+    def rem_unsigned              (op1: UInt, op2: UInt): UInt = op1.asUInt() % op2.asUInt()
+    def div                       (op1: UInt, op2: UInt): UInt = (op1.asSInt() / op2.asSInt()).asUInt()
+    def div_unsigned              (op1: UInt, op2: UInt): UInt = op1.asUInt() / op2.asUInt()
     def shift_left_unsigned       (op1: UInt, op2: UInt): UInt = op1 << op2(5, 0)
     def shift_right_unsigned      (op1: UInt, op2: UInt): UInt = op1 >> op2(5, 0)
     def shift_right_signed        (op1: UInt, op2: UInt): UInt = (op1.asSInt >> op2(5, 0)).asUInt
@@ -90,10 +90,10 @@ class ALU extends Module {
     def compress_and                  (op1: UInt, op2: UInt): UInt =  SEXT(                    and(op1, op2)(31, 0))
     def compress_xor                  (op1: UInt, op2: UInt): UInt =  SEXT(                    xor(op1, op2)(31, 0))
     def compress_or                   (op1: UInt, op2: UInt): UInt =  SEXT(                     or(op1, op2)(31, 0))
-    def compress_rem                  (op1: UInt, op2: UInt): UInt =  SEXT(                    rem(op1, op2)(31, 0))
-    def compress_rem_unsigned         (op1: UInt, op2: UInt): UInt =  SEXT(           rem_unsigned(op1, op2)(31, 0))
-    def compress_div                  (op1: UInt, op2: UInt): UInt =  SEXT(                    div(op1, op2)(31, 0))
-    def compress_div_unsigned         (op1: UInt, op2: UInt): UInt =  SEXT(           div_unsigned(op1, op2)(31, 0))
+    def compress_rem                  (op1: UInt, op2: UInt): UInt =  SEXT(             rem(op1(31, 0), op2(31, 0)))
+    def compress_rem_unsigned         (op1: UInt, op2: UInt): UInt =  SEXT(    rem_unsigned(op1(31, 0), op2(31, 0)))
+    def compress_div                  (op1: UInt, op2: UInt): UInt =  SEXT(             div(op1(31, 0), op2(31, 0)))
+    def compress_div_unsigned         (op1: UInt, op2: UInt): UInt =  SEXT(    div_unsigned(op1(31, 0), op2(31, 0)))
     def compress_shift_left_unsigned  (op1: UInt, op2: UInt): UInt =  SEXT(        (op1(31, 0) << op2(4, 0))(31, 0))
     def compress_shift_right_unsigned (op1: UInt, op2: UInt): UInt =  SEXT(        (op1(31, 0) >> op2(4, 0))(31, 0))
     def compress_shift_right_signed   (op1: UInt, op2: UInt): UInt =  SEXT( (op1(31, 0).asSInt >> op2(4, 0)).asUInt)
@@ -162,10 +162,10 @@ class ALU extends Module {
                                                 BitPat("b0100000")   ->  List(Rd_Write, rd_addr, compress_sub(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)), // sub
                                                 BitPat("b0000001")   ->  List(Rd_Write, rd_addr, compress_mul(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),  // mul
                                                 BitPat("b0000000")   ->  List(Rd_Write, rd_addr, compress_add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)))),  // add
-                            INST_DIVW           -> List(Rd_Write, rd_addr,          compress_div(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
-                            INST_SLLW           -> List(Rd_Write, rd_addr,   shift_left_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
-                            INST_REMW           -> List(Rd_Write, rd_addr,          compress_rem(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
-                            INST_REMUW          -> List(Rd_Write, rd_addr, compress_rem_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
+                            INST_DIVW           -> List(Rd_Write, rd_addr,                 compress_div(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
+                            INST_SLLW           -> List(Rd_Write, rd_addr, compress_shift_left_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
+                            INST_REMW           -> List(Rd_Write, rd_addr,                 compress_rem(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
+                            INST_REMUW          -> List(Rd_Write, rd_addr,        compress_rem_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
                             INST_SRW_DIVUW      -> ListLookup(ex_al.func7, default_exce_list, Array(
                                                BitPat("b0100000")   ->  List(Rd_Write, rd_addr,    compress_shift_right_signed(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),  // SRAW 算术右移
                                                BitPat("b0000001")   ->  List(Rd_Write, rd_addr,          compress_div_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),  // divuw  

@@ -14,7 +14,7 @@
 
 // Memory area for [@start, @end)
 typedef struct {
-  void *start, *end;
+	void *start, *end;
 } Area;
 
 // Arch-dependent processor context
@@ -22,45 +22,21 @@ typedef struct Context Context;
 
 // An event of type @event, caused by @cause of pointer @ref
 typedef struct {
-  enum {
-    EVENT_NULL = 0,
-    EVENT_YIELD, EVENT_SYSCALL, EVENT_PAGEFAULT, EVENT_ERROR,
-    EVENT_IRQ_TIMER, EVENT_IRQ_IODEV,
-  } event;
-  uintptr_t cause, ref;
-  const char *msg;
+	enum {
+		EVENT_NULL = 0,
+		EVENT_YIELD, EVENT_SYSCALL, EVENT_PAGEFAULT, EVENT_ERROR,
+		EVENT_IRQ_TIMER, EVENT_IRQ_IODEV,
+	} event;
+	uintptr_t cause, ref;
+	const char *msg;
 } Event;
-
-// event for EVENT_SYSCALL
-// enum {
-//   SYS_exit,
-//   SYS_yield,
-//   SYS_open,
-//   SYS_read,
-//   SYS_write,
-//   SYS_kill,
-//   SYS_getpid,
-//   SYS_close,
-//   SYS_lseek,
-//   SYS_brk,
-//   SYS_fstat,
-//   SYS_time,
-//   SYS_signal,
-//   SYS_execve,
-//   SYS_fork,
-//   SYS_link,
-//   SYS_unlink,
-//   SYS_wait,
-//   SYS_times,
-//   SYS_gettimeofday
-// };
 
 // A protected address space with user memory @area
 // and arch-dependent @ptr
 typedef struct {
-  int pgsize;
-  Area area;
-  void *ptr;
+	int pgsize;
+	Area area;
+	void *ptr;
 } AddrSpace;
 
 #ifdef __cplusplus

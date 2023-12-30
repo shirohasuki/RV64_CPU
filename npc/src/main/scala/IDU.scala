@@ -44,7 +44,7 @@ class IDU_IDEX_Output extends Bundle {
 class IDU_Bypass_Output extends Bundle {
     val rs1_raddr = Output(UInt(5.W))
     val rs2_raddr = Output(UInt(5.W))
-    val csr_raddr = Output(UInt(5.W))
+    val csr_raddr = Output(UInt(12.W))
 }
 
 class IDU_IDClint_Output extends Bundle {
@@ -131,9 +131,9 @@ class IDU extends Module {
                             INST_CSRRW      -> List(bypass_id.csr_rdata, bypass_id.rs1_rdata, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U, true.B, csr_addr),  
                             INST_CSRRS      -> List(bypass_id.csr_rdata, bypass_id.rs1_rdata, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U, true.B, csr_addr), 
                             INST_CSRRC      -> List(bypass_id.csr_rdata, bypass_id.rs1_rdata, rs1_addr, 0.U, rd_addr, true.B, 0.U, 0.U, true.B, csr_addr), 
-                            INST_CSRRWI     -> List(bypass_id.csr_rdata, immZ, 0.U, 0.U, rd_addr, true.B, 0.U, 0.U, true.B, csr_addr), 
-                            INST_CSRRSI     -> List(bypass_id.csr_rdata, immZ, 0.U, 0.U, rd_addr, true.B, 0.U, 0.U, true.B, csr_addr),   
-                            INST_CSRRCI     -> List(bypass_id.csr_rdata, immZ, 0.U, 0.U, rd_addr, true.B, 0.U, 0.U, true.B, csr_addr)))
+                            INST_CSRRWI     -> List(bypass_id.csr_rdata,                immZ, 0.U, 0.U, rd_addr, true.B, 0.U, 0.U, true.B, csr_addr), 
+                            INST_CSRRSI     -> List(bypass_id.csr_rdata,                immZ, 0.U, 0.U, rd_addr, true.B, 0.U, 0.U, true.B, csr_addr),   
+                            INST_CSRRCI     -> List(bypass_id.csr_rdata,                immZ, 0.U, 0.U, rd_addr, true.B, 0.U, 0.U, true.B, csr_addr)))
     ))
 
     // 为了降低复杂度，ID阶段SLL, SR相关的 op2 我全部直接使用了rs2的data，并没有只取低5/6位，需要EX截断截取，注意注意!
@@ -142,7 +142,7 @@ class IDU extends Module {
     id_idex.op2             := decode_list(1)
     id_bypass.rs1_raddr     := decode_list(2)
     id_bypass.rs2_raddr     := decode_list(3)
-    id_bypass.csr_raddr     := decode_list(2)
+    id_bypass.csr_raddr     := csr_addr
     id_idex.rd_addr         := decode_list(4)
     id_idex.rd_wen          := decode_list(5)
     id_idex.base_addr       := decode_list(6)

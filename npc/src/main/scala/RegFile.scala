@@ -36,6 +36,8 @@ class RegFile extends Module {
     val bypass_reg = IO(new Bypass_REG_Input())
     val reg_bypass = IO(new REG_Bypass_Output())
     val wb_reg     = IO(new WBU_REG_Input())
+    // val reg_clint_o = IO(new Bundle{ val a7 = Output(UInt(64.W)) })
+    
     // })
 
     // 寄存器组
@@ -50,6 +52,9 @@ class RegFile extends Module {
     // 写寄存器的数据:给出写信号，且rd不为0时写寄存器
     regs(wb_reg.rd_waddr) := Mux(wb_reg.rd_wen && (wb_reg.rd_waddr =/= 0.U),  wb_reg.rd_wdata, 0.U(64.W))   
 
+
+    // to Clint a7存着mcasue
+    // reg_clint_o.a7 := regs(17) 
 
     // DPI-C 获取GPRs
     val DPIC_getGprs = Module(new getGprs())

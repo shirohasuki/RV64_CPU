@@ -50,7 +50,7 @@ class CSRS extends Module {
     val clint_csr_i = IO(new Clint_CSR_Input)
     val csr_clint_o = IO(new Clint_CSR_Output)
     
-    val mstatus = RegInit(0x0001800.U(64.W))    // 保存全局中断使能, MIE位控制全局是否开启中断
+    val mstatus = RegInit("ha00001800".U(64.W))    // 保存全局中断使能, MIE位控制全局是否开启中断
     val mtvec   = RegInit(0.U(64.W))            // 存储异常入口地址（需要跳转到的地址）
     val mepc    = RegInit(0.U(64.W))            // 遇到异常时的pc（执行ecall时的）
     val mcause  = RegInit(0.U(64.W))            // 指示异常的事件
@@ -88,10 +88,10 @@ class CSRS extends Module {
 
     // DPI-C 获取CSRs
     val DPIC_getCsrs = Module(new getCsrs())
-    DPIC_getCsrs.io.csrs(0) := mtvec
-    DPIC_getCsrs.io.csrs(1) := mepc
-    DPIC_getCsrs.io.csrs(2) := mstatus
-    DPIC_getCsrs.io.csrs(3) := mcause
+    DPIC_getCsrs.io.csrs(0) := RegNext(mtvec,   init = mstatus)
+    DPIC_getCsrs.io.csrs(1) := RegNext(mepc,    init = mepc   )
+    DPIC_getCsrs.io.csrs(2) := RegNext(mstatus, init = mstatus)
+    DPIC_getCsrs.io.csrs(3) := RegNext(mcause,  init = mcause )
 
 }
 

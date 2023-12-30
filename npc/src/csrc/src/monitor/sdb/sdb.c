@@ -68,7 +68,7 @@ static int sdb_exec_once(int step) {
         IFDEF(CONFIG_NPC_DEVICE, device_update());
         // IFDEF(CONFIG_NPC_CTRACE, print_ctrace());
 #ifdef CONFIG_NPC_ITRACE
-		printf("step %4d  %s\n", nemu_step, ringbuf[ringptr]);
+		// printf("step %4d  %s\n", nemu_step, ringbuf[ringptr]);
 #endif
 		while (cpu_npc.pc == 0x0) {
             npc_exec_once();   

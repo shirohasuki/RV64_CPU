@@ -105,6 +105,8 @@ class CORE extends Module {
     Bypass.bypass_id_o    <> IDU.bypass_id
     Bypass.bypass_ctrl_o  <> CTRL.bypass_ctrl
 
+    // RegFile.reg_clint_o   <> CLINT.reg_clint_i
+
     IDU.id_idex           <> IDEX.id_idex
     IDEX.idex_ex          <> EXU.idex_ex
     IDU.id_idclint        <> IDClint.id_idclint

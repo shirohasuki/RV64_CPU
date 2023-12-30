@@ -7,23 +7,16 @@ static Context* (*user_handler)(Event, Context*) = NULL;
 Context* __am_irq_handle(Context *c) {
   if (user_handler) {
     Event ev = {0};
+    // printf("mcause=%d\n", c->mcause);
     switch (c->mcause) {
-        // case -1: ev.event = EVENT_YIELD;   break; // yield a7版
-        case 11: ev.event = EVENT_SYSCALL; c->mepc += 4;  break; // 所有syscall
-        // case  0: ev.event = EVENT_SYSCALL; break; // exit
-        // case  1: ev.event = EVENT_SYSCALL; break; // yield
-        // case  2: ev.event = EVENT_SYSCALL; break; // open
-        // case  3: ev.event = EVENT_SYSCALL; break; // read
-        // case  4: ev.event = EVENT_SYSCALL; break; // write
-        // case  7: ev.event = EVENT_SYSCALL; break; // close
-        // case  8: ev.event = EVENT_SYSCALL; break; // lseek
-        // case  9: ev.event = EVENT_SYSCALL; break; // brk
-        // case 19: ev.event = EVENT_SYSCALL; break; // SYS_gettimeofday
+        case 11: {
+          if (c->GPR1 == -1) { ev.event = EVENT_YIELD; } // YIELD 本身应该也属于syscall只是这里单列出来了
+          else { ev.event = EVENT_SYSCALL; }
+          c->mepc+=4;
+          break;
+        } 
         default: ev.event = EVENT_ERROR;   break;
     }
-    // c->mepc += 4;
-    // printf("mcause=%d\n", c->mcause);
-    // printf("EVENT_SYSCALL=%d\n", EVENT_SYSCALL);
     c = user_handler(ev, c);
     assert(c != NULL);
   }

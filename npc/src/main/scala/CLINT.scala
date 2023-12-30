@@ -45,13 +45,12 @@ class Clint_CSR_Output extends Bundle {
     val mcause    = Output(UInt(64.W))
 }
 
-
-
 class CLINT extends Module {
     val idclint_clint    = IO(new IDU_Clint_Input)
     val clint_ctrl       = IO(new Clint_Ctrl_Output)
     val csr_clint_i      = IO(new CSR_Clint_Input)
     val clint_csr_o      = IO(new Clint_CSR_Output)
+    // val reg_clint_i      = IO(new Bundle{ val a7 = Input(UInt(64.W)) })
 
     // val CSR = Module(new CSRS())
        
@@ -80,7 +79,7 @@ class CLINT extends Module {
             clint_csr_o.csr_wen       := 1.U
             clint_csr_o.mstatus       := Cat(csr_clint_i.mstatus(63, 13), "b11".U(2.W), csr_clint_i.mstatus(10, 8), csr_clint_i.mstatus(3), csr_clint_i.mstatus(6, 4), 0.U(1.W), csr_clint_i.mstatus(2, 0)) // mstatus[7(MPIE)] = MIE, mstatus[3(MIE)] = 0
             clint_csr_o.mepc          := idclint_clint.pc
-            clint_csr_o.mcause        := 11.U(64.W)
+            clint_csr_o.mcause        := 11.U(64.W) //reg_clint_i.a7
 
             clint_ctrl.intr_jump_en   := true.B
             clint_ctrl.intr_jump_addr := csr_clint_i.mtvec

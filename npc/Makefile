@@ -30,21 +30,42 @@ LDFLAGS += -lSDL2 -lSDL2_image "-ldl $(shell llvm-config-11 --cxxflags) -fPIE $(
 # 使用readline函数的是否需要链接-lreadline
 # ====================================
 
-run: verilog default sim
+$(BIN): ${VSRCS} ${CSRCS} 
+	@rm -rf $(OBJ_DIR)
+# $(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
+	verilator $(VERILATOR_CFLAGS) +incdir+$(BUILD_DIR)\
+		--top $(TOPNAME) $^\
+		$(addprefix -CFLAGS , $(CFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
+		--Mdir $(OBJ_DIR) --exe
+	$(MAKE) -C ${OBJ_DIR} -f V$(TOPNAME).mk V$(TOPNAME) 
+
+.PHONY: run test verilog help compile bsp reformat checkformat clean sim wave
+
+run: verilog sim
 # 生成verilog代码->构建bin->仿真
 
-default: $(BIN)
-	$(shell mkdir -p $(BUILD_DIR))
+
 
 test:
 	mill -i __.test
 
 verilog:
 	$(call git_commit, "generate verilog")
-	mkdir -p $(BUILD_DIR)
+# mkdir -p $(BUILD_DIR)
+	$(shell mkdir -p $(BUILD_DIR))
 	mill -i __.test.runMain Elaborate -td $(BUILD_DIR) -X mverilog
 # mill -i __.test.runMain Elaborate -td $(BUILD_DIR) 
 # -X mverilog 生成verilog取消优化
+
+
+sim:
+	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
+	$(BIN) $(ARGS)
+	  @$^
+# 关于$(BIN)放在前后的对比（sim任务和default任务的不同）
+# default任务中$(BIN)放在default:后，表示依赖于$(BIN),在执行default前会先构建$(BIN)
+# sim任务中$(BIN)放在命令行中，表示普通的指令，即执行该可执行文件，而不会进行构建
+# 所以这个任务，只负责执行，不进行可执行文件的生成
 
 help:
 	mill -i __.test.runMain Elaborate --help
@@ -64,27 +85,8 @@ checkformat:
 clean:
 	-rm -rf $(BUILD_DIR)
 
-$(BIN): ${VSRCS} ${CSRCS} 
-	@rm -rf $(OBJ_DIR)
-	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	verilator $(VERILATOR_CFLAGS) +incdir+$(BUILD_DIR)\
-		--top $(TOPNAME) $^\
-		$(addprefix -CFLAGS , $(CFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
-		--Mdir $(OBJ_DIR) --exe
-	make -C ${OBJ_DIR} -f V$(TOPNAME).mk V$(TOPNAME) -j8
-
-sim:
-	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(BIN) $(ARGS)
-	  @$^
-# 关于$(BIN)放在前后的对比（sim任务和default任务的不同）
-# default任务中$(BIN)放在default:后，表示依赖于$(BIN),在执行default前会先构建$(BIN)
-# sim任务中$(BIN)放在命令行中，表示普通的指令，即执行该可执行文件，而不会进行构建
-# 所以这个任务，只负责执行，不进行可执行文件的生成
-
 wave:
 	gtkwave dump.vcd &
 
-.PHONY: run default test verilog help compile bsp reformat checkformat clean sim wave
 
 include ../Makefile

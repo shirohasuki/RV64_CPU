@@ -11,6 +11,14 @@ extern CPU_state cpu_nemu; // REF
 
 extern int nemu_step;
 
+extern int config_npc_itrace  ;
+extern int config_npc_difftest;
+extern int config_npc_mtrace  ;
+extern int config_npc_dtrace  ;
+extern int config_npc_etrace  ;
+extern int config_npc_ctrace  ;
+extern int config_npc_gprdump ;
+
 static char* rl_gets() {
     static char *line_read = NULL;
     if (line_read) {
@@ -36,6 +44,7 @@ static int cmd_q(char *args);
 // static int cmd_x(char *args);
 static int cmd_si(char *args);
 static int cmd_info(char *args);
+static int cmd_trace(char *args);
 
 static struct {
     const char *name;
@@ -44,9 +53,10 @@ static struct {
 } cmd_table [] = {
     { "help", "Display informations about all supported commands", cmd_help },
     { "c", "Continue the execution of the program", cmd_c },
-    { "q", "Exit NEMU", cmd_q },
+    { "q", "Exit NPC", cmd_q },
     {"si", "Execute the program in n steps\n\t\t-n nsteps(1~10000)", cmd_si },
-    {"info", "print status -r print register status", cmd_info }
+    {"info", "Print status\n\t\t-r print register status\n\t\t-c print cache status", cmd_info },
+    {"trace", "Change trace status -i/m/t/d/e/c -o/s/h", cmd_trace }
     // {"x", "scan the rom", cmd_x }
 };
 
@@ -62,19 +72,15 @@ extern  char ringbuf[SIZE_RINGBUF][LEN_RINGBUF];
 
 static int sdb_exec_once(int step) {
     while(step--) {
-        // dump_gpr(); // 打印通用寄存器
-        // dump_csr(); // 打印异常寄存器
         npc_exec_once();
         IFDEF(CONFIG_NPC_DEVICE, device_update());
-        // IFDEF(CONFIG_NPC_CTRACE, print_ctrace());
 #ifdef CONFIG_NPC_ITRACE
-		// printf("step %4d  %s\n", nemu_step, ringbuf[ringptr]);
+	if (config_npc_itrace == NPC_xTRACE_SHOW) { printf("step %4d  %s\n", nemu_step, ringbuf[ringptr]);}
 #endif
 		while (cpu_npc.pc == 0x0) {
             npc_exec_once();   
         } // EX被冲刷以后，pc再走几拍
 #ifdef CONFIG_NPC_DIFFTEST
-		// printf("npc.pc = %lx, nemu.pc = %lx\n", cpu_npc.pc, cpu_nemu.pc);
         difftest_exec_once();
 #endif
 		nemu_step++;
@@ -90,11 +96,11 @@ static int cmd_help(char *args) {
 	if (arg == NULL) {
 		/* no argument given */
 		printf("Common options:\n");
-		for (i = 0; i < NR_CMD; i ++) {
+		for (i = 0; i < NR_CMD; i++) {
 			printf("\t%-4s - %s\n", cmd_table[i].name, cmd_table[i].description);
 		}
 	} else {
-		for (i = 0; i < NR_CMD; i ++) {
+		for (i = 0; i < NR_CMD; i++) {
 			if (strcmp(arg, cmd_table[i].name) == 0) {
 				printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
 				return 0;
@@ -123,7 +129,7 @@ static int cmd_info(char *args) {
 	char *arg = strtok(NULL, " ");	/* extract the first argument */
 
 	if (arg == NULL || strlen(arg) != 1) { 
-		printf("'%s' must be 'r' \n", arg); 	/* no argument */
+		printf("'%s' must be 'r/c' \n", arg); 	/* no argument */
 	} else if (strcmp(arg, "r") == 0) {
 		dump_gpr(); 	/* dispaly registers */
 	} else if (strcmp(arg, "c") == 0) {
@@ -136,7 +142,7 @@ static int cmd_info(char *args) {
 static int cmd_si(char *args) {
     if (args == NULL) {
         sdb_exec_once(1);
-		dump_gpr();
+		if (config_npc_gprdump == NPC_xTRACE_SHOW) { dump_gpr();}
         return 0;
     }
     int step = atoi(strtok(NULL, " "));
@@ -144,15 +150,35 @@ static int cmd_si(char *args) {
         printf("Too Many Parameters.\n");
         return 0;
     }
-    if (step <= 0 || step > 10000) {
+    if (step <= 0 || step > 100000) {
         printf("Parameter Out of Range.\n");
     	return 0;
     }
     sdb_exec_once(step);
-	dump_gpr();
+	if (config_npc_gprdump == NPC_xTRACE_SHOW) { dump_gpr();}
     return 0;
 }
 
+static int cmd_trace(char *args) {
+    if (args == NULL) { return 0; }
+    char *trace_type = strtok(NULL, " ");  // which trace
+    if (args == NULL) { printf("Need -o/s/h\n"); return 0; }
+    char *trace_opt  = strtok(NULL, " ");  // close or open 
+    // if (args != NULL) { printf("Too Many Parameters.\n"); return 0; }
+
+	switch (trace_type[0]) {
+		case 'h': display_trace_status(); break;
+		case 'i': set_trace_status(&config_npc_itrace, trace_opt); break;
+		case 'd': set_trace_status(&config_npc_dtrace, trace_opt); break;
+		case 't': set_trace_status(&config_npc_difftest, trace_opt); break;
+		case 'e': set_trace_status(&config_npc_etrace, trace_opt); break;
+		case 'm': set_trace_status(&config_npc_mtrace, trace_opt); break;
+		case 'c': set_trace_status(&config_npc_ctrace, trace_opt); break;
+		case 'g': set_trace_status(&config_npc_gprdump, trace_opt); break;
+		default: printf("'%s' is not valid \n type must be\n-i itrace\n-h show trace status\n-d dtrace\n-t difftest\n-e etrace\n-m mtrace\n-c cache trace\n-g gpr dump\n", trace_type); break;
+	}
+    return 0;
+}
 
 void sdb_set_batch_mode() {
 	is_batch_mode = true;

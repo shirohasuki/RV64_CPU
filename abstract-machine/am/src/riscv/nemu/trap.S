@@ -30,32 +30,37 @@ f(30) f(31)
 .align 3
 .globl __am_asm_trap
 __am_asm_trap:
-  addi sp, sp, -CONTEXT_SIZE
+    # 上下文保存
+	addi sp, sp, -CONTEXT_SIZE
 
-  MAP(REGS, PUSH)
+	MAP(REGS, PUSH)	# 压入GPR
 
-  csrr t0, mcause
-  csrr t1, mstatus
-  csrr t2, mepc
+	csrr t0, mcause
+	csrr t1, mstatus
+	csrr t2, mepc 	# 压入CSR
 
-  STORE t0, OFFSET_CAUSE(sp)
-  STORE t1, OFFSET_STATUS(sp)
-  STORE t2, OFFSET_EPC(sp)
+	STORE t0, OFFSET_CAUSE(sp)
+	STORE t1, OFFSET_STATUS(sp)
+	STORE t2, OFFSET_EPC(sp)
 
-  # set mstatus.MPRV to pass difftest
-  li a0, (1 << 17)
-  or t1, t1, a0
-  csrw mstatus, t1
+	# set mstatus.MPRV to pass difftest
+	li a0, (1 << 17)
+	or t1, t1, a0
+	csrw mstatus, t1
 
-  mv a0, sp
-  jal __am_irq_handle
+	# a0 存入栈指针
+	# 跳往 __am_irq_handle，进行异常处理
+	mv a0, sp
+	jal __am_irq_handle
 
-  LOAD t1, OFFSET_STATUS(sp)
-  LOAD t2, OFFSET_EPC(sp)
-  csrw mstatus, t1
-  csrw mepc, t2
+	mv sp, a0 # 切换栈顶指针到新进程的上下文结构
+	# 恢复上下文
+	LOAD t1, OFFSET_STATUS(sp)
+	LOAD t2, OFFSET_EPC(sp)
+	csrw mstatus, t1
+	csrw mepc, t2		# 恢复CSR
 
-  MAP(REGS, POP)
+	MAP(REGS, POP)	# 恢复GPR
 
-  addi sp, sp, CONTEXT_SIZE
-  mret
+	addi sp, sp, CONTEXT_SIZE
+	mret

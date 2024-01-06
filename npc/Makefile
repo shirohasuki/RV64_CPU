@@ -36,15 +36,13 @@ $(BIN): ${VSRCS} ${CSRCS}
 	verilator $(VERILATOR_CFLAGS) +incdir+$(BUILD_DIR)\
 		--top $(TOPNAME) $^\
 		$(addprefix -CFLAGS , $(CFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
-		--Mdir $(OBJ_DIR) --exe
+		--Mdir $(OBJ_DIR) --exe 
 	$(MAKE) -C ${OBJ_DIR} -f V$(TOPNAME).mk V$(TOPNAME) 
 
 .PHONY: run test verilog help compile bsp reformat checkformat clean sim wave
 
 run: verilog sim
 # 生成verilog代码->构建bin->仿真
-
-
 
 test:
 	mill -i __.test
@@ -53,12 +51,12 @@ verilog:
 	$(call git_commit, "generate verilog")
 # mkdir -p $(BUILD_DIR)
 	$(shell mkdir -p $(BUILD_DIR))
-	mill -i __.test.runMain Elaborate -td $(BUILD_DIR) -X mverilog
+	mill -i __.test.runMain Elaborate -td $(BUILD_DIR) 
 # mill -i __.test.runMain Elaborate -td $(BUILD_DIR) 
 # -X mverilog 生成verilog取消优化
 
 
-sim:
+sim:$(BIN)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	$(BIN) $(ARGS)
 	  @$^

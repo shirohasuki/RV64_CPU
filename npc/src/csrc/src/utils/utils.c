@@ -1,10 +1,3 @@
-/*
- * @File Name: utils.c
- * @Author: shiroha
- * @Email: whmio0115@hainanu.edu.cn
- * @Created Time: 2023-10-18 17:23:29
- * @Description: 
- */
 #include "npc.h"
 #include <utils/macro.h>
 #include <utils/debug.h>

@@ -1,10 +1,3 @@
-/*
- * @File Name: monitor.c
- * @Author: shiroha
- * @Email: whmio0115@hainanu.edu.cn
- * @Created Time: 2023-10-28 22:14:32
- * @Description: 
- */
 #include "npc.h"
 #include <getopt.h>
 #include <utils/macro.h>
@@ -12,15 +5,7 @@
 
 
 static void welcome() {
-	printf(ASNI_FMT("ITrace: %s\t", ASNI_FG_BLUE), MUXDEF(CONFIG_NPC_ITRACE, ASNI_FMT("ON", ASNI_FG_GREEN), ASNI_FMT("OFF", ASNI_FG_RED)));
-	printf(ASNI_FMT("GPRTrace: %s\t", ASNI_FG_BLUE), MUXDEF(CONFIG_NPC_GPRTRACE, ASNI_FMT("ON", ASNI_FG_GREEN), ASNI_FMT("OFF", ASNI_FG_RED)));
-	// printf(ASNI_FMT("IFTrace: %s\t", ASNI_FG_BLUE), MUXDEF(CONFIG_NPC_IFTRACE, ASNI_FMT("ON", ASNI_FG_GREEN), ASNI_FMT("OFF", ASNI_FG_RED)));
-	printf(ASNI_FMT("Difftest: %s\n", ASNI_FG_BLUE), MUXDEF(CONFIG_NPC_DIFFTEST, ASNI_FMT("ON", ASNI_FG_GREEN), ASNI_FMT("OFF", ASNI_FG_RED)));
-	printf(ASNI_FMT("MTrace: %s\t", ASNI_FG_BLUE), MUXDEF(CONFIG_NPC_MTRACE, ASNI_FMT("ON", ASNI_FG_GREEN), ASNI_FMT("OFF", ASNI_FG_RED)));
-	printf(ASNI_FMT("DTrace: %s\t", ASNI_FG_BLUE), MUXDEF(CONFIG_NPC_DTRACE, ASNI_FMT("ON", ASNI_FG_GREEN), ASNI_FMT("OFF", ASNI_FG_RED)));
-	printf(ASNI_FMT("ETrace: %s\t\n", ASNI_FG_BLUE), MUXDEF(CONFIG_NPC_ETRACE, ASNI_FMT("ON", ASNI_FG_GREEN), ASNI_FMT("OFF", ASNI_FG_RED)));
-	printf(ASNI_FMT("CTrace: %s\t\n", ASNI_FG_BLUE), MUXDEF(CONFIG_NPC_CTRACE, ASNI_FMT("ON", ASNI_FG_GREEN), ASNI_FMT("OFF", ASNI_FG_RED)));
-
+	display_trace_status(); // 显示默认设置
   	Log("Build time: %s, %s", __TIME__, __DATE__);
   	printf("Welcome to %s!\n", ASNI_FMT(str(NPC), ASNI_FG_YELLOW ASNI_BG_RED));
   	printf("For help, type \"help\"\n");

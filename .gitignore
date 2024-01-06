@@ -13,3 +13,6 @@
 /nvboard
 /fceux-am
 /am-kernels
+/rt-thread
+/npc/build
+/npc-verilog/build

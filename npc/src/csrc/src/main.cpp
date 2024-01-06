@@ -1,16 +1,8 @@
-/*
- * @File Name: main.cpp
- * @Author: shiroha
- * @Email: whmio0115@hainanu.edu.cn
- * @Created Time: 2023-11-25 23:59:39
- * @Description: 
- */
 #include "npc.h"
 #include <utils/macro.h>
 #include <utils/debug.h>
 
-// #define MAX_SIM_TIME 40
-#define MAX_SIM_TIME 15000000// 最大仿真周期，中途读取到ebreak自动退出
+// #define MAX_SIM_TIME 15000000// 最大仿真周期，中途读取到ebreak自动退出
 // #define MAX_SIM_TIME 150000000000// 最大仿真周期，中途读取到ebreak自动退出
 vluint64_t sim_time = 0;
 
@@ -56,7 +48,8 @@ void sim_init() {
 
 void npc_exec_once() {
 #ifdef CONFIG_NPC_ITRACE 
-    itrace_record(cpu_npc.pc);
+    extern int config_npc_itrace;
+    if (config_npc_itrace != NPC_xTRACE_OFF) { itrace_record(cpu_npc.pc);}
 #endif
     top->clock ^= 1; step_and_dump_wave();
     top->clock ^= 1; step_and_dump_wave();

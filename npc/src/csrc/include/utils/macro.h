@@ -93,4 +93,8 @@
 //   ({ reg##_T __io_param = (reg##_T) { __VA_ARGS__ }; \
 //     ioe_write(reg, &__io_param); })
 
+
+// 自定义宏
+#define MUX(v, p, a, b) v == p ? a : b
+// value, p可能值, 则为a, 否则为b
 #endif

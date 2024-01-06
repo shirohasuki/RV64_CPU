@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <assert.h>
 #include <stdlib.h>
@@ -7,7 +8,7 @@
 int main() {
   NDL_Init(0);
   int w, h;
-  void *bmp = BMP_Load("/share/pictures/projectn.bmp", &w, &h);
+  void *bmp = BMP_Load("/share/pictures/Happynewyear.bmp", &w, &h);
   // printf("Load End!\n");
   assert(bmp);
   NDL_OpenCanvas(&w, &h);

@@ -27,15 +27,17 @@
 // typedef word_t vaddr_t;
 
 // ============== 调试选项 ============= //
-#define CONFIG_NPC_ITRACE 1
-#define CONFIG_NPC_GPRTRACE 1
-// #define CONFIG_NPC_IFTRACE 1
-#define CONFIG_NPC_DIFFTEST 1
-// #define CONFIG_NPC_MTRACE 1
-// #define CONFIG_NPC_DTRACE 1
-// #define CONFIG_NPC_ETRACE 1
-// #define CONFIG_NPC_CTRACE 1
+#define CONFIG_NPC_ITRACE    1
+#define CONFIG_NPC_DIFFTEST  1
+#define CONFIG_NPC_MTRACE    1
+#define CONFIG_NPC_DTRACE    1
+#define CONFIG_NPC_ETRACE    1
+#define CONFIG_NPC_CTRACE    1
+#define CONFIG_NPC_GPRDUMP   1
 
+#define NPC_xTRACE_SHOW      2
+#define NPC_xTRACE_HIDE      1
+#define NPC_xTRACE_OFF       0
 
 // ================ CPU ===================
 static int status = 0;
@@ -64,6 +66,10 @@ extern uint8_t mem[MEM_SIZE];
 uint8_t* cpu2mem(ll addr);
 long load_image(char const *img_file); 
 
+
+// ============= Trace Config ================= //
+void display_trace_status();
+void set_trace_status(int *config_npc_xtrace, char *trace_opt);
 // ============= ITRACE ================
 void init_disasm(const char *triple);
 void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
@@ -82,12 +88,6 @@ void print_ctrace();
 // ============= REG ===================
 void dump_gpr(); // 打印寄存器
 void dump_csr(); // 打印异常寄存器
-
-// ============= Format ================
-// #define COLOR(a, b) "\033[" #b "m" a "\033[0m"
-// #define GREEN(a) COLOR(a, 32)
-// #define RED(a) COLOR(a, 31)
-// #define BLUE(a) COLOR(a, 34)
 
 // ============= Difftest ==============
 // #ifdef CONFIG_NPC_DIFFTEST
@@ -117,7 +117,7 @@ extern int diff_skip_ref_flag;
 void npc_exec_once();
 void sim_exit(); // 在异常跳出时记录波形结束
 
-// ============== monitor and sdb======= // 
+// ============== monitor and sdb ======= // 
 void init_monitor(int argc, char *argv[]);
 void sdb_set_batch_mode();
 void sdb_mainloop();

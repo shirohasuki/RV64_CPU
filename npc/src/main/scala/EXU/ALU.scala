@@ -121,7 +121,7 @@ class ALU extends Module {
     // to mul
     val mul_result = WireInit(0.U(64.W))
     val inst_mul   = Module(new MUL)  
-    when ((ex_al.opcode === INST_TYPE_R_M | ex_al.opcode === INST_TYPE_R_M_W) && (ex_al.func3 === INST_ADD_SUB_MUL) && ex_al.func7 === "b0000001".U) {
+    when (((ex_al.opcode === INST_TYPE_R_M) | (ex_al.opcode === INST_TYPE_R_M_W)) && (ex_al.func3 === INST_ADD_SUB_MUL) && ex_al.func7 === "b0000001".U) {
         inst_mul.alu_mul_i.valid             := true.B
         inst_mul.alu_mul_i.bits.multiplier   := op1
         inst_mul.alu_mul_i.bits.multiplicand := op2

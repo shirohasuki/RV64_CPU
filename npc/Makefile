@@ -12,7 +12,8 @@ INC_PATH ?= /home/shiroha/Code/ysyx/ysyx-workbench/npc/src/csrc/include \
 VERILATOR = verilator
 VERILATOR_CFLAGS += -MMD --build -cc  --trace \
 				-O3 --x-assign fast --x-initial fast --noassert \
-				-Wno-fatal 
+				-Wno-fatal \
+				-j 16
 #  --cc 参数告诉 Verilator 转换为 C++。 Verilator 还支持转换为 SystemC，这可以通过使用 --sc 来完成，但我们暂时不会使用此功能。
 # -Wall - 打开所有 C++ 警告。不是必需的，但在您刚开始时很有用
 # --trace - 启用波形跟踪	

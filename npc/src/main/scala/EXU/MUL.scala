@@ -106,8 +106,8 @@ class pp_generator extends Module {
     val io = IO(new Bundle {
         val x_i       = Input(UInt(66.W))
         val y_bus_i   = Input(UInt(3.W) )// y+1, y, y-1
-        val pp_sum_o  = Output(UInt(132.W)) 
-        val pp_c_o    = Output(UInt(132.W)) 
+        val pp_sum_o  = Output(UInt(67.W)) 
+        val pp_c_o    = Output(UInt(1.W)) 
     })
 // booth信号生成
     val y_add = io.y_bus_i(2)
@@ -121,10 +121,10 @@ class pp_generator extends Module {
 
 // 结果选择                    
     io.pp_sum_o := MuxCase(0.U(67.U), Seq(  
-        sel_double_negative ->  ~Cat(io.x_i, 0.U),    // -2x
-        sel_double_positive ->   Cat(io.x_i, 0.U),    // +2x
-        sel_negative        ->  ~Cat(io.x_i(65), io.x_i),  // -x
-        sel_positive        ->   Cat(io.x_i(65), io.x_i)   // +x
+        sel_double_negative ->  ~Cat(io.x_i, 0.U),          // -2x
+        sel_double_positive ->   Cat(io.x_i, 0.U),          // +2x
+        sel_negative        ->  ~Cat(io.x_i(65), io.x_i),   // -x
+        sel_positive        ->   Cat(io.x_i(65), io.x_i)    // +x
     )) 
 
     io.pp_c_o := sel_double_negative | sel_negative;
@@ -235,7 +235,7 @@ class wallace_33 extends Module {
     val c_layer1   = Wire(Vec(11, UInt(132.W)))
     for (i <- 0 until 11) {
         CSA_132bit(i).x_i := io.pp_i(3 * i); CSA_132bit(i).y_i := io.pp_i(3 * i + 1); CSA_132bit(i).c_i := io.pp_i(3 * i + 2);   
-        s_layer1(i) := CSA_132bit(i).s_o; c_layer1(i) := CSA_132bit(i).c_o;
+        s_layer1(i) := CSA_132bit(i).s_o; c_layer1(i) := Cat(CSA_132bit(i).c_o(130, 0), 0.U);
     }
     // second layer, 7 csa, 22->15
     val s_layer2   = Wire(Vec(7, UInt(132.W)))
@@ -246,14 +246,14 @@ class wallace_33 extends Module {
     CSA_132bit(14).x_i := s_layer1(5); CSA_132bit(14).y_i := c_layer1(4);  CSA_132bit(14).c_i := c_layer1(5);   
     CSA_132bit(15).x_i := s_layer1(6); CSA_132bit(15).y_i := s_layer1(7);  CSA_132bit(15).c_i := c_layer1(6);   
     CSA_132bit(16).x_i := s_layer1(8); CSA_132bit(16).y_i := c_layer1(7);  CSA_132bit(16).c_i := c_layer1(8);   
-    CSA_132bit(17).x_i := s_layer1(9); CSA_132bit(17).y_i := s_layer1(10); CSA_132bit(17).c_i := c_layer1(9);   
-    s_layer2(0) := CSA_132bit(11).s_o; c_layer2(0) := CSA_132bit(11).c_o; 
-    s_layer2(1) := CSA_132bit(12).s_o; c_layer2(1) := CSA_132bit(12).c_o; 
-    s_layer2(2) := CSA_132bit(13).s_o; c_layer2(2) := CSA_132bit(13).c_o; 
-    s_layer2(3) := CSA_132bit(14).s_o; c_layer2(3) := CSA_132bit(14).c_o; 
-    s_layer2(4) := CSA_132bit(15).s_o; c_layer2(4) := CSA_132bit(15).c_o; 
-    s_layer2(5) := CSA_132bit(16).s_o; c_layer2(5) := CSA_132bit(16).c_o; 
-    s_layer2(6) := CSA_132bit(17).s_o; c_layer2(6) := CSA_132bit(17).c_o; 
+    CSA_132bit(17).x_i := s_layer1(9); CSA_132bit(17).y_i := s_layer1(10); CSA_132bit(17).c_i := c_layer1(9);   // c_layer1(10) 剩余
+    s_layer2(0) := CSA_132bit(11).s_o; c_layer2(0) := Cat(CSA_132bit(11).c_o(130, 0), 0.U); 
+    s_layer2(1) := CSA_132bit(12).s_o; c_layer2(1) := Cat(CSA_132bit(12).c_o(130, 0), 0.U); 
+    s_layer2(2) := CSA_132bit(13).s_o; c_layer2(2) := Cat(CSA_132bit(13).c_o(130, 0), 0.U); 
+    s_layer2(3) := CSA_132bit(14).s_o; c_layer2(3) := Cat(CSA_132bit(14).c_o(130, 0), 0.U); 
+    s_layer2(4) := CSA_132bit(15).s_o; c_layer2(4) := Cat(CSA_132bit(15).c_o(130, 0), 0.U); 
+    s_layer2(5) := CSA_132bit(16).s_o; c_layer2(5) := Cat(CSA_132bit(16).c_o(130, 0), 0.U); 
+    s_layer2(6) := CSA_132bit(17).s_o; c_layer2(6) := Cat(CSA_132bit(17).c_o(130, 0), 0.U); 
     // third layer, 5 csa, 15->10
     val s_layer3   = Wire(Vec(5, UInt(132.W)))
     val c_layer3   = Wire(Vec(5, UInt(132.W)))
@@ -262,42 +262,42 @@ class wallace_33 extends Module {
     CSA_132bit(20).x_i := s_layer2(3); CSA_132bit(20).y_i := s_layer2(4);  CSA_132bit(20).c_i := c_layer2(3);   
     CSA_132bit(21).x_i := s_layer2(5); CSA_132bit(21).y_i := c_layer2(4);  CSA_132bit(21).c_i := c_layer2(5);   
     CSA_132bit(22).x_i := s_layer2(6); CSA_132bit(22).y_i := c_layer2(6);  CSA_132bit(22).c_i := c_layer1(10);   
-    s_layer3(0) := CSA_132bit(18).s_o; c_layer3(0) := CSA_132bit(18).c_o; 
-    s_layer3(1) := CSA_132bit(19).s_o; c_layer3(1) := CSA_132bit(19).c_o; 
-    s_layer3(2) := CSA_132bit(20).s_o; c_layer3(2) := CSA_132bit(20).c_o; 
-    s_layer3(3) := CSA_132bit(21).s_o; c_layer3(3) := CSA_132bit(21).c_o; 
-    s_layer3(4) := CSA_132bit(22).s_o; c_layer3(4) := CSA_132bit(22).c_o; 
+    s_layer3(0) := CSA_132bit(18).s_o; c_layer3(0) := Cat(CSA_132bit(18).c_o(130, 0), 0.U); 
+    s_layer3(1) := CSA_132bit(19).s_o; c_layer3(1) := Cat(CSA_132bit(19).c_o(130, 0), 0.U); 
+    s_layer3(2) := CSA_132bit(20).s_o; c_layer3(2) := Cat(CSA_132bit(20).c_o(130, 0), 0.U); 
+    s_layer3(3) := CSA_132bit(21).s_o; c_layer3(3) := Cat(CSA_132bit(21).c_o(130, 0), 0.U); 
+    s_layer3(4) := CSA_132bit(22).s_o; c_layer3(4) := Cat(CSA_132bit(22).c_o(130, 0), 0.U); 
     // forth layer, 3 csa, 10->7
     val s_layer4   = Wire(Vec(3, UInt(132.W)))
     val c_layer4   = Wire(Vec(3, UInt(132.W)))
     CSA_132bit(23).x_i := s_layer3(0); CSA_132bit(23).y_i := s_layer3(1);  CSA_132bit(23).c_i := c_layer3(0);   
     CSA_132bit(24).x_i := s_layer3(2); CSA_132bit(24).y_i := c_layer3(1);  CSA_132bit(24).c_i := c_layer3(2);   
-    CSA_132bit(25).x_i := s_layer3(3); CSA_132bit(25).y_i := s_layer3(4);  CSA_132bit(25).c_i := c_layer3(3);   
-    s_layer4(0) := CSA_132bit(23).s_o; c_layer4(0) := CSA_132bit(23).c_o; 
-    s_layer4(1) := CSA_132bit(24).s_o; c_layer4(1) := CSA_132bit(24).c_o; 
-    s_layer4(2) := CSA_132bit(25).s_o; c_layer4(2) := CSA_132bit(25).c_o; 
+    CSA_132bit(25).x_i := s_layer3(3); CSA_132bit(25).y_i := s_layer3(4);  CSA_132bit(25).c_i := c_layer3(3);    // c_layer3(4) 剩余
+    s_layer4(0) := CSA_132bit(23).s_o; c_layer4(0) := Cat(CSA_132bit(23).c_o(130, 0), 0.U); 
+    s_layer4(1) := CSA_132bit(24).s_o; c_layer4(1) := Cat(CSA_132bit(24).c_o(130, 0), 0.U); 
+    s_layer4(2) := CSA_132bit(25).s_o; c_layer4(2) := Cat(CSA_132bit(25).c_o(130, 0), 0.U); 
     // fifth layer, 2 csa, 7->5
     val s_layer5   = Wire(Vec(2, UInt(132.W)))
     val c_layer5   = Wire(Vec(2, UInt(132.W)))
     CSA_132bit(26).x_i := s_layer4(0); CSA_132bit(26).y_i := s_layer4(1);  CSA_132bit(26).c_i := c_layer4(0);   
-    CSA_132bit(27).x_i := s_layer4(2); CSA_132bit(27).y_i := c_layer4(1);  CSA_132bit(27).c_i := c_layer4(2);   
-    s_layer5(0) := CSA_132bit(26).s_o; c_layer5(0) := CSA_132bit(26).c_o; 
-    s_layer5(1) := CSA_132bit(27).s_o; c_layer5(1) := CSA_132bit(27).c_o; 
+    CSA_132bit(27).x_i := s_layer4(2); CSA_132bit(27).y_i := c_layer4(1);  CSA_132bit(27).c_i := c_layer4(2);   // c_layer3(4) 剩余
+    s_layer5(0) := CSA_132bit(26).s_o; c_layer5(0) := Cat(CSA_132bit(26).c_o(130, 0), 0.U); 
+    s_layer5(1) := CSA_132bit(27).s_o; c_layer5(1) := Cat(CSA_132bit(27).c_o(130, 0), 0.U); 
     // sixth layer, 1 csa, 5->4
     val s_layer6   = WireInit(0.U(132.W))
     val c_layer6   = WireInit(0.U(132.W))
-    CSA_132bit(28).x_i := s_layer5(0); CSA_132bit(28).y_i := s_layer5(1);  CSA_132bit(28).c_i := c_layer5(0);   
-    s_layer6 := CSA_132bit(28).s_o; c_layer6 := CSA_132bit(28).c_o; 
+    CSA_132bit(28).x_i := s_layer5(0); CSA_132bit(28).y_i := s_layer5(1);  CSA_132bit(28).c_i := c_layer5(0);   // c_layer3(4) c_layer5(1)剩余
+    s_layer6 := CSA_132bit(28).s_o; c_layer6 := Cat(CSA_132bit(28).c_o(130, 0), 0.U); 
     // seven layer, 1 csa, 4->3
     val s_layer7   = WireInit(0.U(132.W))
     val c_layer7   = WireInit(0.U(132.W))
-    CSA_132bit(29).x_i := s_layer6(0); CSA_132bit(29).y_i := c_layer6(0);  CSA_132bit(29).c_i := c_layer3(4);   
-    s_layer7 := CSA_132bit(29).s_o; c_layer7 := CSA_132bit(29).c_o; 
+    CSA_132bit(29).x_i := s_layer6; CSA_132bit(29).y_i := c_layer6;  CSA_132bit(29).c_i := c_layer3(4);   // c_layer5(1)剩余
+    s_layer7 := CSA_132bit(29).s_o; c_layer7 := Cat(CSA_132bit(29).c_o(130, 0), 0.U); 
     // eight layer, 1 csa, 3->2
     val s_layer8   = WireInit(0.U(132.W))
     val c_layer8   = WireInit(0.U(132.W))
-    CSA_132bit(30).x_i := s_layer7(0); CSA_132bit(30).y_i := c_layer7(0);  CSA_132bit(30).c_i := c_layer4(1);   
-    s_layer8 := CSA_132bit(30).s_o; c_layer8 := CSA_132bit(30).c_o; 
+    CSA_132bit(30).x_i := s_layer7; CSA_132bit(30).y_i := c_layer7;  CSA_132bit(30).c_i := c_layer5(1);   
+    s_layer8 := CSA_132bit(30).s_o; c_layer8 := Cat(CSA_132bit(30).c_o(130, 0), 0.U); 
     
     io.result_o(1) := c_layer8
     io.result_o(0) := s_layer8  
@@ -336,14 +336,14 @@ class MUL extends Module {
     
     inst_pp_generator(0).x_i     :=  x  
     inst_pp_generator(0).y_bus_i :=  Cat(y(1, 0), 0.U)     
-    pp(0)                        :=  inst_pp_generator(0).pp_sum_o
+    pp(0)                        :=  Cat(Fill(65, inst_pp_generator(0).pp_sum_o(66)), inst_pp_generator(0).pp_sum_o)
     inst_pp_generator(1).x_i     :=  x  
     inst_pp_generator(1).y_bus_i :=  y(3, 1)
-    pp(1)                        :=  inst_pp_generator(1).pp_sum_o
+    pp(1)                        :=  Cat(Fill(63, inst_pp_generator(0).pp_sum_o(66)), inst_pp_generator(1).pp_sum_o, 0.U, inst_pp_generator(0).pp_c_o)
     for (i <- 2 until pp_num) {
         inst_pp_generator(i).x_i     :=  x  
         inst_pp_generator(i).y_bus_i :=  y(i * 2 + 1, i * 2 - 1)     
-        pp(i) := Cat(inst_pp_generator(i).pp_sum_o(131, i * 2), 0.U, inst_pp_generator(i - 1).pp_c_o, 0.U(((i - 1) * 2).W))
+        pp(i)                        := Cat(Fill(65 - 2 * i, inst_pp_generator(i).pp_sum_o(66)), inst_pp_generator(i).pp_sum_o, 0.U, inst_pp_generator(i - 1).pp_c_o, Fill(2 * (i - 1), 0.U))
     }
     // step 3: 转置
     // val pp_t_num  = 132

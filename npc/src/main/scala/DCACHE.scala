@@ -181,21 +181,7 @@ class DCACHE extends Module {
     // val masked_wdata_tmp = (0 until 64).map(i => Mux(wmask(i / 8), wdata(i), 0.U)).reverse.reduce(_ ## _)
     
     val old_data         = WireInit(0.U(64.W))
-    // val shift_data       = WireInit(0.U(64.W))
     old_data   := dataMem(set_idx)(way_idx)(offset)
-    // shift_data := ((wdata & wmask_64) | (old_data & ~wmask_64)) << (offsetbit*8.U)
-
-    // masked_wdata := MuxLookup(offsetbit, 0.U, Seq(
-    //     0.U -> shift_data(63, 0),
-    //     1.U -> Cat(shift_data(63, 1*8), old_data(1*8-1, 0)),
-    //     2.U -> Cat(shift_data(63, 2*8), old_data(2*8-1, 0)),
-    //     3.U -> Cat(shift_data(63, 3*8), old_data(3*8-1, 0)),
-    //     4.U -> Cat(shift_data(63, 4*8), old_data(4*8-1, 0)),
-    //     5.U -> Cat(shift_data(63, 5*8), old_data(5*8-1, 0)),
-    //     6.U -> Cat(shift_data(63, 6*8), old_data(6*8-1, 0)),
-    //     7.U -> Cat(shift_data(63, 7*8), old_data(7*8-1, 0))
-    // )) // TODO:B溃了位数不给用UInt, 怎么改写哇
-
     masked_wdata := MuxLookup(offsetbit, 0.U, Seq(
         0.U -> ((wdata & wmask_64) | (old_data & ~wmask_64)),
         1.U -> Cat(((wdata(63-1*8, 0) & wmask_64(63-1*8, 0)) | (old_data(63, 1*8) & ~wmask_64(63-1*8, 0))), old_data(1*8-1, 0)),

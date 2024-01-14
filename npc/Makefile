@@ -41,7 +41,7 @@ $(BIN): ${VSRCS} ${CSRCS}
 
 .PHONY: run test verilog help compile bsp reformat checkformat clean sim wave
 
-run: verilog sim
+run: verilog $(BIN) sim
 # 生成verilog代码->构建bin->仿真
 
 test:
@@ -51,12 +51,12 @@ verilog:
 	$(call git_commit, "generate verilog")
 # mkdir -p $(BUILD_DIR)
 	$(shell mkdir -p $(BUILD_DIR))
-	mill -i __.test.runMain Elaborate -td $(BUILD_DIR) 
+	mill -i __.test.runMain Elaborate -td $(BUILD_DIR) -X mverilog
 # mill -i __.test.runMain Elaborate -td $(BUILD_DIR) 
 # -X mverilog 生成verilog取消优化
 
 
-sim:$(BIN)
+sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	$(BIN) $(ARGS)
 	  @$^

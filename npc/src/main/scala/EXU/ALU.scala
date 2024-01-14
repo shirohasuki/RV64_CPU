@@ -15,6 +15,8 @@ import chisel3.stage._
 import define.MACRO._
 import define.function._
 
+import EXU.MUL._
+
 import DPIC.ebreak
 
 class EXU_ALU_Input extends Bundle {
@@ -116,6 +118,30 @@ class ALU extends Module {
     val    CSR_Write = true.B
     val  NOCSR_Write = false.B
 
+    // to mul
+    val mul_result = WireInit(0.U(64.W))
+    val inst_mul   = Module(new MUL)  
+    when ((ex_al.opcode === INST_TYPE_R_M | ex_al.opcode === INST_TYPE_R_M_W) && (ex_al.func3 === INST_ADD_SUB_MUL) && ex_al.func7 === "b0000001".U) {
+        inst_mul.alu_mul_i.valid             := true.B
+        inst_mul.alu_mul_i.bits.multiplier   := op1
+        inst_mul.alu_mul_i.bits.multiplicand := op2
+        inst_mul.alu_mul_i.bits.mul_signed   := 0.U
+        inst_mul.alu_mul_i.bits.mulw         := 0.U
+    }.otherwise {
+        inst_mul.alu_mul_i.valid             := false.B
+        inst_mul.alu_mul_i.bits.multiplier   := 0.U
+        inst_mul.alu_mul_i.bits.multiplicand := 0.U
+        inst_mul.alu_mul_i.bits.mul_signed   := 0.U
+        inst_mul.alu_mul_i.bits.mulw         := 0.U
+    } // mul
+
+    when (inst_mul.mul_alu_o.valid) {
+        mul_result := inst_mul.mul_alu_o.bits.mul_result 
+    }.otherwise {
+        mul_result := 0.U
+    } 
+
+
     //                      List(rd_wen,  rd_waddr, rd_wdata,    mem_ren,    mem_raddr,  mem_wen,    mem_wmask,  mem_wdata, mem_waddr, typej_jump_en, typej_jump_addr, csr_wen, csr_waddr, csr_data)
     val default_exce_list = List(NORd_Write, 0.U(5.W), 0.U(64.W), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W),  0.U(64.W), 0.U(64.W), NOTypeJ_Jump,  0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W))
     val exce_list = ListLookup(ex_al.opcode, default_exce_list, Array(
@@ -139,7 +165,7 @@ class ALU extends Module {
         INST_TYPE_R_M   -> ListLookup(ex_al.func3, default_exce_list, Array(
                             INST_ADD_SUB_MUL-> ListLookup(ex_al.func7, default_exce_list, Array(
                                                 BitPat("b0100000")   ->   List(Rd_Write, rd_addr, sub(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)), // sub
-                                                BitPat("b0000001")   ->   List(Rd_Write, rd_addr, mul(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)), // mul
+                                                BitPat("b0000001")   ->   List(Rd_Write, rd_addr,    mul_result, NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)), // mul
                                                 BitPat("b0000000")   ->   List(Rd_Write, rd_addr, add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)))), // add 
                             INST_SLT        -> List(Rd_Write, rd_addr,        less_signed(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
                             INST_SLTU       -> List(Rd_Write, rd_addr,      less_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
@@ -159,9 +185,9 @@ class ALU extends Module {
                                                 BitPat("b0000000")   ->  List(Rd_Write, rd_addr,  shift_right_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)))))),  // SRL 逻辑右移
         INST_TYPE_R_M_W -> ListLookup(ex_al.func3, default_exce_list, Array(
                             INST_ADDW_SUBW_MULW -> ListLookup(ex_al.func7, default_exce_list, Array(
-                                                BitPat("b0100000")   ->  List(Rd_Write, rd_addr, compress_sub(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)), // sub
-                                                BitPat("b0000001")   ->  List(Rd_Write, rd_addr, compress_mul(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),  // mul
-                                                BitPat("b0000000")   ->  List(Rd_Write, rd_addr, compress_add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)))),  // add
+                                                BitPat("b0100000")   ->  List(Rd_Write, rd_addr, compress_sub(op1, op2),  NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)), // sub
+                                                BitPat("b0000001")   ->  List(Rd_Write, rd_addr, SEXT(mul_result(31, 0)), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),  // mul
+                                                BitPat("b0000000")   ->  List(Rd_Write, rd_addr, compress_add(op1, op2),  NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)))),  // add
                             INST_DIVW           -> List(Rd_Write, rd_addr,                 compress_div(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
                             INST_SLLW           -> List(Rd_Write, rd_addr, compress_shift_left_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
                             INST_REMW           -> List(Rd_Write, rd_addr,                 compress_rem(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
@@ -208,22 +234,18 @@ class ALU extends Module {
     al_ex.csr_waddr         :=  exce_list(12)
     al_ex.csr_wdata         :=  exce_list(13)
 
-
     // to lsu
     al_ls.func3         :=  ex_al.func3
     // al_ls.pc            :=  ex_al.pc
     al_ls.rd_waddr      :=  exce_list(1)
     al_ls.inst_isload   :=  exce_list(3)
     al_ls.inst_isstore  :=  exce_list(5)
-    al_ls.dcache_ren       :=  exce_list(3)
-    al_ls.dcache_raddr     :=  exce_list(4)
-    al_ls.dcache_wen       :=  exce_list(5)
-    al_ls.dcache_wmask     :=  exce_list(6)
+    al_ls.dcache_ren    :=  exce_list(3)
+    al_ls.dcache_raddr  :=  exce_list(4)
+    al_ls.dcache_wen    :=  exce_list(5)
+    al_ls.dcache_wmask  :=  exce_list(6)        
+    al_ls.dcache_wdata  :=  exce_list(7)
+    al_ls.dcache_waddr  :=  exce_list(8)
 
-    // for(i <- 0 to 7) {
-    //     al_ls.mem_wmask(i) := exce_list(6)(i)
-    // }  // UInt -> wmask
-        
-    al_ls.dcache_wdata     :=  exce_list(7)
-    al_ls.dcache_waddr     :=  exce_list(8)
+
 }

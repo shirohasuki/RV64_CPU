@@ -820,8 +820,7 @@ static int _vsnprintf(out_fct_type out, char* buffer, const size_t maxlen, const
 
 ///////////////////////////////////////////////////////////////////////////////
 
-int printf(const char* format, ...)
-{
+int printf(const char* format, ...) {
   va_list va;
   va_start(va, format);
   char buffer[1];
@@ -831,8 +830,7 @@ int printf(const char* format, ...)
 }
 
 
-int sprintf(char* buffer, const char* format, ...)
-{
+int sprintf(char* buffer, const char* format, ...) {
   va_list va;
   va_start(va, format);
   const int ret = _vsnprintf(_out_buffer, buffer, (size_t)-1, format, va);
@@ -841,8 +839,7 @@ int sprintf(char* buffer, const char* format, ...)
 }
 
 
-int snprintf(char* buffer, size_t count, const char* format, ...)
-{
+int snprintf(char* buffer, size_t count, const char* format, ...) {
   va_list va;
   va_start(va, format);
   const int ret = _vsnprintf(_out_buffer, buffer, count, format, va);
@@ -851,21 +848,18 @@ int snprintf(char* buffer, size_t count, const char* format, ...)
 }
 
 
-int vprintf(const char* format, va_list va)
-{
+int vprintf(const char* format, va_list va) {
   char buffer[1];
   return _vsnprintf(_out_char, buffer, (size_t)-1, format, va);
 }
 
 
-int vsnprintf(char* buffer, size_t count, const char* format, va_list va)
-{
+int vsnprintf(char* buffer, size_t count, const char* format, va_list va) {
   return _vsnprintf(_out_buffer, buffer, count, format, va);
 }
 
 
-int fctprintf(void (*out)(char character, void* arg), void* arg, const char* format, ...)
-{
+int fctprintf(void (*out)(char character, void* arg), void* arg, const char* format, ...) {
   va_list va;
   va_start(va, format);
   const out_fct_wrap_type out_fct_wrap = { out, arg };

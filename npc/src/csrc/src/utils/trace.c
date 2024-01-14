@@ -12,12 +12,12 @@ int config_npc_ctrace    = CONFIG_NPC_CTRACE;
 int config_npc_gprdump   = CONFIG_NPC_GPRDUMP;
 
 void display_trace_status() {
-	printf(ASNI_FMT("ITrace: %s\t", ASNI_FG_BLUE),    MUX(config_npc_itrace,   NPC_xTRACE_OFF, ASNI_FMT("OFF", ASNI_FG_RED), (MUX(config_npc_itrace,   NPC_xTRACE_SHOW, ASNI_FMT("ON[SHOW]", ASNI_FG_GREEN), ASNI_FMT("ON[HIDE]", ASNI_FG_GREEN)))));
-	printf(ASNI_FMT("Difftest: %s\t", ASNI_FG_BLUE),  MUX(config_npc_difftest, NPC_xTRACE_OFF, ASNI_FMT("OFF", ASNI_FG_RED), (MUX(config_npc_difftest, NPC_xTRACE_SHOW, ASNI_FMT("ON[SHOW]", ASNI_FG_GREEN), ASNI_FMT("ON[HIDE]", ASNI_FG_GREEN)))));
-	printf(ASNI_FMT("MTrace: %s\t\n", ASNI_FG_BLUE),  MUX(config_npc_mtrace,   NPC_xTRACE_OFF, ASNI_FMT("OFF", ASNI_FG_RED), (MUX(config_npc_mtrace,   NPC_xTRACE_SHOW, ASNI_FMT("ON[SHOW]", ASNI_FG_GREEN), ASNI_FMT("ON[HIDE]", ASNI_FG_GREEN)))));
-	printf(ASNI_FMT("DTrace: %s\t", ASNI_FG_BLUE),    MUX(config_npc_dtrace,   NPC_xTRACE_OFF, ASNI_FMT("OFF", ASNI_FG_RED), (MUX(config_npc_dtrace,   NPC_xTRACE_SHOW, ASNI_FMT("ON[SHOW]", ASNI_FG_GREEN), ASNI_FMT("ON[HIDE]", ASNI_FG_GREEN)))));
-	printf(ASNI_FMT("ETrace: %s\t", ASNI_FG_BLUE),    MUX(config_npc_etrace,   NPC_xTRACE_OFF, ASNI_FMT("OFF", ASNI_FG_RED), (MUX(config_npc_etrace,   NPC_xTRACE_SHOW, ASNI_FMT("ON[SHOW]", ASNI_FG_GREEN), ASNI_FMT("ON[HIDE]", ASNI_FG_GREEN)))));
-	printf(ASNI_FMT("CTrace: %s\t\n", ASNI_FG_BLUE),  MUX(config_npc_ctrace,   NPC_xTRACE_OFF, ASNI_FMT("OFF", ASNI_FG_RED), (MUX(config_npc_ctrace,   NPC_xTRACE_SHOW, ASNI_FMT("ON[SHOW]", ASNI_FG_GREEN), ASNI_FMT("ON[HIDE]", ASNI_FG_GREEN)))));
+	printf(ASNI_FMT("ITrace: %s\t",    ASNI_FG_BLUE), MUX(config_npc_itrace,   NPC_xTRACE_OFF, ASNI_FMT("OFF", ASNI_FG_RED), (MUX(config_npc_itrace,   NPC_xTRACE_SHOW, ASNI_FMT("ON[SHOW]", ASNI_FG_GREEN), ASNI_FMT("ON[HIDE]", ASNI_FG_GREEN)))));
+	printf(ASNI_FMT("Difftest: %s\t",  ASNI_FG_BLUE), MUX(config_npc_difftest, NPC_xTRACE_OFF, ASNI_FMT("OFF", ASNI_FG_RED), (MUX(config_npc_difftest, NPC_xTRACE_SHOW, ASNI_FMT("ON[SHOW]", ASNI_FG_GREEN), ASNI_FMT("ON[HIDE]", ASNI_FG_GREEN)))));
+	printf(ASNI_FMT("MTrace: %s\t\n",  ASNI_FG_BLUE), MUX(config_npc_mtrace,   NPC_xTRACE_OFF, ASNI_FMT("OFF", ASNI_FG_RED), (MUX(config_npc_mtrace,   NPC_xTRACE_SHOW, ASNI_FMT("ON[SHOW]", ASNI_FG_GREEN), ASNI_FMT("ON[HIDE]", ASNI_FG_GREEN)))));
+	printf(ASNI_FMT("DTrace: %s\t",    ASNI_FG_BLUE), MUX(config_npc_dtrace,   NPC_xTRACE_OFF, ASNI_FMT("OFF", ASNI_FG_RED), (MUX(config_npc_dtrace,   NPC_xTRACE_SHOW, ASNI_FMT("ON[SHOW]", ASNI_FG_GREEN), ASNI_FMT("ON[HIDE]", ASNI_FG_GREEN)))));
+	printf(ASNI_FMT("ETrace: %s\t",    ASNI_FG_BLUE), MUX(config_npc_etrace,   NPC_xTRACE_OFF, ASNI_FMT("OFF", ASNI_FG_RED), (MUX(config_npc_etrace,   NPC_xTRACE_SHOW, ASNI_FMT("ON[SHOW]", ASNI_FG_GREEN), ASNI_FMT("ON[HIDE]", ASNI_FG_GREEN)))));
+	printf(ASNI_FMT("CTrace: %s\t\n",  ASNI_FG_BLUE), MUX(config_npc_ctrace,   NPC_xTRACE_OFF, ASNI_FMT("OFF", ASNI_FG_RED), (MUX(config_npc_ctrace,   NPC_xTRACE_SHOW, ASNI_FMT("ON[SHOW]", ASNI_FG_GREEN), ASNI_FMT("ON[HIDE]", ASNI_FG_GREEN)))));
 	printf(ASNI_FMT("GPRdump: %s\t\n", ASNI_FG_BLUE), MUX(config_npc_gprdump,  NPC_xTRACE_OFF, ASNI_FMT("OFF", ASNI_FG_RED), (MUX(config_npc_gprdump,  NPC_xTRACE_SHOW, ASNI_FMT("ON[SHOW]", ASNI_FG_GREEN), ASNI_FMT("ON[HIDE]", ASNI_FG_GREEN)))));
 }
 

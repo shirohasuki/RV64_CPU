@@ -16,6 +16,7 @@ import define.MACRO._
 import define.function._
 
 import EXU.MUL._
+import EXU.DIV._
 
 import DPIC.ebreak
 
@@ -46,6 +47,7 @@ class ALU_EXU_Output extends Bundle {
     val csr_wen         = Output(Bool())
     val csr_waddr       = Output(UInt(12.W))
     val csr_wdata       = Output(UInt(64.W))
+    val alu_busy        = Output(Bool()) 
 }
 
 class ALU_LSU_Output extends Bundle {
@@ -141,6 +143,30 @@ class ALU extends Module {
         mul_result := 0.U
     } 
 
+    // to div
+    val div_quotient_result = WireInit(0.U(64.W))
+    val inst_div   = Module(new DIV)  
+    when (((ex_al.opcode === INST_TYPE_R_M)) && (ex_al.func3 === INST_XOR_DIV) && ex_al.func7 === "b0000001".U) {
+        inst_div.alu_div_i.valid             := true.B
+        inst_div.alu_div_i.bits.dividend     := op1
+        inst_div.alu_div_i.bits.divisor      := op2
+        inst_div.alu_div_i.bits.div_signed   := 0.U
+        inst_div.alu_div_i.bits.divw         := 0.U
+    }.otherwise {
+        inst_div.alu_div_i.valid             := false.B
+        inst_div.alu_div_i.bits.dividend     := 0.U
+        inst_div.alu_div_i.bits.divisor      := 0.U
+        inst_div.alu_div_i.bits.div_signed   := 0.U
+        inst_div.alu_div_i.bits.divw         := 0.U
+    } // mul
+
+    when (inst_div.div_alu_o.valid) {
+        div_quotient_result := inst_div.div_alu_o.bits.quotient
+    }.otherwise {
+        div_quotient_result := 0.U
+    } 
+
+    al_ex.alu_busy := inst_div.div_alu_o.bits.div_busy
 
     //                      List(rd_wen,  rd_waddr, rd_wdata,    mem_ren,    mem_raddr,  mem_wen,    mem_wmask,  mem_wdata, mem_waddr, typej_jump_en, typej_jump_addr, csr_wen, csr_waddr, csr_data)
     val default_exce_list = List(NORd_Write, 0.U(5.W), 0.U(64.W), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W),  0.U(64.W), 0.U(64.W), NOTypeJ_Jump,  0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W))
@@ -170,8 +196,8 @@ class ALU extends Module {
                             INST_SLT        -> List(Rd_Write, rd_addr,        less_signed(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
                             INST_SLTU       -> List(Rd_Write, rd_addr,      less_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
                             INST_XOR_DIV    -> ListLookup(ex_al.func7, default_exce_list, Array(
-                                                BitPat("b0000001")   ->  List(Rd_Write, rd_addr, div(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)), // div
-                                                BitPat("b0000000")   ->  List(Rd_Write, rd_addr, xor(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)))),  // xor
+                                                BitPat("b0000001")   ->  List(Rd_Write, rd_addr, div_quotient_result, NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)), // div
+                                                BitPat("b0000000")   ->  List(Rd_Write, rd_addr,       xor(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)))),  // xor
                             INST_OR_REM     -> ListLookup(ex_al.func7, default_exce_list, Array(
                                                 BitPat("b0000001")   ->  List(Rd_Write, rd_addr, rem(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),  // rem
                                                 BitPat("b0000000")   ->  List(Rd_Write, rd_addr,  or(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)))),    // or

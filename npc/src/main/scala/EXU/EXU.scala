@@ -55,6 +55,7 @@ class EXU_CTRL_Output extends Bundle {
     val inst_isstore    = Output(Bool())
     val typej_jump_en   = Output(Bool())
     val typej_jump_addr = Output(UInt(64.W))
+    val alu_busy        = Output(Bool())
 }
 
 class EXU_Bypass_Output extends Bundle {
@@ -127,6 +128,7 @@ class EXU extends Module {
     ex_ctrl.inst_isstore     := ALU.al_ex.inst_isstore
     ex_ctrl.typej_jump_en    := ALU.al_ex.typej_jump_en
     ex_ctrl.typej_jump_addr  := ALU.al_ex.typej_jump_addr
+    ex_ctrl.alu_busy         := ALU.al_ex.alu_busy
 
     // ex to dcache
     ex_dcache <> LSU.ls_dcache

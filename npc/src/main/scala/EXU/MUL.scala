@@ -100,7 +100,6 @@ class RCA_132bit extends Module {
 }
 
 
-
 // booth信号生成模块 + 结果选择模块 = 部分积(partial product)生成模块
 class pp_generator extends Module {
     val io = IO(new Bundle {

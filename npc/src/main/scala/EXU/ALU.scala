@@ -121,9 +121,9 @@ class ALU extends Module {
     val  NOCSR_Write = false.B
 
     // to mul
-    val mul_result = WireInit(0.U(64.W))
+    val mul_product = WireInit(0.U(64.W))
     val inst_mul   = Module(new MUL)  
-    when (((ex_al.opcode === INST_TYPE_R_M) | (ex_al.opcode === INST_TYPE_R_M_W)) && (ex_al.func3 === INST_ADD_SUB_MUL) && ex_al.func7 === "b0000001".U) {
+    when (((ex_al.opcode === INST_TYPE_R_M) | (ex_al.opcode === INST_TYPE_R_M_W)) && (ex_al.func3 === INST_ADD_SUB_MUL) && (ex_al.func7 === "b0000001".U)) {
         inst_mul.alu_mul_i.valid             := true.B
         inst_mul.alu_mul_i.bits.multiplier   := op1
         inst_mul.alu_mul_i.bits.multiplicand := op2
@@ -138,35 +138,90 @@ class ALU extends Module {
     } // mul
 
     when (inst_mul.mul_alu_o.valid) {
-        mul_result := inst_mul.mul_alu_o.bits.mul_result 
+        mul_product := inst_mul.mul_alu_o.bits.mul_result 
     }.otherwise {
-        mul_result := 0.U
+        mul_product := 0.U
     } 
 
     // to div
-    val div_quotient_result = WireInit(0.U(64.W))
-    val inst_div   = Module(new DIV)  
-    when (((ex_al.opcode === INST_TYPE_R_M)) && (ex_al.func3 === INST_XOR_DIV) && ex_al.func7 === "b0000001".U) {
-        inst_div.alu_div_i.valid             := true.B
-        inst_div.alu_div_i.bits.dividend     := op1
-        inst_div.alu_div_i.bits.divisor      := op2
-        inst_div.alu_div_i.bits.div_signed   := 0.U
-        inst_div.alu_div_i.bits.divw         := 0.U
-    }.otherwise {
-        inst_div.alu_div_i.valid             := false.B
-        inst_div.alu_div_i.bits.dividend     := 0.U
-        inst_div.alu_div_i.bits.divisor      := 0.U
-        inst_div.alu_div_i.bits.div_signed   := 0.U
-        inst_div.alu_div_i.bits.divw         := 0.U
-    } // mul
+    val div_quotient    = WireInit(0.U(64.W))
+    val div_remainder   = WireInit(0.U(64.W))
+    val inst_div_64bit  = Module(new DIV(width = 64))  
+    val inst_div_32bit  = Module(new DIV(width = 32))          
 
-    when (inst_div.div_alu_o.valid) {
-        div_quotient_result := inst_div.div_alu_o.bits.quotient
+    when (((ex_al.opcode === INST_TYPE_R_M)) && ((ex_al.func3 === INST_XOR_DIV) | (ex_al.func3 === INST_OR_REM)) && (ex_al.func7 === "b0000001".U)) {
+        inst_div_64bit.alu_div_i.valid             := true.B
+        inst_div_64bit.alu_div_i.bits.dividend     := op1
+        inst_div_64bit.alu_div_i.bits.divisor      := op2
+        inst_div_64bit.alu_div_i.bits.div_signed   := "b11".U
+        inst_div_64bit.alu_div_i.bits.divw         := 0.U
+        // inst_div_32bit.alu_div_i <> inst_div_32bit_idle_bundle
+        inst_div_32bit.alu_div_i.valid             := false.B
+        inst_div_32bit.alu_div_i.bits.dividend     := 0.U
+        inst_div_32bit.alu_div_i.bits.divisor      := 0.U
+        inst_div_32bit.alu_div_i.bits.div_signed   := 0.U
+        inst_div_32bit.alu_div_i.bits.divw         := 0.U
+    }.elsewhen (((ex_al.opcode === INST_TYPE_R_M)) && ((ex_al.func3 === INST_SR_DIVU) | (ex_al.func3 === INST_AND_REMU)) && (ex_al.func7 === "b0000001".U)) {
+        inst_div_64bit.alu_div_i.valid             := true.B
+        inst_div_64bit.alu_div_i.bits.dividend     := op1
+        inst_div_64bit.alu_div_i.bits.divisor      := op2
+        inst_div_64bit.alu_div_i.bits.div_signed   := "b00".U
+        inst_div_64bit.alu_div_i.bits.divw         := 0.U
+        // inst_div_32bit.alu_div_i <> inst_div_32bit_idle_bundle
+        inst_div_32bit.alu_div_i.valid             := false.B
+        inst_div_32bit.alu_div_i.bits.dividend     := 0.U
+        inst_div_32bit.alu_div_i.bits.divisor      := 0.U
+        inst_div_32bit.alu_div_i.bits.div_signed   := 0.U
+        inst_div_32bit.alu_div_i.bits.divw         := 0.U
+    }.elsewhen (((ex_al.opcode === INST_TYPE_R_M_W)) && ((ex_al.func3 === INST_DIVW) | (ex_al.func3 === INST_REMW))) {
+        inst_div_32bit.alu_div_i.valid             := true.B
+        inst_div_32bit.alu_div_i.bits.dividend     := ZEXT(op1(31 ,0))
+        inst_div_32bit.alu_div_i.bits.divisor      := ZEXT(op2(31 ,0))
+        inst_div_32bit.alu_div_i.bits.div_signed   := "b00".U
+        inst_div_32bit.alu_div_i.bits.divw         := 1.U
+        // inst_div_64bit.alu_div_i <> inst_div_64bit_idle_bundle
+        inst_div_64bit.alu_div_i.valid             := false.B
+        inst_div_64bit.alu_div_i.bits.dividend     := 0.U
+        inst_div_64bit.alu_div_i.bits.divisor      := 0.U
+        inst_div_64bit.alu_div_i.bits.div_signed   := 0.U
+        inst_div_64bit.alu_div_i.bits.divw         := 0.U
+    }.elsewhen (((ex_al.opcode === INST_TYPE_R_M_W)) && ((ex_al.func3 === INST_SRW_DIVUW) | (ex_al.func3 === INST_REMUW)) && (ex_al.func7 === "b0000001".U)) {
+        inst_div_32bit.alu_div_i.valid             := true.B
+        inst_div_32bit.alu_div_i.bits.dividend     := ZEXT(op1(31 ,0))
+        inst_div_32bit.alu_div_i.bits.divisor      := ZEXT(op2(31 ,0))
+        inst_div_32bit.alu_div_i.bits.div_signed   := "b00".U
+        inst_div_32bit.alu_div_i.bits.divw         := 1.U
+        // inst_div_64bit.alu_div_i <> inst_div_64bit_idle_bundle
+        inst_div_64bit.alu_div_i.valid             := false.B
+        inst_div_64bit.alu_div_i.bits.dividend     := 0.U
+        inst_div_64bit.alu_div_i.bits.divisor      := 0.U
+        inst_div_64bit.alu_div_i.bits.div_signed   := 0.U
+        inst_div_64bit.alu_div_i.bits.divw         := 0.U
     }.otherwise {
-        div_quotient_result := 0.U
+        inst_div_64bit.alu_div_i.valid             := false.B
+        inst_div_64bit.alu_div_i.bits.dividend     := 0.U
+        inst_div_64bit.alu_div_i.bits.divisor      := 0.U
+        inst_div_64bit.alu_div_i.bits.div_signed   := 0.U
+        inst_div_64bit.alu_div_i.bits.divw         := 0.U
+        inst_div_32bit.alu_div_i.valid             := false.B
+        inst_div_32bit.alu_div_i.bits.dividend     := 0.U
+        inst_div_32bit.alu_div_i.bits.divisor      := 0.U
+        inst_div_32bit.alu_div_i.bits.div_signed   := 0.U
+        inst_div_32bit.alu_div_i.bits.divw         := 0.U
+    } // div
+
+    when (inst_div_64bit.div_alu_o.valid) {
+        div_quotient  := inst_div_64bit.div_alu_o.bits.quotient
+        div_remainder := inst_div_64bit.div_alu_o.bits.remainder
+    }.elsewhen (inst_div_32bit.div_alu_o.valid) {
+        div_quotient  := inst_div_32bit.div_alu_o.bits.quotient
+        div_remainder := inst_div_32bit.div_alu_o.bits.remainder
+    }.otherwise {
+        div_quotient  := 0.U
+        div_remainder := 0.U
     } 
 
-    al_ex.alu_busy := inst_div.div_alu_o.bits.div_busy
+    al_ex.alu_busy := (inst_div_64bit.alu_div_i.valid && (~inst_div_64bit.div_alu_o.valid)) | (inst_div_32bit.alu_div_i.valid && (~inst_div_32bit.div_alu_o.valid))
 
     //                      List(rd_wen,  rd_waddr, rd_wdata,    mem_ren,    mem_raddr,  mem_wen,    mem_wmask,  mem_wdata, mem_waddr, typej_jump_en, typej_jump_addr, csr_wen, csr_waddr, csr_data)
     val default_exce_list = List(NORd_Write, 0.U(5.W), 0.U(64.W), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W),  0.U(64.W), 0.U(64.W), NOTypeJ_Jump,  0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W))
@@ -180,47 +235,47 @@ class ALU extends Module {
                             INST_AND        -> List(Rd_Write, rd_addr,                   and(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
                             INST_SLLI       -> List(Rd_Write, rd_addr,   shift_left_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
                             INST_SRI        -> ListLookup(ex_al.func7(6, 1), default_exce_list, Array(
-                                                BitPat("b010000")   ->   List(Rd_Write, rd_addr, shift_right_signed(op1, op2),   NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),      // SRAI
+                                                BitPat("b010000")   ->   List(Rd_Write, rd_addr,   shift_right_signed(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),      // SRAI
                                                 BitPat("b000000")   ->   List(Rd_Write, rd_addr, shift_right_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)))))),   // SRLI
         INST_TYPE_I_W   -> ListLookup(ex_al.func3, default_exce_list, Array(
-                            INST_ADDIW      -> List(Rd_Write, rd_addr,                compress_add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
-                            INST_SLLIW      -> List(Rd_Write, rd_addr,compress_shift_left_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
+                            INST_ADDIW      -> List(Rd_Write, rd_addr,                 compress_add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
+                            INST_SLLIW      -> List(Rd_Write, rd_addr, compress_shift_left_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
                             INST_SRIW       -> ListLookup(ex_al.func7(6, 1), default_exce_list, Array( 
                                                 BitPat("b010000")   ->   List(Rd_Write, rd_addr, compress_shift_right_signed(op1, op2),   NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)), 
                                                 BitPat("b000000")   ->   List(Rd_Write, rd_addr, compress_shift_right_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)))))),
         INST_TYPE_R_M   -> ListLookup(ex_al.func3, default_exce_list, Array(
                             INST_ADD_SUB_MUL-> ListLookup(ex_al.func7, default_exce_list, Array(
                                                 BitPat("b0100000")   ->   List(Rd_Write, rd_addr, sub(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)), // sub
-                                                BitPat("b0000001")   ->   List(Rd_Write, rd_addr,    mul_result, NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)), // mul
+                                                BitPat("b0000001")   ->   List(Rd_Write, rd_addr,   mul_product, NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)), // mul
                                                 BitPat("b0000000")   ->   List(Rd_Write, rd_addr, add(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)))), // add 
                             INST_SLT        -> List(Rd_Write, rd_addr,        less_signed(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
                             INST_SLTU       -> List(Rd_Write, rd_addr,      less_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
                             INST_XOR_DIV    -> ListLookup(ex_al.func7, default_exce_list, Array(
-                                                BitPat("b0000001")   ->  List(Rd_Write, rd_addr, div_quotient_result, NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)), // div
-                                                BitPat("b0000000")   ->  List(Rd_Write, rd_addr,       xor(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)))),  // xor
+                                                BitPat("b0000001")   ->  List(Rd_Write, rd_addr,  div_quotient, NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)), // div
+                                                BitPat("b0000000")   ->  List(Rd_Write, rd_addr, xor(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)))),  // xor
                             INST_OR_REM     -> ListLookup(ex_al.func7, default_exce_list, Array(
-                                                BitPat("b0000001")   ->  List(Rd_Write, rd_addr, rem(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),  // rem
+                                                BitPat("b0000001")   ->  List(Rd_Write, rd_addr, div_remainder, NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),  // rem
                                                 BitPat("b0000000")   ->  List(Rd_Write, rd_addr,  or(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)))),    // or
                             INST_AND_REMU   -> ListLookup(ex_al.func7, default_exce_list, Array(
-                                                BitPat("b0000001")   ->  List(Rd_Write, rd_addr, rem_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)), // remu
-                                                BitPat("b0000000")   ->  List(Rd_Write, rd_addr,          and(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)))), // and
+                                                BitPat("b0000001")   ->  List(Rd_Write, rd_addr, div_remainder, NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)), // remu
+                                                BitPat("b0000000")   ->  List(Rd_Write, rd_addr, and(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)))), // and
                             INST_SLL        -> List(Rd_Write, rd_addr,shift_left_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
                             INST_SR_DIVU    -> ListLookup(ex_al.func7, default_exce_list, Array(
                                                 BitPat("b0100000")   ->  List(Rd_Write, rd_addr,    shift_right_signed(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),  // SRA 算术右移 
-                                                BitPat("b0000001")   ->  List(Rd_Write, rd_addr,          div_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),  // divu 
+                                                BitPat("b0000001")   ->  List(Rd_Write, rd_addr,                    div_quotient, NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),  // divu 
                                                 BitPat("b0000000")   ->  List(Rd_Write, rd_addr,  shift_right_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)))))),  // SRL 逻辑右移
         INST_TYPE_R_M_W -> ListLookup(ex_al.func3, default_exce_list, Array(
                             INST_ADDW_SUBW_MULW -> ListLookup(ex_al.func7, default_exce_list, Array(
-                                                BitPat("b0100000")   ->  List(Rd_Write, rd_addr, compress_sub(op1, op2),  NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)), // sub
-                                                BitPat("b0000001")   ->  List(Rd_Write, rd_addr, SEXT(mul_result(31, 0)), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),  // mul
-                                                BitPat("b0000000")   ->  List(Rd_Write, rd_addr, compress_add(op1, op2),  NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)))),  // add
-                            INST_DIVW           -> List(Rd_Write, rd_addr,                 compress_div(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
+                                                BitPat("b0100000")   ->  List(Rd_Write, rd_addr,   compress_sub(op1, op2),  NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)), // sub
+                                                BitPat("b0000001")   ->  List(Rd_Write, rd_addr, SEXT(mul_product(31, 0)),  NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),  // mul
+                                                BitPat("b0000000")   ->  List(Rd_Write, rd_addr,   compress_add(op1, op2),  NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)))),  // add
+                            INST_DIVW           -> List(Rd_Write, rd_addr,                           div_quotient, NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
                             INST_SLLW           -> List(Rd_Write, rd_addr, compress_shift_left_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
-                            INST_REMW           -> List(Rd_Write, rd_addr,                 compress_rem(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
-                            INST_REMUW          -> List(Rd_Write, rd_addr,        compress_rem_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
+                            INST_REMW           -> List(Rd_Write, rd_addr,                          div_remainder, NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
+                            INST_REMUW          -> List(Rd_Write, rd_addr,                          div_remainder, NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),
                             INST_SRW_DIVUW      -> ListLookup(ex_al.func7, default_exce_list, Array(
                                                BitPat("b0100000")   ->  List(Rd_Write, rd_addr,    compress_shift_right_signed(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),  // SRAW 算术右移
-                                               BitPat("b0000001")   ->  List(Rd_Write, rd_addr,          compress_div_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),  // divuw  
+                                               BitPat("b0000001")   ->  List(Rd_Write, rd_addr,                             div_quotient, NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)),  // divuw  
                                                BitPat("b0000000")   ->  List(Rd_Write, rd_addr,  compress_shift_right_unsigned(op1, op2), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W), NOTypeJ_Jump, 0.U(64.W), NOCSR_Write, 0.U(12.W), 0.U(64.W)))))),  // SRLW 逻辑右移 
         INST_TYPE_B     -> ListLookup(ex_al.func3, default_exce_list, Array(
                             INST_BNE        -> List(NORd_Write, 0.U(5.W), 0.U(64.W), NOMEM_Read, 0.U(64.W), NOMEM_Write, 0.U(8.W), 0.U(64.W), 0.U(64.W),         ~equal(op1, op2), add(base_addr, offset_addr), NOCSR_Write, 0.U(12.W), 0.U(64.W)),

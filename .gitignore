@@ -14,5 +14,6 @@
 /fceux-am
 /am-kernels
 /rt-thread
+/ysyxSoC
 /npc/build
 /npc-verilog/build

@@ -10,9 +10,7 @@ package EXU.DIV
 import chisel3._
 import chisel3.util._
 
-
-
-class Counter(t: Int) extends Module{
+class Counter(t: Int) extends Module {
     val io = IO(new Bundle{
         val en = Input(Bool())
         val out = Output(UInt(8.W))

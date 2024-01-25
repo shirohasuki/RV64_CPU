@@ -12,7 +12,6 @@ import chisel3._
 import chisel3.util._
 import chisel3.stage._
 
-
 import PcReg._
 import IFU._
 import ICACHE._
@@ -34,6 +33,9 @@ import Bypass._
 import CTRL._
 import RegFile._
 import CSRS._
+import MCIF._
+// import RAM._
+import BUS._
 
 
 // class CORE_AXI4_R extends Bundle{
@@ -62,30 +64,31 @@ import CSRS._
 
 
 class CORE extends Module {
-    // val core_axi_r = IO(new CORE_AXI4_R())
-    // val core_axi_w = IO(new CORE_AXI4_W())  // 两边需要同向
+    val core_axi_r = IO(new AXI4_MASTER_RD)
+    // val core_axi_w = IO(new CORE_AXI4_W)  // 两边需要同向
     
-    val Pc       = Module(new PcReg)
-    val IFU      = Module(new IFU)
-    val ICACHE   = Module(new ICACHE)
-    val IFID     = Module(new IFID)
-    val IDU      = Module(new IDU)
-    val IDEX     = Module(new IDEX)
-    val EXU      = Module(new EXU)
-    val IDClint  = Module(new IDClint)
-    val CLINT    = Module(new CLINT)
-    val DCACHE   = Module(new DCACHE)
-    // val LSU      = Module(new LSU)
-    val EXMEM    = Module(new EXMEM)
-    val MEM      = Module(new MEM)
-    val EXWB     = Module(new EXWB)
-    val MEMWB    = Module(new MEMWB)
-    val WBU      = Module(new WBU)
-    // val MCIF     = Module(new MCIF)
-    val CTRL     = Module(new Ctrl)
-    val Bypass   = Module(new Bypass)
-    val RegFile  = Module(new RegFile)
-    val CSRS     = Module(new CSRS)
+    val Pc      = Module(new PcReg)
+    val IFU     = Module(new IFU)
+    val ICACHE  = Module(new ICACHE)
+    val IFID    = Module(new IFID)
+    val IDU     = Module(new IDU)
+    val IDEX    = Module(new IDEX)
+    val EXU     = Module(new EXU)
+    val IDClint = Module(new IDClint)
+    val CLINT   = Module(new CLINT)
+    val DCACHE  = Module(new DCACHE)
+    val EXMEM   = Module(new EXMEM)
+    val MEM     = Module(new MEM)
+    val EXWB    = Module(new EXWB)
+    val MEMWB   = Module(new MEMWB)
+    val WBU     = Module(new WBU)
+    val MCIF    = Module(new MCIF)
+    val CTRL    = Module(new Ctrl)
+    val Bypass  = Module(new Bypass)
+    val RegFile = Module(new RegFile)
+    val CSRS    = Module(new CSRS)
+    // val RAM     = Module(new RAM)
+
 
     Pc.pc_if        <> IFU.pc_if
     IFU.if_icache     <> ICACHE.if_icache
@@ -104,8 +107,6 @@ class CORE extends Module {
     Bypass.bypass_csr_o   <> CSRS.bypass_csr
     Bypass.bypass_id_o    <> IDU.bypass_id
     Bypass.bypass_ctrl_o  <> CTRL.bypass_ctrl
-
-    // RegFile.reg_clint_o   <> CLINT.reg_clint_i
 
     IDU.id_idex           <> IDEX.id_idex
     IDEX.idex_ex          <> EXU.idex_ex
@@ -127,13 +128,13 @@ class CORE extends Module {
     CLINT.clint_csr_o   <> CSRS.clint_csr_i
     CLINT.csr_clint_i   <> CSRS.csr_clint_o
 
-    // MCIF.mcif_axi_r <> core_axi_r
+    ICACHE.icache_mcif_r <> MCIF.icache_mcif_r
+    DCACHE.dcache_mcif_r <> MCIF.dcache_mcif_r
+    MCIF.mcif_axi_r <> core_axi_r
     // MCIF.mcif_axi_w <> core_axi_w
     
     EXU.ex_ctrl        <> CTRL.ex_ctrl
     CLINT.clint_ctrl   <> CTRL.clint_ctrl
-    // LSU.ls_ctrl     <> CTRL.ls_ctrl
-    // MCIF.mcif_ctrl  <> CTRL.mcif_ctrl
     
     CTRL.ctrl_pc        <> Pc.ctrl_pc
     CTRL.ctrl_ifid      <> IFID.ctrl_ifid

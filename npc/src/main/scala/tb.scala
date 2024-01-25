@@ -14,19 +14,19 @@ import chisel3.util.experimental.loadMemoryFromFileInline
 import firrtl.annotations.MemoryLoadFileType
 
 import CORE._
-import AXI4_LITE._
-import MEM._
+import BUS._
+import RAM._
 
 
 class tb extends Module {
-    val CORE        = Module(new CORE())
-    // val AXI4_LITE   = Module(new AXI4_LITE())
-    // val MEM         = Module(new MEM())
+    val CORE        = Module(new CORE)
+    val AXI4_FULL   = Module(new AXI4_FULL)
+    val RAM         = Module(new RAM)
     
-    // CORE.core_axi_r <> AXI4_LITE.mcif_axi_r
+    CORE.core_axi_r <> AXI4_FULL.mcif_axi_r
     // CORE.core_axi_w <> AXI4_LITE.mcif_axi_w
 
-    // AXI4_LITE.mem_axi_r <> MEM.mem_axi_r
+    AXI4_FULL.ram_axi_r <> RAM.ram_axi_r
     // AXI4_LITE.mem_axi_w <> MEM.mem_axi_w
 
     // loadMemoryFromFileInline(MEM.mem, "./image.hex", MemoryLoadFileType.Hex); 

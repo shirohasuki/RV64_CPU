@@ -11,8 +11,10 @@ package ICACHE
 import chisel3._
 import chisel3.util._
 
-import DPIC.pmem_read_Icacheline
-import DPIC.ctrace_icache
+import BUS._
+
+// import DPIC.pmem_read_Icacheline
+// import DPIC.ctrace_icache
 
 class ICacheReq extends Bundle { val raddr = UInt(64.W) }
 class ICacheResp extends Bundle { val rdata = UInt(64.W) }
@@ -22,21 +24,37 @@ class IFU_ICACHE extends Bundle {
     val resp = Valid(new ICacheResp)         // inst
 }
 
-class ICACHE_Ctrl extends Bundle {
-    val icache_busy  = Output(Bool())         
+class Counter(t: Int) extends Module {
+    val io  = IO(new Bundle{
+        val en      = Input(Bool())
+        val offset  = Output(UInt(8.W))
+        val cnt_end = Output(Bool())
+    })
+    val cnt     = RegInit(0.U(10.W))
+    val nextCnt = cnt + 1.U
+    when(io.en) {
+        when(cnt < t.U) {
+            cnt := nextCnt
+        }.otherwise {
+            cnt := 0.U
+        }
+    }.otherwise {
+        cnt := 0.U
+    }
+    io.offset   := cnt
+    io.cnt_end  := (cnt === t.U).asBool
 }
 
 class ICACHE extends Module {
     val if_icache   = IO(new IFU_ICACHE)
-    val icache_ctrl = IO(new ICACHE_Ctrl)
-    // val icache_mem  = IO(new ICACHE_MEM_Output)
+    val icache_ctrl = IO(new Bundle { val icache_busy  = Output(Bool())})
+    val icache_mcif_r = IO(new MCIF_R_BUS)
 
     // 1. define ICache
       // memory
     val vMem    = RegInit(0.U(64.W))    // 64行，每行占一位
     val tagMem  = Reg(Vec(64, UInt(52.W))) 
     val dataMem = SyncReadMem(64, Vec(8, UInt(64.W)))
-    // val dataMem = Seq.fill(4)(SyncReadMem(64, Vec(2, UInt(8.W))))
     
     // wire
     val raddr   = WireInit(0.U(64.W))
@@ -47,14 +65,6 @@ class ICACHE extends Module {
     val idx     = raddr(11, 6)
     val offset  = raddr(5, 3)
     val rdata   = WireInit(0.U(64.W))
-
-    // reg
-    // val raddr_reg   = RegInit(0.U(64.W))
-    // raddr_reg      := raddr
-    // val tag_reg     = raddr_reg(63, 12)
-    // val idx_reg     = raddr_reg(11, 6)
-    // val offset_reg  = raddr_reg(5, 3)
-
 
     // 2. FSM
     val sIdle :: sHit :: sMiss :: Nil = Enum(3)  
@@ -114,41 +124,46 @@ class ICACHE extends Module {
 
     // 5. MISS
     // Read Allocate
-    val DPIC_pmem_read_Icacheline  = Module(new pmem_read_Icacheline())
-    val DPIC_ctrace_icache_record  = Module(new ctrace_icache())
-
+    // val DPIC_pmem_read_Icacheline  = Module(new pmem_read_Icacheline())
+    // val DPIC_ctrace_icache_record  = Module(new ctrace_icache())
+    val Counter1     = Module(new Counter(t = 8))
+    // 5.1 发出读请求 
     when (ren && miss) {
-        DPIC_pmem_read_Icacheline.io.raddr       := Cat(raddr(63, 6), Fill(6, 0.U))
-        val writeAddress = idx
-        val writeData    = VecInit.tabulate(8)(i => DPIC_pmem_read_Icacheline.io.rdata(i))
-        dataMem.write(writeAddress, writeData)
-        // for (i <- 0 until 8) { dataMem(idx)(i)  := DPIC_pmem_read_cacheline.io.rdata(i)}
-        tagMem(idx)                             := tag
-
-        DPIC_ctrace_icache_record.io.idx               := idx
-        DPIC_ctrace_icache_record.io.tag               := tag
-        for (i <- 0 until 8) { DPIC_ctrace_icache_record.io.cacheline(i) := DPIC_pmem_read_Icacheline.io.rdata(i)}
-
-        reload_complete                         := 1.U
+        icache_mcif_r.req.valid       := true.B
+        icache_mcif_r.req.bits.rlen   := 8.U
+        icache_mcif_r.req.bits.raddr  := Cat(raddr(63, 6), Fill(6, 0.U))
     }.otherwise {
-        reload_complete                         := 0.U
+        icache_mcif_r.req.valid       := false.B
+        icache_mcif_r.req.bits.rlen   := 0.U
+        icache_mcif_r.req.bits.raddr  := 0.U
+    }   
+    // 5.2 收到读响应（设置计数器+写入ICache）
+    icache_mcif_r.resp.ready := 1.U
+    when (icache_mcif_r.resp.valid) {
+        Counter1.io.en  := 1.U
+    }.otherwise {
+        Counter1.io.en  := 0.U
+    } 
+    when (icache_mcif_r.resp.valid) { dataMem(idx)(Counter1.io.offset) := icache_mcif_r.resp.bits.rdata} 
+       
+    // 5.3 cacheline写入完成（设置reload_complete）
+    when (Counter1.io.cnt_end) {
+        tagMem(idx)      := tag
+        vMem             := vMem.bitSet(idx, true.B) 
+        reload_complete  := 1.U
+    }.otherwise {
+        reload_complete  := 0.U
     }
 
-    when (reload_complete) {
-        vMem                                    := vMem.bitSet(idx, true.B) 
-    }
-
-    // 6. update 
-    // LRU: Least recently used
-
-    // 7. to ctrl
-    val icache_miss     = next_state === sMiss || state === sMiss
-    val icache_latency  = RegInit(false.B)  // 同步读写自带的一周期latency
+    // 6. to ctrl
+    val icache_miss      = next_state === sMiss || state === sMiss
+    val icache_latency   = RegInit(false.B)  // 同步读写自带的一周期latency
+    val icache_reloading = Counter1.io.en && !Counter1.io.cnt_end
     when (next_state === sHit && ~icache_latency) {
         icache_latency := 1.U
     }.otherwise {
         icache_latency := 0.U
     }
-    icache_ctrl.icache_busy := icache_miss | icache_latency
+    icache_ctrl.icache_busy := icache_miss | icache_latency | icache_reloading
 }
 

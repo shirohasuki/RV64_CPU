@@ -12,10 +12,11 @@ import chisel3._
 import chisel3.util._
 import define.function._
 
-import DPIC.pmem_read_Dcacheline
+// import DPIC.pmem_read_Dcacheline
 import DPIC.pmem_write_Dcacheline
-import DPIC.ctrace_dcache
+// import DPIC.ctrace_dcache
 
+import BUS._
 
 class EXU_DCACHE_Input extends Bundle{
     val rd_req  = Flipped(Valid(new Bundle { val raddr = UInt(64.W)}))
@@ -33,10 +34,33 @@ class DCACHE_MEM_Output extends Bundle{
     })
 }
 
+class Counter(t: Int) extends Module {
+    val io  = IO(new Bundle {
+        val en      = Input(Bool())
+        val offset  = Output(UInt(8.W))
+        val cnt_end = Output(Bool())
+    })
+    val cnt     = RegInit(0.U(10.W))
+    val nextCnt = cnt + 1.U
+    when(io.en) {
+        when(cnt < t.U) {
+            cnt := nextCnt
+        }.otherwise {
+            cnt := 0.U
+        }
+    }.otherwise {
+        cnt := 0.U
+    }
+    io.offset   := cnt
+    io.cnt_end  := (cnt === t.U).asBool
+}
+
 
 class DCACHE extends Module {
     val ex_dcache  = IO(new EXU_DCACHE_Input)
     val dcache_mem = IO(new DCACHE_MEM_Output)
+    val dcache_mcif_r = IO(new MCIF_R_BUS)
+
 
     val dcache_ctrl = IO(new Bundle { val dcache_busy  = Output(Bool())})
 
@@ -174,11 +198,8 @@ class DCACHE extends Module {
     // Write
     val masked_wdata     = WireInit(0.U(64.W))
     val wmask_64         = WireInit(0.U(64.W))
-    // for (i <- 0 until 8) { wmask_64(i * 8 + 7, i * 8) := Mux(wmask(i)===1.U, "b11111111".U, 0.U)}
-    // wmask_64 := VecInit.tabulate(8) { i => Fill(8, wmask(i)) }.reduce(_ | _)
     wmask_64 := Cat(Fill(8, wmask(7)), Fill(8, wmask(6)), Fill(8, wmask(5)), Fill(8, wmask(4)),
                     Fill(8, wmask(3)), Fill(8, wmask(2)), Fill(8, wmask(1)), Fill(8, wmask(0)))
-    // val masked_wdata_tmp = (0 until 64).map(i => Mux(wmask(i / 8), wdata(i), 0.U)).reverse.reduce(_ ## _)
     
     val old_data         = WireInit(0.U(64.W))
     old_data   := dataMem(set_idx)(way_idx)(offset)
@@ -201,19 +222,35 @@ class DCACHE extends Module {
 
     // 5. MISS
     // not dirty
-    val DPIC_pmem_read_Dcacheline    = Module(new pmem_read_Dcacheline())
-    when ((ren || wen) && miss && ~(full && dirty)) {
-        DPIC_pmem_read_Dcacheline.io.raddr                  := Cat(raddr(63, 5), Fill(5, 0.U))
-        for (i <- 0 until 4) { dataMem(set_idx)(way_idx)(i) := DPIC_pmem_read_Dcacheline.io.rdata(i)}
-        tagMem(set_idx)(way_idx)                            := tag
-        dMem(set_idx)                                       := dMem(set_idx).bitSet(way_idx, false.B) 
-        vMem(set_idx)                                       := vMem(set_idx).bitSet(way_idx, true.B) 
-        reload_complete                                     := 1.U
+    val Counter1     = Module(new Counter(t = 4))
+    // 5.1 发出读请求 
+    when (((ren || wen) && miss && ~(full && dirty))) {
+        dcache_mcif_r.req.valid       := 1.U
+        dcache_mcif_r.req.bits.rlen   := 4.U
+        dcache_mcif_r.req.bits.raddr  := Cat(raddr(63, 5), Fill(5, 0.U))
     }.otherwise {
-        reload_complete                                     := 0.U
-        DPIC_pmem_read_Dcacheline.io.raddr                  := 0.U
+        dcache_mcif_r.req.valid       := 0.U
+        dcache_mcif_r.req.bits.rlen   := 0.U
+        dcache_mcif_r.req.bits.raddr  := 0.U
+    }   
+    // 5.2 收到读响应（设置计数器+写入DCache）
+    dcache_mcif_r.resp.ready := 1.U
+    when (dcache_mcif_r.resp.valid) {
+        Counter1.io.en  := 1.U
+    }.otherwise {
+        Counter1.io.en  := 0.U
+    } 
+    when (dcache_mcif_r.resp.valid) { dataMem(set_idx)(way_idx)(Counter1.io.offset) := dcache_mcif_r.resp.bits.rdata} 
+       
+    // 5.3 cacheline写入完成（设置reload_complete）
+    when (Counter1.io.cnt_end) {
+        tagMem(set_idx)(way_idx) := tag
+        dMem(set_idx)            := dMem(set_idx).bitSet(way_idx, false.B) 
+        vMem(set_idx)            := vMem(set_idx).bitSet(way_idx, true.B) 
+        reload_complete  := 1.U
+    }.otherwise {
+        reload_complete  := 0.U
     }
-
 
     // is dirty(WB)
     val DPIC_pmem_write_Dcacheline = Module(new pmem_write_Dcacheline())
@@ -222,9 +259,6 @@ class DCACHE extends Module {
         DPIC_pmem_write_Dcacheline.io.wen          := 1.U
         DPIC_pmem_write_Dcacheline.io.waddr        := Cat(tagMem(set_idx)(way_idx), set_idx, Fill(5, 0.U))
         for (i <- 0 until 4) { DPIC_pmem_write_Dcacheline.io.wdata(i) := dataMem(set_idx)(way_idx)(i)}
-        // // read需要的 Data block 进 cache 
-        // DPIC_pmem_read_Dcacheline.io.raddr          := Cat(waddr(63, 5), Fill(5, 0.U))
-        // for (i <- 0 until 4) { dataMem(set_idx)(way_idx)(i) := DPIC_pmem_read_Dcacheline.io.rdata(i)}
         dMem(set_idx)                               := dMem(set_idx).bitSet(way_idx, false.B) 
         wb_complete                                 := 1.U
     }.otherwise {
@@ -250,25 +284,25 @@ class DCACHE extends Module {
     }
 
     // DPIC Ctrace
-    val DPIC_ctrace_dcache_record    = Module(new ctrace_dcache())
-    when (ren || wen) {
-        DPIC_ctrace_dcache_record.io.set_idx        := set_idx
-        DPIC_ctrace_dcache_record.io.way_idx        := way_idx
-        DPIC_ctrace_dcache_record.io.age            := lru_line // ageMem(set_idx)
-        DPIC_ctrace_dcache_record.io.dirty          := dMem(set_idx)
-        DPIC_ctrace_dcache_record.io.tag            := tag
-        when (ren) { for (i <- 0 until 4) { DPIC_ctrace_dcache_record.io.cacheline(i) := DPIC_pmem_read_Dcacheline.io.rdata(i)}} 
-        when (wen) { 
-            for (i <- 0 until 4) { 
-                when (i.asUInt =/= offset) {
-                    DPIC_ctrace_dcache_record.io.cacheline(i) := dataMem(set_idx)(way_idx)(i)
-                }.otherwise {
-                    DPIC_ctrace_dcache_record.io.cacheline(i) := masked_wdata
-                }
-            }
-        }
-        // when (wen) { for (i <- 0 until 4) { DPIC_ctrace_dcache_record.io.cacheline(i) := dataMem(set_idx)(way_idx)(i)}}
-    }
+    // val DPIC_ctrace_dcache_record    = Module(new ctrace_dcache())
+    // when (ren || wen) {
+    //     DPIC_ctrace_dcache_record.io.set_idx        := set_idx
+    //     DPIC_ctrace_dcache_record.io.way_idx        := way_idx
+    //     DPIC_ctrace_dcache_record.io.age            := lru_line // ageMem(set_idx)
+    //     DPIC_ctrace_dcache_record.io.dirty          := dMem(set_idx)
+    //     DPIC_ctrace_dcache_record.io.tag            := tag
+    //     when (ren) { for (i <- 0 until 4) { DPIC_ctrace_dcache_record.io.cacheline(i) := DPIC_pmem_read_Dcacheline.io.rdata(i)}} 
+    //     when (wen) { 
+    //         for (i <- 0 until 4) { 
+    //             when (i.asUInt =/= offset) {
+    //                 DPIC_ctrace_dcache_record.io.cacheline(i) := dataMem(set_idx)(way_idx)(i)
+    //             }.otherwise {
+    //                 DPIC_ctrace_dcache_record.io.cacheline(i) := masked_wdata
+    //             }
+    //         }
+    //     }
+    //     // when (wen) { for (i <- 0 until 4) { DPIC_ctrace_dcache_record.io.cacheline(i) := dataMem(set_idx)(way_idx)(i)}}
+    // }
 
 
     // 7. to ctrl
